@@ -36,7 +36,7 @@ navigation:
 markdown: kramdown
 highlighter: rouge
 sass:
-  sass_dir: _sass
+  sass_dir: _scss
   style: compressed
 
 # Plugins
