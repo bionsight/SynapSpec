@@ -1,0 +1,216 @@
+// Button styles
+.btn {
+  display: inline-block;
+  padding: $spacing-sm $spacing-md;
+  background-color: $primary-color;
+  color: white;
+  text-decoration: none;
+  border-radius: $border-radius;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-family: $body-font;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    transform: translateY(-1px);
+    box-shadow: $box-shadow;
+  }
+
+  &.btn-large {
+    padding: $spacing-md $spacing-lg;
+    font-size: 1.1rem;
+  }
+
+  &.btn-accent {
+    background-color: $accent-color;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &.btn-outline {
+    background-color: transparent;
+    border: 2px solid $primary-color;
+    color: $primary-color;
+
+    &:hover {
+      background-color: $primary-color;
+      color: white;
+    }
+  }
+}
+
+// Card component
+.card {
+  background: white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $box-shadow;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow-lg;
+  }
+
+  .card-header {
+    margin-bottom: $spacing-md;
+
+    h3 {
+      margin: 0 0 $spacing-xs 0;
+      color: $primary-color;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      color: $accent-color;
+      margin-bottom: $spacing-sm;
+    }
+  }
+
+  .card-content {
+    p {
+      margin-bottom: $spacing-sm;
+      color: lighten($text-color, 10%);
+    }
+  }
+}
+
+// Hero section
+.hero {
+  background: linear-gradient(135deg, $secondary-color 0%, lighten($primary-color, 20%) 100%);
+  padding: $spacing-xl 0;
+  text-align: center;
+
+  h1 {
+    font-family: $heading-font;
+    font-size: $font-size-h1;
+    margin-bottom: $spacing-md;
+    color: $text-color;
+
+    @media (max-width: $mobile) {
+      font-size: 2rem;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: $spacing-lg;
+    color: darken($text-color, 10%);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: $mobile) {
+      font-size: 1rem;
+    }
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: center;
+    margin-top: $spacing-lg;
+
+    @media (max-width: $mobile) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+// Services grid
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $spacing-lg;
+  margin: $spacing-xl 0;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+// Section headers
+.section-header {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+
+  h2 {
+    font-family: $heading-font;
+    font-size: $font-size-h2;
+    margin-bottom: $spacing-sm;
+    color: $text-color;
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: lighten($text-color, 20%);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+// Contact form
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: $spacing-lg;
+  border-radius: $border-radius-lg;
+  box-shadow: $box-shadow;
+
+  .form-group {
+    margin-bottom: $spacing-md;
+
+    label {
+      display: block;
+      margin-bottom: $spacing-xs;
+      font-weight: 500;
+      color: $text-color;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: $spacing-sm;
+      border: 2px solid lighten($secondary-color, 10%);
+      border-radius: $border-radius;
+      font-family: $body-font;
+      font-size: $font-size-body;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+  }
+}
+
+// Navigation breadcrumbs
+.breadcrumbs {
+  margin-bottom: $spacing-lg;
+  color: lighten($text-color, 30%);
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .separator {
+    margin: 0 $spacing-xs;
+  }
+}

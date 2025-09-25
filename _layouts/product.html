@@ -1,0 +1,57 @@
+---
+layout: default
+---
+
+<div class="container">
+  <div class="breadcrumbs">
+    <a href="{{ '/' | relative_url }}">Home</a>
+    <span class="separator">/</span>
+    <a href="{{ '/products/' | relative_url }}">Products</a>
+    <span class="separator">/</span>
+    <span>{{ page.title }}</span>
+  </div>
+
+  <article class="product-detail">
+    <header class="section-header">
+      <h1>{{ page.title }}</h1>
+      {% if page.subtitle %}
+        <p class="section-subtitle">{{ page.subtitle }}</p>
+      {% endif %}
+    </header>
+
+    <div class="product-content">
+      {{ content }}
+    </div>
+
+    {% if page.features %}
+    <section class="product-features py-lg">
+      <h2>Key Features</h2>
+      <div class="services-grid">
+        {% for feature in page.features %}
+        <div class="card">
+          <div class="card-header">
+            {% if feature.icon %}
+              <div class="card-icon">
+                <i class="{{ feature.icon }}"></i>
+              </div>
+            {% endif %}
+            <h3>{{ feature.name }}</h3>
+          </div>
+          <div class="card-content">
+            <p>{{ feature.description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if page.cta %}
+    <section class="text-center py-lg">
+      <a href="{{ page.cta.url | relative_url }}" class="btn btn-large btn-accent">
+        {{ page.cta.text }}
+      </a>
+    </section>
+    {% endif %}
+  </article>
+</div>

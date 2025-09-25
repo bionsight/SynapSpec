@@ -1,0 +1,116 @@
+// Base layout styles
+body {
+  font-family: $body-font;
+  color: $text-color;
+  background-color: $background-color;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+// Container
+.container {
+  max-width: $desktop;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @media (max-width: $mobile) {
+    padding: 0 $spacing-sm;
+  }
+}
+
+// Header
+.site-header {
+  background-color: white;
+  box-shadow: $box-shadow;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-sm 0;
+  }
+
+  .logo {
+    font-family: $heading-font;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $primary-color;
+    text-decoration: none;
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: $spacing-lg;
+
+    @media (max-width: $mobile) {
+      gap: $spacing-sm;
+    }
+
+    a {
+      color: $text-color;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+
+      &.external::after {
+        content: " ↗";
+        font-size: 0.8em;
+      }
+    }
+  }
+}
+
+// Main content
+.main-content {
+  min-height: calc(100vh - 200px);
+  padding: $spacing-lg 0;
+}
+
+// Footer
+.site-footer {
+  background-color: $text-color;
+  color: white;
+  padding: $spacing-lg 0;
+  margin-top: $spacing-xl;
+
+  .footer-content {
+    text-align: center;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-sm;
+
+    @media (max-width: $mobile) {
+      flex-direction: column;
+      gap: $spacing-xs;
+    }
+
+    a {
+      color: $secondary-color;
+      text-decoration: none;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+
+  .copyright {
+    font-size: $font-size-small;
+    opacity: 0.8;
+  }
+}

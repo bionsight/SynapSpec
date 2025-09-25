@@ -1,0 +1,37 @@
+// Color Palette
+$primary-color: #9ACD32;      // YellowGreen
+$secondary-color: #B8E356;    // 더 연한 연두색
+$background-color: #ffffff;   // White
+$text-color: #333333;         // 진한 회색
+$accent-color: #7BA428;       // 더 진한 연두색
+
+// Typography
+$heading-font: 'Montserrat', sans-serif;
+$body-font: 'Noto Sans KR', sans-serif;
+
+// Font sizes
+$font-size-h1: 2.5rem;
+$font-size-h2: 2rem;
+$font-size-h3: 1.5rem;
+$font-size-body: 1rem;
+$font-size-small: 0.875rem;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Breakpoints
+$mobile: 768px;
+$tablet: 1024px;
+$desktop: 1200px;
+
+// Border radius
+$border-radius: 8px;
+$border-radius-lg: 12px;
+
+// Shadows
+$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+$box-shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.15);

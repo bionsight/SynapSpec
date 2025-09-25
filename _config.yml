@@ -1,0 +1,73 @@
+# Site settings
+title: "SynapSpec"
+description: "Advanced chemical proteomics research and development solutions for scientific discovery"
+url: "https://chemproteomics.github.io"
+baseurl: ""
+
+# Company information
+company:
+  name: "SynapSpec"
+  tagline: "Advancing Scientific Discovery Through Chemical Proteomics"
+  email: "contact@bionsight.com"
+  github: "bionsight"
+
+# GitHub links
+github:
+  repository: "bionsight/SynapSpec"
+  discussions: "https://github.com/bionsight/SynapSpec/discussions"
+  issues: "https://github.com/bionsight/SynapSpec/issues"
+  new_discussion: "https://github.com/bionsight/SynapSpec/discussions/new?category=general"
+
+# Navigation
+navigation:
+  - name: "Home"
+    url: "/"
+  - name: "About"
+    url: "/about/"
+  - name: "Software"
+    url: "/software/"
+  - name: "Documentation"
+    url: "/docs/"
+    external: true
+  - name: "Contact"
+    url: "/contact/"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Collections
+collections:
+  products:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "products"
+    values:
+      layout: "product"
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
