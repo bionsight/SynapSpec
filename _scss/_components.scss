@@ -1,44 +1,46 @@
 
+@use "variables";
+
 // Button styles
 .btn {
   display: inline-block;
-  padding: $spacing-sm $spacing-md;
-  background-color: $primary-color;
+  padding: variables.$spacing-sm variables.$spacing-md;
+  background-color: variables.$primary-color;
   color: white;
   text-decoration: none;
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   font-weight: 500;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
-  font-family: $body-font;
+  font-family: variables.$body-font;
 
   &:hover {
-    background-color: darken($primary-color, 10%);
+    background-color: variables.$primary-color-dark;
     transform: translateY(-1px);
-    box-shadow: $box-shadow;
+    box-shadow: variables.$box-shadow;
   }
 
   &.btn-large {
-    padding: $spacing-md $spacing-lg;
+    padding: variables.$spacing-md variables.$spacing-lg;
     font-size: 1.1rem;
   }
 
   &.btn-accent {
-    background-color: $accent-color;
+    background-color: variables.$accent-color;
 
     &:hover {
-      background-color: darken($accent-color, 10%);
+      background-color: variables.$accent-color-dark;
     }
   }
 
   &.btn-outline {
     background-color: transparent;
-    border: 2px solid $primary-color;
-    color: $primary-color;
+    border: 2px solid variables.$primary-color;
+    color: variables.$primary-color;
 
     &:hover {
-      background-color: $primary-color;
+      background-color: variables.$primary-color;
       color: white;
     }
   }
@@ -47,76 +49,76 @@
 // Card component
 .card {
   background: white;
-  border-radius: $border-radius-lg;
-  padding: $spacing-lg;
-  box-shadow: $box-shadow;
+  border-radius: variables.$border-radius-lg;
+  padding: variables.$spacing-lg;
+  box-shadow: variables.$box-shadow;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: $box-shadow-lg;
+    box-shadow: variables.$box-shadow-lg;
   }
 
   .card-header {
-    margin-bottom: $spacing-md;
+    margin-bottom: variables.$spacing-md;
 
     h3 {
-      margin: 0 0 $spacing-xs 0;
-      color: $primary-color;
+      margin: 0 0 variables.$spacing-xs 0;
+      color: variables.$primary-color;
     }
 
     .card-icon {
       font-size: 2rem;
-      color: $accent-color;
-      margin-bottom: $spacing-sm;
+      color: variables.$accent-color;
+      margin-bottom: variables.$spacing-sm;
     }
   }
 
   .card-content {
     p {
-      margin-bottom: $spacing-sm;
-      color: lighten($text-color, 10%);
+      margin-bottom: variables.$spacing-sm;
+      color: variables.$text-color-light;
     }
   }
 }
 
 // Hero section
 .hero {
-  background: linear-gradient(135deg, $secondary-color 0%, lighten($primary-color, 20%) 100%);
-  padding: $spacing-xl 0;
+  background: linear-gradient(135deg, variables.$secondary-color 0%, variables.$primary-color-light 100%);
+  padding: variables.$spacing-xl 0;
   text-align: center;
 
   h1 {
-    font-family: $heading-font;
-    font-size: $font-size-h1;
-    margin-bottom: $spacing-md;
-    color: $text-color;
+    font-family: variables.$heading-font;
+    font-size: variables.$font-size-h1;
+    margin-bottom: variables.$spacing-md;
+    color: variables.$text-color;
 
-    @media (max-width: $mobile) {
+    @media (max-width: variables.$mobile) {
       font-size: 2rem;
     }
   }
 
   .hero-subtitle {
     font-size: 1.2rem;
-    margin-bottom: $spacing-lg;
-    color: darken($text-color, 10%);
+    margin-bottom: variables.$spacing-lg;
+    color: variables.$text-color-dark;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
 
-    @media (max-width: $mobile) {
+    @media (max-width: variables.$mobile) {
       font-size: 1rem;
     }
   }
 
   .hero-actions {
     display: flex;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
     justify-content: center;
-    margin-top: $spacing-lg;
+    margin-top: variables.$spacing-lg;
 
-    @media (max-width: $mobile) {
+    @media (max-width: variables.$mobile) {
       flex-direction: column;
       align-items: center;
     }
@@ -127,30 +129,30 @@
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: $spacing-lg;
-  margin: $spacing-xl 0;
+  gap: variables.$spacing-lg;
+  margin: variables.$spacing-xl 0;
 
-  @media (max-width: $mobile) {
+  @media (max-width: variables.$mobile) {
     grid-template-columns: 1fr;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
   }
 }
 
 // Section headers
 .section-header {
   text-align: center;
-  margin-bottom: $spacing-xl;
+  margin-bottom: variables.$spacing-xl;
 
   h2 {
-    font-family: $heading-font;
-    font-size: $font-size-h2;
-    margin-bottom: $spacing-sm;
-    color: $text-color;
+    font-family: variables.$heading-font;
+    font-size: variables.$font-size-h2;
+    margin-bottom: variables.$spacing-sm;
+    color: variables.$text-color;
   }
 
   .section-subtitle {
     font-size: 1.1rem;
-    color: lighten($text-color, 20%);
+    color: variables.$text-color-lighter;
     max-width: 800px;
     margin: 0 auto;
   }
@@ -161,32 +163,32 @@
   max-width: 600px;
   margin: 0 auto;
   background: white;
-  padding: $spacing-lg;
-  border-radius: $border-radius-lg;
-  box-shadow: $box-shadow;
+  padding: variables.$spacing-lg;
+  border-radius: variables.$border-radius-lg;
+  box-shadow: variables.$box-shadow;
 
   .form-group {
-    margin-bottom: $spacing-md;
+    margin-bottom: variables.$spacing-md;
 
     label {
       display: block;
-      margin-bottom: $spacing-xs;
+      margin-bottom: variables.$spacing-xs;
       font-weight: 500;
-      color: $text-color;
+      color: variables.$text-color;
     }
 
     input, textarea {
       width: 100%;
-      padding: $spacing-sm;
-      border: 2px solid lighten($secondary-color, 10%);
-      border-radius: $border-radius;
-      font-family: $body-font;
-      font-size: $font-size-body;
+      padding: variables.$spacing-sm;
+      border: 2px solid variables.$secondary-color-light;
+      border-radius: variables.$border-radius;
+      font-family: variables.$body-font;
+      font-size: variables.$font-size-body;
       transition: border-color 0.3s ease;
 
       &:focus {
         outline: none;
-        border-color: $primary-color;
+        border-color: variables.$primary-color;
       }
     }
 
@@ -199,11 +201,11 @@
 
 // Navigation breadcrumbs
 .breadcrumbs {
-  margin-bottom: $spacing-lg;
-  color: lighten($text-color, 30%);
+  margin-bottom: variables.$spacing-lg;
+  color: variables.$text-color-lightest;
 
   a {
-    color: $primary-color;
+    color: variables.$primary-color;
     text-decoration: none;
 
     &:hover {
@@ -212,6 +214,6 @@
   }
 
   .separator {
-    margin: 0 $spacing-xs;
+    margin: 0 variables.$spacing-xs;
   }
 }

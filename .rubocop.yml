@@ -1,0 +1,28 @@
+# RuboCop configuration for Jekyll projects
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  Exclude:
+    - "_site/**/*"
+    - ".git/**/*"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+
+# Disable some overly strict cops for Jekyll
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - "Gemfile"
+
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "*.gemspec"
+
+# Allow long lines in configuration files
+Layout/LineLength:
+  Exclude:
+    - "_config.yml"

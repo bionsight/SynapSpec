@@ -5,6 +5,17 @@ $background-color: #ffffff;   // White
 $text-color: #333333;         // 진한 회색
 $accent-color: #7BA428;       // 더 진한 연두색
 
+// Derived color variations (calculated manually to avoid deprecation warnings)
+$primary-color-dark: #7AA025;     // 10% darker primary
+$primary-color-darker: #689B20;   // 15% darker primary
+$primary-color-light: #A8D452;    // 20% lighter primary
+$accent-color-dark: #6B9322;      // 10% darker accent
+$secondary-color-light: #C2E869;  // 10% lighter secondary
+$text-color-dark: #2B2B2B;        // 10% darker text
+$text-color-light: #4D4D4D;       // 10% lighter text
+$text-color-lighter: #666666;     // 20% lighter text
+$text-color-lightest: #808080;    // 30% lighter text
+
 // Typography
 $heading-font: 'Montserrat', sans-serif;
 $body-font: 'Noto Sans KR', sans-serif;

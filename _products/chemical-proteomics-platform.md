@@ -27,18 +27,21 @@ Our Chemical Proteomics Platform represents the state-of-the-art in functional p
 ## Technical Specifications
 
 ### Mass Spectrometry Infrastructure
+
 - High-resolution Orbitrap mass spectrometers
 - Ultra-high performance liquid chromatography (UHPLC)
 - Data-independent acquisition (DIA) capabilities
 - Real-time database searching
 
 ### Chemical Probe Library
+
 - 500+ validated activity-based probes
 - Coverage of major enzyme families
 - Custom probe synthesis capabilities
 - Quality-controlled reagent production
 
 ### Data Analysis Pipeline
+
 - Automated data processing workflows
 - Statistical analysis and quality control
 - Pathway enrichment analysis
@@ -47,12 +50,14 @@ Our Chemical Proteomics Platform represents the state-of-the-art in functional p
 ## Applications
 
 ### Drug Discovery
+
 - Target identification for bioactive compounds
 - Mechanism of action studies
 - Off-target profiling and safety assessment
 - Lead compound optimization
 
 ### Basic Research
+
 - Enzyme function characterization
 - Pathway analysis and mapping
 - Disease mechanism studies
@@ -61,9 +66,11 @@ Our Chemical Proteomics Platform represents the state-of-the-art in functional p
 ## Case Studies
 
 ### Target Identification for Natural Products
+
 Using our platform, we successfully identified the molecular target of a bioactive natural product, leading to the development of a new class of anti-inflammatory compounds.
 
 ### Mechanism of Action Studies
+
 Comprehensive proteomics analysis revealed the multi-target mechanism of a clinically approved drug, providing insights for combination therapy development.
 
 ## Getting Started

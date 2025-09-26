@@ -56,4 +56,3 @@ description: "Download the latest version of SynapSpec for your platform"
     </section>
 
 </div>
-

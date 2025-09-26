@@ -11,6 +11,12 @@ group :jekyll_plugins do
   gem "jekyll-seo-tag"
 end
 
+group :development do
+  gem "rubocop", "~> 1.50", require: false
+  gem "html-proofer", "~> 4.0"
+  gem "mdl", "~> 0.12" # Markdown linter
+end
+
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
 platforms :mingw, :x64_mingw, :mswin, :jruby do

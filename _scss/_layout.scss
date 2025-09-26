@@ -1,8 +1,10 @@
+@use "variables";
+
 // Base layout styles
 body {
-  font-family: $body-font;
-  color: $text-color;
-  background-color: $background-color;
+  font-family: variables.$body-font;
+  color: variables.$text-color;
+  background-color: variables.$background-color;
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -10,19 +12,19 @@ body {
 
 // Container
 .container {
-  max-width: $desktop;
+  max-width: variables.$desktop;
   margin: 0 auto;
-  padding: 0 $spacing-md;
+  padding: 0 variables.$spacing-md;
 
-  @media (max-width: $mobile) {
-    padding: 0 $spacing-sm;
+  @media (max-width: variables.$mobile) {
+    padding: 0 variables.$spacing-sm;
   }
 }
 
 // Header
 .site-header {
   background-color: white;
-  box-shadow: $box-shadow;
+  box-shadow: variables.$box-shadow;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -31,14 +33,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $spacing-sm 0;
+    padding: variables.$spacing-sm 0;
   }
 
   .logo {
-    font-family: $heading-font;
+    font-family: variables.$heading-font;
     font-size: 1.5rem;
     font-weight: bold;
-    color: $primary-color;
+    color: variables.$primary-color;
     text-decoration: none;
   }
 
@@ -47,20 +49,20 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: $spacing-lg;
+    gap: variables.$spacing-lg;
 
-    @media (max-width: $mobile) {
-      gap: $spacing-sm;
+    @media (max-width: variables.$mobile) {
+      gap: variables.$spacing-sm;
     }
 
     a {
-      color: $text-color;
+      color: variables.$text-color;
       text-decoration: none;
       font-weight: 500;
       transition: color 0.3s ease;
 
       &:hover {
-        color: $primary-color;
+        color: variables.$primary-color;
       }
 
       &.external::after {
@@ -74,15 +76,15 @@ body {
 // Main content
 .main-content {
   min-height: calc(100vh - 200px);
-  padding: $spacing-lg 0;
+  padding: variables.$spacing-lg 0;
 }
 
 // Footer
 .site-footer {
-  background-color: $text-color;
+  background-color: variables.$text-color;
   color: white;
-  padding: $spacing-lg 0;
-  margin-top: $spacing-xl;
+  padding: variables.$spacing-lg 0;
+  margin-top: variables.$spacing-xl;
 
   .footer-content {
     text-align: center;
@@ -91,16 +93,16 @@ body {
   .footer-links {
     display: flex;
     justify-content: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-sm;
+    gap: variables.$spacing-md;
+    margin-bottom: variables.$spacing-sm;
 
-    @media (max-width: $mobile) {
+    @media (max-width: variables.$mobile) {
       flex-direction: column;
-      gap: $spacing-xs;
+      gap: variables.$spacing-xs;
     }
 
     a {
-      color: $secondary-color;
+      color: variables.$secondary-color;
       text-decoration: none;
 
       &:hover {
@@ -110,7 +112,7 @@ body {
   }
 
   .copyright {
-    font-size: $font-size-small;
+    font-size: variables.$font-size-small;
     opacity: 0.8;
   }
 }
