@@ -1,0 +1,21 @@
+<header class="site-header">
+  <div class="container">
+    <div class="header-content">
+      <a href="{{ '/' | relative_url }}" class="logo">
+        {{ site.company.name }}
+      </a>
+
+      <nav class="nav-menu">
+        {% for item in site.navigation %}
+          {% if item.external %}
+            <a href="{{ item.url }}" class="external" target="_blank" rel="noopener">{{ item.name }}</a>
+          {% else %}
+            <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>
+              {{ item.name }}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+    </div>
+  </div>
+</header>

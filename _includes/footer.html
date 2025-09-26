@@ -1,0 +1,18 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-links">
+        {% for item in site.navigation %}
+          {% unless item.external %}
+            <a href="{{ item.url | relative_url }}">{{ item.name }}</a>
+          {% endunless %}
+        {% endfor %}
+        <a href="https://github.com/{{ site.company.github }}" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+      <div class="copyright">
+        &copy; {{ 'now' | date: "%Y" }} {{ site.company.name }}. All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>

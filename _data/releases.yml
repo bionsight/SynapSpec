@@ -1,0 +1,21 @@
+synapspec:
+  version: "v0.2.4"
+  name: "SynapSpec v0.2.4"
+  description: |
+    ## New Features
+    - Deep learning-based MS workflow optimization
+    - Cross-platform support (Windows, macOS, Linux)
+    - Real-time processing capabilities
+
+    ## Improvements
+    - Enhanced performance for large datasets
+    - Improved user interface
+    - Better error handling
+
+    ## Bug Fixes
+    - Fixed memory leak issues
+    - Resolved compatibility problems
+  downloads:
+    windows: "https://github.com/bionsight/DeepMSFlow/releases/download/v0.2.4/synapspec-windows-0.2.4.exe" # TODO: change to S3 link (TBD)
+    macos: "https://github.com/bionsight/DeepMSFlow/releases/download/v0.2.4/synapspec-macos-0.2.4.dmg" # TODO: change to S3 link (TBD)
+    linux: "https://github.com/bionsight/DeepMSFlow/releases/download/v0.2.4/SynapSpec-linux-0.2.4.tar.gz" # TODO: change to S3 link (TBD)
