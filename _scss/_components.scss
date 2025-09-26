@@ -93,9 +93,15 @@
     font-size: variables.$font-size-h1;
     margin-bottom: variables.$spacing-md;
     color: variables.$text-color;
+    white-space: nowrap;
 
     @media (max-width: variables.$mobile) {
-      font-size: 2rem;
+      font-size: 1.8rem;
+      white-space: normal;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
     }
   }
 

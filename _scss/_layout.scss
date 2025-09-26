@@ -79,6 +79,11 @@ body {
   padding: variables.$spacing-lg 0;
 }
 
+// Home page specific - remove padding when hero is present
+body.page-home .main-content {
+  padding: 0;
+}
+
 // Footer
 .site-footer {
   background-color: variables.$text-color;

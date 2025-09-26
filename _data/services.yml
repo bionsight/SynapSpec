@@ -1,3 +1,23 @@
-- name: "SynapSpec"
-  icon: "fas fa-flask"
-  description: "Optimizing Mass Spectrometry workflows through deep learning"
+- name: "Easy Installation"
+  icon: "fas fa-download"
+  description: "One-click installer with automatic dependency management. Get started in minutes, not hours."
+
+- name: "Cross-Platform Support"
+  icon: "fas fa-laptop"
+  description: "Works seamlessly on Windows, macOS, and Linux. Same powerful features across all platforms."
+
+- name: "Deep Learning Optimization"
+  icon: "fas fa-brain"
+  description: "Advanced AI algorithms optimize mass spectrometry workflows for maximum accuracy and speed."
+
+- name: "Intuitive Interface"
+  icon: "fas fa-mouse-pointer"
+  description: "Clean, user-friendly interface designed for both beginners and experts. No complex configuration needed."
+
+- name: "Real-time Processing"
+  icon: "fas fa-bolt"
+  description: "Process and analyze data in real-time with lightning-fast performance and instant feedback."
+
+- name: "Automated Workflows"
+  icon: "fas fa-cogs"
+  description: "Smart automation handles repetitive tasks, letting you focus on discovery and insights."
