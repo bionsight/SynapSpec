@@ -1,20 +1,23 @@
 // Color Palette
-$primary-color: #9ACD32;      // YellowGreen
-$secondary-color: #B8E356;    // 더 연한 연두색
+$primary-color: #2563eb;      // Primary blue
+$secondary-color: #64748b;    // Secondary gray
+$accent-color: #0ea5e9;       // Accent sky blue
 $background-color: #ffffff;   // White
-$text-color: #333333;         // 진한 회색
-$accent-color: #7BA428;       // 더 진한 연두색
+$bg-secondary: #f8fafc;       // Light background
+$text-color: #1e293b;         // Dark text
+$text-light: #64748b;         // Light text
+$border-color: #e2e8f0;       // Border color
 
 // Derived color variations (calculated manually to avoid deprecation warnings)
-$primary-color-dark: #7AA025;     // 10% darker primary
-$primary-color-darker: #689B20;   // 15% darker primary
-$primary-color-light: #A8D452;    // 20% lighter primary
-$accent-color-dark: #6B9322;      // 10% darker accent
-$secondary-color-light: #C2E869;  // 10% lighter secondary
-$text-color-dark: #2B2B2B;        // 10% darker text
-$text-color-light: #4D4D4D;       // 10% lighter text
-$text-color-lighter: #666666;     // 20% lighter text
-$text-color-lightest: #808080;    // 30% lighter text
+$primary-color-dark: #1d4ed8;     // Darker primary
+$primary-color-darker: #1e40af;   // Even darker primary
+$primary-color-light: #3b82f6;    // Lighter primary
+$accent-color-dark: #0284c7;      // Darker accent
+$secondary-color-light: #94a3b8;  // Lighter secondary
+$text-color-dark: #0f172a;        // Darker text
+$text-color-light: #475569;       // Light text variant
+$text-color-lighter: #64748b;     // Lighter text
+$text-color-lightest: #94a3b8;    // Lightest text
 
 // Typography
 $heading-font: 'Montserrat', sans-serif;

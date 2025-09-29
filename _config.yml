@@ -27,7 +27,7 @@ navigation:
   - name: "Software"
     url: "/software/"
   - name: "Documentation"
-    url: "/docs/"
+    url: "https://docs.synapspec.ai"
     external: true
   - name: "Contact"
     url: "/contact/"
@@ -38,6 +38,8 @@ highlighter: rouge
 sass:
   sass_dir: _scss
   style: compressed
+  load_paths:
+    - _scss
 
 # Plugins
 plugins:
