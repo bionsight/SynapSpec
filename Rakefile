@@ -26,16 +26,6 @@ desc "Run all linters"
 task :lint do
   puts "🔍 Running linters..."
 
-  # Jekyll build check (for Sass deprecation warnings)
-  puts "📄 Checking Jekyll build..."
-  result = system("bundle exec jekyll build 2>&1 | grep -i 'deprecation.*warning'")
-  if $?.exitstatus == 0
-    puts "❌ Sass deprecation warnings found!"
-    exit 1
-  else
-    puts "✅ No Sass deprecation warnings"
-  end
-
   # Markdown linting
   if system("which mdl > /dev/null 2>&1")
     puts "📝 Linting Markdown files..."

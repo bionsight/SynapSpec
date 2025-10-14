@@ -1,17 +1,18 @@
 ---
 layout: default
 title: "Home"
-description: "Advanced chemical proteomics research and development solutions for scientific discovery"
+description: "Advanced proteomics research and development solutions for scientific discovery"
 ---
 
 <section class="hero">
   <div class="container">
     <h1>{{ site.company.tagline }}</h1>
     <p class="hero-subtitle">
-      We develop cutting-edge chemical proteomics technologies to accelerate drug discovery and advance our understanding of protein function in living systems.
+      We develop cutting-edge proteomics technologies to accelerate drug discovery and advance our understanding of protein function in living systems.
     </p>
     <div class="hero-actions">
-      <a href="{{ '/software/' | relative_url }}" class="btn btn-large">Download Now</a>
+      <a href="{{ '/download/' | relative_url }}" class="btn btn-large">Download Now</a>
+      <a href="https://github.com/bionsight/SynapSpec/discussions" class="btn btn-large" target="_blank" rel="noopener">Join Our Community</a>
     </div>
   </div>
 </section>
@@ -21,7 +22,7 @@ description: "Advanced chemical proteomics research and development solutions fo
     <div class="section-header">
       <h2>Our Core Services</h2>
       <p class="section-subtitle">
-        Comprehensive chemical proteomics solutions for modern drug discovery and basic research
+        Comprehensive proteomics solutions for modern drug discovery and basic research
       </p>
     </div>
 
@@ -48,7 +49,7 @@ description: "Advanced chemical proteomics research and development solutions fo
     <div class="section-header">
       <h2>Ready to Get Started?</h2>
       <p class="section-subtitle">
-        Contact us to discuss how our chemical proteomics solutions can advance your research
+        Contact us to discuss how our proteomics solutions can advance your research
       </p>
     </div>
     <a href="{{ '/contact/' | relative_url }}" class="btn btn-large btn-accent">Get in Touch</a>

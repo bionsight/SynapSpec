@@ -1,13 +1,13 @@
 # Site settings
 title: "SynapSpec"
-description: "Advanced chemical proteomics research and development solutions for scientific discovery"
+description: "Advanced proteomics research and development solutions for scientific discovery"
 url: "https://chemproteomics.github.io"
 baseurl: ""
 
 # Company information
 company:
   name: "SynapSpec"
-  tagline: "Advancing Scientific Discovery Through Chemical Proteomics"
+  tagline: "Advancing Scientific Discovery Through Proteomics"
   email: "contact@bionsight.com"
   github: "bionsight"
 
@@ -24,8 +24,8 @@ navigation:
     url: "/"
   - name: "About"
     url: "/about/"
-  - name: "Software"
-    url: "/software/"
+  - name: "Download"
+    url: "/download/"
   - name: "Documentation"
     url: "https://docs.synapspec.ai"
     external: true
@@ -36,10 +36,8 @@ navigation:
 markdown: kramdown
 highlighter: rouge
 sass:
-  sass_dir: _scss
+  sass_dir: _sass
   style: compressed
-  load_paths:
-    - _scss
 
 # Plugins
 plugins:

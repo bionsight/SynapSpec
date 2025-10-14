@@ -17,6 +17,7 @@
 
   &:hover {
     background-color: $primary-color-dark;
+    color: white;
     transform: translateY(-1px);
     box-shadow: $box-shadow;
   }
@@ -31,6 +32,7 @@
 
     &:hover {
       background-color: $accent-color-dark;
+      color: white;
     }
   }
 

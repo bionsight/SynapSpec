@@ -1,22 +1,22 @@
 ---
 layout: default
 title: "About Us"
-description: "Learn about ChemProteomics Solutions and our mission to advance scientific discovery through chemical proteomics"
+description: "Learn about Proteomics Solutions and our mission to advance scientific discovery through proteomics"
 ---
 
 <div class="container">
   <div class="section-header">
-    <h1>About ChemProteomics Solutions</h1>
+    <h1>About SynapSpec</h1>
     <p class="section-subtitle">
-      Pioneering the future of chemical proteomics research and drug discovery
+      Comprehensive proteomics software platform for advanced mass spectrometry data analysis
     </p>
   </div>
 
-  <section class="highlight-section">
+  <section class="py-lg">
     <div class="section-header">
-      <h2>Our Expertise</h2>
+      <h2>Core Features</h2>
       <p class="section-subtitle">
-        World-class team combining chemistry, biology, and computational expertise
+        Powerful analytical capabilities designed for modern proteomics research
       </p>
     </div>
 
@@ -25,12 +25,12 @@ description: "Learn about ChemProteomics Solutions and our mission to advance sc
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
-            <i class="fas fa-microscope"></i>
+            <i class="fas fa-dna"></i>
           </div>
-          <h3>Mass Spectrometry</h3>
+          <h3>Peptide Identification & Quantification</h3>
         </div>
         <div class="card-content">
-          <p>Advanced proteomics workflows using state-of-the-art mass spectrometry platforms.</p>
+          <p>Advanced algorithms for accurate peptide identification with robust false discovery rate control and precise quantification across samples.</p>
         </div>
       </div>
 
@@ -39,22 +39,46 @@ description: "Learn about ChemProteomics Solutions and our mission to advance sc
           <div class="card-icon">
             <i class="fas fa-brain"></i>
           </div>
-          <h3>Computational Biology</h3>
+          <h3>Deep Learning-based Spectral Library Generation</h3>
         </div>
         <div class="card-content">
-          <p>Machine learning and bioinformatics approaches for data analysis and target prediction.</p>
+          <p>Advanced deep learning models for accurate spectral library prediction and generation, enabling enhanced peptide identification and DIA analysis.</p>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-icon">
-            <i class="fas fa-pills"></i>
+            <i class="fas fa-chart-line"></i>
           </div>
-          <h3>Drug Discovery</h3>
+          <h3>Label-free Quantification</h3>
         </div>
         <div class="card-content">
-          <p>Translation of chemical proteomics insights into therapeutic development programs.</p>
+          <p>Support for both label-free and isobaric labeling methods for multiplexed quantitative proteomics experiments.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-microscope"></i>
+          </div>
+          <h3>DIA Analysis</h3>
+        </div>
+        <div class="card-content">
+          <p>Optimized workflows for data-independent acquisition and SWATH-MS analysis with spectral library generation and matching.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <h3>Statistical Analysis & Differential Expression</h3>
+        </div>
+        <div class="card-content">
+          <p>Integrated statistical tools for differential expression analysis and multiple testing correction.</p>
         </div>
       </div>
     </div>

@@ -1,14 +1,14 @@
 ---
 layout: default
 title: "Contact Us"
-description: "Get in touch with ChemProteomics Solutions for collaborations and inquiries"
+description: "Get in touch with Proteomics Solutions for collaborations and inquiries"
 ---
 
 <div class="container">
   <div class="section-header">
     <h1>Contact Us</h1>
     <p class="section-subtitle">
-      Ready to advance your research with chemical proteomics? Let's discuss how we can help.
+      Ready to advance your research? Let's discuss how we can help.
     </p>
   </div>
 
