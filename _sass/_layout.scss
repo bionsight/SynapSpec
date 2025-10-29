@@ -3,11 +3,12 @@
 // Base layout styles
 body {
   font-family: $body-font;
-  color: $text-color;
-  background-color: $background-color;
+  color: #fff;
+  background-color: #050811;
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 // Container
@@ -23,26 +24,40 @@ body {
 
 // Header
 .site-header {
-  background-color: $background-color;
-  border-bottom: 1px solid $border-color;
-  box-shadow: $box-shadow;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  width: 100%;
+  padding: 25px 80px;
+  z-index: 1000;
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(5, 8, 17, 0.7);
+  border-bottom: 1px solid rgba(140, 198, 63, 0.1);
+
+  @media (max-width: $breakpoint-lg) {
+    padding: 20px 40px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 20px 30px;
+  }
 
   .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $spacing-sm 0;
   }
 
   .logo {
     font-family: $heading-font;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: $primary-color;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
     text-decoration: none;
+    color: #fff;
+    background: linear-gradient(135deg, $primary-green, #72b626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .nav-menu {
@@ -50,25 +65,50 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: $spacing-lg;
+    gap: 50px;
+    align-items: center;
 
-    @media (max-width: $mobile) {
-      gap: $spacing-sm;
+    @media (max-width: $breakpoint-lg) {
+      gap: 30px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      display: none;
     }
 
     a {
-      color: $text-color;
+      color: rgba(255, 255, 255, 0.7);
       text-decoration: none;
+      font-size: 15px;
       font-weight: 500;
-      transition: color 0.3s ease;
+      transition: all 0.3s;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: $primary-green;
+        transition: width 0.3s;
+      }
 
       &:hover {
-        color: $primary-color;
+        color: $primary-green;
+
+        &::after {
+          width: 100%;
+        }
+      }
+
+      &.active {
+        color: $primary-green;
       }
 
       &.external::after {
-        content: " ↗";
-        font-size: 0.8em;
+        display: none;
       }
     }
   }
@@ -77,20 +117,29 @@ body {
 // Main content
 .main-content {
   min-height: calc(100vh - 200px);
-  padding: $spacing-lg 0;
+  padding-top: 100px;
 }
 
 // Home page specific - remove padding when hero is present
 body.page-home .main-content {
-  padding: 0;
+  padding-top: 100px;
 }
 
 // Footer
 .site-footer {
-  background-color: $text-color;
-  color: white;
-  padding: $spacing-lg 0;
+  padding: 60px 80px;
+  border-top: 1px solid rgba(140, 198, 63, 0.1);
+  background: rgba(5, 8, 17, 0.8);
+  text-align: center;
   margin-top: $spacing-xl;
+
+  @media (max-width: $breakpoint-lg) {
+    padding: 40px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 40px 30px;
+  }
 
   .footer-content {
     text-align: center;
@@ -99,26 +148,28 @@ body.page-home .main-content {
   .footer-links {
     display: flex;
     justify-content: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-sm;
+    gap: 40px;
+    margin-bottom: 30px;
 
-    @media (max-width: $mobile) {
+    @media (max-width: $breakpoint-md) {
       flex-direction: column;
-      gap: $spacing-xs;
+      gap: 20px;
     }
 
     a {
-      color: $secondary-color;
+      color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
 
       &:hover {
-        color: white;
+        color: $primary-green;
       }
     }
   }
 
   .copyright {
-    font-size: $font-size-small;
-    opacity: 0.8;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.5);
   }
 }

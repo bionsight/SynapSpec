@@ -14,6 +14,12 @@
   {% seo %}
 </head>
 <body class="{% if page.title == 'Home' %}page-home{% endif %}">
+  <!-- Gradient Orb Background -->
+  <div class="dna-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+
   {% include header.html %}
 
   <main class="main-content">
@@ -21,6 +27,26 @@
   </main>
 
   {% include footer.html %}
+
+  <script>
+    // Parallax effect for gradient orbs
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const orbs = document.querySelectorAll('.gradient-orb');
+      orbs.forEach((orb, index) => {
+        orb.style.transform = `translateY(${scrolled * (0.1 + index * 0.05)}px)`;
+      });
+    });
+
+    // Active navigation
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === currentPath || (currentPath.startsWith(href) && href !== '/')) {
+        link.classList.add('active');
+      }
+    });
+  </script>
 
   {% if site.analytics %}
     <!-- Analytics code would go here -->

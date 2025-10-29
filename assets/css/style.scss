@@ -1,9 +1,10 @@
 ---
 ---
 @import "variables";
+@import "animations";
 @import "layout";
 @import "components";
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
 // Global typography
 h1, h2, h3, h4, h5, h6 {
@@ -23,11 +24,11 @@ p {
 }
 
 a {
-  color: $primary-color;
+  color: $primary-green;
   transition: color 0.3s ease;
 
   &:hover {
-    color: $primary-color-darker;
+    color: #72b626;
   }
 }
 
@@ -57,9 +58,10 @@ img {
 
 // Highlight sections
 .highlight-section {
-  background-color: $bg-secondary;
-  border: 1px solid $border-color;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(140, 198, 63, 0.15);
   padding: $spacing-xl;
   margin: $spacing-xl 0;
-  border-radius: $border-radius-lg;
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
 }

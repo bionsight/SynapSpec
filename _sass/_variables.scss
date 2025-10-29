@@ -1,27 +1,38 @@
-// Color Palette
-$primary-color: #2563eb;      // Primary blue
-$secondary-color: #64748b;    // Secondary gray
-$accent-color: #0ea5e9;       // Accent sky blue
-$background-color: #ffffff;   // White
-$bg-secondary: #f8fafc;       // Light background
-$text-color: #1e293b;         // Dark text
-$text-light: #64748b;         // Light text
-$border-color: #e2e8f0;       // Border color
+// Brand colors from CI
+$primary-green: #8cc63f;
+$primary-gray: #4d4d4d;
+$dark-gray: #333333;
+$light-gray: #f5f5f5;
+$white: #ffffff;
 
-// Derived color variations (calculated manually to avoid deprecation warnings)
-$primary-color-dark: #1d4ed8;     // Darker primary
-$primary-color-darker: #1e40af;   // Even darker primary
-$primary-color-light: #3b82f6;    // Lighter primary
-$accent-color-dark: #0284c7;      // Darker accent
-$secondary-color-light: #94a3b8;  // Lighter secondary
-$text-color-dark: #0f172a;        // Darker text
-$text-color-light: #475569;       // Light text variant
-$text-color-lighter: #64748b;     // Lighter text
-$text-color-lightest: #94a3b8;    // Lightest text
+// Color Palette (mapped to CI colors)
+$primary-color: $primary-green;      // Primary green
+$secondary-color: $primary-gray;     // Secondary gray
+$accent-color: #72b626;              // Accent darker green
+$background-color: $white;           // White
+$bg-secondary: $light-gray;          // Light background
+$text-color: $dark-gray;             // Dark text
+$text-light: $primary-gray;          // Light text
+$border-color: #e0e0e0;              // Border color
+
+
+// Derived color variations
+$primary-color-dark: #72b626;        // Darker primary green
+$primary-color-darker: #5a9420;      // Even darker primary green
+$primary-color-light: #a3d15f;       // Lighter primary green
+$accent-color-dark: #5a9420;         // Darker accent
+$secondary-color-light: #666666;     // Lighter secondary
+$text-color-dark: $dark-gray;        // Darker text
+$text-color-light: $primary-gray;    // Light text variant
+$text-color-lighter: #6b6b6b;        // Lighter text
+$text-color-lightest: #999999;       // Lightest text
 
 // Typography
+$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $heading-font: 'Montserrat', sans-serif;
 $body-font: 'Noto Sans KR', sans-serif;
+$font-size-base: 16px;
+$line-height-base: 1.6;
 
 // Font sizes
 $font-size-h1: 2.5rem;
@@ -31,16 +42,24 @@ $font-size-body: 1rem;
 $font-size-small: 0.875rem;
 
 // Spacing
-$spacing-xs: 0.5rem;
-$spacing-sm: 1rem;
-$spacing-md: 1.5rem;
-$spacing-lg: 2rem;
-$spacing-xl: 3rem;
+$spacing-unit: 1rem;
+$spacing-xs: $spacing-unit * 0.5;
+$spacing-sm: $spacing-unit;
+$spacing-md: $spacing-unit * 1.5;
+$spacing-lg: $spacing-unit * 2;
+$spacing-xl: $spacing-unit * 3;
 
 // Breakpoints
-$mobile: 768px;
-$tablet: 1024px;
-$desktop: 1200px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$mobile: $breakpoint-md;
+$tablet: $breakpoint-lg;
+$desktop: $breakpoint-xl;
+
+// Container
+$container-max-width: 1200px;
 
 // Border radius
 $border-radius: 8px;

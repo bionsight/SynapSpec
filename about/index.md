@@ -63,7 +63,7 @@ description: "Learn about Proteomics Solutions and our mission to advance scient
           <div class="card-icon">
             <i class="fas fa-microscope"></i>
           </div>
-          <h3>DIA Analysis</h3>
+          <h3>Semi-Specific Support</h3>
         </div>
         <div class="card-content">
           <p>Optimized workflows for data-independent acquisition and SWATH-MS analysis with spectral library generation and matching.</p>
@@ -79,6 +79,18 @@ description: "Learn about Proteomics Solutions and our mission to advance scient
         </div>
         <div class="card-content">
           <p>Integrated statistical tools for differential expression analysis and multiple testing correction.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-flask"></i>
+          </div>
+          <h3>Scalable Multi-Omics Solution</h3>
+        </div>
+        <div class="card-content">
+          <p>Developing scalable workflows applicable to diverse research areas including metaproteomics, immunoproteomics, and clinical proteomics for comprehensive biological insights.</p>
         </div>
       </div>
     </div>

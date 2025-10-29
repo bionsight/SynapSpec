@@ -4,62 +4,64 @@
 // Button styles
 .btn {
   display: inline-block;
-  padding: $spacing-sm $spacing-md;
-  background-color: $primary-color;
-  color: white;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, $primary-green, #72b626);
+  color: #050811;
   text-decoration: none;
-  border-radius: $border-radius;
-  font-weight: 500;
+  border-radius: 30px;
+  font-weight: 700;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
   font-family: $body-font;
+  box-shadow: 0 4px 20px rgba(140, 198, 63, 0.3);
 
   &:hover {
-    background-color: $primary-color-dark;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: $box-shadow;
+    color: #050811;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(140, 198, 63, 0.5);
   }
 
   &.btn-large {
-    padding: $spacing-md $spacing-lg;
+    padding: 15px 35px;
     font-size: 1.1rem;
   }
 
   &.btn-accent {
-    background-color: $accent-color;
+    background: linear-gradient(135deg, $primary-green, #72b626);
+    color: #050811;
 
     &:hover {
-      background-color: $accent-color-dark;
-      color: white;
+      color: #050811;
     }
   }
 
   &.btn-outline {
-    background-color: transparent;
-    border: 2px solid $primary-color;
-    color: $primary-color;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: none;
 
     &:hover {
-      background-color: $primary-color;
-      color: white;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
     }
   }
 }
 
 // Card component
 .card {
-  background: $background-color;
-  border: 1px solid $border-color;
-  border-radius: $border-radius-lg;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(140, 198, 63, 0.15);
+  border-radius: 16px;
   padding: $spacing-lg;
-  box-shadow: $box-shadow;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: $box-shadow-lg;
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(140, 198, 63, 0.3);
   }
 
   .card-header {
@@ -67,12 +69,13 @@
 
     h3 {
       margin: 0 0 $spacing-xs 0;
-      color: $primary-color;
+      color: $primary-green;
+      font-size: 1.5rem;
     }
 
     .card-icon {
       font-size: 2rem;
-      color: $accent-color;
+      color: $primary-green;
       margin-bottom: $spacing-sm;
     }
   }
@@ -80,44 +83,58 @@
   .card-content {
     p {
       margin-bottom: $spacing-sm;
-      color: $text-color-light;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.8;
     }
   }
 }
 
 // Hero section
 .hero {
-  background: linear-gradient(135deg, $bg-secondary 0%, $primary-color-light 30%, $accent-color 100%);
-  padding: $spacing-xl 0;
+  position: relative;
+  background: linear-gradient(180deg, rgba(5, 8, 17, 0.6) 0%, rgba(10, 14, 39, 0.4) 100%);
+  padding: 80px 0;
   text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   h1 {
     font-family: $heading-font;
-    font-size: $font-size-h1;
+    font-size: 56px;
     margin-bottom: $spacing-md;
-    color: $text-color;
-    white-space: nowrap;
+    font-weight: 900;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, $primary-green 50%, #72b626 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 
-    @media (max-width: $mobile) {
-      font-size: 1.8rem;
-      white-space: normal;
+    @media (max-width: $breakpoint-md) {
+      font-size: 40px;
     }
 
-    @media (max-width: 768px) {
-      font-size: 1.6rem;
+    @media (max-width: $breakpoint-sm) {
+      font-size: 32px;
     }
   }
 
   .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 20px;
     margin-bottom: $spacing-lg;
-    color: $text-color-dark;
-    max-width: 600px;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+    line-height: 1.6;
 
-    @media (max-width: $mobile) {
-      font-size: 1rem;
+    @media (max-width: $breakpoint-md) {
+      font-size: 18px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 16px;
     }
   }
 
@@ -127,7 +144,7 @@
     justify-content: center;
     margin-top: $spacing-lg;
 
-    @media (max-width: $mobile) {
+    @media (max-width: $breakpoint-md) {
       flex-direction: column;
       align-items: center;
     }
@@ -154,14 +171,18 @@
 
   h2 {
     font-family: $heading-font;
-    font-size: $font-size-h2;
+    font-size: 2.5rem;
     margin-bottom: $spacing-sm;
-    color: $text-color;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .section-subtitle {
-    font-size: 1.1rem;
-    color: $text-color-lighter;
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.6);
     max-width: 800px;
     margin: 0 auto;
   }
@@ -171,11 +192,12 @@
 .contact-form {
   max-width: 600px;
   margin: 0 auto;
-  background: $background-color;
-  border: 1px solid $border-color;
+  background: rgba(10, 14, 39, 0.4);
+  border: 1px solid rgba(140, 198, 63, 0.15);
   padding: $spacing-lg;
-  border-radius: $border-radius-lg;
-  box-shadow: $box-shadow;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20px);
 
   .form-group {
     margin-bottom: $spacing-md;
@@ -184,21 +206,28 @@
       display: block;
       margin-bottom: $spacing-xs;
       font-weight: 500;
-      color: $text-color;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     input, textarea {
       width: 100%;
       padding: $spacing-sm;
-      border: 1px solid $border-color;
+      border: 1px solid rgba(140, 198, 63, 0.2);
       border-radius: $border-radius;
       font-family: $body-font;
       font-size: $font-size-body;
       transition: border-color 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
 
       &:focus {
         outline: none;
-        border-color: $primary-color;
+        border-color: $primary-green;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.4);
       }
     }
 
@@ -212,10 +241,10 @@
 // Navigation breadcrumbs
 .breadcrumbs {
   margin-bottom: $spacing-lg;
-  color: $text-color-lightest;
+  color: rgba(255, 255, 255, 0.4);
 
   a {
-    color: $primary-color;
+    color: $primary-green;
     text-decoration: none;
 
     &:hover {
