@@ -93,7 +93,10 @@ description: "Download the latest version of SynapSpec for your platform"
 
       <div class="requirement-item">
         <h4><i class="fas fa-code"></i> Software Dependencies</h4>
-        <p>.NET 8.0 or higher</p>
+        <p>
+        .NET 8.0 or higher <br>
+        Mono
+        </p>
       </div>
 
     </div>

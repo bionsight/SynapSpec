@@ -13,7 +13,7 @@ description: "SynapSpec - Advanced DIA-MS analysis software solution for proteom
     </p>
     <div class="hero-actions">
       <a href="{{ '/download/' | relative_url }}" class="btn btn-large">Download Solution</a>
-      <a href="https://github.com/bionsight/SynapSpec/discussions" class="btn btn-large btn-outline" target="_blank" rel="noopener">Join Community</a>
+      <a href="https://github.com/bionsight/SynapSpec/discussions" class="btn btn-large">Join Community</a>
     </div>
   </div>
 </section>

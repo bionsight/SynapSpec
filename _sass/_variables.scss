@@ -1,38 +1,27 @@
-// Brand colors from CI
-$primary-green: #8cc63f;
-$primary-gray: #4d4d4d;
-$dark-gray: #333333;
-$light-gray: #f5f5f5;
-$white: #ffffff;
-
-// Color Palette (mapped to CI colors)
-$primary-color: $primary-green;      // Primary green
-$secondary-color: $primary-gray;     // Secondary gray
-$accent-color: #72b626;              // Accent darker green
-$background-color: $white;           // White
-$bg-secondary: $light-gray;          // Light background
-$text-color: $dark-gray;             // Dark text
-$text-light: $primary-gray;          // Light text
-$border-color: #e0e0e0;              // Border color
-
+// Color Palette (Updated for #6ed6e8 theme with Lavender accent)
+$primary-color: #6ed6e8;      // Primary blue (밝은 시안/하늘색)
+$secondary-color: #94a3b8;    // Secondary gray (부드러운 중립색)
+$accent-color: #88aaf3;       // <- 최종 변경: 채도를 낮춘 라벤더/연한 보라색
+$background-color: #ffffff;   // White
+$bg-secondary: #f0f9ff;       // Light background (주색과 유사한 페일 블루)
+$text-color: #1e293b;         // Dark text
+$text-light: #64748b;         // Light text
+$border-color: #dbeafe;       // Border color (주색과 유사한 매우 밝은 페일 블루)
 
 // Derived color variations
-$primary-color-dark: #72b626;        // Darker primary green
-$primary-color-darker: #5a9420;      // Even darker primary green
-$primary-color-light: #a3d15f;       // Lighter primary green
-$accent-color-dark: #5a9420;         // Darker accent
-$secondary-color-light: #666666;     // Lighter secondary
-$text-color-dark: $dark-gray;        // Darker text
-$text-color-light: $primary-gray;    // Light text variant
-$text-color-lighter: #6b6b6b;        // Lighter text
-$text-color-lightest: #999999;       // Lightest text
+$primary-color-dark: #1d96b0;     // Darker primary
+$primary-color-darker: #1a7a8d;   // Even darker primary
+$primary-color-light: #99e3ec;    // Lighter primary (주색의 틴트)
+$accent-color-dark:#2563eb;      // <- 최종 변경: Darker accent (더 진한 보라색)
+$secondary-color-light: #bcc5d6;  // Lighter secondary
+$text-color-dark: #0f172a;        // Darker text
+$text-color-light: #475569;       // Light text variant
+$text-color-lighter: #64748b;     // Lighter text
+$text-color-lightest: #94a3b8;    // Lightest text
 
 // Typography
-$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $heading-font: 'Montserrat', sans-serif;
 $body-font: 'Noto Sans KR', sans-serif;
-$font-size-base: 16px;
-$line-height-base: 1.6;
 
 // Font sizes
 $font-size-h1: 2.5rem;
@@ -42,24 +31,16 @@ $font-size-body: 1rem;
 $font-size-small: 0.875rem;
 
 // Spacing
-$spacing-unit: 1rem;
-$spacing-xs: $spacing-unit * 0.5;
-$spacing-sm: $spacing-unit;
-$spacing-md: $spacing-unit * 1.5;
-$spacing-lg: $spacing-unit * 2;
-$spacing-xl: $spacing-unit * 3;
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
 
 // Breakpoints
-$breakpoint-sm: 576px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 992px;
-$breakpoint-xl: 1200px;
-$mobile: $breakpoint-md;
-$tablet: $breakpoint-lg;
-$desktop: $breakpoint-xl;
-
-// Container
-$container-max-width: 1200px;
+$mobile: 768px;
+$tablet: 1024px;
+$desktop: 1200px;
 
 // Border radius
 $border-radius: 8px;

@@ -3,12 +3,11 @@
 // Base layout styles
 body {
   font-family: $body-font;
-  color: #fff;
-  background-color: #050811;
+  color: $text-color;
+  background-color: $background-color;
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
 }
 
 // Container
@@ -24,40 +23,26 @@ body {
 
 // Header
 .site-header {
-  position: fixed;
+  background-color: $background-color;
+  border-bottom: 1px solid $border-color;
+  box-shadow: $box-shadow;
+  position: sticky;
   top: 0;
-  width: 100%;
-  padding: 25px 80px;
-  z-index: 1000;
-  backdrop-filter: blur(20px) saturate(180%);
-  background: rgba(5, 8, 17, 0.7);
-  border-bottom: 1px solid rgba(140, 198, 63, 0.1);
-
-  @media (max-width: $breakpoint-lg) {
-    padding: 20px 40px;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    padding: 20px 30px;
-  }
+  z-index: 100;
 
   .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: $spacing-sm 0;
   }
 
   .logo {
     font-family: $heading-font;
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -1px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $primary-color;
     text-decoration: none;
-    color: #fff;
-    background: linear-gradient(135deg, $primary-green, #72b626);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .nav-menu {
@@ -65,50 +50,25 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 50px;
-    align-items: center;
+    gap: $spacing-lg;
 
-    @media (max-width: $breakpoint-lg) {
-      gap: 30px;
-    }
-
-    @media (max-width: $breakpoint-md) {
-      display: none;
+    @media (max-width: $mobile) {
+      gap: $spacing-sm;
     }
 
     a {
-      color: rgba(255, 255, 255, 0.7);
+      color: $text-color;
       text-decoration: none;
-      font-size: 15px;
       font-weight: 500;
-      transition: all 0.3s;
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: $primary-green;
-        transition: width 0.3s;
-      }
+      transition: color 0.3s ease;
 
       &:hover {
-        color: $primary-green;
-
-        &::after {
-          width: 100%;
-        }
-      }
-
-      &.active {
-        color: $primary-green;
+        color: $primary-color;
       }
 
       &.external::after {
-        display: none;
+        content: " ↗";
+        font-size: 0.8em;
       }
     }
   }
@@ -117,29 +77,20 @@ body {
 // Main content
 .main-content {
   min-height: calc(100vh - 200px);
-  padding-top: 100px;
+  padding: $spacing-lg 0;
 }
 
 // Home page specific - remove padding when hero is present
 body.page-home .main-content {
-  padding-top: 100px;
+  padding: 0;
 }
 
 // Footer
 .site-footer {
-  padding: 60px 80px;
-  border-top: 1px solid rgba(140, 198, 63, 0.1);
-  background: rgba(5, 8, 17, 0.8);
-  text-align: center;
+  background-color: $text-color;
+  color: white;
+  padding: $spacing-lg 0;
   margin-top: $spacing-xl;
-
-  @media (max-width: $breakpoint-lg) {
-    padding: 40px;
-  }
-
-  @media (max-width: $breakpoint-md) {
-    padding: 40px 30px;
-  }
 
   .footer-content {
     text-align: center;
@@ -148,28 +99,26 @@ body.page-home .main-content {
   .footer-links {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-bottom: 30px;
+    gap: $spacing-md;
+    margin-bottom: $spacing-sm;
 
-    @media (max-width: $breakpoint-md) {
+    @media (max-width: $mobile) {
       flex-direction: column;
-      gap: 20px;
+      gap: $spacing-xs;
     }
 
     a {
-      color: rgba(255, 255, 255, 0.6);
+      color: $secondary-color;
       text-decoration: none;
-      font-size: 14px;
-      transition: color 0.3s;
 
       &:hover {
-        color: $primary-green;
+        color: white;
       }
     }
   }
 
   .copyright {
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: $font-size-small;
+    opacity: 0.8;
   }
 }
