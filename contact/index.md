@@ -24,12 +24,12 @@ description: "Get in touch with Proteomics Solutions for collaborations and inqu
 
         <div class="contact-info" style="margin: 2rem 0;">
           <div style="margin-bottom: 1.5rem;">
-            <h3><i class="fas fa-envelope" style="color: #8cc63f; margin-right: 1rem;"></i>Email</h3>
+            <h3><i class="fas fa-envelope" style="color: #57b9caff; margin-right: 1rem;"></i>Email</h3>
             <p><a href="mailto:{{ site.company.email }}">{{ site.company.email }}</a></p>
           </div>
 
           <div style="margin-bottom: 1.5rem;">
-            <h3><i class="fab fa-github" style="color: #8cc63f; margin-right: 1rem;"></i>GitHub</h3>
+            <h3><i class="fab fa-github" style="color: #57b9caff; margin-right: 1rem;"></i>GitHub</h3>
             <p>
               For technical discussions, feature requests, and community support:
             </p>
@@ -44,7 +44,7 @@ description: "Get in touch with Proteomics Solutions for collaborations and inqu
           </div>
 
           <div>
-            <h3><i class="fas fa-users" style="color: #8cc63f; margin-right: 1rem;"></i>Collaborations</h3>
+            <h3><i class="fas fa-users" style="color: #57b9caff; margin-right: 1rem;"></i>Collaborations</h3>
             <p>
               Interested in research collaborations or partnerships? We work with academic
               institutions, pharmaceutical companies, and biotechnology organizations worldwide.
@@ -57,14 +57,14 @@ description: "Get in touch with Proteomics Solutions for collaborations and inqu
         <h3>Send us a Message</h3>
         <p>Use this form to get started, or reach out directly via email or GitHub.</p>
 
-        <div style="background: rgba(10, 14, 39, 0.4); border: 1px solid rgba(140, 198, 63, 0.15); padding: 2rem; border-radius: 16px; text-align: center; backdrop-filter: blur(20px);">
-          <i class="fab fa-github" style="font-size: 3rem; color: #8cc63f; margin-bottom: 1rem;"></i>
+        <div style="background: rgba(26, 122, 141, 0.4); border: 1px solid rgba(140, 198, 63, 0.15); padding: 2rem; border-radius: 16px; text-align: center; backdrop-filter: blur(20px);">
+          <i class="fab fa-github" style="font-size: 3rem; color: #57b9caff; margin-bottom: 1rem;"></i>
           <h4>Prefer GitHub?</h4>
           <p>
             For faster responses and to engage with our community, we recommend using GitHub:
           </p>
           <div style="margin-top: 1.5rem;">
-            <a href="{{ site.github.new_discussion }}" class="btn btn-accent" target="_blank" rel="noopener">
+            <a href="{{ site.github.new_discussion }}" class="btn btn" target="_blank" rel="noopener">
               Start a Discussion
             </a>
           </div>

@@ -1,6 +1,6 @@
 synapspec:
-  version: "v0.2.4"
-  name: "SynapSpec v0.2.4"
+  version: "v0.2.15"
+  name: "SynapSpec v0.2.15"
   description: |
     ## New Features
     - Deep learning-based MS workflow optimization
