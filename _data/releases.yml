@@ -16,6 +16,6 @@ synapspec:
     - Fixed memory leak issues
     - Resolved compatibility problems
   downloads:
-    windows: "https://github.com/bionsight/DeepMSFlow/releases/download/v0.2.4/DeepMSFlow-windows-0.2.4.exe" # TODO: change to S3 link (TBD)
-    macos: "https://github.com/bionsight/DeepMSFlow/releases/download/v0.2.4/DeepMSFlow-macos-0.2.4.dmg" # TODO: change to S3 link (TBD)
-    linux: "https://github.com/bionsight/DeepMSFlow/releases/download/v0.2.4/DeepMSFlow-linux-0.2.4.tar.gz" # TODO: change to S3 link (TBD)
+    windows: "https://synapspec.s3.ap-northeast-2.amazonaws.com/0.2.15/SynapSpec-windows-0.2.15.msi" # TODO: change to S3 link (TBD)
+    macos: "https://synapspec.s3.ap-northeast-2.amazonaws.com/0.2.15/SynapSpec-macos-0.2.15.dmg" # TODO: change to S3 link (TBD)
+    linux: "https://synapspec.s3.ap-northeast-2.amazonaws.com/0.2.15/SynapSpec-linux-0.2.15.tar.gz" # TODO: change to S3 link (TBD)
