@@ -101,4 +101,4 @@ We are grateful to these projects and their contributors for advancing the field
 
 **Documentation**: [docs.synapspec.ai](https://docs.synapspec.ai)
 
-**Contact**: For enterprise solutions and partnerships
+**Contact:** [contact@bionsight.com] (contact@bionsight.com)
