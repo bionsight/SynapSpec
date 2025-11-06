@@ -16,6 +16,6 @@ synapspec:
     - Fixed memory leak issues
     - Resolved compatibility problems
   downloads:
-    windows: "https://synapspec.s3.ap-northeast-2.amazonaws.com/0.2.16/SynapSpec-windows-0.2.16.msi" # TODO: change to S3 link (TBD)
-    macos: "https://synapspec.s3.ap-northeast-2.amazonaws.com/0.2.16/SynapSpec-macos-0.2.16.dmg" # TODO: change to S3 link (TBD)
-    linux: "https://synapspec.s3.ap-northeast-2.amazonaws.com/0.2.16/SynapSpec-linux-0.2.16.tar.gz" # TODO: change to S3 link (TBD)
+    windows: "https://d3s63qbeileh4l.cloudfront.net/0.2.16/SynapSpec-windows-0.2.16.msi" # TODO: change to S3 link (TBD)
+    macos: "https://d3s63qbeileh4l.cloudfront.net/0.2.16/SynapSpec-macos-0.2.16.dmg" # TODO: change to S3 link (TBD)
+    linux: "https://d3s63qbeileh4l.cloudfront.net/0.2.16/SynapSpec-linux-0.2.16.tar.gz" # TODO: change to S3 link (TBD)
