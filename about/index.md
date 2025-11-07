@@ -96,4 +96,15 @@ description: "Learn about Proteomics Solutions and our mission to advance scient
     </div>
   </section>
 
+  <section class="py-lg">
+    <div class="section-header">
+      <h2>Developed by Bionsight</h2>
+      <p class="section-subtitle">
+        SynapSpec is developed and maintained by Bionsight, a biotechnology company dedicated to advancing scientific discovery through AI-powered proteomics solutions
+        <br><br>
+        <a href="https://www.bionsight.com" target="_blank" rel="noopener">www.bionsight.com</a>
+      </p>
+    </div>
+  </section>
+
 </div>
