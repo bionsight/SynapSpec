@@ -1,6 +1,6 @@
 synapspec:
-  version: "v0.2.15"
-  name: "SynapSpec v0.2.15"
+  version: "v0.3.0"
+  name: "SynapSpec v0.3.0"
   description: |
     ## New Features
     - Deep learning-based MS workflow optimization
@@ -16,6 +16,6 @@ synapspec:
     - Fixed memory leak issues
     - Resolved compatibility problems
   downloads:
-    windows: "https://d3s63qbeileh4l.cloudfront.net/0.2.16/SynapSpec-windows-0.2.16.msi" # TODO: change to S3 link (TBD)
-    macos: "https://d3s63qbeileh4l.cloudfront.net/0.2.16/SynapSpec-macos-0.2.16.dmg" # TODO: change to S3 link (TBD)
-    linux: "https://d3s63qbeileh4l.cloudfront.net/0.2.16/SynapSpec-linux-0.2.16.tar.gz" # TODO: change to S3 link (TBD)
+    windows: "https://d3s63qbeileh4l.cloudfront.net/0.3.0/SynapSpec-windows-0.3.0.msi"
+    macos: "https://d3s63qbeileh4l.cloudfront.net/0.3.0/SynapSpec-macos-0.3.0.dmg"
+    linux: "https://d3s63qbeileh4l.cloudfront.net/0.3.0/SynapSpec-linux-0.3.0.tar.gz"
