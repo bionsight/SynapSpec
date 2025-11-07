@@ -95,6 +95,12 @@ SynapSpec was inspired by and greatly benefited from the following open-source p
 
 We are grateful to these projects and their contributors for advancing the field of computational proteomics and making their work openly available to the scientific community.
 
+## License & Commercial Use
+
+SynapSpec is free for academic and non-commercial research use. For commercial use, please contact us at [contact@bionsight.com](mailto:contact@bionsight.com).
+
+For detailed license information and terms, please see [LICENSE.md](LICENSE.md).
+
 ---
 
 **Visit our website**: [synapspec.ai](https://synapspec.ai)
