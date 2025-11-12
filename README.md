@@ -11,12 +11,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/bionsight/SynapSpec/releases">
-    <img src="https://img.shields.io/github/v/release/bionsight/SynapSpec?style=flat-square" alt="Release">
-  </a>
-  <a href="https://github.com/bionsight/SynapSpec/discussions">
-    <img src="https://img.shields.io/github/discussions/bionsight/SynapSpec?style=flat-square" alt="Discussions">
-  </a>
   <a href="https://docs.synapspec.ai">
     <img src="https://img.shields.io/badge/docs-synapspec.ai-blue?style=flat-square" alt="Documentation">
   </a>
