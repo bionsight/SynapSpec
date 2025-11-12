@@ -1,21 +1,13 @@
 synapspec:
-  version: "v0.3.1"
-  name: "SynapSpec v0.3.1"
+  version: "0.3.3
+  name: "SynapSpec 0.3.3"
   description: |
-    ## New Features
-    - Deep learning-based MS workflow optimization
-    - Cross-platform support (Windows, macOS, Linux)
-    - Real-time processing capabilities
+    ### Bug Fixes
 
-    ## Improvements
-    - Enhanced performance for large datasets
-    - Improved user interface
-    - Better error handling
+    * **macOS Compatibility**
+      * Fixed issue where application could not open on macOS.
 
-    ## Bug Fixes
-    - Fixed memory leak issues
-    - Resolved compatibility problems
   downloads:
-    windows: "https://d3s63qbeileh4l.cloudfront.net/0.3.2/SynapSpec-windows-0.3.2.msi"
-    macos: "https://d3s63qbeileh4l.cloudfront.net/0.3.2/SynapSpec-macos-0.3.2.dmg"
-    linux: "https://d3s63qbeileh4l.cloudfront.net/0.3.2/SynapSpec-linux-0.3.2.tar.gz"
+    windows: "https://d3s63qbeileh4l.cloudfront.net/0.3.3/SynapSpec-windows-0.3.3.msi"
+    macos: "https://d3s63qbeileh4l.cloudfront.net/0.3.3/SynapSpec-macos-0.3.3.dmg"
+    linux: "https://d3s63qbeileh4l.cloudfront.net/0.3.3/SynapSpec-linux-0.3.3.tar.gz"
