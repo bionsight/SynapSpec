@@ -60,9 +60,9 @@
 
 Download the latest version from our [releases page](https://github.com/bionsight/SynapSpec/releases):
 
-- **Windows**: `SynapSpec-windows-v0.3.2.msi`
-- **macOS**: `SynapSpec-macos-v0.3.2.dmg`
-- **Linux**: `SynapSpec-linux-v0.3.2.tar.gz`
+- **Windows**: `SynapSpec-windows-v0.3.3.msi`
+- **macOS**: `SynapSpec-macos-v0.3.3.dmg`
+- **Linux**: `SynapSpec-linux-v0.3.3.tar.gz`
 
 ### System Requirements
 
