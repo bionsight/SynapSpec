@@ -1,6 +1,6 @@
 synapspec:
-  version: "0.3.3"
-  name: "SynapSpec 0.3.3"
+  version: "0.3.4"
+  name: "SynapSpec 0.3.4"
   description: |
     ### Bug Fixes
 
@@ -8,6 +8,6 @@ synapspec:
       * Fixed issue where application could not open on macOS.
 
   downloads:
-    windows: "https://d3s63qbeileh4l.cloudfront.net/0.3.3/SynapSpec-windows-0.3.3.msi"
-    macos: "https://d3s63qbeileh4l.cloudfront.net/0.3.3/SynapSpec-macos-0.3.3.dmg"
-    linux: "https://d3s63qbeileh4l.cloudfront.net/0.3.3/SynapSpec-linux-0.3.3.tar.gz"
+    windows: "https://d3s63qbeileh4l.cloudfront.net/0.3.4/SynapSpec-windows-0.3.4.msi"
+    macos: "https://d3s63qbeileh4l.cloudfront.net/0.3.4/SynapSpec-macos-0.3.4.dmg"
+    linux: "https://d3s63qbeileh4l.cloudfront.net/0.3.4/SynapSpec-linux-0.3.4.tar.gz"
