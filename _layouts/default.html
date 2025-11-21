@@ -51,12 +51,38 @@
 
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
       gtag('js', new Date());
       gtag('config', GA_MEASUREMENT_ID, {
         'anonymize_ip': true
       });
 
       console.log('✅ Google Analytics activated');
+
+      initButtonTracking();
+    }
+
+    function initButtonTracking() {
+      document.addEventListener('click', function(e) {
+        const target = e.target.closest('a.btn, button, a[href*="contact"], a[href*="download"]');
+
+        if (target && window.gtag) {
+          const buttonText = target.textContent.trim() || target.getAttribute('aria-label') || 'Unknown';
+          const buttonHref = target.getAttribute('href') || '';
+          const buttonClass = target.className || '';
+          const pageUrl = window.location.pathname;
+
+          window.gtag('event', 'button_click', {
+            'button_text': buttonText,
+            'button_url': buttonHref,
+            'button_class': buttonClass,
+            'page_location': pageUrl,
+            'timestamp': new Date().toISOString()
+          });
+
+          console.log('📊 Button tracked:', buttonText, 'on', pageUrl);
+        }
+      });
     }
 
     function acceptCookies() {
