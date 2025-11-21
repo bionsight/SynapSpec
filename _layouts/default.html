@@ -64,23 +64,34 @@
 
     function initButtonTracking() {
       document.addEventListener('click', function(e) {
-        const target = e.target.closest('a.btn, button, a[href*="contact"], a[href*="download"]');
+        const target = e.target.closest('a, button');
 
         if (target && window.gtag) {
-          const buttonText = target.textContent.trim() || target.getAttribute('aria-label') || 'Unknown';
+          const buttonText = target.textContent.trim().substring(0, 100) || target.getAttribute('aria-label') || 'Unknown';
           const buttonHref = target.getAttribute('href') || '';
           const buttonClass = target.className || '';
+          const buttonId = target.id || '';
           const pageUrl = window.location.pathname;
+
+          let clickSection = 'unknown';
+          if (e.target.closest('header, .site-header, nav, .nav-menu')) clickSection = 'navigation';
+          else if (e.target.closest('footer, .site-footer')) clickSection = 'footer';
+          else if (e.target.closest('.hero')) clickSection = 'hero';
+          else if (e.target.closest('.services-grid, .card')) clickSection = 'services';
+          else if (e.target.closest('.highlight-section')) clickSection = 'cta_section';
+          else if (e.target.closest('main, .main-content')) clickSection = 'main_content';
 
           window.gtag('event', 'button_click', {
             'button_text': buttonText,
             'button_url': buttonHref,
             'button_class': buttonClass,
+            'button_id': buttonId,
+            'click_section': clickSection,
             'page_location': pageUrl,
             'timestamp': new Date().toISOString()
           });
 
-          console.log('📊 Button tracked:', buttonText, 'on', pageUrl);
+          console.log('📊 Button tracked:', buttonText, 'in', clickSection, 'on', pageUrl);
         }
       });
     }
