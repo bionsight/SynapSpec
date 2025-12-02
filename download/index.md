@@ -20,7 +20,34 @@ description: "Download the latest version of SynapSpec for your platform"
                 </div>
                 <div class="card-content">
                     <p>Compatible with Windows 10/11</p>
-                    <a href="{{ site.data.releases.synapspec.downloads.windows }}" class="btn btn-large">Download for Windows</a>
+                    <div style="display: flex; gap: 10px; flex-direction: row;">
+                        <a href="{{ site.data.releases.synapspec.downloads.windows_gpu }}" class="btn btn-large" style="flex: 1;">
+                            <i class="fas fa-microchip"></i> GPU
+                        </a>
+                        <a href="{{ site.data.releases.synapspec.downloads.windows_cpu }}" class="btn btn-large btn-outline" style="flex: 1;">
+                            <i class="fas fa-desktop"></i> CPU
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fab fa-linux"></i>
+                    </div>
+                    <h3>Linux</h3>
+                </div>
+                <div class="card-content">
+                    <p>Compatible with most Linux distributions</p>
+                    <div style="display: flex; gap: 10px; flex-direction: row;">
+                        <a href="{{ site.data.releases.synapspec.downloads.linux_gpu }}" class="btn btn-large" style="flex: 1;">
+                            <i class="fas fa-microchip"></i> GPU
+                        </a>
+                        <a href="{{ site.data.releases.synapspec.downloads.linux_cpu }}" class="btn btn-large btn-outline" style="flex: 1;">
+                            <i class="fas fa-desktop"></i> CPU
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -34,19 +61,6 @@ description: "Download the latest version of SynapSpec for your platform"
                 <div class="card-content">
                     <p>Compatible with macOS 10.14+</p>
                     <a href="{{ site.data.releases.synapspec.downloads.macos }}" class="btn btn-large">Download for macOS</a>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fab fa-linux"></i>
-                    </div>
-                    <h3>Linux</h3>
-                </div>
-                <div class="card-content">
-                    <p>Compatible with most Linux distributions</p>
-                    <a href="{{ site.data.releases.synapspec.downloads.linux }}" class="btn btn-large">Download for Linux</a>
                 </div>
             </div>
         </div>
