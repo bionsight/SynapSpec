@@ -1,9 +1,9 @@
 synapspec:
-  version: "0.4.1"
-  name: "SynapSpec 0.4.1"
+  version: "0.4.2"
+  name: "SynapSpec 0.4.2"
   downloads:
-    windows_gpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.1/SynapSpec-windows-0.4.1.msi"
-    windows_cpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.1/SynapSpec-windows-cpu-0.4.1.msi"
-    linux_gpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.1/SynapSpec-linux-0.4.1.tar.gz"
-    linux_cpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.1/SynapSpec-linux-cpu-0.4.1.tar.gz"
-    macos: "https://d3s63qbeileh4l.cloudfront.net/0.4.1/SynapSpec-macos-0.4.1.dmg"
+    windows_gpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.2/SynapSpec-windows-0.4.2.msi"
+    windows_cpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.2/SynapSpec-windows-cpu-0.4.2.msi"
+    linux_gpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.2/SynapSpec-linux-0.4.2.tar.gz"
+    linux_cpu: "https://d3s63qbeileh4l.cloudfront.net/0.4.2/SynapSpec-linux-cpu-0.4.2.tar.gz"
+    macos: "https://d3s63qbeileh4l.cloudfront.net/0.4.2/SynapSpec-macos-0.4.2.dmg"
