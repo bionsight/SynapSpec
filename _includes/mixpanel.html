@@ -5,6 +5,65 @@
     const ANALYTICS_PRODUCT = "{{ page.analytics_product | default: site.title | escape }}";
     const ANALYTICS_PAGE_TYPE = "{{ page.analytics_page_type | default: page.layout | default: 'page' | escape }}";
 
+    function installMixpanelSnippet() {
+      if (window.mixpanel && window.mixpanel.__SV) return;
+
+      (function(documentRef, mixpanelRef) {
+        if (mixpanelRef.__SV) return;
+
+        let script;
+        let firstScript;
+
+        window.mixpanel = mixpanelRef;
+        mixpanelRef._i = [];
+        mixpanelRef.init = function(token, config, name) {
+          function addStubMethod(target, methodPath) {
+            const parts = methodPath.split('.');
+            if (parts.length === 2) {
+              target = target[parts[0]];
+              methodPath = parts[1];
+            }
+            target[methodPath] = function() {
+              target.push([methodPath].concat(Array.prototype.slice.call(arguments, 0)));
+            };
+          }
+
+          let instance = mixpanelRef;
+          if (typeof name !== 'undefined') {
+            instance = mixpanelRef[name] = [];
+          } else {
+            name = 'mixpanel';
+          }
+
+          instance.people = instance.people || [];
+          instance.toString = function(stub) {
+            let output = 'mixpanel';
+            if (name !== 'mixpanel') output += '.' + name;
+            if (!stub) output += ' (stub)';
+            return output;
+          };
+          instance.people.toString = function() {
+            return instance.toString(1) + '.people (stub)';
+          };
+
+          const methods = 'disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user'.split(' ');
+          for (let index = 0; index < methods.length; index += 1) {
+            addStubMethod(instance, methods[index]);
+          }
+
+          mixpanelRef._i.push([token, config, name]);
+        };
+        mixpanelRef.__SV = 1.2;
+
+        script = documentRef.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+        firstScript = documentRef.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+      })(document, window.mixpanel || []);
+    }
+
     function getCommonProperties() {
       return {
         product: ANALYTICS_PRODUCT,
@@ -73,27 +132,23 @@
     };
 
     window.loadMixpanelAnalytics = function() {
-      if (!MIXPANEL_TOKEN || window.mixpanelLoaded) return;
-      window.mixpanelLoaded = true;
+      if (!MIXPANEL_TOKEN || window.mixpanelInitialized) return;
+      window.mixpanelInitialized = true;
 
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
-      script.onload = function() {
-        if (!window.mixpanel || typeof window.mixpanel.init !== 'function') return;
+      installMixpanelSnippet();
+      if (!window.mixpanel || typeof window.mixpanel.init !== 'function') return;
 
-        window.mixpanel.init(MIXPANEL_TOKEN, {
-          persistence: 'localStorage',
-          ignore_dnt: false
-        });
-        window.mixpanel.register({
-          product: ANALYTICS_PRODUCT,
-          site: window.location.hostname || 'local'
-        });
-        window.trackMixpanelEvent('website_page_viewed');
-        window.initMixpanelClickTracking();
-      };
-      document.head.appendChild(script);
+      window.mixpanel.init(MIXPANEL_TOKEN, {
+        persistence: 'localStorage',
+        api_transport: 'sendBeacon',
+        ignore_dnt: true
+      });
+      window.mixpanel.register({
+        product: ANALYTICS_PRODUCT,
+        site: window.location.hostname || 'local'
+      });
+      window.trackMixpanelEvent('website_page_viewed');
+      window.initMixpanelClickTracking();
     };
   })();
 </script>
