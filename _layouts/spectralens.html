@@ -12,7 +12,8 @@
   <meta property="og:image" content="{{ '/assets/images/spectralens/logo.png' | absolute_url }}">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% assign css_cache_buster = site.time | date: '%s' %}
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ css_cache_buster }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="icon" type="image/png" href="{{ '/assets/images/spectralens/favicon.png' | relative_url }}">
 
