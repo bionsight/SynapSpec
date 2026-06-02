@@ -109,6 +109,7 @@ analytics_page_type: "landing_page"
     <div class="spectralens-doc-layout">
       <aside class="spectralens-doc-nav" aria-label="SpectraLens documentation sections">
         <a href="#download">Download</a>
+        <a href="#troubleshooting">Troubleshooting</a>
         <a href="#quick-start">Quick start</a>
         <a href="#precursor-input">Precursor input</a>
         <a href="#settings">Settings</a>
@@ -134,6 +135,27 @@ analytics_page_type: "landing_page"
               <strong>Desktop app</strong>
             </a>
           </div>
+        </section>
+
+        <section id="troubleshooting">
+          <h3>Troubleshooting</h3>
+          <h4>macOS: app cannot be opened because the developer cannot be verified</h4>
+          <p>
+            Due to macOS Gatekeeper security settings, you may need to manually approve SpectraLens
+            because the current macOS build may not have an Apple Developer code signature.
+          </p>
+          <ol>
+            <li>Open <strong>System Settings</strong> or <strong>System Preferences</strong>.</li>
+            <li>Go to <strong>Privacy &amp; Security</strong>.</li>
+            <li>Scroll down to the <strong>Security</strong> section.</li>
+            <li>
+              Find the message about SpectraLens being blocked because it is not from an identified
+              developer, then click <strong>Open Anyway</strong>.
+            </li>
+          </ol>
+          <p>
+            After approving the app, open SpectraLens again from Finder or Launchpad.
+          </p>
         </section>
 
         <section id="quick-start">

@@ -2,13 +2,13 @@ name: "SpectraLens"
 tagline: "Targeted DIA peak inspection for the precursor you care about"
 description: "A lightweight desktop tool for quickly checking precursor and fragment peaks in DIA raw files without running a full DIA analysis pipeline."
 repository_url: "https://github.com/bionsight/SpectraLens"
-release_url: "https://github.com/bionsight/SpectraLens/releases/tag/v0.4.3"
+release_url: "https://github.com/bionsight/SpectraLens/releases/tag/v0.4.4"
 contact_url: "mailto:contact@bionsight.com"
 
 download:
-  version: "0.4.3"
-  macos_url: "https://d35ag17soow82e.cloudfront.net/0.4.3/SpectraLens-macos-0.4.3.dmg"
-  windows_url: "https://d35ag17soow82e.cloudfront.net/0.4.3/SpectraLens-windows-0.4.3.msi"
+  version: "0.4.4"
+  macos_url: "https://d35ag17soow82e.cloudfront.net/0.4.4/SpectraLens-macos-0.4.4.dmg"
+  windows_url: "https://d35ag17soow82e.cloudfront.net/0.4.4/SpectraLens-windows-0.4.4.msi"
 
 highlights:
   - label: "Targeted"
