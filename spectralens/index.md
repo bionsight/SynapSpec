@@ -114,6 +114,7 @@ analytics_page_type: "landing_page"
         <a href="#precursor-input">Precursor input</a>
         <a href="#settings">Settings</a>
         <a href="#outputs">Outputs</a>
+        <a href="#support">Support</a>
       </aside>
 
       <div class="spectralens-doc-content">
@@ -280,6 +281,28 @@ PEPTIDES(UniMod:21)EQ,PEPTIDEM(UniMod:35)SEQ</code></pre>
             inside the selected workspace. Use Export CSV from the visualization panel to save a reviewable result
             table for downstream notes or manual curation.
           </p>
+        </section>
+
+        <section id="support">
+          <h3>Support &amp; community</h3>
+          <p>
+            SpectraLens uses GitHub Discussions and Issues for community support, bug reports, and feature ideas.
+          </p>
+          <ul>
+            <li>
+              <strong>Questions and usage help:</strong>
+              ask in <a href="{{ product.repository_url }}/discussions" target="_blank" rel="noopener">GitHub Discussions</a>.
+            </li>
+            <li>
+              <strong>Bug reports:</strong>
+              open a <a href="{{ product.repository_url }}/issues" target="_blank" rel="noopener">GitHub Issue</a>
+              with your operating system, SpectraLens version, input file type, and a short description of what happened.
+            </li>
+            <li>
+              <strong>Feature ideas:</strong>
+              share suggestions in Discussions so they can be discussed before becoming issues.
+            </li>
+          </ul>
         </section>
       </div>
     </div>
