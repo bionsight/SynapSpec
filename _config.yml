@@ -18,6 +18,11 @@ github:
   issues: "https://github.com/bionsight/SynapSpec/issues"
   new_discussion: "https://github.com/bionsight/SynapSpec/discussions/new?category=general"
 
+# Analytics
+analytics:
+  mixpanel:
+    token: "0af3e19a73b0a8fa536568138d6f08a7"
+
 # Navigation
 navigation:
   - name: "Home"

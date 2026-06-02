@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% if page.title %}{{ page.title }}{% else %}SpectraLens{% endif %}</title>
+  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.data.spectralens.description }}{% endif %}">
+  <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}SpectraLens{% endif %}">
+  <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.data.spectralens.description }}{% endif %}">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="{{ '/assets/images/spectralens/logo.png' | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="{{ '/assets/images/spectralens/favicon.png' | relative_url }}">
+
+  {% include mixpanel.html %}
+
+  <script>
+    window.addEventListener('load', function() {
+      const consent = localStorage.getItem('cookieConsent');
+
+      if (consent === 'accepted') {
+        if (typeof loadMixpanelAnalytics === 'function') {
+          loadMixpanelAnalytics();
+        }
+      } else if (consent === null) {
+        setTimeout(showSpectraLensCookieBanner, 800);
+      }
+    });
+
+    function showSpectraLensCookieBanner() {
+      const banner = document.getElementById('spectralens-cookie-consent-banner');
+      if (banner) {
+        banner.classList.add('show');
+      }
+    }
+
+    function hideSpectraLensCookieBanner() {
+      const banner = document.getElementById('spectralens-cookie-consent-banner');
+      if (banner) {
+        banner.classList.remove('show');
+      }
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('cookieConsent', 'accepted');
+      hideSpectraLensCookieBanner();
+      if (typeof loadMixpanelAnalytics === 'function') {
+        loadMixpanelAnalytics();
+      }
+    }
+
+    function declineCookies() {
+      localStorage.setItem('cookieConsent', 'declined');
+      hideSpectraLensCookieBanner();
+    }
+  </script>
+</head>
+<body class="page-spectralens">
+  {% assign product = site.data.spectralens %}
+
+  <header class="spectralens-site-header">
+    <div class="container spectralens-header-inner">
+      <a href="{{ '/spectralens/' | relative_url }}" class="spectralens-brand" aria-label="SpectraLens home">
+        <img src="{{ '/assets/images/spectralens/logo.png' | relative_url }}" alt="">
+        <span>SpectraLens</span>
+      </a>
+
+      <nav class="spectralens-nav" aria-label="SpectraLens navigation">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#docs">Docs</a>
+        <a href="#download">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer class="spectralens-footer">
+    <div class="container spectralens-footer-inner">
+      <div>
+        <strong>SpectraLens</strong>
+        <span>Targeted DIA peak inspection for focused precursor review.</span>
+      </div>
+      <div class="spectralens-footer-links">
+        <a href="{{ product.release_url }}" target="_blank" rel="noopener">Download</a>
+        <a href="{{ product.contact_url }}">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="spectralens-cookie-consent-banner">
+    <div class="spectralens-cookie-content">
+      <div class="spectralens-cookie-text">
+        <h3>Cookie & Privacy Consent</h3>
+        <p>
+          We collect anonymized usage statistics to improve this website.
+          You can accept or decline analytics cookies.
+        </p>
+      </div>
+      <div class="spectralens-cookie-buttons">
+        <button class="spectralens-cookie-btn spectralens-cookie-btn-accept" onclick="acceptCookies()">
+          Accept All
+        </button>
+        <button class="spectralens-cookie-btn spectralens-cookie-btn-decline" onclick="declineCookies()">
+          Decline
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

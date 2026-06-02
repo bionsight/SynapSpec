@@ -12,6 +12,7 @@
   <link rel="icon" type="image/png" href="{{ '/assets/images/favicon.png' | relative_url }}">
 
   {% seo %}
+  {% include mixpanel.html %}
 
   <script>
     const GA_MEASUREMENT_ID = 'G-94DZ0M7QBZ';
@@ -21,6 +22,9 @@
 
       if (consent === 'accepted') {
         loadGoogleAnalytics();
+        if (typeof loadMixpanelAnalytics === 'function') {
+          loadMixpanelAnalytics();
+        }
       } else if (consent === null) {
         setTimeout(showCookieBanner, 800);
       }
@@ -100,6 +104,9 @@
       localStorage.setItem('cookieConsent', 'accepted');
       hideCookieBanner();
       loadGoogleAnalytics();
+      if (typeof loadMixpanelAnalytics === 'function') {
+        loadMixpanelAnalytics();
+      }
     }
 
     function declineCookies() {
@@ -264,8 +271,8 @@
       <div class="cookie-text">
         <h3>🍪 Cookie & Privacy Consent</h3>
         <p>
-          We use Google Analytics to collect anonymized usage statistics.
-          By continuing to use our site, you consent to our use of cookies.
+          We use Google Analytics and Mixpanel to collect anonymized usage statistics.
+          You can accept or decline analytics cookies.
           <a href="{{ '/privacy/' | relative_url }}">Privacy Policy</a>
         </p>
       </div>

@@ -1,0 +1,100 @@
+{% if site.analytics.mixpanel.token %}
+<script>
+  (function() {
+    const MIXPANEL_TOKEN = "{{ site.analytics.mixpanel.token }}";
+    const ANALYTICS_PRODUCT = "{{ page.analytics_product | default: site.title | escape }}";
+    const ANALYTICS_PAGE_TYPE = "{{ page.analytics_page_type | default: page.layout | default: 'page' | escape }}";
+
+    function getCommonProperties() {
+      return {
+        product: ANALYTICS_PRODUCT,
+        page_type: ANALYTICS_PAGE_TYPE,
+        page_title: document.title,
+        page_path: window.location.pathname,
+        page_url: window.location.href,
+        referrer: document.referrer || null
+      };
+    }
+
+    function getClickSection(target) {
+      if (target.closest('header, .site-header, .spectralens-site-header, nav')) return 'navigation';
+      if (target.closest('footer, .site-footer, .spectralens-footer')) return 'footer';
+      if (target.closest('.hero, .spectralens-hero')) return 'hero';
+      if (target.closest('.services-grid, .card, .spectralens-feature-grid')) return 'features';
+      if (target.closest('.highlight-section, .spectralens-cta')) return 'cta_section';
+      if (target.closest('#docs, .spectralens-docs')) return 'docs';
+      if (target.closest('main, .main-content')) return 'main_content';
+      return 'unknown';
+    }
+
+    window.trackMixpanelEvent = function(eventName, properties) {
+      if (!window.mixpanel || typeof window.mixpanel.track !== 'function') return;
+
+      try {
+        window.mixpanel.track(eventName, {
+          ...getCommonProperties(),
+          ...(properties || {})
+        });
+      } catch (error) {
+        // Analytics should never affect the site experience.
+      }
+    };
+
+    window.initMixpanelClickTracking = function() {
+      if (window.mixpanelClickTrackingInitialized) return;
+      window.mixpanelClickTrackingInitialized = true;
+
+      document.addEventListener('click', function(event) {
+        const target = event.target.closest('a, button');
+        if (!target) return;
+
+        const href = target.getAttribute('href') || '';
+        const absoluteHref = target.href || href;
+        let linkDomain = null;
+
+        if (absoluteHref) {
+          try {
+            linkDomain = new URL(absoluteHref, window.location.href).hostname;
+          } catch (error) {
+            linkDomain = null;
+          }
+        }
+
+        window.trackMixpanelEvent('website_link_clicked', {
+          link_text: (target.textContent || target.getAttribute('aria-label') || 'Unknown').trim().substring(0, 100),
+          link_url: href,
+          link_domain: linkDomain,
+          is_external: Boolean(linkDomain && linkDomain !== window.location.hostname),
+          element_id: target.id || null,
+          element_class: typeof target.className === 'string' ? target.className : '',
+          click_section: getClickSection(target)
+        });
+      });
+    };
+
+    window.loadMixpanelAnalytics = function() {
+      if (!MIXPANEL_TOKEN || window.mixpanelLoaded) return;
+      window.mixpanelLoaded = true;
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+      script.onload = function() {
+        if (!window.mixpanel || typeof window.mixpanel.init !== 'function') return;
+
+        window.mixpanel.init(MIXPANEL_TOKEN, {
+          persistence: 'localStorage',
+          ignore_dnt: false
+        });
+        window.mixpanel.register({
+          product: ANALYTICS_PRODUCT,
+          site: window.location.hostname || 'local'
+        });
+        window.trackMixpanelEvent('website_page_viewed');
+        window.initMixpanelClickTracking();
+      };
+      document.head.appendChild(script);
+    };
+  })();
+</script>
+{% endif %}
