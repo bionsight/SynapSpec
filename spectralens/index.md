@@ -12,7 +12,6 @@ analytics_page_type: "landing_page"
   <div class="container spectralens-hero-grid">
     <div class="spectralens-hero-copy">
       <div class="spectralens-kicker">
-        <span>{{ product.status_label }}</span>
         <span>DIA peak inspection</span>
       </div>
       <h1>{{ product.name }}</h1>

@@ -4,7 +4,6 @@ description: "A lightweight desktop tool for quickly checking precursor and frag
 repository_url: "https://github.com/bionsight/SpectraLens"
 release_url: "https://github.com/bionsight/SpectraLens/releases/tag/v0.4.3"
 contact_url: "mailto:contact@bionsight.com"
-status_label: "Alpha preview"
 
 download:
   version: "0.4.3"
