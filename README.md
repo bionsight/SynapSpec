@@ -54,11 +54,11 @@
 
 Download the latest version from our [releases page](https://github.com/bionsight/SynapSpec/releases):
 
-- **Windows (GPU)**: `SynapSpec-windows-0.9.1.zip`
-- **Windows (CPU)**: `SynapSpec-windows-cpu-0.9.1.zip`
-- **Linux (GPU)**: `SynapSpec-linux-0.9.1.tar.gz`
-- **Linux (CPU)**: `SynapSpec-linux-cpu-0.9.1.tar.gz`
-- **macOS**: `SynapSpec-macos-0.9.1.dmg`
+- **Windows (GPU)**: `SynapSpec-windows-0.9.2.zip`
+- **Windows (CPU)**: `SynapSpec-windows-cpu-0.9.2.zip`
+- **Linux (GPU)**: `SynapSpec-linux-0.9.2.tar.gz`
+- **Linux (CPU)**: `SynapSpec-linux-cpu-0.9.2.tar.gz`
+- **macOS**: `SynapSpec-macos-0.9.2.dmg`
 
 ### System Requirements
 
