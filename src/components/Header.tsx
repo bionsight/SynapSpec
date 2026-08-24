@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router'
 
+import { container } from '../ui'
+
 const navigation = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
@@ -10,18 +12,18 @@ const navigation = [
 
 export function Header() {
   return (
-    <header className="site-header">
-      <div className="container header-content">
-        <Link to="/" className="brand" aria-label="SynapSpec home">
-          <img src="/images/favicon.png" alt="" />
+    <header className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+      <div className={`${container} flex min-h-[4.7rem] flex-wrap items-center justify-between gap-4 py-3 max-sm:justify-center`}>
+        <Link to="/" className="inline-flex items-center gap-2.5 text-xl text-ink no-underline" aria-label="SynapSpec home">
+          <img className="size-8" src="/images/favicon.png" alt="" />
           <span><strong>Synap</strong>Spec</span>
         </Link>
-        <nav className="nav-menu" aria-label="Main navigation">
+        <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-muted" aria-label="Main navigation">
           {navigation.map((item) =>
             'href' in item ? (
-              <a href={item.href} key={item.label} target="_blank" rel="noreferrer">{item.label}</a>
+              <a className="no-underline transition hover:text-brand" href={item.href} key={item.label} target="_blank" rel="noreferrer">{item.label}</a>
             ) : (
-              <Link key={item.label} to={item.to} activeProps={{ className: 'active' }}>
+              <Link key={item.label} to={item.to} className="no-underline transition hover:text-brand" activeProps={{ className: 'font-bold text-brand' }}>
                 {item.label}
               </Link>
             ),
