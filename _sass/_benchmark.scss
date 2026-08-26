@@ -199,3 +199,117 @@
     margin-right: $spacing-lg;
   }
 }
+
+// ── Trend bars (list page) ──────────────────────────────────
+
+.bench-trend {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 180px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-trend-bar {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+
+  &:hover .bench-trend-fill {
+    background: $primary-color-darker;
+  }
+}
+
+.bench-trend-fill {
+  display: block;
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: $primary-color;
+  transition: background 0.2s ease;
+}
+
+.bench-trend-date {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  color: $text-color-lightest;
+}
+
+// ── Tables ──────────────────────────────────────────────────
+
+.bench-table-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-small;
+  font-variant-numeric: tabular-nums;
+
+  th,
+  td {
+    padding: $spacing-xs $spacing-sm;
+    text-align: left;
+    border-bottom: 1px solid $border-color;
+    white-space: nowrap;
+  }
+
+  th {
+    font-family: $heading-font;
+    font-weight: 600;
+    color: $accent-color;
+    border-bottom-width: 2px;
+  }
+
+  .num {
+    text-align: right;
+  }
+
+  tbody tr:hover {
+    background: $bg-secondary;
+  }
+
+  code {
+    font-size: 0.8rem;
+    color: $text-light;
+  }
+}
+
+.bench-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: $text-color-lightest;
+
+  &.is-on {
+    background: rgba(87, 185, 202, 0.15);
+    color: $primary-color-darker;
+    font-weight: 500;
+  }
+}
+
+// ── Prev / next ─────────────────────────────────────────────
+
+.bench-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-md;
+  max-width: 860px;
+  margin: 0 auto $spacing-xl;
+  padding-top: $spacing-md;
+  border-top: 1px solid $border-color;
+  font-size: $font-size-small;
+}

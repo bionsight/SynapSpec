@@ -57,6 +57,9 @@ collections:
   products:
     output: true
     permalink: /:collection/:name/
+  benchmarks:
+    output: true
+    permalink: /benchmarks/:name/
 
 # Defaults
 defaults:
@@ -70,6 +73,11 @@ defaults:
       type: "products"
     values:
       layout: "product"
+  - scope:
+      path: ""
+      type: "benchmarks"
+    values:
+      layout: "benchmark_run"
 
 # Exclude from processing
 exclude:

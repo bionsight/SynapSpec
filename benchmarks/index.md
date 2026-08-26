@@ -1,149 +1,101 @@
 ---
 layout: default
 title: "Benchmarks"
-description: "SynapSpec validation results on the LFQBench standard dataset — quantification accuracy against known ground-truth ratios"
+description: "SynapSpec benchmark history on the LFQBench standard dataset — identification depth and quantification accuracy measured on every tracked release of the engine"
 ---
 
 {% assign bm = site.data.benchmarks %}
-{% assign run = bm.runs | last %}
+{% assign runs_desc = bm.runs | sort: "date" | reverse %}
+{% assign peak = bm.runs | map: "total_precursors" | sort | last %}
 
 <div class="container">
 
   <div class="section-header">
     <h1>Benchmarks</h1>
     <p class="section-subtitle">
-      SynapSpec is validated against LFQBench, a standard dataset whose true protein
-      ratios are known in advance. Every number on this page is measured, not estimated.
+      SynapSpec is measured against LFQBench, a standard dataset whose true protein
+      ratios are known in advance. Every run on the {{ bm.filter.branch }} branch is
+      recorded here &mdash; improvements and regressions alike.
     </p>
   </div>
 
   <section class="py-lg">
     <div class="bench-meta">
-      <span><i class="fas fa-calendar-day"></i> Measured {{ run.date }}</span>
+      <span><i class="fas fa-list-ol"></i> {{ bm.coverage.run_count }} runs</span>
+      <span><i class="fas fa-calendar-day"></i> {{ bm.coverage.date_from }} &ndash; {{ bm.coverage.date_to }}</span>
       <span><i class="fas fa-flask"></i> {{ bm.dataset.name }} &middot; {{ bm.dataset.instrument }}</span>
-      <span><i class="fas fa-server"></i> AWS {{ run.instance }}</span>
     </div>
   </section>
 
-  <!-- ── Quantification accuracy ─────────────────────────────── -->
+  <!-- ── Trend ───────────────────────────────────────────────── -->
   <section class="py-lg">
     <div class="section-header">
-      <h2>Quantification Accuracy</h2>
-      <p class="section-subtitle">
-        LFQBench mixes human, yeast and <em>E.&nbsp;coli</em> proteins into two samples at
-        fixed, known ratios. A perfect result lands exactly on the target line.
-      </p>
+      <h2>Identification Depth Over Time</h2>
+      <p class="section-subtitle">Total precursors identified across the {{ bm.dataset.files }}-file benchmark.</p>
     </div>
 
-    <div class="bench-scale">
-      {% for item in run.accuracy %}
-        {% assign target_pos = item.target_log2_ratio | plus: 2.5 | times: 25 %}
-        {% assign value_pos = item.median_log2_ratio | plus: 2.5 | times: 25 %}
-        {% assign band_half = item.mad_from_target | times: 25 %}
-        {% assign band_left = value_pos | minus: band_half %}
-        {% assign band_width = band_half | times: 2 %}
-
-        <div class="bench-species" data-species="{{ item.species }}">
-          <div class="bench-species-head">
-            <h3>{{ item.label }}</h3>
-            <span class="bench-count">{{ item.count_display }} precursors</span>
-          </div>
-
-          <div class="bench-track">
-            <div class="bench-band" style="left: {{ band_left }}%; width: {{ band_width }}%;"></div>
-            <div class="bench-target" style="left: {{ target_pos }}%;">
-              <span class="bench-target-label">target {{ item.target_log2_ratio }}</span>
-            </div>
-            <div class="bench-value" style="left: {{ value_pos }}%;">
-              <span class="bench-value-label">{{ item.median_log2_ratio }}</span>
-            </div>
-          </div>
-
-          <div class="bench-species-foot">
-            <span>deviation from target <strong>{{ item.deviation }}</strong></span>
-            <span>spread (MAD) <strong>{{ item.mad_from_target }}</strong></span>
-          </div>
-        </div>
+    <div class="bench-trend">
+      {% for run in bm.runs %}
+        {% assign height = run.total_precursors | times: 100 | divided_by: peak %}
+        <a class="bench-trend-bar" href="{{ '/benchmarks/' | append: run.slug | append: '/' | relative_url }}"
+           title="{{ run.date }} — {{ run.total_precursors_display }} precursors">
+          <span class="bench-trend-fill" style="height: {{ height }}%;"></span>
+          <span class="bench-trend-date">{{ run.date | date: "%b" }}</span>
+        </a>
       {% endfor %}
-
-      <p class="bench-axis-note">
-        Horizontal axis: log<sub>2</sub> ratio between the two samples.
-        The shaded band shows the median absolute deviation &mdash; how tightly
-        individual measurements cluster around the target.
-      </p>
     </div>
+    <p class="bench-axis-note">
+      Bars are scaled against the highest value in the series ({{ peak }}). Click any bar for that run's detail.
+    </p>
   </section>
 
-  <!-- ── Identification depth ────────────────────────────────── -->
+  <!-- ── History table ───────────────────────────────────────── -->
   <section class="py-lg">
     <div class="section-header">
-      <h2>Identification Depth</h2>
-      <p class="section-subtitle">
-        Totals across {{ run.files_in_experiment }} runs
-        ({{ bm.dataset.conditions | size }} conditions &times; {{ bm.dataset.replicates }} replicates).
-      </p>
+      <h2>All Runs</h2>
     </div>
 
-    <div class="bench-stats">
-      <div class="bench-stat">
-        <span class="bench-stat-value">{{ run.total_precursors_display }}</span>
-        <span class="bench-stat-label">Precursors</span>
-      </div>
-      <div class="bench-stat">
-        <span class="bench-stat-value">{{ run.total_proteins_display }}</span>
-        <span class="bench-stat-label">Protein groups</span>
-      </div>
-      <div class="bench-stat">
-        <span class="bench-stat-value">{{ run.runtime_hours }}<small>h</small></span>
-        <span class="bench-stat-label">Wall-clock runtime</span>
-      </div>
+    <div class="bench-table-wrap">
+      <table class="bench-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th class="num">Precursors</th>
+            <th class="num">Protein groups</th>
+            <th class="num">Runtime</th>
+            <th>Instance</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for run in runs_desc %}
+            <tr>
+              <td>
+                <a href="{{ '/benchmarks/' | append: run.slug | append: '/' | relative_url }}">{{ run.date }}</a>
+              </td>
+              <td class="num">{{ run.total_precursors_display }}</td>
+              <td class="num">{{ run.total_proteins_display }}</td>
+              <td class="num">{% if run.runtime_hours %}{{ run.runtime_hours }} h{% else %}&mdash;{% endif %}</td>
+              <td><code>{{ run.instance }}</code></td>
+              <td>
+                {% if run.has_accuracy %}
+                  <span class="bench-badge is-on">measured</span>
+                {% else %}
+                  <span class="bench-badge">&mdash;</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-  </section>
 
-  <!-- ── Method ──────────────────────────────────────────────── -->
-  <section class="py-lg">
-    <div class="highlight-section">
-      <h2>How this was measured</h2>
-      <p>
-        {{ bm.dataset.name }} is a community-standard benchmark for label-free quantification.
-        Because the mixing ratios are fixed when the samples are prepared, the correct answer
-        is known independently of any software &mdash; which makes it possible to measure
-        accuracy rather than merely report output volume.
-      </p>
-
-      <div class="bench-method">
-        <div>
-          <h4>Dataset</h4>
-          <p>
-            {{ bm.dataset.instrument }} &mdash; {{ bm.dataset.files }} raw files:
-            conditions {{ bm.dataset.conditions | join: " and " }},
-            {{ bm.dataset.replicates }} replicates each.
-          </p>
-        </div>
-        <div>
-          <h4>Ground truth</h4>
-          <p>
-            Expected log<sub>2</sub> ratios &mdash;
-            {%- for item in run.accuracy %} {{ item.label }} {{ item.target_log2_ratio }}
-            {%- unless forloop.last %},{% endunless %}{% endfor %}.
-          </p>
-        </div>
-        <div>
-          <h4>Environment</h4>
-          <p>
-            AWS {{ run.instance }}, single run. Random seed fixed so the
-            analysis is reproducible.
-          </p>
-        </div>
-        <div>
-          <h4>Scope</h4>
-          <p>
-            Measured on the {{ bm.filter.branch }} branch of the SynapSpec engine.
-            Runtime reflects one run on shared infrastructure and will vary with hardware.
-          </p>
-        </div>
-      </div>
-    </div>
+    <p class="bench-axis-note">
+      Quantification accuracy has been recorded since {{ bm.coverage.date_to }}
+      ({{ bm.coverage.accuracy_count }} of {{ bm.coverage.run_count }} runs);
+      earlier runs report identification depth only.
+      Runtime reflects a single run on shared infrastructure and is not comparable across instance types.
+    </p>
   </section>
 
 </div>
