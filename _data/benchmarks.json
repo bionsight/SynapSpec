@@ -24,7 +24,9 @@
     "date_from": "2026-01-10",
     "date_to": "2026-07-22",
     "run_count": 18,
-    "accuracy_count": 1
+    "accuracy_count": 1,
+    "peak_precursors": 263241,
+    "peak_precursors_display": "263,241"
   },
   "runs": [
     {
@@ -114,7 +116,8 @@
         }
       ],
       "prev_slug": null,
-      "next_slug": "2026-01-15"
+      "next_slug": "2026-01-15",
+      "month_label": "Jan"
     },
     {
       "slug": "2026-01-15",
@@ -203,7 +206,8 @@
         }
       ],
       "prev_slug": "2026-01-10",
-      "next_slug": "2026-01-25"
+      "next_slug": "2026-01-25",
+      "month_label": ""
     },
     {
       "slug": "2026-01-25",
@@ -292,7 +296,8 @@
         }
       ],
       "prev_slug": "2026-01-15",
-      "next_slug": "2026-03-13"
+      "next_slug": "2026-03-13",
+      "month_label": ""
     },
     {
       "slug": "2026-03-13",
@@ -381,7 +386,8 @@
         }
       ],
       "prev_slug": "2026-01-25",
-      "next_slug": "2026-03-26"
+      "next_slug": "2026-03-26",
+      "month_label": "Mar"
     },
     {
       "slug": "2026-03-26",
@@ -470,7 +476,8 @@
         }
       ],
       "prev_slug": "2026-03-13",
-      "next_slug": "2026-03-29"
+      "next_slug": "2026-03-29",
+      "month_label": ""
     },
     {
       "slug": "2026-03-29",
@@ -559,7 +566,8 @@
         }
       ],
       "prev_slug": "2026-03-26",
-      "next_slug": "2026-03-30"
+      "next_slug": "2026-03-30",
+      "month_label": ""
     },
     {
       "slug": "2026-03-30",
@@ -648,7 +656,8 @@
         }
       ],
       "prev_slug": "2026-03-29",
-      "next_slug": "2026-03-31"
+      "next_slug": "2026-03-31",
+      "month_label": ""
     },
     {
       "slug": "2026-03-31",
@@ -737,7 +746,8 @@
         }
       ],
       "prev_slug": "2026-03-30",
-      "next_slug": "2026-04-04"
+      "next_slug": "2026-04-04",
+      "month_label": ""
     },
     {
       "slug": "2026-04-04",
@@ -826,7 +836,8 @@
         }
       ],
       "prev_slug": "2026-03-31",
-      "next_slug": "2026-05-15"
+      "next_slug": "2026-05-15",
+      "month_label": "Apr"
     },
     {
       "slug": "2026-05-15",
@@ -915,7 +926,8 @@
         }
       ],
       "prev_slug": "2026-04-04",
-      "next_slug": "2026-05-19"
+      "next_slug": "2026-05-19",
+      "month_label": "May"
     },
     {
       "slug": "2026-05-19",
@@ -1004,7 +1016,8 @@
         }
       ],
       "prev_slug": "2026-05-15",
-      "next_slug": "2026-06-02"
+      "next_slug": "2026-06-02",
+      "month_label": ""
     },
     {
       "slug": "2026-06-02",
@@ -1093,7 +1106,8 @@
         }
       ],
       "prev_slug": "2026-05-19",
-      "next_slug": "2026-06-04"
+      "next_slug": "2026-06-04",
+      "month_label": "Jun"
     },
     {
       "slug": "2026-06-04",
@@ -1182,7 +1196,8 @@
         }
       ],
       "prev_slug": "2026-06-02",
-      "next_slug": "2026-07-07"
+      "next_slug": "2026-07-07",
+      "month_label": ""
     },
     {
       "slug": "2026-07-07",
@@ -1271,7 +1286,8 @@
         }
       ],
       "prev_slug": "2026-06-04",
-      "next_slug": "2026-07-12"
+      "next_slug": "2026-07-12",
+      "month_label": "Jul"
     },
     {
       "slug": "2026-07-12",
@@ -1360,7 +1376,8 @@
         }
       ],
       "prev_slug": "2026-07-07",
-      "next_slug": "2026-07-14"
+      "next_slug": "2026-07-14",
+      "month_label": ""
     },
     {
       "slug": "2026-07-14",
@@ -1449,7 +1466,8 @@
         }
       ],
       "prev_slug": "2026-07-12",
-      "next_slug": "2026-07-16"
+      "next_slug": "2026-07-16",
+      "month_label": ""
     },
     {
       "slug": "2026-07-16",
@@ -1538,7 +1556,8 @@
         }
       ],
       "prev_slug": "2026-07-14",
-      "next_slug": "2026-07-22"
+      "next_slug": "2026-07-22",
+      "month_label": ""
     },
     {
       "slug": "2026-07-22",
@@ -1658,7 +1677,8 @@
         }
       ],
       "prev_slug": "2026-07-16",
-      "next_slug": null
+      "next_slug": null,
+      "month_label": ""
     }
   ]
 }

@@ -6,7 +6,7 @@ description: "SynapSpec benchmark history on the LFQBench standard dataset — i
 
 {% assign bm = site.data.benchmarks %}
 {% assign runs_desc = bm.runs | sort: "date" | reverse %}
-{% assign peak = bm.runs | map: "total_precursors" | sort | last %}
+{% assign peak = bm.coverage.peak_precursors %}
 
 <div class="container">
 
@@ -40,12 +40,12 @@ description: "SynapSpec benchmark history on the LFQBench standard dataset — i
         <a class="bench-trend-bar" href="{{ '/benchmarks/' | append: run.slug | append: '/' | relative_url }}"
            title="{{ run.date }} — {{ run.total_precursors_display }} precursors">
           <span class="bench-trend-fill" style="height: {{ height }}%;"></span>
-          <span class="bench-trend-date">{{ run.date | date: "%b" }}</span>
+          <span class="bench-trend-date">{{ run.month_label }}</span>
         </a>
       {% endfor %}
     </div>
     <p class="bench-axis-note">
-      Bars are scaled against the highest value in the series ({{ peak }}). Click any bar for that run's detail.
+      Bars are scaled against the highest value in the series ({{ bm.coverage.peak_precursors_display }}). Click any bar for that run's detail.
     </p>
   </section>
 

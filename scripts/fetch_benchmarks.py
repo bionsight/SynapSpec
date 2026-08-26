@@ -47,6 +47,8 @@ SPECIES_LABELS = {"HUMAN": "Human", "ECOLI": "E. coli", "YEAS8": "Yeast"}
 # 상세 페이지의 파일별 표에 싣는 지표
 PER_FILE_METRICS = ("precursors", "proteins", "ms1_error", "ms2_error", "rt_error", "fwhm_rt")
 
+MONTH_NAMES = ("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -269,6 +271,12 @@ def main() -> None:
         run["prev_slug"] = runs[index - 1]["slug"] if index > 0 else None
         run["next_slug"] = runs[index + 1]["slug"] if index < len(runs) - 1 else None
 
+    previous_month = None
+    for run in runs:
+        month = run["date"][:7]
+        run["month_label"] = MONTH_NAMES[int(run["date"][5:7])] if month != previous_month else ""
+        previous_month = month
+
     with_accuracy = sum(1 for run in runs if run["has_accuracy"])
     log(f"\n수집 {len(runs)}개 (정확도 보유 {with_accuracy}개) / 제외 {skipped}개 / 실패 {failed}개")
     if not runs:
@@ -291,6 +299,8 @@ def main() -> None:
             "date_to": latest["date"],
             "run_count": len(runs),
             "accuracy_count": with_accuracy,
+            "peak_precursors": max(run["total_precursors"] for run in runs),
+            "peak_precursors_display": thousands(max(run["total_precursors"] for run in runs)),
         },
         "runs": runs,
     }
