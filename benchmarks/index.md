@@ -115,7 +115,7 @@ description: "SynapSpec validation results on the LFQBench standard dataset — 
         <div>
           <h4>Dataset</h4>
           <p>
-            {{ bm.dataset.files }} raw files from a {{ bm.dataset.instrument }}:
+            {{ bm.dataset.instrument }} &mdash; {{ bm.dataset.files }} raw files:
             conditions {{ bm.dataset.conditions | join: " and " }},
             {{ bm.dataset.replicates }} replicates each.
           </p>
@@ -124,9 +124,8 @@ description: "SynapSpec validation results on the LFQBench standard dataset — 
           <h4>Ground truth</h4>
           <p>
             Expected log<sub>2</sub> ratios &mdash;
-            {% for pair in bm.dataset.target_log2_ratios %}
-              {{ pair[0] }} {{ pair[1] }}{% unless forloop.last %}, {% endunless %}
-            {% endfor %}.
+            {%- for item in run.accuracy %} {{ item.label }} {{ item.target_log2_ratio }}
+            {%- unless forloop.last %},{% endunless %}{% endfor %}.
           </p>
         </div>
         <div>
