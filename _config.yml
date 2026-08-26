@@ -31,8 +31,6 @@ navigation:
     url: "/about/"
   - name: "Download"
     url: "/download/"
-  - name: "Benchmarks"
-    url: "/benchmarks/"
   - name: "Documentation"
     url: "https://docs.synapspec.ai"
     external: true
@@ -78,6 +76,9 @@ defaults:
       type: "benchmarks"
     values:
       layout: "benchmark_run"
+      # 아직 공개 전 — 링크를 걸지 않고 색인도 막는다
+      noindex: true
+      sitemap: false
 
 # Exclude from processing
 exclude:

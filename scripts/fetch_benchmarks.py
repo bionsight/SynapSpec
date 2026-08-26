@@ -210,6 +210,8 @@ def write_collection(runs: list[dict]) -> None:
             f"slug: \"{run['slug']}\"\n"
             f"date: {run['date']}\n"
             f"title: \"Benchmark run {run['date']}\"\n"
+            "noindex: true\n"
+            "sitemap: false\n"
             "---\n",
             encoding="utf-8",
         )

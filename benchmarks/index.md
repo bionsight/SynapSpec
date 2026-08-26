@@ -2,6 +2,9 @@
 layout: default
 title: "Benchmarks"
 description: "SynapSpec benchmark history on the LFQBench standard dataset — identification depth and quantification accuracy measured on every tracked release of the engine"
+# 아직 공개 전 — 내비게이션에 링크를 걸지 않고 색인도 막는다
+noindex: true
+sitemap: false
 ---
 
 {% assign bm = site.data.benchmarks %}
