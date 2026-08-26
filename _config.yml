@@ -31,6 +31,8 @@ navigation:
     url: "/about/"
   - name: "Download"
     url: "/download/"
+  - name: "Benchmarks"
+    url: "/benchmarks/"
   - name: "Documentation"
     url: "https://docs.synapspec.ai"
     external: true

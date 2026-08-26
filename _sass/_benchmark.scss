@@ -1,0 +1,201 @@
+// Benchmarks page — LFQBench validation results
+
+.bench-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $spacing-md;
+  font-size: $font-size-small;
+  color: $text-light;
+
+  i {
+    color: $primary-color;
+    margin-right: $spacing-xs * 0.6;
+  }
+}
+
+// ── Accuracy scale ──────────────────────────────────────────
+
+.bench-scale {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.bench-species {
+  padding: $spacing-md 0 $spacing-lg;
+
+  & + .bench-species {
+    border-top: 1px solid $border-color;
+  }
+}
+
+.bench-species-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+}
+
+.bench-count {
+  font-size: $font-size-small;
+  color: $text-color-lightest;
+  white-space: nowrap;
+}
+
+.bench-track {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, $border-color, $secondary-color-light, $border-color);
+  margin: $spacing-xl $spacing-sm;
+}
+
+// Median absolute deviation band
+.bench-band {
+  position: absolute;
+  top: -7px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(87, 185, 202, 0.18);
+}
+
+// Known correct answer
+.bench-target {
+  position: absolute;
+  top: -12px;
+  width: 0;
+  height: 28px;
+  border-left: 2px dashed $text-color-lighter;
+}
+
+.bench-target-label {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: $text-color-lighter;
+}
+
+// Measured median
+.bench-value {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: $primary-color;
+  box-shadow: 0 0 0 3px $background-color, 0 2px 8px rgba(87, 185, 202, 0.5);
+}
+
+.bench-value-label {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+}
+
+.bench-species-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  font-size: $font-size-small;
+  color: $text-light;
+
+  strong {
+    color: $text-color;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bench-axis-note {
+  margin-top: $spacing-md;
+  font-size: $font-size-small;
+  color: $text-color-lightest;
+  text-align: center;
+}
+
+// ── Depth stats ─────────────────────────────────────────────
+
+.bench-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-md;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.bench-stat {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs * 0.6;
+  padding: $spacing-lg;
+  text-align: center;
+  background: $bg-secondary;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+}
+
+.bench-stat-value {
+  font-family: $heading-font;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+  font-variant-numeric: tabular-nums;
+
+  small {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 1px;
+  }
+}
+
+.bench-stat-label {
+  font-size: $font-size-small;
+  color: $text-light;
+}
+
+// ── Method ──────────────────────────────────────────────────
+
+.bench-method {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+
+  h4 {
+    margin-bottom: $spacing-xs * 0.6;
+    font-size: 0.95rem;
+    color: $accent-color;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size-small;
+    color: $text-light;
+  }
+}
+
+@media (max-width: $mobile) {
+  .bench-species-head {
+    flex-direction: column;
+    gap: $spacing-xs * 0.5;
+  }
+
+  .bench-track {
+    margin-left: $spacing-lg;
+    margin-right: $spacing-lg;
+  }
+}

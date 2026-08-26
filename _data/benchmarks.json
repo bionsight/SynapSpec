@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-08-26",
+  "dataset": {
+    "name": "LFQBench",
+    "description": "Human/yeast/E. coli 3종 혼합물을 A/B 두 조건에 알려진 비율로 섞은 표준 벤치마크",
+    "instrument": "Orbitrap Astral",
+    "files": 6,
+    "conditions": [
+      "A",
+      "B"
+    ],
+    "replicates": 3,
+    "target_log2_ratios": {
+      "HUMAN": 0.0,
+      "ECOLI": -2.0,
+      "YEAS8": 1.0
+    }
+  },
+  "filter": {
+    "branch": "main",
+    "project": "DeepMSFlow/lfq/astral",
+    "tag": "bion-lfq-astral"
+  },
+  "coverage": {
+    "date_from": "2026-07-22",
+    "date_to": "2026-07-22",
+    "run_count": 1
+  },
+  "runs": [
+    {
+      "date": "2026-07-22",
+      "instance": "c7i.8xlarge",
+      "runtime_hours": 7.23,
+      "total_precursors": 261903,
+      "total_precursors_display": "261,903",
+      "total_proteins": 17831,
+      "total_proteins_display": "17,831",
+      "files_in_experiment": 6,
+      "accuracy": [
+        {
+          "species": "HUMAN",
+          "label": "Human",
+          "target_log2_ratio": 0.0,
+          "median_log2_ratio": -0.0337,
+          "deviation": -0.0337,
+          "mad_from_target": 0.1054,
+          "count": 182199,
+          "count_display": "182,199"
+        },
+        {
+          "species": "ECOLI",
+          "label": "E. coli",
+          "target_log2_ratio": -2.0,
+          "median_log2_ratio": -1.9172,
+          "deviation": 0.0828,
+          "mad_from_target": 0.2037,
+          "count": 19320,
+          "count_display": "19,320"
+        },
+        {
+          "species": "YEAS8",
+          "label": "Yeast",
+          "target_log2_ratio": 1.0,
+          "median_log2_ratio": 0.9445,
+          "deviation": -0.0555,
+          "mad_from_target": 0.1401,
+          "count": 50216,
+          "count_display": "50,216"
+        }
+      ]
+    }
+  ]
+}
