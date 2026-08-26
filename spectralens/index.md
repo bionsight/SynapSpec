@@ -172,15 +172,15 @@ analytics_page_type: "landing_page"
                 <span>Step 1</span>
                 <h4>Add raw files</h4>
                 <p>
-                  Open the Raw Files panel, click <strong>Add Files</strong>, and choose the raw files you want
-                  to inspect. After the files are listed, select the blue checkbox for the file or files that
+                  Open the Raw Files panel, click <strong>Add files</strong>, and choose the raw files you want
+                  to inspect. After the files are listed, tick the checkbox for the file or files that
                   should be included in the targeted analysis.
                 </p>
               </div>
               <figure>
                 <img
                   src="{{ '/assets/images/spectralens/select_raw_files.png' | relative_url }}"
-                  alt="SpectraLens Raw Files panel with Add Files and file selection checkbox highlighted"
+                  alt="SpectraLens Raw Files panel with two raw files listed and selected"
                   loading="lazy"
                 >
                 <figcaption>Add raw files, then select the files to use for analysis.</figcaption>
@@ -192,17 +192,16 @@ analytics_page_type: "landing_page"
                 <span>Step 2</span>
                 <h4>Open the precursor input dialog</h4>
                 <p>
-                  Click the <strong>+</strong> button in the precursor toolbar to open the sequence input dialog.
-                  If the button is not visible, collapse the Raw Files panel first so the precursor list has more space.
+                  Click <strong>Add precursors</strong> below the precursor list to open the sequence input dialog.
                 </p>
               </div>
               <figure>
                 <img
                   src="{{ '/assets/images/spectralens/add_sequences.png' | relative_url }}"
-                  alt="SpectraLens precursor list with plus button highlighted and Raw Files panel highlighted"
+                  alt="SpectraLens Add Precursors dialog opened over the precursor list"
                   loading="lazy"
                 >
-                <figcaption>Use the plus button to add target precursor sequences.</figcaption>
+                <figcaption>Use Add precursors to open the sequence input dialog.</figcaption>
               </figure>
             </article>
 
@@ -219,7 +218,7 @@ analytics_page_type: "landing_page"
               <figure>
                 <img
                   src="{{ '/assets/images/spectralens/fill_sequences.png' | relative_url }}"
-                  alt="SpectraLens Add Peptide dialog with sequence input examples"
+                  alt="SpectraLens Add Precursors dialog with three target sequences entered"
                   loading="lazy"
                 >
                 <figcaption>Enter one or more target sequences, then add them to the precursor list.</figcaption>
@@ -233,17 +232,18 @@ analytics_page_type: "landing_page"
                 <p>
                   Select the sequence rows you want to analyze. Anchor precursors are used for RT-iRT mapping.
                   SpectraLens automatically fills many settings from the raw file metadata, but you can adjust
-                  tolerances, instrument, NCE, RT window, and fragment limits from Settings when needed.
-                  Click <strong>Analyze All</strong> to extract and inspect the target peaks.
+                  tolerances, instrument, NCE, RT window, and fragment limits in <strong>Experiment Settings</strong>
+                  when needed. Click <strong>Analyze</strong> to extract and inspect the target peaks. Setup
+                  collapses into the icon rail once the run succeeds, so the results get the full window.
                 </p>
               </div>
               <figure>
                 <img
                   src="{{ '/assets/images/spectralens/select_seqs_settings.png' | relative_url }}"
-                  alt="SpectraLens precursor table and settings area with selectable sequence rows highlighted"
+                  alt="SpectraLens setup with every raw file and precursor selected, ready to analyze"
                   loading="lazy"
                 >
-                <figcaption>Select target sequences, review settings, and run Analyze All.</figcaption>
+                <figcaption>Select target sequences, review settings, and run Analyze.</figcaption>
               </figure>
             </article>
           </div>

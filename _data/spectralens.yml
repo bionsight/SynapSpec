@@ -48,7 +48,7 @@ workflow:
   - title: "Enter precursors"
     text: "Paste peptide sequences, optional charge suffixes, UniMod modifications, or supported glycan notation."
   - title: "Inspect peaks"
-    text: "Run targeted extraction, then switch between iRT-RT, spectra, MS1 XIC, and MS2 XIC tabs."
+    text: "Run targeted extraction. Setup collapses into the icon rail so the results take the full window, then switch between iRT-RT, spectra, MS1 XIC, and MS2 XIC tabs."
 
 settings:
   - name: "MS1 tolerance"
