@@ -3,6 +3,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { SectionHead } from '../components/Section'
 import { block, button, caps, container, eyebrow, panel } from '../ui'
 
+/* SpectraLens 는 라이브 synapspec.ai 에 없는 페이지라 대조할 원문이 없다.
+   그래서 문구는 이 저장소가 이전부터 쓰던 것을 그대로 두고 스타일만 옮겼다. */
+
 const features = [
   ['Precursor-centered inspection', 'Add a peptide sequence and charge state, then inspect the targeted signal without processing the entire experiment.'],
   ['Interactive XIC views', 'Review precursor MS1 and fragment MS2 XICs with linear or log scale and optional TIC or base-peak overlays.'],
@@ -17,6 +20,13 @@ const facts = [
   ['Views', 'MS1 and MS2 XIC'],
   ['Context', 'iRT, RT, spectra'],
   ['Output', 'CSV export'],
+] as const
+
+const workflow = [
+  'Create a workspace',
+  'Add DIA raw files',
+  'Enter target precursors',
+  'Inspect MS1 and MS2 peak evidence',
 ] as const
 
 const quickStart = [
@@ -38,18 +48,18 @@ function SpectraLensPage() {
         <div className={`${container} grid items-center gap-8 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:gap-12 md:py-20`}>
           <div>
             <p className={eyebrow}>Targeted DIA peak inspection</p>
-            <h1 className="mt-3 text-[31px]/[1.06] tracking-[-0.035em] text-balance md:text-[46px]">
-              Inspect one precursor without running the whole pipeline.
-            </h1>
-            <p className="mt-4 text-[15.5px] text-ink-600 md:max-w-[34ch] md:text-[17px]">
-              Load raw files, enter a precursor, and read MS1 and MS2 peak evidence directly — no full DIA
-              analysis in between.
+            <h1 className="mt-3 text-[31px]/[1.06] tracking-[-0.035em] text-balance md:text-[46px]">SpectraLens</h1>
+            <p className="mt-4 text-[15.5px] text-ink-600 md:text-[17px]">
+              Targeted DIA peak inspection for the precursor you care about.
+            </p>
+            <p className="mt-3 text-[15.5px] text-ink-600 md:max-w-[38ch]">
+              Load raw files, enter a precursor, and inspect MS1/MS2 peak evidence without waiting for a
+              full DIA pipeline.
             </p>
             <div className="mt-6 grid gap-3 md:flex md:flex-wrap">
               <a className={`${button('primary', 'lg')} w-full md:w-auto`} href="https://github.com/bionsight/SpectraLens/releases/tag/v0.4.5" target="_blank" rel="noreferrer">Download latest</a>
-              <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="#docs">Read the docs</a>
+              <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="#docs">Read docs</a>
             </div>
-            <p className="mt-5 font-mono text-xs text-ink-500">macOS 10.14+ · Windows 10/11 &nbsp;·&nbsp; v0.4.5</p>
           </div>
           <img
             className="rounded-lg border border-ink-200 shadow-xl"
@@ -83,6 +93,18 @@ function SpectraLensPage() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className={block}>
+          <SectionHead title="From raw file to peak evidence" />
+          <ol className="grid list-none gap-4 p-0 md:grid-cols-4 md:gap-5">
+            {workflow.map((step, index) => (
+              <li className="border-t-2 border-brand-600 pt-4" key={step}>
+                <span className="font-mono text-[11.5px] text-brand-700">0{index + 1}</span>
+                <p className="mt-1 text-sm">{step}</p>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section className={block} id="docs">

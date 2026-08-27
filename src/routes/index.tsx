@@ -1,11 +1,11 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
-import { Closer, Requirements, SectionHead, TableScroll } from '../components/Section'
-import { exampleRun, pipeline, requirements, version, workflows } from '../data/site'
-import { badge, block, button, caps, container, eyebrow } from '../ui'
+import { Closer, Requirements, SectionHead } from '../components/Section'
+import { exampleRun, requirements, services } from '../data/site'
+import { badge, block, button, container, eyebrow, panel } from '../ui'
 
 export const Route = createFileRoute('/')({
-  head: () => ({ meta: [{ title: 'SynapSpec | DIA proteomics on your own machine' }] }),
+  head: () => ({ meta: [{ title: 'SynapSpec | DIA analysis solution for proteomics research' }] }),
   component: HomePage,
 })
 
@@ -19,8 +19,8 @@ const points = exampleRun.perFile.values.map(([name, value], index, all) => ({
 }))
 const chartLabel = `Precursors per file: ${exampleRun.perFile.values.map(([name, value]) => `${name} ${value.toLocaleString('en-US')}`).join(', ')}`
 
-/* 히어로 옆에 서는 제품 창. 형용사 대신 완료된 실행 하나를 보여주는 것이
-   이 시안의 주장 전부라서, 스크린샷이 아니라 마크업으로 그린다. */
+/* 히어로 옆에 서는 제품 창. 시안의 주장은 형용사 대신 완료된 실행 하나를
+   보여주는 것이고, 여기 들어가는 숫자는 실측 벤치마크다. */
 function AppWindow() {
   return (
     <div className="overflow-hidden rounded-lg border border-ink-200 bg-white text-xs/[1.45] shadow-xl">
@@ -80,20 +80,20 @@ function HomePage() {
       <section className="border-b border-ink-100 bg-linear-to-b from-ink-50 to-white">
         <div className={`${container} grid items-center gap-8 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:gap-12 md:py-20`}>
           <div>
-            <p className={eyebrow}>DIA mass spectrometry · Desktop</p>
+            <p className={eyebrow}>DIA-MS data processing and analysis</p>
             <h1 className="mt-3 text-[31px]/[1.06] tracking-[-0.035em] text-balance md:text-[46px]">
-              Raw DIA files in. Quantified proteins out. On your own machine.
+              Advancing Scientific Discovery Through Proteomics
             </h1>
-            <p className="mt-4 text-[15.5px] text-ink-600 md:max-w-[34ch] md:text-[17px]">
-              Spectral library prediction, search, FDR control and label-free quantification in one local
-              pipeline — nothing is uploaded, nothing is queued.
+            <p className="mt-4 text-[15.5px] text-ink-600 md:max-w-[38ch] md:text-[17px]">
+              Advanced DIA mass spectrometry analysis solution for proteomics research. Accelerate your
+              drug discovery and protein function studies with our cutting-edge software.
             </p>
             <div className="mt-6 grid gap-3 md:flex md:flex-wrap">
-              <Link to="/download" className={`${button('primary', 'lg')} w-full md:w-auto`}>Download {version}</Link>
-              <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="https://docs.synapspec.ai" target="_blank" rel="noreferrer">Read the docs</a>
+              <Link to="/download" className={`${button('primary', 'lg')} w-full md:w-auto`}>Download Solution</Link>
+              <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="https://github.com/bionsight/SynapSpec/discussions" target="_blank" rel="noreferrer">Join Community</a>
             </div>
             <p className="mt-5 font-mono text-xs text-ink-500">
-              Windows 10/11 · macOS 10.14+ · Ubuntu 20.04+ &nbsp;·&nbsp; GPU and CPU builds
+              Windows 10/11 · macOS 10.14+ · Ubuntu 20.04 LTS+ &nbsp;·&nbsp; GPU and CPU builds
             </p>
           </div>
           <AppWindow />
@@ -117,62 +117,35 @@ function HomePage() {
 
       <div className={container}>
         <section className={block}>
-          <SectionHead title="Four stages, one window">
-            Every stage runs locally and writes its own output, so a failed step is re-run instead of the whole analysis.
+          <SectionHead title="SynapSpec DIA Analysis Solution">
+            Comprehensive software solution for DIA-MS data processing and analysis in proteomics research.
           </SectionHead>
-          <div className="grid gap-4 md:grid-cols-4 md:gap-5">
-            {pipeline.map(([number, title, description, io]) => (
-              <div className="border-t-2 border-brand-600 pt-4" key={number}>
-                <div className="font-mono text-[11.5px] text-brand-700">{number}</div>
-                <h3 className="mt-1 text-base">{title}</h3>
+          <div className="grid gap-4 md:grid-cols-3">
+            {services.map(([title, description]) => (
+              <article className={panel} key={title}>
+                <h3 className="text-base">{title}</h3>
                 <p className="mt-2 text-sm text-ink-600">{description}</p>
-                <p className="mt-3 font-mono text-[11.5px] text-ink-500">{io}</p>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section className={block} id="workflows">
-          <SectionHead title="Workflows it covers">
-            What the pipeline supports today, without plugins or a separate licence.
-          </SectionHead>
-          <TableScroll>
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr>
-                  {['Workflow', 'Takes', 'Returns'].map((heading) => (
-                    <th className={`${caps} border-b border-ink-200 p-3 text-start font-semibold`} key={heading}>{heading}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {workflows.map(([workflow, takes, returns]) => (
-                  <tr key={workflow}>
-                    <th className="w-auto border-b border-ink-100 p-3 text-start align-top font-semibold md:w-68">{workflow}</th>
-                    <td className="w-auto border-b border-ink-100 p-3 align-top text-ink-600 md:w-84">{takes}</td>
-                    <td className="border-b border-ink-100 p-3 align-top text-ink-600">{returns}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </TableScroll>
-        </section>
-
         <section className={block}>
-          <SectionHead title="Runs on the hardware you already have">
-            A workstation is enough. A GPU makes library prediction faster; the CPU build does the same work without one.
+          <SectionHead title="System Requirements">
+            SynapSpec installs and runs on the machine you already have. GPU and CPU builds are available
+            for Windows and Linux.
           </SectionHead>
           <Requirements items={requirements} />
           <Closer
-            title="Try it on one of your own runs"
+            title="Ready to Try SynapSpec?"
             actions={
               <>
-                <Link to="/download" className={`${button('primary', 'lg')} w-full md:w-auto`}>Download {version}</Link>
-                <Link to="/contact" className={`${button('secondary', 'lg')} w-full md:w-auto`}>Contact us</Link>
+                <Link to="/download" className={`${button('primary', 'lg')} w-full md:w-auto`}>Download Now</Link>
+                <Link to="/contact" className={`${button('secondary', 'lg')} w-full md:w-auto`}>Contact Us</Link>
               </>
             }
           >
-            Download the build for your platform, or tell us about the study you are planning.
+            Download our DIA analysis solution or reach out to discuss how it can advance your proteomics research.
           </Closer>
         </section>
       </div>

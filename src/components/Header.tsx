@@ -5,11 +5,13 @@ import { version } from '../data/site'
 import { button, container } from '../ui'
 import { Logo } from './Logo'
 
+/* 라이브 synapspec.ai 의 내비게이션 그대로. 시안이 새로 만든
+   Product / Workflows 항목은 대응하는 페이지도 근거도 없어 쓰지 않는다. */
 const navigation = [
-  { to: '/', label: 'Product', exact: true },
-  { hash: '/#workflows', label: 'Workflows' },
+  { to: '/', label: 'Home', exact: true },
+  { to: '/about', label: 'About' },
   { to: '/download', label: 'Download' },
-  { href: 'https://docs.synapspec.ai', label: 'Docs' },
+  { href: 'https://docs.synapspec.ai', label: 'Documentation' },
   { to: '/contact', label: 'Contact' },
 ] as const
 
@@ -17,22 +19,12 @@ const linkClass = 'transition-colors hover:text-brand-700'
 const activeClass = 'font-semibold text-ink-900'
 
 function NavItems({ onNavigate }: { onNavigate?: () => void }) {
-  return navigation.map((item) => {
-    if ('href' in item) {
-      return (
-        <a className={linkClass} href={item.href} key={item.label} target="_blank" rel="noreferrer" onClick={onNavigate}>
-          {item.label}
-        </a>
-      )
-    }
-    if ('hash' in item) {
-      return (
-        <Link className={linkClass} to="/" hash="workflows" key={item.label} onClick={onNavigate}>
-          {item.label}
-        </Link>
-      )
-    }
-    return (
+  return navigation.map((item) =>
+    'href' in item ? (
+      <a className={linkClass} href={item.href} key={item.label} target="_blank" rel="noreferrer" onClick={onNavigate}>
+        {item.label}
+      </a>
+    ) : (
       <Link
         className={linkClass}
         to={item.to}
@@ -43,8 +35,8 @@ function NavItems({ onNavigate }: { onNavigate?: () => void }) {
       >
         {item.label}
       </Link>
-    )
-  })
+    ),
+  )
 }
 
 export function Header() {

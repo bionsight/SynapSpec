@@ -20,13 +20,21 @@ export function TableScroll({ children }: { children: ReactNode }) {
   )
 }
 
-export function Requirements({ items }: { items: readonly (readonly [string, string])[] }) {
+/* 라이브의 요구사항은 항목마다 여러 줄이고, 그 줄들이 서로 조건을 건다
+   (최소/권장/단서). 한 줄로 합치면 의미가 새므로 줄을 그대로 세운다. */
+export function Requirements({
+  items,
+}: {
+  items: readonly (readonly [string, readonly string[]])[]
+}) {
   return (
     <dl className="m-0 grid gap-x-8 gap-y-5 md:grid-cols-3">
-      {items.map(([term, value]) => (
+      {items.map(([term, lines]) => (
         <div className="border-t border-ink-100 pt-3" key={term}>
           <dt className={caps}>{term}</dt>
-          <dd className="m-0 mt-1 text-sm">{value}</dd>
+          {lines.map((line) => (
+            <dd className="m-0 mt-1 text-sm text-ink-600" key={line}>{line}</dd>
+          ))}
         </div>
       ))}
     </dl>
