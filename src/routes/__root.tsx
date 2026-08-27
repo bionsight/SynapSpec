@@ -12,7 +12,7 @@ export const Route = createRootRoute({
       {
         name: 'description',
         content:
-          'Spectral library prediction, search, FDR control and label-free quantification for DIA mass spectrometry — in one local pipeline.',
+          'SynapSpec - Advanced DIA-MS analysis software solution for proteomics research and drug discovery',
       },
     ],
     links: [
