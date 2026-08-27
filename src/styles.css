@@ -1,18 +1,71 @@
 @import "tailwindcss";
 
+/* 시안 A(증거 우선)의 토큰. bion-design design-system.css 의 Petrol 램프를
+   그대로 옮겨왔다 — 이전 사이트의 #187e93 은 더 이상 쓰지 않는다. */
 @theme {
-  --color-ink: #0b2f52;
-  --color-muted: #52657c;
-  --color-surface: #f6fafc;
-  --color-brand: #187e93;
-  --color-brand-soft: #d8f0f4;
-  --color-deep: #061d33;
-  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-ink-0: #ffffff;
+  --color-ink-50: #f8f9fa;
+  --color-ink-100: #f1f3f5;
+  --color-ink-200: #e7eaee;
+  --color-ink-300: #d5dae1;
+  --color-ink-400: #aab3bf;
+  --color-ink-500: #7f8a99;
+  --color-ink-600: #5c6773;
+  --color-ink-700: #434c58;
+  --color-ink-800: #2b323b;
+  --color-ink-900: #1a1f26;
+  --color-ink-950: #0f1318;
+
+  --color-brand-50: #eff8fd;
+  --color-brand-100: #d6edf9;
+  --color-brand-200: #aedaf3;
+  --color-brand-300: #79c0e8;
+  --color-brand-400: #45a2d6;
+  --color-brand-500: #2285bd;
+  --color-brand-600: #106a9e;
+  --color-brand-700: #0f5680;
+  --color-brand-800: #12486a;
+  --color-brand-900: #133d59;
+  --color-brand-950: #0b2639;
+
+  --color-success: #059669;
+  --color-success-text: #047857;
+
+  /* 색맹 안전 계열 — 앱 창의 스파크라인용 */
+  --color-viz-1: #0072b2;
+  --color-viz-2: #e69f00;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard Variable', Pretendard,
+    'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+
+  --shadow-xs: 0 1px 2px rgba(15, 19, 24, 0.06);
+  --shadow-sm: 0 1px 3px rgba(15, 19, 24, 0.08), 0 1px 2px rgba(15, 19, 24, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(15, 19, 24, 0.10), 0 2px 4px -2px rgba(15, 19, 24, 0.06);
+  --shadow-lg: 0 12px 20px -6px rgba(15, 19, 24, 0.12), 0 4px 8px -4px rgba(15, 19, 24, 0.08);
+  --shadow-xl: 0 24px 40px -12px rgba(15, 19, 24, 0.18), 0 8px 16px -8px rgba(15, 19, 24, 0.10);
+
+  --tracking-caps: 0.06em;
 }
 
 @layer base {
-  html { scroll-behavior: smooth; }
-  body { @apply min-w-80 bg-surface font-sans text-ink antialiased; }
-  a { @apply underline-offset-4; }
-  code { @apply rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[.85em] text-slate-700; }
+  html {
+    scroll-behavior: smooth;
+    /* sticky 헤더 높이만큼 앵커를 밀어낸다 */
+    scroll-padding-top: 60px;
+  }
+  body {
+    @apply min-w-80 bg-white font-sans text-[15px]/[1.6] text-ink-900 antialiased;
+  }
+  a { @apply no-underline; }
+  h1, h2, h3, h4 { @apply m-0 tracking-[-0.01em]; }
+  p { @apply m-0; }
+  code {
+    @apply rounded-sm bg-ink-100 px-1.5 py-0.5 font-mono text-[.85em] text-ink-700;
+  }
 }

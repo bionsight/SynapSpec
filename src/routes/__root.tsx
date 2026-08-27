@@ -11,7 +11,8 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         name: 'description',
-        content: 'Advanced proteomics research and development solutions for scientific discovery.',
+        content:
+          'Spectral library prediction, search, FDR control and label-free quantification for DIA mass spectrometry — in one local pipeline.',
       },
     ],
     links: [
@@ -28,12 +29,8 @@ function RootComponent() {
         <HeadContent />
       </head>
       <body>
-        <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[radial-gradient(circle_at_50%_-30%,#e4f7fa,transparent_42%),#f6fafc]" aria-hidden="true">
-          <div className="absolute -right-56 top-40 size-[30rem] rounded-full bg-[#bde9ed]/45 blur-lg" />
-          <div className="absolute -bottom-8 -left-40 size-88 rounded-full bg-[#d9e8fb]/45 blur-lg" />
-        </div>
         <Header />
-        <main className="min-h-[calc(100vh-10rem)]">
+        <main>
           <Outlet />
         </main>
         <Footer />
