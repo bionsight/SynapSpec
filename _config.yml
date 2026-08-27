@@ -83,6 +83,7 @@ defaults:
 # Exclude from processing
 exclude:
   - README.md
+  - docs   # 팀 내부 문서 — 사이트로 빌드하지 않는다
   - Gemfile
   - Gemfile.lock
   - node_modules
