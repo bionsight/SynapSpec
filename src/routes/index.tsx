@@ -1,7 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { Closer, Requirements, SectionHead } from '../components/Section'
-import { exampleRun, requirements, services } from '../data/site'
+import { exampleRun } from '../data/benchmarks'
+import { requirements, services } from '../data/site'
 import { badge, block, button, container, eyebrow, panel } from '../ui'
 
 export const Route = createFileRoute('/')({
@@ -9,8 +10,6 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
-/* 그리드 선 y=24/52/80 사이에 값을 앉힌다. 축이 0 에서 시작하지 않으므로
-   창 안에 실제 범위를 함께 적어야 납작한 선이 오해되지 않는다. */
 const [axisMin, axisMax] = exampleRun.perFile.axis
 const points = exampleRun.perFile.values.map(([name, value], index, all) => ({
   name,
@@ -19,8 +18,6 @@ const points = exampleRun.perFile.values.map(([name, value], index, all) => ({
 }))
 const chartLabel = `Precursors per file: ${exampleRun.perFile.values.map(([name, value]) => `${name} ${value.toLocaleString('en-US')}`).join(', ')}`
 
-/* 히어로 옆에 서는 제품 창. 시안의 주장은 형용사 대신 완료된 실행 하나를
-   보여주는 것이고, 여기 들어가는 숫자는 실측 벤치마크다. */
 function AppWindow() {
   return (
     <div className="overflow-hidden rounded-lg border border-ink-200 bg-white text-xs/[1.45] shadow-xl">
@@ -92,9 +89,6 @@ function HomePage() {
               <Link to="/download" className={`${button('primary', 'lg')} w-full md:w-auto`}>Download Solution</Link>
               <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="https://github.com/bionsight/SynapSpec/discussions" target="_blank" rel="noreferrer">Join Community</a>
             </div>
-            <p className="mt-5 font-mono text-xs text-ink-500">
-              Windows 10/11 · macOS 10.14+ · Ubuntu 20.04 LTS+ &nbsp;·&nbsp; GPU and CPU builds
-            </p>
           </div>
           <AppWindow />
         </div>
@@ -131,10 +125,7 @@ function HomePage() {
         </section>
 
         <section className={block}>
-          <SectionHead title="System Requirements">
-            SynapSpec installs and runs on the machine you already have. GPU and CPU builds are available
-            for Windows and Linux.
-          </SectionHead>
+          <SectionHead title="System Requirements" />
           <Requirements items={requirements} />
           <Closer
             title="Ready to Try SynapSpec?"

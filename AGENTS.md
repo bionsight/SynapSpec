@@ -72,20 +72,21 @@ storage floor for data processing, and the 4 GB-per-thread memory note. `require
 
 ## THE EXAMPLE RUN IS MEASURED, NOT DECORATIVE
 
-The figures in the home hero and the dark band are a real benchmark — the 2026-07-22 LFQBench run,
-`src/data/benchmarks.json`. The proposal shipped placeholder numbers (61,904 precursors, a 1:42:07
-wall clock, an `FDR 1.0%` tile) and a sparkline whose points were drawn by hand.
+The home hero and dark band use the newest LFQBench run in `src/data/benchmarks.json` (currently
+2026-07-22). `exampleRun` in `src/data/benchmarks.ts` derives every displayed value from that JSON;
+do not replace it with placeholder numbers or hand-drawn chart points.
 
-Three things follow from using real data:
+Three rules follow from using the real data:
 
-- **There is no FDR field.** The third tile shows the median log2 ratio deviation, which is what
-  LFQBench actually measures.
-- **The chart suppresses its zero.** Per-file precursor counts span 2%, so the plot states its axis
-  range in the window. Without that a flat line reads as a trend.
-- **The run was on a `c7i.8xlarge`.** The footnote does not say "no cloud"; the data contradicts it.
+- **There is no FDR field.** The third tile uses the largest absolute median log₂-ratio deviation
+  from the run's accuracy data.
+- **The chart suppresses its zero.** Per-file precursor counts span only a narrow range, so the
+  window states the exact range alongside the chart.
+- **The run was on a `c7i.8xlarge`.** The footnote names that AWS instance; it must not imply that
+  all processing is local or that the result came from a workstation.
 
-**These numbers are not cleared for publication.** They come from the benchmark pages, which are
-deliberately unlisted (below). Publishing this site publishes them.
+The benchmark pages themselves remain deliberately unlisted below. Showing the derived example run
+on the public home page does not make `/benchmarks` or its individual runs discoverable.
 
 ## THE BENCHMARK PAGES ARE UNLISTED
 
@@ -127,9 +128,11 @@ surface was judged the wrong trade until this consumes `dist/` directly.
 
 ## KNOWN GAPS
 
-- **No cookie consent banner.** Live synapspec.ai and docs.synapspec.ai both have one; this rewrite
-  does not. It is a deployment blocker, not a design question.
+- **There is no privacy-policy destination yet.** The live Jekyll banner and the rewrite both link
+  to `/privacy/`, but the `gh-page` checkout has no page at that path. Publishing a policy needs an
+  approved destination and text.
 - **bion-design's `projects/marketing/` snapshots are stale.** `snapshot/next/*.png` was captured
   2026-08-25 from `feat/tanstack-start-site` and still shows the old `#187e93`. Re-capture with
   `make capture-marketing` against this branch before treating those shots as current.
-- The live contact page says "Use this form to get started" and has no form. Not carried over.
+- The live contact page says "Use this form to get started" and has no form. The rewrite preserves
+  that text for parity; adding a form needs a separate product decision.

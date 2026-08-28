@@ -73,6 +73,40 @@ export const benchmarks = data as unknown as Benchmarks
 /* 목록 표는 최신순, 추세 막대는 시간순(원본 순서)으로 읽는다. */
 export const runsNewestFirst = [...benchmarks.runs].sort((a, b) => b.date.localeCompare(a.date))
 
+/* 홈의 실행 요약은 숨겨진 벤치마크 페이지와 같은 최신 LFQBench run에서 바로 만든다.
+   임의의 예시값·손으로 그린 선·존재하지 않는 FDR 필드를 쓰지 않는다. */
+export const latestBenchmarkRun = benchmarks.runs.at(-1)!
+
+const perFilePrecursors = latestBenchmarkRun.files.map((file) => file.precursors)
+const minPrecursors = Math.min(...perFilePrecursors)
+const maxPrecursors = Math.max(...perFilePrecursors)
+const maxDeviation = Math.max(...latestBenchmarkRun.accuracy.map((item) => Math.abs(item.deviation)))
+const runtimeMinutes = Math.round((latestBenchmarkRun.runtime_hours ?? 0) * 60)
+
+export const exampleRun = {
+  title: `SynapSpec — ${benchmarks.dataset.name}, ${benchmarks.dataset.instrument}`,
+  files: `${latestBenchmarkRun.files_in_experiment} files`,
+  wallClock: `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m`,
+  tiles: [
+    ['Precursors', latestBenchmarkRun.total_precursors_display],
+    ['Protein groups', latestBenchmarkRun.total_proteins_display],
+    ['Median log₂ ratio deviation', `≤ ${maxDeviation.toFixed(3)}`],
+  ],
+  perFile: {
+    label: 'Precursors per file',
+    axis: [Math.floor(minPrecursors / 1000) * 1000 - 1000, Math.ceil(maxPrecursors / 1000) * 1000 + 1000],
+    range: `${(minPrecursors / 1000).toFixed(1)}k – ${(maxPrecursors / 1000).toFixed(1)}k across ${latestBenchmarkRun.files_in_experiment} files`,
+    values: latestBenchmarkRun.files.map((file) => [file.short_name, file.precursors] as const),
+  },
+  figures: [
+    [latestBenchmarkRun.total_precursors_display, 'precursors identified'],
+    [latestBenchmarkRun.total_proteins_display, 'protein groups'],
+    [`${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m`, `wall clock, ${latestBenchmarkRun.files_in_experiment} DIA files`],
+    [`≤ ${maxDeviation.toFixed(3)}`, 'median log₂ ratio deviation from target'],
+  ],
+  footnote: `${benchmarks.dataset.name} on an ${benchmarks.dataset.instrument} · ${latestBenchmarkRun.files_in_experiment} files, two conditions × ${benchmarks.dataset.replicates} replicates · AWS ${latestBenchmarkRun.instance} · run ${latestBenchmarkRun.date}`,
+} as const
+
 export function findRun(slug: string) {
   return benchmarks.runs.find((run) => run.slug === slug)
 }

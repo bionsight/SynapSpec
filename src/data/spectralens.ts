@@ -1,0 +1,66 @@
+export const spectralens = {
+  releaseUrl: 'https://github.com/bionsight/SpectraLens/releases/tag/v0.5.0',
+  downloads: [
+    ['macOS', 'Desktop app', 'https://d35ag17soow82e.cloudfront.net/0.5.0/SpectraLens-macos-0.5.0.dmg'],
+    ['Windows', 'Desktop app', 'https://d35ag17soow82e.cloudfront.net/0.5.0/SpectraLens-windows-0.5.0.msi'],
+  ],
+  highlights: [
+    ['Targeted', 'Precursor-first'],
+    ['Views', 'MS1 and MS2 XIC'],
+    ['Context', 'iRT, RT, spectra'],
+    ['Output', 'CSV export'],
+  ],
+  features: [
+    ['Precursor-centered inspection', 'Add the peptide sequence and charge state you want to verify, then inspect only the targeted signal instead of processing the full experiment.'],
+    ['Interactive XIC views', 'Review precursor-level MS1 XICs and fragment-level MS2 XICs with linear or log scale, legends, and optional TIC or base peak overlays.'],
+    ['iRT and charge prediction', 'Use model-based iRT and charge predictions to seed a focused search window when library information is incomplete.'],
+    ['Spectrum context', 'Compare experimental and predicted spectra so a peak can be checked with chromatographic and fragment evidence together.'],
+    ['Raw file workspace', 'Create a local workspace, add raw files, and reuse converted files during repeated precursor checks.'],
+    ['Exportable review', 'Export analysis results as CSV for review notes, sharing, or downstream manual curation.'],
+  ],
+  workflow: [
+    ['Create a workspace', 'Choose a local workspace for raw files, converted files, peptide lists, and analysis settings.'],
+    ['Add raw files', 'Select DIA raw files. SpectraLens prepares local analysis-ready files and keeps their status visible.'],
+    ['Enter precursors', 'Paste peptide sequences, optional charge suffixes, UniMod modifications, or supported glycan notation.'],
+    ['Inspect peaks', 'Run targeted extraction. Setup collapses into the icon rail so the results take the full window, then switch between iRT-RT, spectra, MS1 XIC, and MS2 XIC tabs.'],
+  ],
+  quickStart: [
+    [
+      'Add raw files',
+      'Open the Raw Files panel, click Add files, and choose the raw files you want to inspect. After the files are listed, tick the checkbox for the file or files that should be included in the targeted analysis.',
+      '/images/spectralens/select_raw_files.png',
+      'SpectraLens Raw Files panel with two raw files listed and selected',
+      'Add raw files, then select the files to use for analysis.',
+    ],
+    [
+      'Open the precursor input dialog',
+      'Click Add precursors below the precursor list to open the sequence input dialog.',
+      '/images/spectralens/add_sequences.png',
+      'SpectraLens Add Precursors dialog opened over the precursor list',
+      'Use Add precursors to open the sequence input dialog.',
+    ],
+    [
+      'Enter target sequences',
+      'Add the sequence or precursor you want to check, then click Add. Use UniMod notation for modifications, such as C(UniMod:4). Separate multiple sequences with line breaks or commas. Add a charge state after a period, such as PEPTIDESEQ.2.',
+      '/images/spectralens/fill_sequences.png',
+      'SpectraLens Add Precursors dialog with three target sequences entered',
+      'Enter one or more target sequences, then add them to the precursor list.',
+    ],
+    [
+      'Select precursors and run',
+      'Select the sequence rows you want to analyze. Anchor precursors are used for RT-iRT mapping. SpectraLens automatically fills many settings from the raw file metadata, but you can adjust tolerances, instrument, NCE, RT window, and fragment limits in Experiment Settings when needed. Click Analyze to extract and inspect the target peaks. Setup collapses into the icon rail once the run succeeds, so the results get the full window.',
+      '/images/spectralens/select_seqs_settings.png',
+      'SpectraLens setup with every raw file and precursor selected, ready to analyze',
+      'Select target sequences, review settings, and run Analyze.',
+    ],
+  ],
+  settings: [
+    ['MS1 tolerance', 'Precursor m/z extraction window in ppm.'],
+    ['MS2 tolerance', 'Fragment ion extraction window in ppm.'],
+    ['RT window', 'Seconds around the predicted or entered retention time used for targeted XIC extraction.'],
+    ['Instrument', 'Mass spectrometer model used for prediction and display context.'],
+    ['NCE', 'Normalized collision energy used for predicted fragment spectra.'],
+    ['Max fragments', 'Optional cap on the number of fragment ions extracted.'],
+    ['Intensity aggregation', 'How intensities inside each tolerance window are combined: sum, mean, or maximum.'],
+  ],
+} as const

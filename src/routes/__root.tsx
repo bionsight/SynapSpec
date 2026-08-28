@@ -1,7 +1,9 @@
-import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import { createRootRoute, HeadContent, Outlet, Scripts, useRouterState } from '@tanstack/react-router'
 
 import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
+import { CookieConsent } from '../components/CookieConsent'
+import { SpectraLensFooter, SpectraLensHeader } from '../components/SpectraLensChrome'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -23,17 +25,20 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  const isSpectraLens = useRouterState({ select: (state) => state.location.pathname.startsWith('/spectralens') })
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <Header />
+        {isSpectraLens ? <SpectraLensHeader /> : <Header />}
         <main>
           <Outlet />
         </main>
-        <Footer />
+        {isSpectraLens ? <SpectraLensFooter /> : <Footer />}
+        <CookieConsent product={isSpectraLens ? 'spectralens' : 'synapspec'} />
         <Scripts />
       </body>
     </html>

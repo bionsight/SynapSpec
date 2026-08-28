@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { button, container, eyebrow } from '../ui'
+import { button, container } from '../ui'
 
 export const Route = createFileRoute('/contact')({
-  head: () => ({ meta: [{ title: 'Contact SynapSpec' }] }),
+  head: () => ({ meta: [{ title: 'Contact Us' }] }),
   component: ContactPage,
 })
 
@@ -11,8 +11,7 @@ function ContactPage() {
   return (
     <div className={container}>
       <div className="pt-10 pb-6 md:pt-16 md:pb-8">
-        <p className={eyebrow}>Contact</p>
-        <h1 className="mt-3 text-[30px] tracking-[-0.035em] md:text-[40px]">Contact Us</h1>
+        <h1 className="text-[30px] tracking-[-0.035em] md:text-[40px]">Contact Us</h1>
         <p className="mt-3 max-w-[46ch] text-[15.5px] text-ink-600 md:text-[17px]">
           Ready to advance your research? Let&apos;s discuss how we can help.
         </p>
@@ -49,11 +48,12 @@ function ContactPage() {
         </div>
 
         <aside className="self-start rounded-lg bg-ink-900 p-6 text-white">
-          <p className="font-mono text-[11.5px] tracking-caps text-white/60 uppercase">Community first</p>
-          <h2 className="mt-3 text-[23px] tracking-[-0.03em]">Prefer GitHub?</h2>
+          <h3 className="text-[23px] tracking-[-0.03em]">Send us a Message</h3>
+          <p className="mt-2 text-white/60">Use this form to get started, or reach out directly via email or GitHub.</p>
+          <div className="mt-6 rounded-md bg-white/15 p-6 text-center">
+          <h4 className="text-lg">Prefer GitHub?</h4>
           <p className="mt-2 text-sm text-white/60">
-            For faster responses and to engage with our community, we recommend using GitHub. Questions,
-            ideas, and collaboration proposals are welcome.
+            For faster responses and to engage with our community, we recommend using GitHub:
           </p>
           <a
             className="mt-5 inline-flex h-9 items-center justify-center rounded-md bg-white px-4 text-sm font-medium text-ink-900 transition-colors hover:bg-ink-100"
@@ -63,6 +63,8 @@ function ContactPage() {
           >
             Start a Discussion
           </a>
+          <p className="mt-4 text-sm text-white/60">Questions, ideas, and collaboration proposals are welcome!</p>
+          </div>
         </aside>
       </section>
     </div>

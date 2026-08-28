@@ -1,25 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Closer, Requirements, SectionHead, TableScroll } from '../components/Section'
-import { builds, requirements, version } from '../data/site'
-import { block, button, caps, container, eyebrow } from '../ui'
+import { Requirements, SectionHead, TableScroll } from '../components/Section'
+import { builds, requirements } from '../data/site'
+import { block, button, caps, container } from '../ui'
 
 export const Route = createFileRoute('/download')({
   head: () => ({ meta: [{ title: 'Download SynapSpec' }] }),
   component: DownloadPage,
 })
 
-const cell = 'border-b border-ink-100 px-3 py-4 text-start align-middle'
-
 function DownloadPage() {
   return (
     <div className={container}>
       <div className="pt-10 pb-6 md:pt-16 md:pb-8">
-        <p className={eyebrow}>Latest release · {version}</p>
-        <h1 className="mt-3 text-[30px] tracking-[-0.035em] md:text-[40px]">Download SynapSpec</h1>
-        <p className="mt-3 max-w-[46ch] text-[15.5px] text-ink-600 md:text-[17px]">
-          Choose the build for your operating system and hardware.
-        </p>
+        <h1 className="text-[30px] tracking-[-0.035em] md:text-[40px]">Download SynapSpec</h1>
       </div>
 
       <TableScroll>
@@ -37,13 +31,13 @@ function DownloadPage() {
                 <tr key={row.file}>
                   {index === 0 && (
                     <>
-                      <th className={`${cell} font-semibold`} rowSpan={platform.rows.length}>{platform.platform}</th>
-                      <td className={`${cell} text-ink-600`} rowSpan={platform.rows.length}>{platform.compatibility}</td>
+                      <th className="border-b border-ink-100 px-3 py-4 text-start align-middle font-semibold" rowSpan={platform.rows.length}>{platform.platform}</th>
+                      <td className="border-b border-ink-100 px-3 py-4 align-middle text-ink-600" rowSpan={platform.rows.length}>{platform.compatibility}</td>
                     </>
                   )}
-                  <td className={`${cell} text-ink-600`}>{row.build}</td>
-                  <td className={`${cell} font-mono text-[12.5px] text-ink-500`}>{row.file}</td>
-                  <td className={`${cell} text-end whitespace-nowrap`}>
+                  <td className="border-b border-ink-100 px-3 py-4 align-middle text-ink-600">{row.build}</td>
+                  <td className="border-b border-ink-100 px-3 py-4 font-mono text-[12.5px] text-ink-500">{row.file}</td>
+                  <td className="border-b border-ink-100 px-3 py-4 text-end align-middle whitespace-nowrap">
                     <a className={button(row.primary ? 'primary' : 'secondary', 'sm')} href={row.href}>Download</a>
                   </td>
                 </tr>
@@ -53,23 +47,12 @@ function DownloadPage() {
         </table>
       </TableScroll>
 
-      <section className={block}>
-        <SectionHead title="System Requirements">
-          The one-click installer handles dependencies automatically. These are the requirements for the
-          analysis itself.
-        </SectionHead>
+      <section className={`${block} mt-10 mb-10 bg-ink-50 px-6 md:mt-16 md:mb-16`}>
+        <SectionHead title="System Requirements" />
         <Requirements items={requirements} />
-        <Closer
-          title="Installation Guide"
-          actions={
-            <>
-              <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="https://docs.synapspec.ai/installation/" target="_blank" rel="noreferrer">View Installation Guide</a>
-              <a className={`${button('ghost', 'lg')} w-full md:w-auto`} href="https://github.com/bionsight/SynapSpec/discussions" target="_blank" rel="noreferrer">Join Discussions</a>
-            </>
-          }
-        >
-          Setup instructions for each platform, plus technical discussions and community support on GitHub.
-        </Closer>
+        <div className="mt-8">
+          <a className={button('secondary', 'lg')} href="https://docs.synapspec.ai/installation/" target="_blank" rel="noreferrer">View Installation Guide</a>
+        </div>
       </section>
     </div>
   )

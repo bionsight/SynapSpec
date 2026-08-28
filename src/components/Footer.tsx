@@ -5,9 +5,6 @@ import { Logo } from './Logo'
 
 type FooterLink = { label: string; to: string } | { label: string; href: string }
 
-/* 링크 대상은 전부 실재하는 곳이다. 이름표는 라이브에 있는 것을 그대로 쓴다
-   (Home / About / Download / Contact / Documentation / GitHub). SpectraLens 만
-   라이브에 없는 페이지인데, 이 저장소에는 실제로 존재한다. */
 const columns: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Product',
