@@ -59,3 +59,9 @@ reachable only by typing the URL: nothing links to them, they send
 `noindex, nofollow`, and `vite.config.ts` keeps them out of `sitemap.xml`.
 Opening them up means undoing all three at once — a link, the `robots` meta on
 both routes, and the `unlistedPages` block in `vite.config.ts`.
+
+## Working on this repository
+
+`CLAUDE.md` is the short guide; `AGENTS.md` carries the branch and deploy topology, the
+unlisted-benchmark mechanism, and the design-token copy relationship. Read them before changing
+copy, tokens, or anything under `/benchmarks`.
