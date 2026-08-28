@@ -51,5 +51,11 @@ bun run preview
 ```
 
 The figures in the home page's example run are a real benchmark, not sample
-values: the 2026-07-22 LFQBench run in `_data/benchmarks.json` on the
-`gh-page` branch.
+values: the 2026-07-22 LFQBench run in `src/data/benchmarks.json`, copied from
+the `gh-page` branch.
+
+`/benchmarks` and its per-run pages carry the same benchmark history. They are
+reachable only by typing the URL: nothing links to them, they send
+`noindex, nofollow`, and `vite.config.ts` keeps them out of `sitemap.xml`.
+Opening them up means undoing all three at once — a link, the `robots` meta on
+both routes, and the `unlistedPages` block in `vite.config.ts`.

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && tsc --noEmit",
+    "build": "vite build && rm -f dist/client/pages.json && tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {

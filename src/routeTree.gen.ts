@@ -14,6 +14,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DownloadRouteImport } from './routes/download'
 import { Route as SpectralensRouteImport } from './routes/spectralens'
+import { Route as BenchmarksIndexRouteImport } from './routes/benchmarks.index'
+import { Route as BenchmarksSlugRouteImport } from './routes/benchmarks.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +42,16 @@ const SpectralensRoute = SpectralensRouteImport.update({
   path: '/spectralens',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BenchmarksIndexRoute = BenchmarksIndexRouteImport.update({
+  id: '/benchmarks/',
+  path: '/benchmarks/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BenchmarksSlugRoute = BenchmarksSlugRouteImport.update({
+  id: '/benchmarks/$slug',
+  path: '/benchmarks/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/download': typeof DownloadRoute
   '/spectralens': typeof SpectralensRoute
+  '/benchmarks/$slug': typeof BenchmarksSlugRoute
+  '/benchmarks/': typeof BenchmarksIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/download': typeof DownloadRoute
   '/spectralens': typeof SpectralensRoute
+  '/benchmarks/$slug': typeof BenchmarksSlugRoute
+  '/benchmarks': typeof BenchmarksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +78,37 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/download': typeof DownloadRoute
   '/spectralens': typeof SpectralensRoute
+  '/benchmarks/$slug': typeof BenchmarksSlugRoute
+  '/benchmarks/': typeof BenchmarksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/download' | '/spectralens'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/download'
+    | '/spectralens'
+    | '/benchmarks/$slug'
+    | '/benchmarks/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/download' | '/spectralens'
-  id: '__root__' | '/' | '/about' | '/contact' | '/download' | '/spectralens'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/download'
+    | '/spectralens'
+    | '/benchmarks/$slug'
+    | '/benchmarks'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/download'
+    | '/spectralens'
+    | '/benchmarks/$slug'
+    | '/benchmarks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +117,8 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DownloadRoute: typeof DownloadRoute
   SpectralensRoute: typeof SpectralensRoute
+  BenchmarksSlugRoute: typeof BenchmarksSlugRoute
+  BenchmarksIndexRoute: typeof BenchmarksIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +158,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpectralensRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/benchmarks/': {
+      id: '/benchmarks/'
+      path: '/benchmarks'
+      fullPath: '/benchmarks/'
+      preLoaderRoute: typeof BenchmarksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/benchmarks/$slug': {
+      id: '/benchmarks/$slug'
+      path: '/benchmarks/$slug'
+      fullPath: '/benchmarks/$slug'
+      preLoaderRoute: typeof BenchmarksSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DownloadRoute: DownloadRoute,
   SpectralensRoute: SpectralensRoute,
+  BenchmarksSlugRoute: BenchmarksSlugRoute,
+  BenchmarksIndexRoute: BenchmarksIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
