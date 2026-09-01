@@ -3,79 +3,18 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Closer, Requirements, SectionHead } from '../components/Section'
 import { exampleRun } from '../data/benchmarks'
 import { requirements, services } from '../data/site'
-import { badge, block, button, container, eyebrow, panel } from '../ui'
+import { block, button, container, eyebrow, panel } from '../ui'
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [{ title: 'SynapSpec | DIA analysis solution for proteomics research' }] }),
   component: HomePage,
 })
 
-const [axisMin, axisMax] = exampleRun.perFile.axis
-const points = exampleRun.perFile.values.map(([name, value], index, all) => ({
-  name,
-  x: 16 + (index * 288) / (all.length - 1),
-  y: 24 + ((axisMax - value) / (axisMax - axisMin)) * 56,
-}))
-const chartLabel = `Precursors per file: ${exampleRun.perFile.values.map(([name, value]) => `${name} ${value.toLocaleString('en-US')}`).join(', ')}`
-
-function AppWindow() {
-  return (
-    <div className="overflow-hidden rounded-lg border border-ink-200 bg-white text-xs/[1.45] shadow-xl">
-      <div className="flex items-center gap-3 border-b border-ink-100 bg-ink-100 px-3 py-2">
-        <span className="flex gap-[5px]" aria-hidden="true">
-          <i className="size-[9px] rounded-full bg-ink-300" />
-          <i className="size-[9px] rounded-full bg-ink-300" />
-          <i className="size-[9px] rounded-full bg-ink-300" />
-        </span>
-        <span className="text-[11.5px] text-ink-500">{exampleRun.title}</span>
-      </div>
-      <div className="grid gap-4 p-4">
-        <div className="flex items-baseline gap-3">
-          <b className="text-[13px]">Run complete</b>
-          <span className={badge}>{exampleRun.files}</span>
-          <span className="ms-auto font-mono text-[11px] text-success-text">{exampleRun.wallClock}</span>
-        </div>
-        <span className="block h-1 overflow-hidden rounded-[2px] bg-ink-200">
-          <i className="block h-full w-full bg-success" />
-        </span>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          {exampleRun.tiles.map(([label, value], index) => (
-            <div
-              className={`rounded-md border border-ink-100 bg-white p-3 ${index === exampleRun.tiles.length - 1 ? 'col-span-2 md:col-span-1' : ''}`}
-              key={label}
-            >
-              <div className="text-[10.5px] tracking-caps text-ink-500 uppercase">{label}</div>
-              <div className="mt-[2px] text-[18px] font-semibold tabular-nums">{value}</div>
-            </div>
-          ))}
-        </div>
-        <div className="rounded-md border border-ink-100 bg-white p-3">
-          <div className="mb-2 flex items-baseline justify-between gap-2">
-            <span className="text-[10.5px] tracking-caps text-ink-500 uppercase">{exampleRun.perFile.label}</span>
-            <span className="font-mono text-[10px] text-ink-400">{exampleRun.perFile.range}</span>
-          </div>
-          <svg viewBox="0 0 320 96" className="block h-auto w-full" role="img" aria-label={chartLabel}>
-            <g stroke="var(--color-ink-200)" strokeWidth="1">
-              <line x1="0" y1="24" x2="320" y2="24" />
-              <line x1="0" y1="52" x2="320" y2="52" />
-              <line x1="0" y1="80" x2="320" y2="80" />
-            </g>
-            <polyline fill="none" stroke="var(--color-viz-1)" strokeWidth="2" strokeLinejoin="round" points={points.map(({ x, y }) => `${x},${y}`).join(' ')} />
-            <g fill="var(--color-viz-1)">
-              {points.map(({ x, y, name }) => <circle cx={x} cy={y} r="2.5" key={name} />)}
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function HomePage() {
   return (
     <>
       <section className="border-b border-ink-100 bg-linear-to-b from-ink-50 to-white">
-        <div className={`${container} grid items-center gap-8 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:gap-12 md:py-20`}>
+        <div className={`${container} grid items-center gap-8 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.62fr)] md:gap-12 md:py-20`}>
           <div>
             <p className={eyebrow}>DIA-MS data processing and analysis</p>
             <h1 className="mt-3 text-[31px]/[1.06] tracking-[-0.035em] text-balance md:text-[46px]">
@@ -90,7 +29,11 @@ function HomePage() {
               <a className={`${button('secondary', 'lg')} w-full md:w-auto`} href="https://github.com/bionsight/SynapSpec/discussions" target="_blank" rel="noreferrer">Join Community</a>
             </div>
           </div>
-          <AppWindow />
+          <img
+            className="rounded-lg border border-ink-200 shadow-xl"
+            src="/images/synapspec/run_detail.png"
+            alt="SynapSpec showing a finished run: precursor, peptide and protein-group counts, and the same three counts per raw file"
+          />
         </div>
       </section>
 
