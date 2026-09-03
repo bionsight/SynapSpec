@@ -70,18 +70,22 @@ Two live requirements lines are load-bearing and were lost once to one-line comp
 storage floor for data processing, and the 4 GB-per-thread memory note. `requirements` in
 `src/data/site.ts` keeps the live text line by line for that reason.
 
-## THE EXAMPLE RUN IS MEASURED, NOT DECORATIVE
+## THE HERO IS A SCREENSHOT, THE DARK BAND IS MEASURED
 
-The home hero and dark band use the newest LFQBench run in `src/data/benchmarks.json` (currently
-2026-07-22). `exampleRun` in `src/data/benchmarks.ts` derives every displayed value from that JSON;
-do not replace it with placeholder numbers or hand-drawn chart points.
+The hero image, `public/images/synapspec/run_detail.png`, is a copy of bion-design's
+`projects/synapspec/snapshot-pywebview/busy/1280px/runs-detail.png`, cut to its top 560px. Below
+that line the Output card shows the capture sandbox's absolute path, which is not for a public page.
+The counts in it are the capture fixture's, not a benchmark. Re-copy it after the app's snapshot is
+re-captured; nothing checks that they match.
 
-Three rules follow from using the real data:
+The dark band uses the newest LFQBench run in `src/data/benchmarks.json` (currently 2026-07-22).
+`exampleRun` in `src/data/benchmarks.ts` derives every displayed value from that JSON; do not
+replace it with placeholder numbers.
 
-- **There is no FDR field.** The third tile uses the largest absolute median log₂-ratio deviation
-  from the run's accuracy data.
-- **The chart suppresses its zero.** Per-file precursor counts span only a narrow range, so the
-  window states the exact range alongside the chart.
+Two rules follow from using the real data:
+
+- **There is no FDR field.** The proposal's FDR tile became the largest absolute median
+  log₂-ratio deviation from the run's accuracy data.
 - **The run was on a `c7i.8xlarge`.** The footnote names that AWS instance; it must not imply that
   all processing is local or that the result came from a workstation.
 
