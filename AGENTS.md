@@ -73,7 +73,10 @@ storage floor for data processing, and the 4 GB-per-thread memory note. `require
 ## THE HERO IS A SCREENSHOT, THE DARK BAND IS MEASURED
 
 The hero image, `public/images/synapspec/run_detail.png`, is a copy of bion-design's
-`projects/synapspec/snapshot-pywebview/busy/1280px/runs-detail.png`, cut to its top 560px. Below
+`projects/synapspec/snapshot-rebuild/busy/1280px/runs-detail.png`, cut to its top 560px. That
+snapshot is the window as it stands: the pywebview migration was rejected on 2026-09-04 and the
+same screens were rebuilt on NiceGUI widgets, so `snapshot-pywebview` records a build that will
+not ship. Below
 that line the Output card shows the capture sandbox's absolute path, which is not for a public page.
 The counts in it are the capture fixture's, not a benchmark. Re-copy it after the app's snapshot is
 re-captured; nothing checks that they match.
