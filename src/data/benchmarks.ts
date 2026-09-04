@@ -110,3 +110,55 @@ export const exampleRun = {
 export function findRun(slug: string) {
   return benchmarks.runs.find((run) => run.slug === slug)
 }
+
+/* ── 보드가 쓰는 파생값 ────────────────────────────────────────────────────
+   전부 JSON 에서 계산한다. 수집 스크립트를 다시 돌려 run 이 늘어나면 보드의
+   숫자도 같이 움직인다 — 손으로 적어 둔 값은 하나도 없다. */
+
+export const oldestRun = benchmarks.runs[0]
+
+/* 정확도는 LFQ 파서가 들어온 뒤의 run 에만 있다. 가장 최근에 잰 것을 고른다. */
+export const latestAccuracyRun = [...benchmarks.runs].reverse().find((run) => run.has_accuracy) ?? null
+
+/* 최대 편차와 그것을 낸 종. 숫자만 싣고 어느 종인지 빼면 확인할 길이 없다. */
+export const worstAccuracySpecies = latestAccuracyRun
+  ? latestAccuracyRun.accuracy.reduce((a, b) => (Math.abs(b.deviation) > Math.abs(a.deviation) ? b : a))
+  : null
+
+const percentChange = (from: number, to: number) => ((to - from) / from) * 100
+
+export const signedPercent = (value: number) => `${value > 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`
+
+export const depthChangePercent = percentChange(oldestRun.total_precursors, latestBenchmarkRun.total_precursors)
+
+/* 런타임은 인스턴스 타입이 다르면 비교되지 않는다. 최신 run 과 같은 타입의
+   가장 오래된 run 을 찾아 그 둘만 견준다. 짝이 없으면 변화를 싣지 않는다. */
+const sameInstanceRuns = benchmarks.runs.filter(
+  (run) => run.instance === latestBenchmarkRun.instance && run.runtime_hours !== null,
+)
+export const runtimeBaselineRun = sameInstanceRuns.length > 1 ? sameInstanceRuns[0] : null
+export const runtimeChangePercent =
+  runtimeBaselineRun?.runtime_hours && latestBenchmarkRun.runtime_hours
+    ? percentChange(runtimeBaselineRun.runtime_hours, latestBenchmarkRun.runtime_hours)
+    : null
+
+const ERROR_KEYS = ['ms1_error', 'ms2_error', 'rt_error', 'fwhm_rt'] as const
+
+/* 상세 표의 합계 행. 개수는 중복을 제거한 run 전체 값이고, 오차 넷은 파일 평균이다.
+   오차를 더하는 것은 뜻이 없으므로 평균만 낸다. */
+export function combinedFileErrors(run: BenchmarkRun) {
+  return Object.fromEntries(
+    ERROR_KEYS.map((key) => {
+      const values = run.files.map((file) => file[key]).filter((value): value is number => value !== null)
+      const mean = values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null
+      return [key, mean === null ? null : Number(mean.toFixed(4))]
+    }),
+  ) as Record<(typeof ERROR_KEYS)[number], number | null>
+}
+
+/* 정확도 카드는 목표값 순으로 세운다. 세 트랙이 같은 축을 쓰므로 카드 순서가
+   축 순서와 어긋나면 점이 왼쪽·가운데·오른쪽으로 흐르지 않는다.
+   JSON 의 순서는 프리셋 딕셔너리 순서라 축과 무관하다. */
+export function accuracyByAxis(run: BenchmarkRun) {
+  return [...run.accuracy].sort((a, b) => a.target_log2_ratio - b.target_log2_ratio)
+}

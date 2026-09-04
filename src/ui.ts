@@ -31,6 +31,10 @@ export const badge =
 /* 섹션 사이 경계선과 리듬. 인접한 블록끼리만 선을 긋는다. */
 export const block = 'py-10 md:py-16 [&_+_&]:border-t [&_+_&]:border-ink-100'
 
+/* 같은 리듬, 구분선 없음. 표와 차트가 이미 경계를 그리는 화면에서는 선이
+   한 겹 더 얹혀 화면이 잘려 보인다. 벤치마크 두 페이지가 쓴다. */
+export const blockPlain = 'py-10 md:py-16'
+
 export const eyebrow =
   'font-mono text-[11.5px] tracking-caps uppercase text-brand-700'
 
