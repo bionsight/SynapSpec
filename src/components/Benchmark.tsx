@@ -126,6 +126,11 @@ const VIEW_HEIGHT = 286
 const PLOT = { left: 64, right: 1128, top: 34, bottom: 250 }
 const GRID_STEP = 20000
 
+const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+/* 눈금 탐색의 상한. 10년 치면 어떤 이력에도 넉넉하다. */
+const MAX_TICK_MONTHS = 120
+
+/* ISO 날짜만 넣는다. 날짜만 있는 ISO 문자열은 UTC 로 파싱되므로 시간대를 타지 않는다. */
 const dayIndex = (date: string) => Date.parse(date) / 86_400_000
 
 export function TrendChart({ runs }: { runs: readonly BenchmarkRun[] }) {
@@ -145,13 +150,22 @@ export function TrendChart({ runs }: { runs: readonly BenchmarkRun[] }) {
   const gridValues: number[] = []
   for (let value = low; value <= high; value += GRID_STEP) gridValues.push(value)
 
-  /* 눈금은 두 달에 하나. 매달 찍으면 좁은 폭에서 라벨이 겹친다. */
+  /* 눈금은 두 달에 하나. 매달 찍으면 좁은 폭에서 라벨이 겹친다.
+
+     달 이름을 toLocaleString 으로 만들지 않고 배열에서 꺼낸다. prerender 는
+     서버 런타임에서 돌고 hydration 은 브라우저에서 도는데, 두 쪽의 ICU 가
+     다르면 같은 자리에 다른 글자가 나와 React 가 hydration 을 버린다.
+     날짜 계산도 Date 의 지역시간 getter 대신 ISO 문자열 산술로 한다. */
   const ticks: { label: string; cx: number }[] = []
-  const start = new Date(runs[0].date)
-  const end = new Date(runs[runs.length - 1].date)
-  for (let cursor = new Date(start.getFullYear(), start.getMonth(), 1); cursor <= end; cursor.setMonth(cursor.getMonth() + 2)) {
-    const iso = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-01`
-    ticks.push({ label: cursor.toLocaleString('en', { month: 'short' }), cx: x(iso) })
+  const [firstYear, firstMonth] = runs[0].date.split('-').map(Number)
+  const lastDay = dayIndex(runs[runs.length - 1].date)
+  for (let step = 0; step < MAX_TICK_MONTHS; step += 2) {
+    const monthIndex = firstMonth - 1 + step
+    const year = firstYear + Math.floor(monthIndex / 12)
+    const month = (monthIndex % 12) + 1
+    const iso = `${year}-${String(month).padStart(2, '0')}-01`
+    if (dayIndex(iso) > lastDay) break
+    ticks.push({ label: MONTH_LABELS[month - 1], cx: x(iso) })
   }
 
   return (

@@ -51,7 +51,7 @@ function figuresFor(run: BenchmarkRun) {
 function BenchmarkRunPage() {
   const run = Route.useLoaderData()
   const combined = combinedFileErrors(run)
-  const peakFilePrecursors = Math.max(...run.files.map((file) => file.precursors))
+  const peakFile = run.files.reduce((a, b) => (b.precursors > a.precursors ? b : a))
 
   const chips = [
     dataset.name,
@@ -142,7 +142,7 @@ function BenchmarkRunPage() {
                       <code>{file.short_name}</code>
                     </td>
                     <td className={numeric}>
-                      <Spark value={file.precursors} max={peakFilePrecursors} />
+                      <Spark value={file.precursors} max={peakFile.precursors} />
                       {file.precursors_display}
                     </td>
                     <td className={numeric}>{file.proteins_display}</td>
@@ -173,7 +173,7 @@ function BenchmarkRunPage() {
           </TableScroll>
           <p className="mt-4 font-mono text-[11.5px] text-ink-500">
             합계 행의 precursor·protein 은 파일 합이 아니라 중복을 제거한 수. 오차 넷은 파일 평균.
-            막대는 이 run 의 최고값 {peakFilePrecursors.toLocaleString('en-US')} 대비.
+            막대는 이 run 의 최고값 {peakFile.precursors_display} 대비.
           </p>
         </section>
 
