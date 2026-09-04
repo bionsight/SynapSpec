@@ -44,7 +44,7 @@ export function Header() {
   const close = () => setOpen(false)
 
   return (
-    <header className="sticky top-0 z-20 border-b border-ink-100 bg-white">
+    <header className="sticky top-0 z-20 bg-white">
       <div className={`${container} flex h-[54px] items-center gap-3 md:h-[60px] md:gap-6`}>
         <Logo />
         <nav className="hidden gap-5 text-sm text-ink-600 md:flex" aria-label="Main navigation">
