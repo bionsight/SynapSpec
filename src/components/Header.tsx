@@ -11,6 +11,8 @@ const navigation = [
   { to: '/', label: 'Home', exact: true },
   { to: '/about', label: 'About' },
   { to: '/download', label: 'Download' },
+  /* gh-page 의 _config.yml 이 817de49 에서 빼기 전까지 있던 자리 그대로다. */
+  { to: '/benchmarks', label: 'Benchmarks' },
   { href: 'https://docs.synapspec.ai', label: 'Documentation' },
   { to: '/contact', label: 'Contact' },
 ] as const
