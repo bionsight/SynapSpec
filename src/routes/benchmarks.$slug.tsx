@@ -2,6 +2,8 @@ import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
 import { AccuracyTrack, Chips, Figures, Spark } from '../components/Benchmark'
+import { PendingDataset, RecordedBenchmark } from '../components/BenchmarkRecord'
+import { datasetCatalog, recordedRunSlug } from '../data/benchmark-catalog'
 import { TableScroll } from '../components/Section'
 import { accuracyByAxis, benchmarks, combinedFileErrors, findRun, latestBenchmarkRun } from '../data/benchmarks'
 import type { BenchmarkRun } from '../data/benchmarks'
@@ -9,9 +11,12 @@ import { blockPlain, caps, container, eyebrow } from '../ui'
 
 export const Route = createFileRoute('/benchmarks/$slug')({
   loader: ({ params }) => {
+    if (params.slug === recordedRunSlug) return { kind: 'recorded' as const }
+    const pending = datasetCatalog.find((dataset) => !dataset.run && dataset.slug === params.slug)
+    if (pending) return { kind: 'pending' as const, dataset: pending }
     const run = findRun(params.slug)
     if (!run) throw notFound()
-    return run
+    return { kind: 'historical' as const, run }
   },
   head: ({ params }) => ({
     meta: [
@@ -49,7 +54,13 @@ function figuresFor(run: BenchmarkRun) {
 }
 
 function BenchmarkRunPage() {
-  const run = Route.useLoaderData()
+  const data = Route.useLoaderData()
+  if (data.kind === 'recorded') return <RecordedBenchmark />
+  if (data.kind === 'pending') return <PendingDataset dataset={data.dataset} />
+  return <HistoricalBenchmarkRun run={data.run} />
+}
+
+function HistoricalBenchmarkRun({ run }: { run: BenchmarkRun }) {
   const combined = combinedFileErrors(run)
   const peakFile = run.files.reduce((a, b) => (b.precursors > a.precursors ? b : a))
 
@@ -199,7 +210,7 @@ function BenchmarkRunPage() {
             ) : (
               <span />
             )}
-            <Link to="/benchmarks" className="text-brand-700 hover:underline">
+            <Link to="/benchmarks/history" className="text-brand-700 hover:underline">
               모든 run {benchmarks.coverage.run_count}개
             </Link>
             {run.next_slug ? (

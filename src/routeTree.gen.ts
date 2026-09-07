@@ -16,6 +16,7 @@ import { Route as DownloadRouteImport } from './routes/download'
 import { Route as SpectralensRouteImport } from './routes/spectralens'
 import { Route as BenchmarksIndexRouteImport } from './routes/benchmarks.index'
 import { Route as BenchmarksSlugRouteImport } from './routes/benchmarks.$slug'
+import { Route as BenchmarksHistoryRouteImport } from './routes/benchmarks.history'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const BenchmarksSlugRoute = BenchmarksSlugRouteImport.update({
   path: '/benchmarks/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BenchmarksHistoryRoute = BenchmarksHistoryRouteImport.update({
+  id: '/benchmarks/history',
+  path: '/benchmarks/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/download': typeof DownloadRoute
   '/spectralens': typeof SpectralensRoute
   '/benchmarks/$slug': typeof BenchmarksSlugRoute
+  '/benchmarks/history': typeof BenchmarksHistoryRoute
   '/benchmarks/': typeof BenchmarksIndexRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/download': typeof DownloadRoute
   '/spectralens': typeof SpectralensRoute
   '/benchmarks/$slug': typeof BenchmarksSlugRoute
+  '/benchmarks/history': typeof BenchmarksHistoryRoute
   '/benchmarks': typeof BenchmarksIndexRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/download': typeof DownloadRoute
   '/spectralens': typeof SpectralensRoute
   '/benchmarks/$slug': typeof BenchmarksSlugRoute
+  '/benchmarks/history': typeof BenchmarksHistoryRoute
   '/benchmarks/': typeof BenchmarksIndexRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/spectralens'
     | '/benchmarks/$slug'
+    | '/benchmarks/history'
     | '/benchmarks/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/spectralens'
     | '/benchmarks/$slug'
+    | '/benchmarks/history'
     | '/benchmarks'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/spectralens'
     | '/benchmarks/$slug'
+    | '/benchmarks/history'
     | '/benchmarks/'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   DownloadRoute: typeof DownloadRoute
   SpectralensRoute: typeof SpectralensRoute
   BenchmarksSlugRoute: typeof BenchmarksSlugRoute
+  BenchmarksHistoryRoute: typeof BenchmarksHistoryRoute
   BenchmarksIndexRoute: typeof BenchmarksIndexRoute
 }
 
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BenchmarksSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/benchmarks/history': {
+      id: '/benchmarks/history'
+      path: '/benchmarks/history'
+      fullPath: '/benchmarks/history'
+      preLoaderRoute: typeof BenchmarksHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   DownloadRoute: DownloadRoute,
   SpectralensRoute: SpectralensRoute,
   BenchmarksSlugRoute: BenchmarksSlugRoute,
+  BenchmarksHistoryRoute: BenchmarksHistoryRoute,
   BenchmarksIndexRoute: BenchmarksIndexRoute,
 }
 export const routeTree = rootRouteImport

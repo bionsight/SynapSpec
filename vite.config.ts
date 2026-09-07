@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import viteReact from '@vitejs/plugin-react'
 
 import benchmarks from './src/data/benchmarks.json'
+import { catalogDestination, datasetCatalog } from './src/data/benchmark-catalog'
 
 /* 내비게이션이 /benchmarks 를 가리키게 되어 crawlLinks 가 목록과 18개 상세를
    스스로 찾는다. 그래도 이 목록을 지우지 않는 이유는 prerender 가 아니라
@@ -14,6 +15,12 @@ const unlistedPages = [
      하나만 적으면 나머지 하나가 sitemap 에 실려 나간다. */
   { path: '/benchmarks' },
   { path: '/benchmarks/' },
+  { path: '/benchmarks/history' },
+  { path: '/benchmarks/history/' },
+  ...datasetCatalog.flatMap((dataset) => [
+    { path: `/benchmarks/${catalogDestination(dataset)}` },
+    { path: `/benchmarks/${catalogDestination(dataset)}/` },
+  ]),
   ...benchmarks.runs.map((run) => ({ path: `/benchmarks/${run.slug}` })),
 ].map((page) => ({ ...page, sitemap: { exclude: true } }))
 
