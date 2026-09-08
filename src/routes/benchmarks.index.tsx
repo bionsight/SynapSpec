@@ -2,6 +2,7 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { catalogDestination, datasetCatalog, filterDatasets } from '../data/benchmark-catalog'
+import { comparisonRecords } from '../data/benchmark-comparisons'
 import { badge, blockPlain, button, caps, container, eyebrow } from '../ui'
 
 export const Route = createFileRoute('/benchmarks/')({
@@ -63,6 +64,11 @@ function BenchmarksPage() {
         </table>
       </div>
       <p className="mt-4 max-w-[65rem] text-xs text-ink-600">This catalog contains one verified run and two dataset presets awaiting result import. It is not an inventory of all available experiments. “—” means not imported, not zero; release mapping is unverified.</p>
+      <section className={blockPlain}>
+        <h2 className="text-[19px] tracking-[-0.02em]">Archived cross-tool comparisons</h2>
+        <p className="mt-3 text-sm text-ink-600">Two experiments with matching six-file inputs across SynapSpec, DIA-NN and Spectronaut. Separate from the selected run above; releases and full settings are not yet reconciled.</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">{comparisonRecords.map(record => <Link key={record.slug} to="/benchmarks/$slug" params={{ slug: record.slug }} className="rounded-md border border-ink-200 p-5 hover:bg-ink-50 focus-visible:outline-2 focus-visible:outline-brand-500"><span className="font-medium text-brand-700">{record.name}</span><span className="mt-2 block text-sm text-ink-600">Archived v092 folder · 3 tools · 6 inputs · comparison PNG and metrics</span></Link>)}</div>
+      </section>
       <section className={`${blockPlain} grid gap-8 md:grid-cols-2`}>
         <div><h2 className="text-[19px] tracking-[-0.02em]">Start with the dataset</h2><p className="mt-3 max-w-[32rem] text-sm text-ink-600">Open a row for configuration, elapsed time, raw-file results and LFQ metrics. Counts from different samples are not a head-to-head score.</p></div>
         <div><h2 className="text-[19px] tracking-[-0.02em]">Follow changes over time</h2><p className="mt-3 text-sm text-ink-600">Keep the dataset fixed and inspect its recorded run history.</p><Link to="/benchmarks/history" className="mt-3 inline-block text-sm font-medium text-brand-700 hover:underline">LFQBench / Astral history</Link></div>

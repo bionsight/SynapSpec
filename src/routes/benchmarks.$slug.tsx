@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 
 import { AccuracyTrack, Chips, Figures, Spark } from '../components/Benchmark'
 import { PendingDataset, RecordedBenchmark } from '../components/BenchmarkRecord'
+import { BenchmarkComparison } from '../components/BenchmarkComparison'
+import { findComparison } from '../data/benchmark-comparisons'
 import { datasetCatalog, recordedRunSlug } from '../data/benchmark-catalog'
 import { TableScroll } from '../components/Section'
 import { accuracyByAxis, benchmarks, combinedFileErrors, findRun, latestBenchmarkRun } from '../data/benchmarks'
@@ -11,6 +13,8 @@ import { blockPlain, caps, container, eyebrow } from '../ui'
 
 export const Route = createFileRoute('/benchmarks/$slug')({
   loader: ({ params }) => {
+    const comparison = findComparison(params.slug)
+    if (comparison) return { kind: 'comparison' as const, comparison }
     if (params.slug === recordedRunSlug) return { kind: 'recorded' as const }
     const pending = datasetCatalog.find((dataset) => !dataset.run && dataset.slug === params.slug)
     if (pending) return { kind: 'pending' as const, dataset: pending }
@@ -55,6 +59,7 @@ function figuresFor(run: BenchmarkRun) {
 
 function BenchmarkRunPage() {
   const data = Route.useLoaderData()
+  if (data.kind === 'comparison') return <BenchmarkComparison record={data.comparison} />
   if (data.kind === 'recorded') return <RecordedBenchmark />
   if (data.kind === 'pending') return <PendingDataset dataset={data.dataset} />
   return <HistoricalBenchmarkRun run={data.run} />

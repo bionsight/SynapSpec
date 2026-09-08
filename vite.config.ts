@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import viteReact from '@vitejs/plugin-react'
 
 import benchmarks from './src/data/benchmarks.json'
+import { comparisonRecords } from './src/data/benchmark-comparisons'
 import { catalogDestination, datasetCatalog } from './src/data/benchmark-catalog'
 
 /* 내비게이션이 /benchmarks 를 가리키게 되어 crawlLinks 가 목록과 18개 상세를
@@ -17,6 +18,11 @@ const unlistedPages = [
   { path: '/benchmarks/' },
   { path: '/benchmarks/history' },
   { path: '/benchmarks/history/' },
+  ...comparisonRecords.flatMap(record => [
+    { path: `/benchmarks/${record.slug}` },
+    { path: `/benchmarks/${record.slug}/` },
+    { path: `/images/benchmarks/${record.figure}` },
+  ]),
   ...datasetCatalog.flatMap((dataset) => [
     { path: `/benchmarks/${catalogDestination(dataset)}` },
     { path: `/benchmarks/${catalogDestination(dataset)}/` },
@@ -35,6 +41,7 @@ export default defineConfig({
       },
       prerender: {
         enabled: true,
+        filter: (page) => !page.path.includes('/images/'),
         crawlLinks: true,
         failOnError: true,
       },
