@@ -1,79 +1,72 @@
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-
-import { catalogDestination, datasetCatalog, filterDatasets } from '../data/benchmark-catalog'
-import { comparisonRecords } from '../data/benchmark-comparisons'
-import { badge, blockPlain, button, caps, container, eyebrow } from '../ui'
+import { benchmarkLedgers } from '../data/benchmark-ledger'
+import { formatCount } from '../data/benchmark-catalog'
+import { button, caps, container } from '../ui'
 
 export const Route = createFileRoute('/benchmarks/')({
   head: () => ({ meta: [
     { title: 'Benchmarks | SynapSpec' },
     { name: 'robots', content: 'noindex, nofollow' },
-    { name: 'description', content: 'Benchmark datasets, recorded results and the conditions behind each run.' },
+    { name: 'description', content: 'Compare SynapSpec, DIA-NN and Spectronaut on fixed inputs and browse recorded runs.' },
   ] }),
-  component: BenchmarksPage,
+  component: BenchmarkLedger,
 })
 
-const cell = 'border-b border-ink-100 px-3 py-5 align-top'
-const note = 'mt-1 block text-[11.5px] font-normal text-ink-600'
-const resultCount = datasetCatalog.filter((dataset) => dataset.run !== null).length
+const cell = 'border-b border-ink-100 px-3 py-3 align-top'
+const linkStyle = 'text-sm font-medium text-brand-700 hover:underline focus-visible:outline-2 focus-visible:outline-brand-500'
 
-function BenchmarksPage() {
-  const [onlyWithResults, setOnlyWithResults] = useState(false)
-  const navigate = useNavigate()
-  return (
-    <div className={container}>
-      <header className="pt-10 pb-8 md:pt-14">
-        <p className={eyebrow}>Benchmarks</p>
-        <h1 className="mt-3 text-[26px] tracking-[-0.035em] md:text-[32px]">Results across datasets</h1>
-        <p className="mt-3 max-w-[48rem] text-ink-600">Identification counts and analysis conditions, with run details one click away.</p>
-      </header>
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex gap-2" role="group" aria-label="Dataset filter">
-          <button type="button" className={button(onlyWithResults ? 'ghost' : 'secondary', 'sm')} aria-pressed={!onlyWithResults} onClick={() => setOnlyWithResults(false)}>All datasets {datasetCatalog.length}</button>
-          <button type="button" className={button(onlyWithResults ? 'secondary' : 'ghost', 'sm')} aria-pressed={onlyWithResults} onClick={() => setOnlyWithResults(true)}>Imported results {resultCount}</button>
+function BenchmarkLedger() {
+  const [datasetId, setDatasetId] = useState(benchmarkLedgers[0].id)
+  const [selectedId, setSelectedId] = useState(benchmarkLedgers[0].comparison.slug)
+  const ledger = benchmarkLedgers.find(dataset => dataset.id === datasetId)!
+  const selected = ledger.rows.find(row => row.id === selectedId) ?? ledger.rows[ledger.rows.length - 1]
+  const image = `${import.meta.env.BASE_URL}images/benchmarks/${ledger.comparison.figure}`
+  return <div className={container}>
+    <header className="pt-10 pb-7 md:pt-14">
+      <h1 className="text-[26px] tracking-[-0.035em] md:text-[32px]">Benchmarks</h1>
+      <p className="mt-3 max-w-[48rem] text-sm text-ink-600">Fixed input files. Three analysis tools. Recorded runs over time.</p>
+    </header>
+    <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink-200 pb-5">
+      <div role="group" aria-label="Dataset" className="flex flex-wrap gap-2">{benchmarkLedgers.map(dataset => <button key={dataset.id} type="button" className={button(dataset.id === datasetId ? 'secondary' : 'ghost', 'sm')} aria-pressed={dataset.id === datasetId} onClick={() => { setDatasetId(dataset.id); setSelectedId(dataset.comparison.slug) }}>{dataset.name}</button>)}</div>
+      <a href="#run-history" className={linkStyle}>Run history ({ledger.rows.length})</a>
+    </div>
+
+    <section className="py-8" aria-label="Selected results">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div><h2 className="text-[21px] tracking-[-0.02em]">{selected.comparisonSlug ? 'SynapSpec · DIA-NN · Spectronaut' : `SynapSpec · ${selected.date}`}</h2>
+          <p className="mt-2 text-xs text-ink-600">{ledger.name} · {ledger.files.length} input files · {selected.comparisonSlug ? 'Archived comparison; execution date not recorded' : `Commit ${selected.commit ?? 'not recorded'} · source display date`}</p>
         </div>
-        <p className="text-xs text-ink-600">One selected run per dataset · not a ranking</p>
+        <Link to="/benchmarks/$slug" params={{ slug: selected.sourceSlug }} className={linkStyle}>Run details & source</Link>
       </div>
-      <div className="relative overflow-x-auto focus-visible:outline-2 focus-visible:outline-brand-500" role="region" aria-label="Benchmark datasets" tabIndex={0}>
-        <table className="w-full min-w-[1080px] border-collapse text-[13px]">
-          <caption className="sr-only">Select a dataset to view its recorded run or import status.</caption>
-          <thead><tr>{['Dataset / instrument', 'Release / commit', 'Run date', 'Resource', 'Precursor IDs', 'Protein IDs', 'Key config'].map((heading, index) => (
-            <th key={heading} scope="col" className={`${caps} border-y border-ink-200 bg-ink-50 px-3 py-3 font-semibold ${index === 4 || index === 5 ? 'text-end' : 'text-start'}`}>{heading}</th>
-          ))}</tr></thead>
-          <tbody>{filterDatasets(onlyWithResults).map((dataset) => (
-            <tr key={dataset.slug} className="cursor-pointer hover:bg-ink-50 focus-within:bg-brand-50" onClick={(event) => {
-              // The real link retains keyboard, new-tab and modifier-click behavior.
-              if (event.target instanceof Element && event.target.closest('a')) return
-              if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || window.getSelection()?.toString()) return
-              void navigate({ to: '/benchmarks/$slug', params: { slug: catalogDestination(dataset) } })
-            }}>
-              <th scope="row" className={`${cell} min-w-[210px] text-start font-normal`}>
-                <Link to="/benchmarks/$slug" params={{ slug: catalogDestination(dataset) }} className="font-semibold text-brand-700 hover:underline focus-visible:outline-2 focus-visible:outline-brand-500" aria-label={`${dataset.name}, ${dataset.instrument}: ${dataset.run ? 'view run' : 'view import status'}`}>{dataset.name}</Link>
-                <span className={note}>{dataset.instrument}{dataset.run ? ` · ${dataset.run.files_in_experiment} raw files` : ''}</span>
-                <span className={`${badge} mt-3 ${dataset.run ? 'border-brand-200 bg-brand-50 text-brand-700' : ''}`}>{dataset.run ? 'Results imported' : 'Results not imported'}</span>
-              </th>
-              <td className={cell}>{dataset.release ?? (dataset.run ? 'Not mapped' : '—')}<span className={note}>{dataset.commit ? <code>{dataset.commit}</code> : 'No selected run'}</span></td>
-              <td className={`${cell} whitespace-nowrap`}>{dataset.run?.date ?? '—'}{dataset.run ? <span className={note}>ClearML display date</span> : null}</td>
-              <td className={cell}>{dataset.run ? <><code>{dataset.run.instance}</code><span className={note}>Instance tag</span></> : '—'}</td>
-              <td className={`${cell} text-end text-base font-semibold tabular-nums`}>{dataset.run?.total_precursors_display ?? '—'}{dataset.run ? <span className={note}>Analysis total</span> : null}</td>
-              <td className={`${cell} text-end text-base font-semibold tabular-nums`}>{dataset.run?.total_proteins_display ?? '—'}{dataset.run ? <span className={note}>total_proteins</span> : null}</td>
-              <td className={`${cell} min-w-[170px]`}>{dataset.keyConfig ?? '—'}</td>
-            </tr>
-          ))}</tbody>
+      {selected.comparisonSlug ? <>
+        <p className="mt-4 max-w-[60rem] text-xs text-ink-600">Same six input filenames across tools. Releases, full settings and input checksums are not reconciled; this is not a controlled current-release ranking.</p>
+        <a href={image} target="_blank" rel="noreferrer" className="mt-6 block focus-visible:outline-2 focus-visible:outline-brand-500"><img src={image} width={2880} height={1600} className="h-auto w-full" alt={`${ledger.name}: SynapSpec, DIA-NN and Spectronaut precursor IDs, six-run completeness, CV and Human, Yeast, E. coli LFQ median and IQR.`} /></a>
+        <div className="mt-3 flex flex-wrap gap-5"><a href={image} target="_blank" rel="noreferrer" className={linkStyle}>Open full-size figure</a><a href={image} download className={linkStyle}>Download PNG</a></div>
+      </> : <div className="mt-6 border-y border-ink-200 py-6">
+        <p className="text-2xl font-semibold tabular-nums">{formatCount(selected.counts[0]!)} <span className="text-sm font-normal text-ink-600">SynapSpec precursor IDs</span></p>
+        <p className="mt-3 max-w-[48rem] text-sm text-ink-600">DIA-NN and Spectronaut results are not linked to this execution. The archived comparison belongs to a separate execution and is not substituted here.</p>
+        <button type="button" className={`${button('secondary', 'sm')} mt-4`} onClick={() => setSelectedId(ledger.comparison.slug)}>Show archived three-tool comparison</button>
+      </div>}
+    </section>
+
+    <section id="run-history" className="border-t border-ink-200 py-8">
+      <h2 className="text-[21px] tracking-[-0.02em]">Run history</h2>
+      <p className="mt-3 max-w-[55rem] text-sm text-ink-600">One row per recorded execution or comparison bundle, newest dated runs first. Select a row to inspect it above. Dates are source display dates; undated comparisons are listed separately at the end.</p>
+      <div className="mt-6 overflow-x-auto" role="region" aria-label="Run history table" tabIndex={0}>
+        <table className="w-full min-w-[940px] border-collapse text-[13px]">
+          <caption className="pb-3 text-start text-xs text-ink-600">Precursor IDs by tool · “—” means not linked, not zero. Matching filenames do not prove identical file contents, settings or counting definitions; changes are descriptive, not isolated software improvements.</caption>
+          <thead><tr>{['Run / date', 'Commit / source', 'SynapSpec', 'DIA-NN', 'Spectronaut', 'SynapSpec time', 'Resource'].map(title => <th scope="col" key={title} className={`${caps} ${cell} bg-ink-50 text-start`}>{title}</th>)}</tr></thead>
+          <tbody>{ledger.rows.map(row => <tr key={row.id} className={selected.id === row.id ? 'bg-brand-50' : 'hover:bg-ink-50'}>
+            <th scope="row" className={`${cell} text-start font-normal`}><button type="button" aria-pressed={selected.id === row.id} className={linkStyle} onClick={() => setSelectedId(row.id)}>{row.date ?? 'Undated comparison'}</button><span className="mt-1 block text-xs text-ink-600">{row.label}</span></th>
+            <td className={cell}>{row.commit ?? (row.comparisonSlug ? 'Folder labels only' : 'Not recorded')}</td>
+            {row.counts.map((value, index) => <td key={index} className={`${cell} text-end tabular-nums`}>{value === null ? '—' : formatCount(value)}</td>)}
+            <td className={`${cell} tabular-nums`}>{row.runtime === null ? '—' : `${row.runtime.toFixed(2)} h`}</td><td className={cell}>{row.resource ?? '—'}</td>
+          </tr>)}</tbody>
         </table>
       </div>
-      <p className="mt-4 max-w-[65rem] text-xs text-ink-600">This catalog contains one verified run and two dataset presets awaiting result import. It is not an inventory of all available experiments. “—” means not imported, not zero; release mapping is unverified.</p>
-      <section className={blockPlain}>
-        <h2 className="text-[19px] tracking-[-0.02em]">Archived cross-tool comparisons</h2>
-        <p className="mt-3 text-sm text-ink-600">Two experiments with matching six-file inputs across SynapSpec, DIA-NN and Spectronaut. Separate from the selected run above; releases and full settings are not yet reconciled.</p>
-        <div className="mt-5 grid gap-4 md:grid-cols-2">{comparisonRecords.map(record => <Link key={record.slug} to="/benchmarks/$slug" params={{ slug: record.slug }} className="rounded-md border border-ink-200 p-5 hover:bg-ink-50 focus-visible:outline-2 focus-visible:outline-brand-500"><span className="font-medium text-brand-700">{record.name}</span><span className="mt-2 block text-sm text-ink-600">Archived v092 folder · 3 tools · 6 inputs · comparison PNG and metrics</span></Link>)}</div>
-      </section>
-      <section className={`${blockPlain} grid gap-8 md:grid-cols-2`}>
-        <div><h2 className="text-[19px] tracking-[-0.02em]">Start with the dataset</h2><p className="mt-3 max-w-[32rem] text-sm text-ink-600">Open a row for configuration, elapsed time, raw-file results and LFQ metrics. Counts from different samples are not a head-to-head score.</p></div>
-        <div><h2 className="text-[19px] tracking-[-0.02em]">Follow changes over time</h2><p className="mt-3 text-sm text-ink-600">Keep the dataset fixed and inspect its recorded run history.</p><Link to="/benchmarks/history" className="mt-3 inline-block text-sm font-medium text-brand-700 hover:underline">LFQBench / Astral history</Link></div>
-      </section>
-      <details className="mb-12 rounded-md border border-ink-200 p-5 text-sm"><summary className="cursor-pointer font-medium focus-visible:outline-2 focus-visible:outline-brand-500">What do precursor and protein IDs mean?</summary><p className="mt-3 max-w-[48rem] text-ink-600">IDs means the number identified, not an identifier string. Precursors are peptide-ion forms; proteins are the protein entities reported by the pipeline. More identifications means broader coverage, not automatically more accurate quantities. The protein column preserves the source field total_proteins; its grouping definition still needs confirmation.</p></details>
-    </div>
-  )
+      <p className="mt-4 text-xs text-ink-600">{ledger.rows.length > 1 ? '19 dated SynapSpec records and one undated three-tool bundle. Only one imported three-tool bundle is available for this dataset.' : 'Only one imported three-tool bundle is available for this dataset. A repeated-run history is not yet available.'}</p>
+    </section>
+    <details className="mb-12 border-t border-ink-200 pt-5 text-sm"><summary className="cursor-pointer font-medium">Fixed input-file list</summary><ul className="mt-4 space-y-2 text-xs text-ink-600">{ledger.files.map(file => <li key={file} className="break-all">{file}</li>)}</ul></details>
+  </div>
 }
