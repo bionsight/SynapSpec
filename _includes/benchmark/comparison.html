@@ -1,0 +1,121 @@
+{% assign record = site.data.benchmark_comparisons | where: "slug", page.slug | first %}
+{% assign synapspec = record.tools | where: "id", "synapspec" | first %}
+{% assign diann = record.tools | where: "id", "diann" | first %}
+{% assign spectronaut = record.tools | where: "id", "spectronaut" | first %}
+<div class="container">
+
+  <div class="breadcrumbs">
+    <a href="{{ '/benchmarks/' | relative_url }}">&larr; Benchmarks</a> / Archived comparison
+  </div>
+
+  <div class="section-header">
+    <h1>{{ record.name }}</h1>
+    <p class="section-subtitle">Three archived reports, the same six input files. A and B each contain three replicate runs.</p>
+  </div>
+
+  <div class="bench-callout">This is not a current-release ranking. Tool labels preserve source-folder labels; exact releases, execution dates, hardware and full search settings are not reconciled. Matching filenames do not establish identical search settings.</div>
+
+  <section class="py-lg">
+    <div class="bench-table-wrap">
+      <table class="bench-table">
+        <caption>Precursor q-value &lt; 0.01; decoys excluded. IDs are distinct modified-sequence and charge pairs across all six runs.</caption>
+        <thead>
+          <tr>
+            <th>Tool / source label</th>
+            <th class="num">Precursor IDs</th>
+            <th class="num">Detected in all six</th>
+            <th class="num">Median CV: A</th>
+            <th class="num">Median CV: B</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tool in record.tools %}
+          <tr>
+            <th scope="row">{{ tool.label }}</th>
+            <td class="num">{{ tool.precursors_display }}</td>
+            <td class="num">{{ tool.complete_six_percent | round: 1 }}%<span class="bench-subvalue">{{ tool.complete_six_display }} of {{ tool.precursors_display }}</span></td>
+            <td class="num">{{ tool.cv.A.median_percent | round: 1 }}%<span class="bench-subvalue">n = {{ tool.cv.A.count_display }}</span></td>
+            <td class="num">{{ tool.cv.B.median_percent | round: 1 }}%<span class="bench-subvalue">n = {{ tool.cv.B.count_display }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="bench-axis-note" style="text-align: left;">CV uses sample standard deviation / mean within one condition, only for precursors with positive finite MS2 quantities in all three replicates. Each tool has its own eligible population. Missing observations are not imputed.</p>
+  </section>
+
+  <section class="py-lg bench-border-t">
+    <h2>Identification, repeatability and LFQ ratios</h2>
+    <p class="bench-axis-note" style="text-align: left;">More IDs means broader coverage, not automatically better quantification. Lower CV means more consistent repeat measurements. For LFQ, a median closer to the dashed expected line and a narrower interquartile range indicate closer agreement and less spread.</p>
+    <a href="{{ '/assets/images/benchmarks/' | append: record.figure | relative_url }}" target="_blank" rel="noreferrer" class="bench-figure-link">
+      <img src="{{ '/assets/images/benchmarks/' | append: record.figure | relative_url }}" width="2880" height="1600" alt="{{ record.name }}: three-tool precursor counts, six-run completeness, within-condition CV, and species-specific LFQ median and interquartile range. Exact values follow below.">
+    </a>
+    <a href="{{ '/assets/images/benchmarks/' | append: record.figure | relative_url }}" download class="bench-download-link">Download comparison PNG</a>
+
+    <div class="bench-table-wrap" style="margin-top: 1.5rem;">
+      <table class="bench-table">
+        <caption>Precursor MS2 log&#8322;(mean A / mean B), using observed values; entities require positive means in both conditions. Mixed-species annotations are excluded. Intervals are quartiles, not confidence intervals.</caption>
+        <thead>
+          <tr><th>Tool</th><th>Species</th><th>Expected</th><th>Median</th><th>25&ndash;75%</th><th class="num">Precursors</th></tr>
+        </thead>
+        <tbody>
+          {% for tool in record.tools %}
+            {% for ratio in tool.ratios %}
+            <tr>
+              <th scope="row">{{ tool.label }}</th>
+              <td>{{ ratio.species }}</td>
+              <td>{{ ratio.target }}</td>
+              <td>{{ ratio.median | round: 3 }}</td>
+              <td>{{ ratio.lower | round: 3 }} &ndash; {{ ratio.upper | round: 3 }}</td>
+              <td class="num">{{ ratio.count_display }}</td>
+            </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="py-lg bench-border-t">
+    <h2>Shared precursor IDs</h2>
+    <p class="bench-axis-note" style="text-align: left;">Exact modified-sequence and charge matches, across all six runs; pairwise counts overlap and must not be added together.</p>
+    <ul class="bench-overlap-list">
+      {% for pair in record.overlap %}<li>{{ pair.left }} / {{ pair.right }}: <strong>{{ pair.precursors_display }}</strong></li>{% endfor %}
+    </ul>
+  </section>
+
+  <details class="bench-details">
+    <summary>Input files and per-file IDs</summary>
+    <div class="bench-table-wrap" style="margin-top: 1rem;">
+      <table class="bench-table">
+        <thead>
+          <tr><th>Input stem</th>{% for tool in record.tools %}<th>{{ tool.label }}</th>{% endfor %}</tr>
+        </thead>
+        <tbody>
+          {% for name in record.files %}
+          <tr>
+            <th scope="row">{{ name }}</th>
+            {% for tool in record.tools %}
+              {% assign file = tool.files | where: "name", name | first %}
+              <td>{{ file.precursors_display | default: "0" }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="bench-details">
+    <summary>Limitations and reproducibility</summary>
+    <ul class="bench-limitations">
+      <li>No analysis engine was rerun. These are archived report extracts, imported on 2026-09-08.</li>
+      <li>Protein entities use tool-specific grouping definitions and are not presented as a cross-tool score.</li>
+      <li>Separate SynapSpec MBR files are not included. MBR settings in the base reports remain unverified.</li>
+      <li>Expected ratios follow the existing BION LFQ preset: human 1:1, yeast 2:1, E. coli 1:4 (A:B). Sample preparation records and full settings still need owner review.</li>
+      <li>Release, execution time, resource and analysis date: not verified. No metadata is borrowed from the September 7 run.</li>
+      <li>These internal LFQBench experiments are not labeled PXD028735; a provenance mapping is not established.</li>
+    </ul>
+  </details>
+
+</div>

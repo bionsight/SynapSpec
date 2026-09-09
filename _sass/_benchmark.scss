@@ -313,3 +313,468 @@
   border-top: 1px solid $border-color;
   font-size: $font-size-small;
 }
+
+// ── Ported from the TanStack /benchmarks prototype ───────────
+// Four kinds hand-authored into _benchmark_entries: recorded run,
+// archived comparison, imported ClearML run, pending dataset. Plus the
+// index dataset switcher and the /benchmarks/history/ trend chart.
+// All still unlisted — see _config.yml's benchmark_entries defaults.
+
+.bench-muted {
+  font-weight: 400;
+  color: $text-light;
+}
+
+.bench-link {
+  font-size: $font-size-small;
+  font-weight: 600;
+  color: $primary-color-darker;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.bench-header-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-sm;
+}
+
+.bench-callout {
+  max-width: 900px;
+  margin: $spacing-md auto 0;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  background: $bg-secondary;
+  font-size: $font-size-small;
+  color: $text-color-light;
+}
+
+.bench-subvalue {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: $text-color-lightest;
+}
+
+.bench-border-t {
+  border-top: 1px solid $border-color;
+}
+
+.bench-border-b {
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-border-y {
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-lede {
+  margin: $spacing-sm 0 0;
+  font-family: $heading-font;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-lede-unit {
+  font-family: $body-font;
+  font-size: $font-size-small;
+  font-weight: 500;
+  color: $text-light;
+}
+
+.bench-figure-link {
+  display: block;
+  margin-top: $spacing-md;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+  }
+}
+
+.bench-figure-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-top: $spacing-xs;
+
+  a {
+    font-size: $font-size-small;
+    color: $primary-color-darker;
+  }
+}
+
+.bench-download-link {
+  display: inline-block;
+  margin-top: $spacing-xs;
+  font-size: $font-size-small;
+  color: $primary-color-darker;
+}
+
+// ── Fact lists (dl grids) ─────────────────────────────────────
+
+.bench-facts,
+.bench-config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm $spacing-lg;
+  margin: $spacing-md 0;
+
+  @media (min-width: $mobile) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $text-color-lightest;
+  }
+
+  dd {
+    margin: 4px 0 0;
+    font-size: $font-size-small;
+  }
+}
+
+.bench-facts-top {
+  padding-top: $spacing-md;
+  border-top: 2px solid $primary-color-dark;
+
+  dd {
+    font-family: $heading-font;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bench-fact-note {
+  display: block;
+  margin-top: 3px;
+  font-family: $body-font;
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: $text-color-lightest;
+}
+
+.bench-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1px solid $border-color;
+
+  a {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $primary-color-darker;
+  }
+}
+
+.bench-file-list {
+  margin: $spacing-sm 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  color: $text-color-lightest;
+
+  li {
+    margin-top: 4px;
+    word-break: break-all;
+  }
+}
+
+.bench-overlap-list {
+  margin: $spacing-sm 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: $font-size-small;
+
+  li {
+    margin-top: 6px;
+  }
+
+  strong {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bench-details {
+  margin: $spacing-md 0;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  font-size: $font-size-small;
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  p {
+    margin: $spacing-xs 0 0;
+    color: $text-light;
+  }
+}
+
+.bench-limitations {
+  margin: $spacing-sm 0 0;
+  padding-left: 1.25rem;
+  color: $text-light;
+  font-size: $font-size-small;
+
+  li {
+    margin-top: 6px;
+  }
+}
+
+.bench-pending {
+  max-width: 640px;
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+// ── No-JS toggle pattern (radio + sibling selectors) ─────────
+// Shared shell for the ratio-mode toggle and the dataset switcher.
+
+.bench-ratio-input,
+.bench-ds-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bench-toggle-group {
+  display: flex;
+  gap: $spacing-xs * 0.5;
+}
+
+.bench-toggle-btn {
+  padding: 6px 14px;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $text-light;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: $primary-color;
+  }
+}
+
+#ratio-actual:checked ~ .bench-ratio-head .bench-toggle-btn[for="ratio-actual"],
+#ratio-relative:checked ~ .bench-ratio-head .bench-toggle-btn[for="ratio-relative"],
+#dataset-oe480:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-oe480"],
+#dataset-astral:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-astral"] {
+  background: $primary-color;
+  border-color: $primary-color;
+  color: $background-color;
+}
+
+// ── Ratio widget ───────────────────────────────────────────────
+
+.bench-ratio-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-md;
+  margin-bottom: $spacing-sm;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.bench-ratio-panel-relative {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-panel-actual {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-panel-relative {
+  display: block;
+}
+
+.bench-ratio-footnote-relative {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-footnote-actual {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-footnote-relative {
+  display: block;
+}
+
+.bench-ratio-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 150px;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid $border-color;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bench-ratio-species {
+  font-weight: 600;
+}
+
+.bench-ratio-count {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: $text-color-lightest;
+}
+
+.bench-ratio-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bench-ratio-gridline {
+  stroke: $border-color;
+}
+
+.bench-ratio-ticklabel {
+  fill: $text-color-lightest;
+  font-size: 11px;
+}
+
+.bench-ratio-band {
+  fill: rgba(87, 185, 202, 0.18);
+  stroke: $primary-color-dark;
+}
+
+.bench-ratio-target {
+  stroke: $text-color;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.bench-ratio-dot {
+  fill: $primary-color;
+  stroke: $background-color;
+  stroke-width: 2;
+}
+
+.bench-ratio-value {
+  text-align: right;
+  font-family: $heading-font;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+
+  @media (max-width: $mobile) {
+    text-align: left;
+  }
+}
+
+.bench-ratio-value-label {
+  display: block;
+  margin-top: 2px;
+  font-family: $body-font;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: $text-color-lightest;
+}
+
+// ── Dataset switcher (index page) ────────────────────────────
+
+.bench-ds-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-ds-panel-astral {
+  display: none;
+}
+
+#dataset-astral:checked ~ .bench-ds-panel-oe480 {
+  display: none;
+}
+
+#dataset-astral:checked ~ .bench-ds-panel-astral {
+  display: block;
+}
+
+// The two run-history links in .bench-ds-head reuse the same panel classes,
+// so the rules above already show/hide them — just keep their "on" state inline.
+.bench-ds-head .bench-ds-panel-oe480,
+.bench-ds-head .bench-ds-panel-astral {
+  display: none;
+}
+
+#dataset-oe480:checked ~ .bench-ds-head .bench-ds-panel-oe480,
+#dataset-astral:checked ~ .bench-ds-head .bench-ds-panel-astral {
+  display: inline;
+}
+
+// ── History trend chart ───────────────────────────────────────
+
+.bench-history-chart-wrap {
+  overflow-x: auto;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+}
+
+.bench-history-svg {
+  display: block;
+  width: 100%;
+  min-width: 600px;
+  height: auto;
+}
+
+.bench-history-gridline {
+  stroke: $border-color;
+}
+
+.bench-history-ticklabel {
+  fill: $text-color-lightest;
+  font-size: 12px;
+}
+
+.bench-history-line {
+  fill: none;
+  stroke: $primary-color-dark;
+  stroke-width: 2;
+}
+
+.bench-history-dot {
+  fill: $primary-color-dark;
+}

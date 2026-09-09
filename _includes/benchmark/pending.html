@@ -1,0 +1,21 @@
+{% assign dataset = site.data.benchmark_catalog.dataset_catalog | where: "slug", page.slug | first %}
+<div class="container">
+
+  <div class="breadcrumbs">
+    <a href="{{ '/benchmarks/' | relative_url }}">&larr; All datasets</a>
+  </div>
+
+  <div class="section-header">
+    <h1>{{ dataset.name }} <span class="bench-muted">/ {{ dataset.instrument }}</span></h1>
+  </div>
+
+  <section class="py-lg">
+    <div class="highlight-section bench-pending">
+      <h2>Results have not been imported</h2>
+      <p>This dataset preset exists, but no source run has been selected for this catalog. That does not mean the dataset or its results are unavailable.</p>
+      <p>Release, date, resource, configuration, identification counts and plots will appear after result import.</p>
+      <p class="bench-axis-note" style="text-align: left;">Preset: <code>{{ dataset.preset }}</code></p>
+    </div>
+  </section>
+
+</div>

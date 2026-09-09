@@ -1,104 +1,97 @@
 ---
 layout: default
 title: "Benchmarks"
-description: "SynapSpec benchmark history on the LFQBench standard dataset — identification depth and quantification accuracy measured on every tracked release of the engine"
+description: "SynapSpec benchmark history on the LFQBench standard dataset — three-tool comparisons on fixed inputs, and every recorded run over time"
 # 아직 공개 전 — 내비게이션에 링크를 걸지 않고 색인도 막는다
 noindex: true
 sitemap: false
 ---
 
-{% assign bm = site.data.benchmarks %}
-{% assign runs_desc = bm.runs | sort: "date" | reverse %}
-{% assign peak = bm.coverage.peak_precursors %}
+{% assign ledgers = site.data.benchmark_ledger %}
+{% assign oe480 = ledgers[0] %}
+{% assign astral = ledgers[1] %}
 
 <div class="container">
 
   <div class="section-header">
     <h1>Benchmarks</h1>
-    <p class="section-subtitle">
-      SynapSpec is measured against LFQBench, a standard dataset whose true protein
-      ratios are known in advance. Every run on the {{ bm.filter.branch }} branch is
-      recorded here &mdash; improvements and regressions alike.
-    </p>
+    <p class="section-subtitle">Fixed input files. Three analysis tools. Recorded runs over time.</p>
   </div>
 
-  <section class="py-lg">
-    <div class="bench-meta">
-      <span><i class="fas fa-list-ol"></i> {{ bm.coverage.run_count }} runs</span>
-      <span><i class="fas fa-calendar-day"></i> {{ bm.coverage.date_from }} &ndash; {{ bm.coverage.date_to }}</span>
-      <span><i class="fas fa-flask"></i> {{ bm.dataset.name }} &middot; {{ bm.dataset.instrument }}</span>
-    </div>
-  </section>
+  <input type="radio" name="dataset" id="dataset-oe480" class="bench-ds-input" checked>
+  <input type="radio" name="dataset" id="dataset-astral" class="bench-ds-input">
 
-  <!-- ── Trend ───────────────────────────────────────────────── -->
-  <section class="py-lg">
-    <div class="section-header">
-      <h2>Identification Depth Over Time</h2>
-      <p class="section-subtitle">Total precursors identified across the {{ bm.dataset.files }}-file benchmark.</p>
+  <div class="bench-ds-head">
+    <div class="bench-toggle-group" role="group" aria-label="Dataset">
+      <label for="dataset-oe480" class="bench-toggle-btn">{{ oe480.name }}</label>
+      <label for="dataset-astral" class="bench-toggle-btn">{{ astral.name }}</label>
     </div>
+    <a href="#run-history-oe480" class="bench-ds-panel-oe480 bench-link">Run history ({{ oe480.rows.size }})</a>
+    <a href="#run-history-astral" class="bench-ds-panel-astral bench-link">Run history ({{ astral.rows.size }})</a>
+  </div>
 
-    <div class="bench-trend">
-      {% for run in bm.runs %}
-        {% assign height = run.total_precursors | times: 100 | divided_by: peak %}
-        <a class="bench-trend-bar" href="{{ '/benchmarks/' | append: run.slug | append: '/' | relative_url }}"
-           title="{{ run.date }} — {{ run.total_precursors_display }} precursors">
-          <span class="bench-trend-fill" style="height: {{ height }}%;"></span>
-          <span class="bench-trend-date">{{ run.month_label }}</span>
+  {% for ledger in ledgers %}
+    {% assign is_astral = false %}
+    {% if ledger.id == astral.id %}{% assign is_astral = true %}{% endif %}
+    {% assign panel_class = "bench-ds-panel-oe480" %}
+    {% assign anchor = "run-history-oe480" %}
+    {% if is_astral %}{% assign panel_class = "bench-ds-panel-astral" %}{% assign anchor = "run-history-astral" %}{% endif %}
+    {% assign comparison_row = ledger.rows | last %}
+
+    <div class="bench-ds-panel {{ panel_class }}">
+
+      <section class="py-lg" aria-label="Selected results">
+        <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
+        <p class="bench-axis-note" style="text-align: left;">{{ ledger.name }} &middot; {{ ledger.files.size }} input files &middot; Archived comparison; execution date not recorded</p>
+        <p class="bench-axis-note" style="text-align: left;"><a href="{{ '/benchmarks/' | append: comparison_row.sourceSlug | append: '/' | relative_url }}" class="bench-link">Run details &amp; source</a></p>
+        <p class="bench-axis-note" style="text-align: left;">Same six input filenames across tools. Releases, full settings and input checksums are not reconciled; this is not a controlled current-release ranking.</p>
+        <a href="{{ '/assets/images/benchmarks/' | append: ledger.comparison.figure | relative_url }}" target="_blank" rel="noreferrer" class="bench-figure-link">
+          <img src="{{ '/assets/images/benchmarks/' | append: ledger.comparison.figure | relative_url }}" width="2880" height="1600" alt="{{ ledger.name }}: SynapSpec, DIA-NN and Spectronaut precursor IDs, six-run completeness, CV and Human, Yeast, E. coli LFQ median and IQR.">
         </a>
-      {% endfor %}
-    </div>
-    <p class="bench-axis-note">
-      Bars are scaled against the highest value in the series ({{ bm.coverage.peak_precursors_display }}). Click any bar for that run's detail.
-    </p>
-  </section>
+        <div class="bench-figure-actions">
+          <a href="{{ '/assets/images/benchmarks/' | append: ledger.comparison.figure | relative_url }}" target="_blank" rel="noreferrer">Open full-size figure</a>
+          <a href="{{ '/assets/images/benchmarks/' | append: ledger.comparison.figure | relative_url }}" download>Download PNG</a>
+        </div>
+      </section>
 
-  <!-- ── History table ───────────────────────────────────────── -->
-  <section class="py-lg">
-    <div class="section-header">
-      <h2>All Runs</h2>
-    </div>
+      <section id="{{ anchor }}" class="py-lg bench-border-t">
+        <h2>Run history</h2>
+        <p class="section-subtitle">One row per recorded execution or comparison bundle, newest dated runs first. Open a run to view its detailed results and figures. Dates are source display dates; undated comparisons are listed separately at the end.</p>
+        <div class="bench-table-wrap" style="max-width: 100%;">
+          <table class="bench-table">
+            <caption>Precursor IDs by tool &middot; &ldquo;&mdash;&rdquo; means not linked, not zero. Matching filenames do not prove identical file contents, settings or counting definitions; changes are descriptive, not isolated software improvements.</caption>
+            <thead>
+              <tr><th>Run / date</th><th>Commit / source</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
+            </thead>
+            <tbody>
+              {% for row in ledger.rows %}
+              <tr>
+                <th scope="row">
+                  <a href="{{ '/benchmarks/' | append: row.sourceSlug | append: '/' | relative_url }}">{{ row.date | default: "Undated comparison" }}</a>
+                  <span class="bench-subvalue">{{ row.label }}</span>
+                </th>
+                <td>{% if row.commit %}{{ row.commit }}{% elsif row.comparisonSlug %}Folder labels only{% else %}Not recorded{% endif %}</td>
+                {% for value in row.counts_display %}
+                  <td class="num">{{ value | default: "—" }}</td>
+                {% endfor %}
+                <td class="num">{% if row.runtime %}{{ row.runtime | round: 2 }} h{% else %}&mdash;{% endif %}</td>
+                <td>{{ row.resource | default: "—" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="bench-axis-note" style="text-align: left;">
+          {% if ledger.rows.size > 1 %}{{ ledger.rows.size | minus: 1 }} dated SynapSpec records and one undated three-tool bundle. Only one imported three-tool bundle is available for this dataset.{% else %}Only one imported three-tool bundle is available for this dataset. A repeated-run history is not yet available.{% endif %}
+        </p>
+      </section>
 
-    <div class="bench-table-wrap">
-      <table class="bench-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th class="num">Precursors</th>
-            <th class="num">Protein groups</th>
-            <th class="num">Runtime</th>
-            <th>Instance</th>
-            <th>Accuracy</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for run in runs_desc %}
-            <tr>
-              <td>
-                <a href="{{ '/benchmarks/' | append: run.slug | append: '/' | relative_url }}">{{ run.date }}</a>
-              </td>
-              <td class="num">{{ run.total_precursors_display }}</td>
-              <td class="num">{{ run.total_proteins_display }}</td>
-              <td class="num">{% if run.runtime_hours %}{{ run.runtime_hours }} h{% else %}&mdash;{% endif %}</td>
-              <td><code>{{ run.instance }}</code></td>
-              <td>
-                {% if run.has_accuracy %}
-                  <span class="bench-badge is-on">measured</span>
-                {% else %}
-                  <span class="bench-badge">&mdash;</span>
-                {% endif %}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+      <details class="bench-details bench-border-t" style="border-top: 1px solid var(--bench-border, #e2e2e2); border-radius: 0; padding-top: 1.25rem;">
+        <summary>Fixed input-file list</summary>
+        <ul class="bench-file-list">{% for file in ledger.files %}<li>{{ file }}</li>{% endfor %}</ul>
+      </details>
 
-    <p class="bench-axis-note">
-      Quantification accuracy has been recorded since {{ bm.coverage.date_to }}
-      ({{ bm.coverage.accuracy_count }} of {{ bm.coverage.run_count }} runs);
-      earlier runs report identification depth only.
-      Runtime reflects a single run on shared infrastructure and is not comparable across instance types.
-    </p>
-  </section>
+    </div>
+  {% endfor %}
 
 </div>

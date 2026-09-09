@@ -58,6 +58,9 @@ collections:
   benchmarks:
     output: true
     permalink: /benchmarks/:name/
+  benchmark_entries:
+    output: true
+    permalink: /benchmarks/:name/
 
 # Defaults
 defaults:
@@ -76,6 +79,14 @@ defaults:
       type: "benchmarks"
     values:
       layout: "benchmark_run"
+      # 아직 공개 전 — 링크를 걸지 않고 색인도 막는다
+      noindex: true
+      sitemap: false
+  - scope:
+      path: ""
+      type: "benchmark_entries"
+    values:
+      layout: "benchmark_entry"
       # 아직 공개 전 — 링크를 걸지 않고 색인도 막는다
       noindex: true
       sitemap: false
