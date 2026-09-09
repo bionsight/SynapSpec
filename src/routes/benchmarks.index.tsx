@@ -52,20 +52,20 @@ function BenchmarkLedger() {
 
     <section id="run-history" className="border-t border-ink-200 py-8">
       <h2 className="text-[21px] tracking-[-0.02em]">Run history</h2>
-      <p className="mt-3 max-w-[55rem] text-sm text-ink-600">One row per recorded execution or comparison bundle, newest dated runs first. Select a row to inspect it above. Dates are source display dates; undated comparisons are listed separately at the end.</p>
+      <p className="mt-3 max-w-[55rem] text-sm text-ink-600">One row per recorded execution or comparison bundle, newest dated runs first. Open a run to view its detailed results and figures. Dates are source display dates; undated comparisons are listed separately at the end.</p>
       <div className="mt-6 overflow-x-auto" role="region" aria-label="Run history table" tabIndex={0}>
         <table className="w-full min-w-[940px] border-collapse text-[13px]">
           <caption className="pb-3 text-start text-xs text-ink-600">Precursor IDs by tool · “—” means not linked, not zero. Matching filenames do not prove identical file contents, settings or counting definitions; changes are descriptive, not isolated software improvements.</caption>
           <thead><tr>{['Run / date', 'Commit / source', 'SynapSpec', 'DIA-NN', 'Spectronaut', 'SynapSpec time', 'Resource'].map(title => <th scope="col" key={title} className={`${caps} ${cell} bg-ink-50 text-start`}>{title}</th>)}</tr></thead>
           <tbody>{ledger.rows.map(row => <tr key={row.id} className={selected.id === row.id ? 'bg-brand-50' : 'hover:bg-ink-50'}>
-            <th scope="row" className={`${cell} text-start font-normal`}><button type="button" aria-pressed={selected.id === row.id} className={linkStyle} onClick={() => setSelectedId(row.id)}>{row.date ?? 'Undated comparison'}</button><span className="mt-1 block text-xs text-ink-600">{row.label}</span></th>
+            <th scope="row" className={`${cell} text-start font-normal`}><Link to="/benchmarks/$slug" params={{ slug: row.sourceSlug }} className={linkStyle}>{row.date ?? 'Undated comparison'}</Link><span className="mt-1 block text-xs text-ink-600">{row.label}</span></th>
             <td className={cell}>{row.commit ?? (row.comparisonSlug ? 'Folder labels only' : 'Not recorded')}</td>
             {row.counts.map((value, index) => <td key={index} className={`${cell} text-end tabular-nums`}>{value === null ? '—' : formatCount(value)}</td>)}
             <td className={`${cell} tabular-nums`}>{row.runtime === null ? '—' : `${row.runtime.toFixed(2)} h`}</td><td className={cell}>{row.resource ?? '—'}</td>
           </tr>)}</tbody>
         </table>
       </div>
-      <p className="mt-4 text-xs text-ink-600">{ledger.rows.length > 1 ? '19 dated SynapSpec records and one undated three-tool bundle. Only one imported three-tool bundle is available for this dataset.' : 'Only one imported three-tool bundle is available for this dataset. A repeated-run history is not yet available.'}</p>
+      <p className="mt-4 text-xs text-ink-600">{ledger.rows.length > 1 ? `${ledger.rows.filter(row => row.date !== null).length} dated SynapSpec records and one undated three-tool bundle. Only one imported three-tool bundle is available for this dataset.` : 'Only one imported three-tool bundle is available for this dataset. A repeated-run history is not yet available.'}</p>
     </section>
     <details className="mb-12 border-t border-ink-200 pt-5 text-sm"><summary className="cursor-pointer font-medium">Fixed input-file list</summary><ul className="mt-4 space-y-2 text-xs text-ink-600">{ledger.files.map(file => <li key={file} className="break-all">{file}</li>)}</ul></details>
   </div>

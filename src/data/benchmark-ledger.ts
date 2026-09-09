@@ -1,6 +1,7 @@
 import { benchmarks } from './benchmarks'
 import { recordedRun } from './benchmark-catalog'
 import { comparisonRecords } from './benchmark-comparisons'
+import { importedRuns } from './benchmark-imports'
 
 export type LedgerRow = {
   id: string
@@ -30,7 +31,13 @@ export const benchmarkLedgers = comparisonRecords.map(comparison => {
       sourceSlug: recordedRun.slug, comparisonSlug: null, counts: [recordedRun.total_precursors, null, null],
       runtime: recordedRun.runtime_hours, resource: recordedRun.instance, commit: '5d12a532' })
   }
-  dated.sort((left, right) => (right.date ?? '').localeCompare(left.date ?? ''))
+  for (const run of importedRuns.filter(run => inputSignature(run.files) === signature)) {
+    dated.push({ id: run.slug, date: run.started.slice(0, 10), label: `SynapSpec run · ${run.started.slice(11)}`,
+      sourceSlug: run.slug, comparisonSlug: null, counts: [run.totalPrecursors, null, null],
+      runtime: run.runtimeMinutes / 60, resource: run.resource, commit: run.commit })
+  }
+  const sortTime = (row: LedgerRow) => importedRuns.find(run => run.slug === row.id)?.started ?? row.date ?? ''
+  dated.sort((left, right) => sortTime(right).localeCompare(sortTime(left)))
   const archived: LedgerRow = {
     id: comparison.slug, date: null, label: '3-tool comparison · v092 folder', sourceSlug: comparison.slug,
     comparisonSlug: comparison.slug,

@@ -1,0 +1,29 @@
+// Transcribed from ClearML INFO, CONFIGURATION and PLOTS on 2026-09-08.
+// See docs/benchmark-history-imports.md for provenance and limitations.
+const files = ['A_R1', 'A_R2', 'A_R3', 'B_R1', 'B_R2', 'B_R3']
+  .map(sample => `20250206_OA_OP_LFQBench_${sample}.raw`)
+
+export const importedRuns = [
+  {
+    slug: '2026-09-07-b4de5599', commit: 'b4de5599',
+    taskId: '233d29931f8e41699ddb04875ef56250', artifactId: 'ff4a6499',
+    started: '2026-09-07 17:25', completed: '2026-09-07 23:35',
+    runtimeMinutes: 369, totalPrecursors: 259474, totalProteins: 19464,
+  },
+  {
+    slug: '2026-09-07-34879e5b', commit: '34879e5b',
+    taskId: '19787e7d28ad4710818c95e6abff33a8', artifactId: '9366ae6d',
+    started: '2026-09-07 16:30', completed: '2026-09-07 23:51',
+    runtimeMinutes: 441, totalPrecursors: 275106, totalProteins: 20917,
+  },
+  {
+    slug: '2026-09-06-9897b894', commit: '9897b894',
+    taskId: '797be92685ea4868b48bd0ed9174b90a', artifactId: 'f869d46d',
+    started: '2026-09-06 21:04', completed: '2026-09-07 03:39',
+    runtimeMinutes: 394, totalPrecursors: 261436, totalProteins: 20117,
+  },
+].map(run => ({ ...run, files, status: 'Completed' as const, resource: 'c7i.8xlarge',
+  figure: run.taskId === '797be92685ea4868b48bd0ed9174b90a' ? '2026-09-06-9897b894.jpeg' : null,
+}))
+
+export type ImportedRun = typeof importedRuns[number]

@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import viteReact from '@vitejs/plugin-react'
 
 import benchmarks from './src/data/benchmarks.json'
+import { importedRuns } from './src/data/benchmark-imports'
 import { comparisonRecords } from './src/data/benchmark-comparisons'
 import { catalogDestination, datasetCatalog } from './src/data/benchmark-catalog'
 
@@ -18,6 +19,10 @@ const unlistedPages = [
   { path: '/benchmarks/' },
   { path: '/benchmarks/history' },
   { path: '/benchmarks/history/' },
+  ...importedRuns.flatMap(run => [
+    { path: `/benchmarks/${run.slug}` },
+    { path: `/benchmarks/${run.slug}/` },
+  ]),
   ...comparisonRecords.flatMap(record => [
     { path: `/benchmarks/${record.slug}` },
     { path: `/benchmarks/${record.slug}/` },

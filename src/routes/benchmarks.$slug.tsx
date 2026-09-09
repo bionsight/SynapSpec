@@ -4,6 +4,8 @@ import type { ReactNode } from 'react'
 import { AccuracyTrack, Chips, Figures, Spark } from '../components/Benchmark'
 import { PendingDataset, RecordedBenchmark } from '../components/BenchmarkRecord'
 import { BenchmarkComparison } from '../components/BenchmarkComparison'
+import { ImportedBenchmark } from '../components/ImportedBenchmark'
+import { importedRuns } from '../data/benchmark-imports'
 import { findComparison } from '../data/benchmark-comparisons'
 import { datasetCatalog, recordedRunSlug } from '../data/benchmark-catalog'
 import { TableScroll } from '../components/Section'
@@ -13,6 +15,8 @@ import { blockPlain, caps, container, eyebrow } from '../ui'
 
 export const Route = createFileRoute('/benchmarks/$slug')({
   loader: ({ params }) => {
+    const imported = importedRuns.find(run => run.slug === params.slug)
+    if (imported) return { kind: 'imported' as const, run: imported }
     const comparison = findComparison(params.slug)
     if (comparison) return { kind: 'comparison' as const, comparison }
     if (params.slug === recordedRunSlug) return { kind: 'recorded' as const }
@@ -59,6 +63,7 @@ function figuresFor(run: BenchmarkRun) {
 
 function BenchmarkRunPage() {
   const data = Route.useLoaderData()
+  if (data.kind === 'imported') return <ImportedBenchmark run={data.run} />
   if (data.kind === 'comparison') return <BenchmarkComparison record={data.comparison} />
   if (data.kind === 'recorded') return <RecordedBenchmark />
   if (data.kind === 'pending') return <PendingDataset dataset={data.dataset} />
