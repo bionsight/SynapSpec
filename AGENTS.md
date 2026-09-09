@@ -72,14 +72,17 @@ storage floor for data processing, and the 4 GB-per-thread memory note. `require
 
 ## THE HERO IS A SCREENSHOT, THE DARK BAND IS MEASURED
 
-The hero image, `public/images/synapspec/run_detail.png`, is a copy of bion-design's
-`projects/synapspec/snapshot-rebuild/busy/1280px/runs-detail.png`, cut to its top 560px. That
-snapshot is the window as it stands: the pywebview migration was rejected on 2026-09-04 and the
-same screens were rebuilt on NiceGUI widgets, so `snapshot-pywebview` records a build that will
-not ship. Below
-that line the Output card shows the capture sandbox's absolute path, which is not for a public page.
-The counts in it are the capture fixture's, not a benchmark. Re-copy it after the app's snapshot is
+The hero image, `public/images/synapspec/run_detail.png`, is the `busy` scenario's `runs-detail`
+shot from bion-design's `projects/synapspec/capture` harness, cut to its top 560px. Below that line
+the Output card shows the capture sandbox's absolute path, which is not for a public page. The
+counts in it are the capture fixture's, not a benchmark. Re-copy it after the app's snapshot is
 re-captured; nothing checks that they match.
+
+**Last re-copied 2026-09-09** from a capture run against DeepMSFlow `2ebff04f` (past the `v0.12.0`
+tag, after the BIO-260 NiceGUI rebuild landed on `main` as `919f6226`). That squash merge dropped
+`_format_count()` — the tile numbers read `15662`, not `15,662`, and this hero image now shows that
+plainly. This capture was written to the default cache output, not committed into bion-design's own
+`snapshot-rebuild/`; the two can drift.
 
 The dark band uses the newest LFQBench run in `src/data/benchmarks.json` (currently 2026-07-22).
 `exampleRun` in `src/data/benchmarks.ts` derives every displayed value from that JSON; do not
