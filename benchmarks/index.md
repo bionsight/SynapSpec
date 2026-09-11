@@ -13,9 +13,9 @@ sitemap: false
 
 <div class="container">
 
-  <div class="section-header">
+  <div class="page-header">
     <h1>Benchmarks</h1>
-    <p class="section-subtitle">Fixed input files. Three analysis tools. Recorded runs over time.</p>
+    <p>Fixed input files. Three analysis tools. Recorded runs over time.</p>
   </div>
 
   <input type="radio" name="dataset" id="dataset-oe480" class="bench-ds-input" checked>
@@ -40,8 +40,10 @@ sitemap: false
 
     <div class="bench-ds-panel {{ panel_class }}">
 
-      <section class="py-lg" aria-label="Selected results">
-        <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
+      <section class="block" aria-label="Selected results">
+        <div class="section-header">
+          <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
+        </div>
         <p class="bench-axis-note" style="text-align: left;">{{ ledger.name }} &middot; {{ ledger.files.size }} input files &middot; Archived comparison; execution date not recorded</p>
         <p class="bench-axis-note" style="text-align: left;"><a href="{{ '/benchmarks/' | append: comparison_row.sourceSlug | append: '/' | relative_url }}" class="bench-link">Run details &amp; source</a></p>
         <p class="bench-axis-note" style="text-align: left;">Same six input filenames across tools. Releases, full settings and input checksums are not reconciled; this is not a controlled current-release ranking.</p>
@@ -54,9 +56,11 @@ sitemap: false
         </div>
       </section>
 
-      <section id="{{ anchor }}" class="py-lg bench-border-t">
-        <h2>Run history</h2>
-        <p class="section-subtitle">One row per recorded execution or comparison bundle, newest dated runs first. Open a run to view its detailed results and figures. Dates are source display dates; undated comparisons are listed separately at the end.</p>
+      <section id="{{ anchor }}" class="block">
+        <div class="section-header">
+          <h2>Run history</h2>
+          <p class="section-subtitle">One row per recorded execution or comparison bundle, newest dated runs first. Open a run to view its detailed results and figures. Dates are source display dates; undated comparisons are listed separately at the end.</p>
+        </div>
         <div class="bench-table-wrap" style="max-width: 100%;">
           <table class="bench-table">
             <caption>Precursor IDs by tool &middot; &ldquo;&mdash;&rdquo; means not linked, not zero. Matching filenames do not prove identical file contents, settings or counting definitions; changes are descriptive, not isolated software improvements.</caption>

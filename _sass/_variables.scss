@@ -1,27 +1,70 @@
-// Color Palette
-$primary-color: #57b9caff;      // Primary blue
-$secondary-color: #94a3b8;    // Secondary gray
-$accent-color: #1a7a8d;       // Accent color
-$background-color: #ffffff;   // White
-$bg-secondary: #f0f9ff;       // Light background
-$text-color: #1e293b;         // Dark text
-$text-light: #64748b;         // Light text
-$border-color: #dbeafe;       // Border color
+// Design tokens — "evidence-first" 리디자인 (feat/benchmark-board 의 src/styles.css 를
+// Tailwind @theme 에서 SCSS 변수로 옮긴 것). bion-design design-system.css 의 Petrol
+// 램프를 그대로 쓴다 — 이전 사이트의 #57b9ca 팔레트는 더 이상 쓰지 않는다.
 
-// Derived color variations
-$primary-color-dark: #1d96b0;     // Darker primary
-$primary-color-darker: #1a7a8d;   // Even darker primary
-$primary-color-light: #99e3ec;    // Lighter primary
-$accent-color-dark:#2563eb;       // Darker accent
-$secondary-color-light: #bcc5d6;  // Lighter secondary
-$text-color-dark: #0f172a;        // Darker text
-$text-color-light: #475569;       // Light text variant
-$text-color-lighter: #64748b;     // Lighter text
-$text-color-lightest: #94a3b8;    // Lightest text
+// Ink scale (그레이스케일)
+$ink-0: #ffffff;
+$ink-50: #f8f9fa;
+$ink-100: #f1f3f5;
+$ink-200: #e7eaee;
+$ink-300: #d5dae1;
+$ink-400: #aab3bf;
+$ink-500: #7f8a99;
+$ink-600: #5c6773;
+$ink-700: #434c58;
+$ink-800: #2b323b;
+$ink-900: #1a1f26;
+$ink-950: #0f1318;
 
-// Typography
-$heading-font: 'Montserrat', sans-serif;
-$body-font: 'Noto Sans KR', sans-serif;
+// Brand scale (Petrol)
+$brand-50: #eff8fd;
+$brand-100: #d6edf9;
+$brand-200: #aedaf3;
+$brand-300: #79c0e8;
+$brand-400: #45a2d6;
+$brand-500: #2285bd;
+$brand-600: #106a9e;
+$brand-700: #0f5680;
+$brand-800: #12486a;
+$brand-900: #133d59;
+$brand-950: #0b2639;
+
+$success: #059669;
+$success-text: #047857;
+
+// 색맹 안전 계열 — 차트용 (Okabe-Ito)
+$viz-1: #0072b2;
+$viz-2: #e69f00;
+$viz-3: #009e73;
+
+// 이전 변수 이름과의 호환 별칭. _layout/_components/_benchmark/_spectralens 가
+// 아직 쓰고 있어서 전부 새 팔레트로 다시 정의한다 — 값만 바뀐다.
+$primary-color: $brand-600;
+$primary-color-dark: $brand-700;
+$primary-color-darker: $brand-800;
+$primary-color-light: $brand-200;
+$secondary-color: $ink-500;
+$secondary-color-light: $ink-300;
+$accent-color: $brand-700;
+$accent-color-dark: $brand-800;
+$background-color: $ink-0;
+$bg-secondary: $ink-50;
+$text-color: $ink-900;
+$text-color-dark: $ink-950;
+$text-color-light: $ink-600;
+$text-light: $ink-600;
+$text-color-lighter: $ink-500;
+$text-color-lightest: $ink-400;
+$border-color: $ink-200;
+
+// Typography — Pretendard 우선, 없으면 시스템 산세리프. 별도 heading 폰트를
+// 쓰지 않는다(시안 A 는 굵기로만 위계를 준다).
+$heading-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard Variable', Pretendard,
+  'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, Helvetica, Arial, sans-serif;
+$body-font: $heading-font;
+$mono-font: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+$tracking-caps: 0.06em;
 
 // Font sizes
 $font-size-h1: 2.5rem;
@@ -42,10 +85,19 @@ $mobile: 768px;
 $tablet: 1024px;
 $desktop: 1200px;
 
+// container 폭 — 시안의 1120px + 여백
+$container-width: 1120px;
+
 // Border radius
-$border-radius: 8px;
-$border-radius-lg: 12px;
+$border-radius-sm: 4px;
+$border-radius: 6px;
+$border-radius-lg: 10px;
+$border-radius-xl: 16px;
+$border-radius-full: 999px;
 
 // Shadows
-$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-$box-shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.15);
+$box-shadow-xs: 0 1px 2px rgba(15, 19, 24, 0.06);
+$box-shadow: 0 1px 3px rgba(15, 19, 24, 0.08), 0 1px 2px rgba(15, 19, 24, 0.04);
+$box-shadow-md: 0 4px 8px -2px rgba(15, 19, 24, 0.1), 0 2px 4px -2px rgba(15, 19, 24, 0.06);
+$box-shadow-lg: 0 12px 20px -6px rgba(15, 19, 24, 0.12), 0 4px 8px -4px rgba(15, 19, 24, 0.08);
+$box-shadow-xl: 0 24px 40px -12px rgba(15, 19, 24, 0.18), 0 8px 16px -8px rgba(15, 19, 24, 0.1);

@@ -2,13 +2,14 @@
 {% assign synapspec = record.tools | where: "id", "synapspec" | first %}
 {% assign diann = record.tools | where: "id", "diann" | first %}
 {% assign spectronaut = record.tools | where: "id", "spectronaut" | first %}
+{% assign scatter = site.data.benchmark_comparison_scatter | where: "ledger_slug", page.slug | first %}
 <div class="container">
 
   <div class="breadcrumbs">
     <a href="{{ '/benchmarks/' | relative_url }}">&larr; Benchmarks</a> / Archived comparison
   </div>
 
-  <div class="section-header">
+  <div class="page-header">
     <h1>{{ record.name }}</h1>
     <p class="section-subtitle">Three archived reports, the same six input files. A and B each contain three replicate runs.</p>
   </div>
@@ -43,6 +44,69 @@
     </div>
     <p class="bench-axis-note" style="text-align: left;">CV uses sample standard deviation / mean within one condition, only for precursors with positive finite MS2 quantities in all three replicates. Each tool has its own eligible population. Missing observations are not imputed.</p>
   </section>
+
+  {% if scatter %}
+  {% assign sc_tools = scatter.tools %}
+  {% assign eps_sorted = sc_tools | map: "median_epsilon" | sort %}
+  {% assign depth_sorted = sc_tools | map: "precursors" | sort %}
+  {% assign max_eps = eps_sorted | last %}
+  {% assign x_max = max_eps | times: 1.15 %}
+  {% assign min_depth = depth_sorted | first %}
+  {% assign max_depth = depth_sorted | last %}
+  {% assign y_min = min_depth | divided_by: 20000 | times: 20000 %}
+  {% assign max_depth_pad = max_depth | plus: 19999 %}
+  {% assign y_max = max_depth_pad | divided_by: 20000 | times: 20000 %}
+  {% assign y_range = y_max | minus: y_min %}
+  {% assign y_steps = y_range | divided_by: 20000 %}
+  {% assign x_steps = 4 %}
+
+  <section class="py-lg bench-border-t">
+    <h2>Accuracy vs. depth</h2>
+    <p class="bench-axis-note" style="text-align: left;">
+      Same layout as ProteoBench&rsquo;s LFQ accuracy modules (proteobench.org): each point is one tool&rsquo;s
+      full run on these six files, not one point per precursor. Horizontal position is the median absolute
+      error between measured and expected log&#8322; fold change across the three species (species-weighted,
+      lower is more accurate); vertical position is how many precursor ions that run identified. Up and to the
+      left is more precursors identified with less error &mdash; neither axis alone ranks a tool.
+    </p>
+    <div class="bench-scatter-chart-wrap">
+      <svg viewBox="0 0 640 300" class="bench-scatter-svg" role="img" aria-label="{{ record.name }}: {{ sc_tools.size }} tools plotted by median absolute log2 fold-change error against precursor ions identified. Exact values are in the table below.">
+        {% for i in (0..y_steps) %}
+          {% assign tick_offset = i | times: 20000 %}
+          {% assign tick = tick_offset | plus: y_min %}
+          {% assign tick_scaled = tick_offset | times: 210 | divided_by: y_range %}
+          {% assign tick_y = 230 | minus: tick_scaled %}
+          <line x1="70" x2="620" y1="{{ tick_y }}" y2="{{ tick_y }}" class="bench-scatter-gridline" />
+          <text x="60" y="{{ tick_y | plus: 4 }}" text-anchor="end" class="bench-scatter-ticklabel">{{ tick | divided_by: 1000 }}k</text>
+        {% endfor %}
+
+        {% for i in (0..x_steps) %}
+          {% assign tick_val = x_max | times: i | divided_by: x_steps %}
+          {% assign tick_frac = tick_val | divided_by: x_max %}
+          {% assign tick_x = tick_frac | times: 550 | plus: 70 %}
+          <line x1="{{ tick_x }}" x2="{{ tick_x }}" y1="20" y2="230" class="bench-scatter-gridline" />
+          <text x="{{ tick_x }}" y="248" text-anchor="middle" class="bench-scatter-ticklabel">{{ tick_val | round: 2 }}</text>
+        {% endfor %}
+
+        {% for tool in sc_tools %}
+          {% assign x_frac = tool.median_epsilon | divided_by: x_max %}
+          {% assign x = x_frac | times: 550 | plus: 70 %}
+          {% assign vfrac = tool.precursors | minus: y_min %}
+          {% assign v_scaled = vfrac | times: 210 | divided_by: y_range %}
+          {% assign y = 230 | minus: v_scaled %}
+          <circle cx="{{ x }}" cy="{{ y }}" r="7" class="bench-scatter-dot bench-scatter-dot-{{ tool.id }}"><title>{{ tool.label }}: {{ tool.precursors }} precursors, median |error| {{ tool.median_epsilon }}</title></circle>
+        {% endfor %}
+
+        <text x="345" y="278" text-anchor="middle" class="bench-scatter-axis-title">Median absolute log&#8322; fold-change error (species-weighted)</text>
+      </svg>
+    </div>
+    <ul class="bench-scatter-legend">
+      {% for tool in sc_tools %}
+      <li><span class="bench-scatter-legend-swatch bench-scatter-dot-{{ tool.id }}"></span>{{ tool.label }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
 
   <section class="py-lg bench-border-t">
     <h2>Identification, repeatability and LFQ ratios</h2>

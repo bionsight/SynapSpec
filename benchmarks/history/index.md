@@ -31,7 +31,7 @@ sitemap: false
     <a href="{{ '/benchmarks/' | relative_url }}">&larr; Benchmarks</a> / Dataset history
   </div>
 
-  <div class="section-header">
+  <div class="page-header">
     <h1>LFQBench <span class="bench-muted">/ Orbitrap Astral</span></h1>
     <p class="section-subtitle">{{ bm.coverage.run_count }} archived runs from {{ bm.coverage.date_from }} to {{ bm.coverage.date_to }}. Same dataset, different engine runs; these are not verified release versions.</p>
     <p class="section-subtitle"><a href="{{ '/benchmarks/' | append: recorded_run_slug | append: '/' | relative_url }}" class="bench-link">View the separately imported 7 September run</a></p>
@@ -51,8 +51,6 @@ sitemap: false
           <text x="55" y="{{ tick_label_y }}" text-anchor="end" class="bench-history-ticklabel">{{ tick | divided_by: 1000 }}k</text>
         {% endfor %}
 
-        <polyline class="bench-history-line" points="{% for run in runs_asc %}{% assign e = run.date | date: '%s' %}{% assign dx = e | minus: first_epoch %}{% assign dx_scaled = dx | times: 910 | divided_by: day_span %}{% assign x = 65 | plus: dx_scaled %}{% assign vfrac = run.total_precursors | minus: minimum %}{% assign v_scaled = vfrac | times: 190 | divided_by: span_range %}{% assign y = 225 | minus: v_scaled %}{{ x }},{{ y }} {% endfor %}" />
-
         {% for run in runs_asc %}
           {% assign e = run.date | date: '%s' %}
           {% assign dx = e | minus: first_epoch %}
@@ -61,7 +59,7 @@ sitemap: false
           {% assign vfrac = run.total_precursors | minus: minimum %}
           {% assign v_scaled = vfrac | times: 190 | divided_by: span_range %}
           {% assign y = 225 | minus: v_scaled %}
-          <circle cx="{{ x }}" cy="{{ y }}" r="4" class="bench-history-dot"><title>{{ run.date }}: {{ run.total_precursors_display }} precursors</title></circle>
+          <circle cx="{{ x }}" cy="{{ y }}" r="5" class="bench-history-dot"><title>{{ run.date }}: {{ run.total_precursors_display }} precursors</title></circle>
         {% endfor %}
 
         <text x="65" y="255" class="bench-history-ticklabel">{{ first_run.date }}</text>

@@ -4,116 +4,67 @@ title: "Download SynapSpec"
 description: "Download the latest version of SynapSpec for your platform"
 ---
 
+{% assign dl = site.data.releases.synapspec.downloads %}
+
 <div class="container">
+  <div class="page-header">
+    <h1>Download SynapSpec</h1>
+  </div>
 
-    <h1 class="section-header">Download SynapSpec</h1>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Compatibility</th>
+          <th>Build</th>
+          <th>File</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th rowspan="2">Windows</th>
+          <td rowspan="2">Compatible with Windows 10/11</td>
+          <td>GPU</td>
+          <td class="file-name">SynapSpec-windows-{{ site.data.releases.synapspec.version }}.zip</td>
+          <td class="col-action"><a href="{{ dl.windows_gpu }}" class="btn btn-small">Download</a></td>
+        </tr>
+        <tr>
+          <td>CPU</td>
+          <td class="file-name">SynapSpec-windows-cpu-{{ site.data.releases.synapspec.version }}.zip</td>
+          <td class="col-action"><a href="{{ dl.windows_cpu }}" class="btn btn-small btn-outline">Download</a></td>
+        </tr>
+        <tr>
+          <th rowspan="2">Linux</th>
+          <td rowspan="2">Compatible with most Linux distributions</td>
+          <td>GPU</td>
+          <td class="file-name">SynapSpec-linux-{{ site.data.releases.synapspec.version }}.tar.gz</td>
+          <td class="col-action"><a href="{{ dl.linux_gpu }}" class="btn btn-small">Download</a></td>
+        </tr>
+        <tr>
+          <td>CPU</td>
+          <td class="file-name">SynapSpec-linux-cpu-{{ site.data.releases.synapspec.version }}.tar.gz</td>
+          <td class="col-action"><a href="{{ dl.linux_cpu }}" class="btn btn-small btn-outline">Download</a></td>
+        </tr>
+        <tr>
+          <th>macOS</th>
+          <td>Compatible with macOS 10.14+</td>
+          <td>—</td>
+          <td class="file-name">SynapSpec-macos-{{ site.data.releases.synapspec.version }}.dmg</td>
+          <td class="col-action"><a href="{{ dl.macos }}" class="btn btn-small">Download</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <section class="py-lg">
-        <div class="services-grid">
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fab fa-windows"></i>
-                    </div>
-                    <h3>Windows</h3>
-                </div>
-                <div class="card-content">
-                    <p>Compatible with Windows 10/11</p>
-                    <div style="display: flex; gap: 10px; flex-direction: row;">
-                        <a href="{{ site.data.releases.synapspec.downloads.windows_gpu }}" class="btn btn-large" style="flex: 1;">
-                            <i class="fas fa-microchip"></i> GPU
-                        </a>
-                        <a href="{{ site.data.releases.synapspec.downloads.windows_cpu }}" class="btn btn-large btn-outline" style="flex: 1;">
-                            <i class="fas fa-desktop"></i> CPU
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fab fa-linux"></i>
-                    </div>
-                    <h3>Linux</h3>
-                </div>
-                <div class="card-content">
-                    <p>Compatible with most Linux distributions</p>
-                    <div style="display: flex; gap: 10px; flex-direction: row;">
-                        <a href="{{ site.data.releases.synapspec.downloads.linux_gpu }}" class="btn btn-large" style="flex: 1;">
-                            <i class="fas fa-microchip"></i> GPU
-                        </a>
-                        <a href="{{ site.data.releases.synapspec.downloads.linux_cpu }}" class="btn btn-large btn-outline" style="flex: 1;">
-                            <i class="fas fa-desktop"></i> CPU
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fab fa-apple"></i>
-                    </div>
-                    <h3>macOS</h3>
-                </div>
-                <div class="card-content">
-                    <p>Compatible with macOS 10.14+</p>
-                    <a href="{{ site.data.releases.synapspec.downloads.macos }}" class="btn btn-large">Download for macOS</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center mt-lg">
-            <a href="https://docs.synapspec.ai/installation/" class="btn btn-large btn-outline" target="_blank" rel="noopener">
-                <i class="fas fa-book"></i> View Installation Guide
-            </a>
-        </div>
-    </section>
-
-    <section class="py-xl highlight-section">
+  <section class="block-plain highlight-section">
     <div class="section-header">
       <h2>System Requirements</h2>
     </div>
-
-    <div class="requirements-grid">
-      <div class="requirement-item">
-        <h4><i class="fas fa-desktop"></i> Operating System</h4>
-        <p><strong>Windows:</strong> Windows 10, 11, or Server 2016/2019/2022 (64-bit)<br>
-        <strong>macOS:</strong> macOS 10.14 or higher<br>
-        <strong>Linux:</strong> Ubuntu 20.04 LTS or higher</p>
-      </div>
-
-      <div class="requirement-item">
-        <h4><i class="fas fa-microchip"></i> Processor</h4>
-        <p><strong>Minimum:</strong> 4 cores<br>
-        <strong>Recommended:</strong> Intel or AMD CPU with 16 cores or more</p>
-      </div>
-
-      <div class="requirement-item">
-        <h4><i class="fas fa-memory"></i> Memory</h4>
-        <p><strong>Minimum:</strong> 16 GB RAM<br>
-        <strong>Recommended:</strong> 32 GB RAM or more<br>
-        <em>Note: 4 GB RAM per thread for optimal performance</em></p>
-      </div>
-
-      <div class="requirement-item">
-        <h4><i class="fas fa-hdd"></i> Storage</h4>
-        <p><strong>Installation:</strong> 3 GB available disk space<br>
-        <strong>Data Processing:</strong> 2 TB or more (2x dataset size recommended)<br>
-        <strong>Recommended:</strong> SSD for improved processing speed</p>
-      </div>
-
-      <div class="requirement-item">
-        <h4><i class="fas fa-code"></i> Software Dependencies</h4>
-        <p>
-        .NET 8.0 or higher <br>
-        Mono
-        </p>
-      </div>
-
+    {% include requirements.html %}
+    <div class="mt-lg">
+      <a href="https://docs.synapspec.ai/installation/" class="btn btn-outline btn-large" target="_blank" rel="noopener">View Installation Guide</a>
     </div>
   </section>
-
 </div>

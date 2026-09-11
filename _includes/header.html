@@ -1,22 +1,45 @@
 <header class="site-header">
-  <div class="container">
-    <div class="header-content">
-      <a href="{{ '/' | relative_url }}" class="logo">
-        <img src="{{ '/assets/images/favicon.png' | relative_url }}" alt="SynapSpec Icon" style="height: 40px; margin-right: 12px; vertical-align: middle;">
-        <span style="color: #0B2F52;">Synap</span>Spec
-      </a>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" hidden>
+  <div class="container header-content">
+    <a href="{{ '/' | relative_url }}" class="logo" aria-label="SynapSpec home">
+      <img src="{{ '/assets/images/favicon.png' | relative_url }}" alt="" width="460" height="539">
+      <span><b>Synap</b>Spec</span>
+    </a>
 
-      <nav class="nav-menu">
-        {% for item in site.navigation %}
-          {% if item.external %}
-            <a href="{{ item.url }}" class="external" target="_blank" rel="noopener">{{ item.name }}</a>
-          {% else %}
-            <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>
-              {{ item.name }}
-            </a>
-          {% endif %}
-        {% endfor %}
-      </nav>
-    </div>
+    <nav class="nav-menu" aria-label="Main navigation">
+      {% for item in site.navigation %}
+        {% if item.external %}
+          <a href="{{ item.url }}" class="external" target="_blank" rel="noopener">{{ item.name }}</a>
+        {% else %}
+          <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>{{ item.name }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <span class="header-spacer"></span>
+    <span class="header-version">v{{ site.data.releases.synapspec.version }}</span>
+    <a href="{{ '/download/' | relative_url }}" class="btn btn-small">Download</a>
+
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Menu">
+      <svg class="icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </label>
   </div>
+
+  <nav class="mobile-nav" aria-label="Main navigation">
+    <div class="container">
+      <ul class="mobile-nav-list">
+        {% for item in site.navigation %}
+          <li>
+            {% if item.external %}
+              <a href="{{ item.url }}" class="external" target="_blank" rel="noopener">{{ item.name }}</a>
+            {% else %}
+              <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>{{ item.name }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+        <li class="header-version">v{{ site.data.releases.synapspec.version }}</li>
+      </ul>
+    </div>
+  </nav>
 </header>

@@ -1,0 +1,81 @@
+<!-- 쿠키 동의 배너. include.product 로 SynapSpec/SpectraLens 문구를 가른다
+     (기본값 synapspec). CookieConsent.tsx 를 그대로 옮긴 것 — GA 는 synapspec 에서만,
+     Mixpanel 은 둘 다에서 불러온다. -->
+{% assign product = include.product | default: "synapspec" %}
+<section class="cookie-consent" id="cookie-consent-banner" aria-label="Cookie and privacy consent">
+  <div class="container cookie-consent-content">
+    <div class="cookie-consent-text">
+      {% if product == "synapspec" %}
+        <h2>🍪 Cookie &amp; Privacy Consent</h2>
+        <p>
+          We use Google Analytics and Mixpanel to collect anonymized usage statistics. You can accept or
+          decline analytics cookies. <a href="{{ '/privacy/' | relative_url }}">Privacy Policy</a>
+        </p>
+      {% else %}
+        <h2>Cookie &amp; Privacy Consent</h2>
+        <p>We collect anonymized usage statistics to improve this website. You can accept or decline analytics cookies.</p>
+      {% endif %}
+    </div>
+    <div class="cookie-consent-actions">
+      <button class="cookie-consent-accept" type="button" onclick="acceptCookies()">Accept All</button>
+      <button class="cookie-consent-decline" type="button" onclick="declineCookies()">Decline</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const GA_MEASUREMENT_ID = 'G-94DZ0M7QBZ';
+  const COOKIE_CONSENT_PRODUCT = '{{ product }}';
+
+  window.addEventListener('load', function() {
+    const consent = localStorage.getItem('cookieConsent');
+
+    if (consent === 'accepted') {
+      loadConsentedAnalytics();
+    } else if (consent === null) {
+      setTimeout(showCookieBanner, 800);
+    }
+  });
+
+  function showCookieBanner() {
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.classList.add('show');
+  }
+
+  function hideCookieBanner() {
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.classList.remove('show');
+  }
+
+  function loadConsentedAnalytics() {
+    if (COOKIE_CONSENT_PRODUCT === 'synapspec') loadGoogleAnalytics();
+    if (typeof loadMixpanelAnalytics === 'function') loadMixpanelAnalytics();
+  }
+
+  function loadGoogleAnalytics() {
+    if (window.gaLoaded) return;
+    window.gaLoaded = true;
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  function acceptCookies() {
+    localStorage.setItem('cookieConsent', 'accepted');
+    hideCookieBanner();
+    loadConsentedAnalytics();
+  }
+
+  function declineCookies() {
+    localStorage.setItem('cookieConsent', 'declined');
+    hideCookieBanner();
+  }
+</script>

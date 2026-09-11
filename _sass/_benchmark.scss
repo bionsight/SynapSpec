@@ -62,7 +62,7 @@
   top: -7px;
   height: 18px;
   border-radius: 9px;
-  background: rgba(87, 185, 202, 0.18);
+  background: rgba(16, 106, 158, 0.18);
 }
 
 // Known correct answer
@@ -93,7 +93,7 @@
   margin: -7px 0 0 -7px;
   border-radius: 50%;
   background: $primary-color;
-  box-shadow: 0 0 0 3px $background-color, 0 2px 8px rgba(87, 185, 202, 0.5);
+  box-shadow: 0 0 0 3px $background-color, 0 2px 8px rgba(16, 106, 158, 0.5);
 }
 
 .bench-value-label {
@@ -247,8 +247,8 @@
 // ── Tables ──────────────────────────────────────────────────
 
 .bench-table-wrap {
-  max-width: 900px;
-  margin: 0 auto;
+  // 900px 로 좁혀 놨던 것 — 바로 위 .bench-header-split(제목+링크 줄)은 컨테이너
+  // 전체 폭을 쓰는데 표만 좁아서 리더보드 등에서 어긋나 보였다. 컨테이너 폭 그대로 쓴다.
   overflow-x: auto;
 }
 
@@ -295,7 +295,7 @@
   color: $text-color-lightest;
 
   &.is-on {
-    background: rgba(87, 185, 202, 0.15);
+    background: rgba(16, 106, 158, 0.15);
     color: $primary-color-darker;
     font-weight: 500;
   }
@@ -345,8 +345,8 @@
 }
 
 .bench-callout {
-  max-width: 900px;
-  margin: $spacing-md auto 0;
+  // .bench-table-wrap 과 같은 문제 — 900px 로 좁혀 놨던 걸 컨테이너 폭 그대로 쓰게 뺐다.
+  margin-top: $spacing-md;
   padding: $spacing-md;
   border: 1px solid $border-color;
   border-radius: $border-radius;
@@ -671,7 +671,7 @@
 }
 
 .bench-ratio-band {
-  fill: rgba(87, 185, 202, 0.18);
+  fill: rgba(16, 106, 158, 0.18);
   stroke: $primary-color-dark;
 }
 
@@ -769,12 +769,107 @@
   font-size: 12px;
 }
 
-.bench-history-line {
-  fill: none;
-  stroke: $primary-color-dark;
-  stroke-width: 2;
-}
-
+// 산점도 버전 — 날짜를 잇는 선 없이 점만 찍는다. 점 사이가 가까울 때도
+// 구분되도록 흰 테두리와 약간의 투명도를 준다.
 .bench-history-dot {
   fill: $primary-color-dark;
+  fill-opacity: 0.85;
+  stroke: $background-color;
+  stroke-width: 1.5;
+}
+
+// ── Accuracy-vs-depth scatter (ProteoBench 참고) ───────────────
+// proteobench.org 의 LFQ 정확도 모듈과 같은 축: 가로 = 정확도 오차, 세로 = 깊이.
+// 점 하나 = 도구 하나. 색은 Okabe-Ito 색맹 안전 팔레트를 도구별로 고정 배정한다.
+
+.bench-scatter-chart-wrap {
+  overflow-x: auto;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+}
+
+.bench-scatter-svg {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+}
+
+.bench-scatter-gridline {
+  stroke: $border-color;
+}
+
+.bench-scatter-ticklabel {
+  fill: $text-color-lightest;
+  font-size: 12px;
+}
+
+.bench-scatter-axis-title {
+  fill: $text-color-lighter;
+  font-size: 12px;
+}
+
+.bench-scatter-dot {
+  stroke: $background-color;
+  stroke-width: 2;
+  fill-opacity: 0.9;
+
+  &-synapspec { fill: $viz-1; }
+  &-diann { fill: $viz-2; }
+  &-spectronaut { fill: $viz-3; }
+}
+
+.bench-scatter-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin: $spacing-sm 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: $font-size-small;
+  color: $text-color-light;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+}
+
+.bench-scatter-legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  // <span> 는 SVG 가 아니라 fill 이 안 먹는다 — 배경색으로 같은 팔레트를 다시 준다.
+  &.bench-scatter-dot-synapspec { background: $viz-1; }
+  &.bench-scatter-dot-diann { background: $viz-2; }
+  &.bench-scatter-dot-spectronaut { background: $viz-3; }
+}
+
+// ── Leaderboard ─────────────────────────────────────────────
+// 메달 색 대신 브랜드 톤 3단계로 순위를 표시한다 — 토큰 밖 색을 새로 안 만든다.
+
+.bench-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $background-color;
+  background: $ink-300;
+
+  &-1 { background: $primary-color; }
+  &-2 { background: $ink-400; }
+}
+
+.bench-leaderboard-lead {
+  background: $bg-secondary;
+
+  th { font-weight: 700; }
 }

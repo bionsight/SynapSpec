@@ -8,106 +8,83 @@ analytics_page_type: "landing_page"
 
 {% assign product = site.data.spectralens %}
 
-<section class="spectralens-hero">
-  <div class="container spectralens-hero-grid">
-    <div class="spectralens-hero-copy">
-      <div class="spectralens-kicker">
-        <span>DIA peak inspection</span>
-      </div>
+<section class="hero">
+  <div class="container hero-grid hero-grid-even">
+    <div>
+      <p class="eyebrow">DIA peak inspection</p>
       <h1>{{ product.name }}</h1>
-      <p class="spectralens-lede">
-        {{ product.tagline }}.
+      <p class="hero-subtitle">{{ product.tagline }}.</p>
+      <p class="hero-subtitle">
+        SpectraLens is built for the moment when you do not want to run a full DIA pipeline. Load raw
+        files, enter the precursor you care about, and quickly inspect the MS1/MS2 peak evidence.
       </p>
-      <p class="spectralens-hero-text">
-        SpectraLens is built for the moment when you do not want to run a full DIA pipeline.
-        Load raw files, enter the precursor you care about, and quickly inspect the MS1/MS2 peak evidence.
-      </p>
-      <div class="spectralens-actions">
-        <a href="{{ product.release_url }}" class="btn btn-large" target="_blank" rel="noopener">
-          <i class="fas fa-download"></i> Download Latest
-        </a>
-        <a href="#docs" class="btn btn-large btn-outline">
-          <i class="fas fa-book-open"></i> Read Docs
-        </a>
+      <div class="hero-actions btn-group">
+        <a href="{{ product.release_url }}" class="btn btn-large" target="_blank" rel="noopener">Download Latest</a>
+        <a href="#docs" class="btn btn-large btn-outline">Read Docs</a>
       </div>
     </div>
-
-    <div class="spectralens-visual spectralens-screenshot-frame" aria-label="SpectraLens application preview">
-      <img
-        src="{{ '/assets/images/spectralens/spectralens_window.png' | relative_url }}"
-        alt="SpectraLens desktop application showing precursor selection and XIC peak plots"
-      >
-    </div>
+    <img src="{{ '/assets/images/spectralens/spectralens_window.png' | relative_url }}" alt="SpectraLens desktop application showing precursor selection and XIC peak plots">
   </div>
 </section>
 
-<section class="spectralens-band spectralens-summary-band">
-  <div class="container spectralens-highlight-grid">
+<section class="stat-band">
+  <div class="container stat-band-grid">
     {% for item in product.highlights %}
-    <div class="spectralens-highlight">
-      <span>{{ item.label }}</span>
-      <strong>{{ item.value }}</strong>
+    <div>
+      <span class="stat-label stat-label-first">{{ item.label }}</span>
+      <strong class="stat-value">{{ item.value }}</strong>
     </div>
     {% endfor %}
   </div>
 </section>
 
-<section id="features" class="spectralens-section">
-  <div class="container">
-    <div class="spectralens-section-header">
-      <span>Why it exists</span>
+<div class="container">
+  <section id="features" class="block">
+    <p class="eyebrow">Why it exists</p>
+    <div class="section-header">
       <h2>Fast answers before a full analysis run</h2>
-      <p>
-        SpectraLens is for targeted visual confirmation: a few precursors, selected raw files,
-        and immediate chromatographic evidence without waiting for a full DIA analysis workflow.
+      <p class="section-subtitle">
+        SpectraLens is for targeted visual confirmation: a few precursors, selected raw files, and
+        immediate chromatographic evidence without waiting for a full DIA analysis workflow.
       </p>
     </div>
-
-    <div class="spectralens-feature-grid">
+    <div class="services-grid">
       {% for feature in product.features %}
-      <article class="spectralens-feature">
-        <div class="spectralens-feature-icon">
-          <i class="{{ feature.icon }}"></i>
-        </div>
+      <article class="card">
         <h3>{{ feature.title }}</h3>
         <p>{{ feature.text }}</p>
       </article>
       {% endfor %}
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="workflow" class="spectralens-band">
-  <div class="container">
-    <div class="spectralens-section-header">
-      <span>Workflow</span>
+  <section id="workflow" class="block">
+    <p class="eyebrow">Workflow</p>
+    <div class="section-header">
       <h2>From raw file to peak evidence</h2>
     </div>
-
-    <div class="spectralens-workflow">
+    <ol class="spectralens-workflow">
       {% for step in product.workflow %}
-      <article>
-        <div class="spectralens-step-number">{{ forloop.index }}</div>
+      <li>
+        <span class="spectralens-workflow-number">{{ forloop.index }}</span>
         <h3>{{ step.title }}</h3>
         <p>{{ step.text }}</p>
-      </article>
+      </li>
       {% endfor %}
-    </div>
-  </div>
-</section>
+    </ol>
+  </section>
 
-<section id="docs" class="spectralens-section spectralens-docs">
-  <div class="container">
-    <div class="spectralens-section-header">
-      <span>Docs</span>
+  <section id="docs" class="block">
+    <p class="eyebrow">Docs</p>
+    <div class="section-header">
       <h2>Install and use SpectraLens</h2>
-      <p>
+      <p class="section-subtitle">
         This page keeps the working notes and user docs together because SpectraLens has a focused surface area.
       </p>
     </div>
 
     <div class="spectralens-doc-layout">
-      <aside class="spectralens-doc-nav" aria-label="SpectraLens documentation sections">
+      <nav class="spectralens-doc-nav" aria-label="SpectraLens documentation sections">
         <a href="#download">Download</a>
         <a href="#troubleshooting">Troubleshooting</a>
         <a href="#quick-start">Quick start</a>
@@ -115,25 +92,23 @@ analytics_page_type: "landing_page"
         <a href="#settings">Settings</a>
         <a href="#outputs">Outputs</a>
         <a href="#support">Support</a>
-      </aside>
+      </nav>
 
-      <div class="spectralens-doc-content">
+      <article class="spectralens-doc-content">
         <section id="download">
           <h3>Download</h3>
           <p>
-            SpectraLens is distributed as a desktop application for macOS and Windows.
-            Download the binary for your platform, launch it locally, and create a workspace to inspect DIA precursor peaks.
+            SpectraLens is distributed as a desktop application for macOS and Windows. Download the
+            binary for your platform, launch it locally, and create a workspace to inspect DIA precursor peaks.
           </p>
           <div class="spectralens-download-grid">
-            <a href="{{ product.download.macos_url }}" class="spectralens-download" target="_blank" rel="noopener">
-              <i class="fab fa-apple"></i>
-              <span>macOS</span>
-              <strong>Desktop app</strong>
+            <a href="{{ product.download.macos_url }}" class="card" target="_blank" rel="noopener">
+              <span class="spectralens-download-platform">macOS</span>
+              <span>Desktop app</span>
             </a>
-            <a href="{{ product.download.windows_url }}" class="spectralens-download" target="_blank" rel="noopener">
-              <i class="fab fa-windows"></i>
-              <span>Windows</span>
-              <strong>Desktop app</strong>
+            <a href="{{ product.download.windows_url }}" class="card" target="_blank" rel="noopener">
+              <span class="spectralens-download-platform">Windows</span>
+              <span>Desktop app</span>
             </a>
           </div>
         </section>
@@ -154,9 +129,7 @@ analytics_page_type: "landing_page"
               developer, then click <strong>Open Anyway</strong>.
             </li>
           </ol>
-          <p>
-            After approving the app, open SpectraLens again from Finder or Launchpad.
-          </p>
+          <p>After approving the app, open SpectraLens again from Finder or Launchpad.</p>
         </section>
 
         <section id="quick-start">
@@ -169,7 +142,7 @@ analytics_page_type: "landing_page"
           <div class="spectralens-guide">
             <article class="spectralens-guide-step">
               <div class="spectralens-guide-copy">
-                <span>Step 1</span>
+                <span class="caps-label">Step 1</span>
                 <h4>Add raw files</h4>
                 <p>
                   Open the Raw Files panel, click <strong>Add files</strong>, and choose the raw files you want
@@ -178,36 +151,26 @@ analytics_page_type: "landing_page"
                 </p>
               </div>
               <figure>
-                <img
-                  src="{{ '/assets/images/spectralens/select_raw_files.png' | relative_url }}"
-                  alt="SpectraLens Raw Files panel with two raw files listed and selected"
-                  loading="lazy"
-                >
+                <img src="{{ '/assets/images/spectralens/select_raw_files.png' | relative_url }}" alt="SpectraLens Raw Files panel with two raw files listed and selected" loading="lazy">
                 <figcaption>Add raw files, then select the files to use for analysis.</figcaption>
               </figure>
             </article>
 
             <article class="spectralens-guide-step">
               <div class="spectralens-guide-copy">
-                <span>Step 2</span>
+                <span class="caps-label">Step 2</span>
                 <h4>Open the precursor input dialog</h4>
-                <p>
-                  Click <strong>Add precursors</strong> below the precursor list to open the sequence input dialog.
-                </p>
+                <p>Click <strong>Add precursors</strong> below the precursor list to open the sequence input dialog.</p>
               </div>
               <figure>
-                <img
-                  src="{{ '/assets/images/spectralens/add_sequences.png' | relative_url }}"
-                  alt="SpectraLens Add Precursors dialog opened over the precursor list"
-                  loading="lazy"
-                >
+                <img src="{{ '/assets/images/spectralens/add_sequences.png' | relative_url }}" alt="SpectraLens Add Precursors dialog opened over the precursor list" loading="lazy">
                 <figcaption>Use Add precursors to open the sequence input dialog.</figcaption>
               </figure>
             </article>
 
             <article class="spectralens-guide-step">
               <div class="spectralens-guide-copy">
-                <span>Step 3</span>
+                <span class="caps-label">Step 3</span>
                 <h4>Enter target sequences</h4>
                 <p>
                   Add the sequence or precursor you want to check, then click <strong>Add</strong>. Use UniMod
@@ -216,18 +179,14 @@ analytics_page_type: "landing_page"
                 </p>
               </div>
               <figure>
-                <img
-                  src="{{ '/assets/images/spectralens/fill_sequences.png' | relative_url }}"
-                  alt="SpectraLens Add Precursors dialog with three target sequences entered"
-                  loading="lazy"
-                >
+                <img src="{{ '/assets/images/spectralens/fill_sequences.png' | relative_url }}" alt="SpectraLens Add Precursors dialog with three target sequences entered" loading="lazy">
                 <figcaption>Enter one or more target sequences, then add them to the precursor list.</figcaption>
               </figure>
             </article>
 
             <article class="spectralens-guide-step">
               <div class="spectralens-guide-copy">
-                <span>Step 4</span>
+                <span class="caps-label">Step 4</span>
                 <h4>Select precursors and run</h4>
                 <p>
                   Select the sequence rows you want to analyze. Anchor precursors are used for RT-iRT mapping.
@@ -238,11 +197,7 @@ analytics_page_type: "landing_page"
                 </p>
               </div>
               <figure>
-                <img
-                  src="{{ '/assets/images/spectralens/select_seqs_settings.png' | relative_url }}"
-                  alt="SpectraLens setup with every raw file and precursor selected, ready to analyze"
-                  loading="lazy"
-                >
+                <img src="{{ '/assets/images/spectralens/select_seqs_settings.png' | relative_url }}" alt="SpectraLens setup with every raw file and precursor selected, ready to analyze" loading="lazy">
                 <figcaption>Select target sequences, review settings, and run Analyze.</figcaption>
               </figure>
             </article>
@@ -264,14 +219,14 @@ PEPTIDES(UniMod:21)EQ,PEPTIDEM(UniMod:35)SEQ</code></pre>
 
         <section id="settings">
           <h3>Settings reference</h3>
-          <div class="spectralens-settings-list">
+          <dl class="spectralens-settings-list">
             {% for setting in product.settings %}
             <div>
-              <strong>{{ setting.name }}</strong>
-              <span>{{ setting.value }}</span>
+              <dt>{{ setting.name }}</dt>
+              <dd>{{ setting.value }}</dd>
             </div>
             {% endfor %}
-          </div>
+          </dl>
         </section>
 
         <section id="outputs">
@@ -285,9 +240,7 @@ PEPTIDES(UniMod:21)EQ,PEPTIDEM(UniMod:35)SEQ</code></pre>
 
         <section id="support">
           <h3>Support &amp; community</h3>
-          <p>
-            SpectraLens uses GitHub Discussions and Issues for community support, bug reports, and feature ideas.
-          </p>
+          <p>SpectraLens uses GitHub Discussions and Issues for community support, bug reports, and feature ideas.</p>
           <ul>
             <li>
               <strong>Questions and usage help:</strong>
@@ -304,7 +257,7 @@ PEPTIDES(UniMod:21)EQ,PEPTIDEM(UniMod:35)SEQ</code></pre>
             </li>
           </ul>
         </section>
-      </div>
+      </article>
     </div>
-  </div>
-</section>
+  </section>
+</div>

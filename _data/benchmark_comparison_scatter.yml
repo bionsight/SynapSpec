@@ -1,0 +1,39 @@
+# ProteoBench 스타일 정확도-깊이 산점도용 파생 데이터.
+# https://proteobench.org 의 LFQ 정확도 모듈이 쓰는 지표를 그대로 따른다: 가로축은
+# median(|측정 log2FC − 기대 log2FC|) (species-weighted), 세로축은 정량된 precursor 수.
+# 점 하나 = 도구 하나의 제출 결과 하나. ProteoBench 웹앱(Quant_LFQ_DDA_ion_Astral)에서
+# 확인한 것과 같은 축 정의다.
+#
+# _data/benchmark_comparisons.json 의 tools[].ratios[] 에서 계산했다:
+#   median_epsilon = median(|ratio.median − ratio.target}| for ratio in tools[].ratios)
+#   precursors = tools[].precursors 그대로
+# 세 종(species) 중 가운데 값을 쓰므로 median-of-3 이다. 소스 JSON 이 바뀌면
+# (예: fetch_benchmarks.py 재실행이 아니라 손검증 스냅샷이 갱신되는 경우) 다시 계산해야 한다.
+- ledger_slug: "lfqbench-202409-archived"
+  tools:
+    - id: "synapspec"
+      label: "SynapSpec"
+      median_epsilon: 0.1846
+      precursors: 81559
+    - id: "diann"
+      label: "DIA-NN"
+      median_epsilon: 0.1757
+      precursors: 108447
+    - id: "spectronaut"
+      label: "Spectronaut"
+      median_epsilon: 0.3294
+      precursors: 104099
+- ledger_slug: "lfqbench-202502-archived"
+  tools:
+    - id: "synapspec"
+      label: "SynapSpec"
+      median_epsilon: 0.0540
+      precursors: 261946
+    - id: "diann"
+      label: "DIA-NN"
+      median_epsilon: 0.1065
+      precursors: 289626
+    - id: "spectronaut"
+      label: "Spectronaut"
+      median_epsilon: 0.0409
+      precursors: 300293

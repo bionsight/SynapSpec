@@ -1,135 +1,354 @@
-
 @import "variables";
 
-// Button styles
+// Buttons — src/ui.ts 의 button() 을 그대로 옮긴 것. primary/secondary/ghost × sm/md/lg.
 .btn {
-  display: inline-block;
-  padding: $spacing-sm $spacing-md;
-  background-color: $primary-color;
-  color: white;
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 36px;
+  padding: 0 1rem;
+  border: 1px solid transparent;
   border-radius: $border-radius;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
   font-family: $body-font;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  background-color: $brand-600;
+  color: $ink-0;
 
   &:hover {
-    background-color: $primary-color-dark;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: $box-shadow;
+    background-color: $brand-700;
+    color: $ink-0;
+  }
+
+  &:active {
+    background-color: $brand-800;
   }
 
   &.btn-large {
-    padding: $spacing-md $spacing-lg;
-    font-size: 1.1rem;
+    height: 44px;
+    padding: 0 1.5rem;
+    font-size: 1rem;
   }
 
+  &.btn-small {
+    height: 28px;
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  // 옛 accent 변형은 primary 와 같은 값으로 합친다 — 시안엔 별도 accent 색이 없다.
   &.btn-accent {
-    background-color: $accent-color;
+    background-color: $brand-600;
 
     &:hover {
-      background-color: $accent-color-dark;
-      color: white;
+      background-color: $brand-700;
     }
   }
 
-  &.btn-outline {
-    background-color: transparent;
-    border: 2px solid $primary-color;
-    color: $primary-color;
+  &.btn-outline,
+  &.btn-secondary {
+    background-color: $ink-0;
+    border-color: $ink-500;
+    color: $ink-800;
 
     &:hover {
-      background-color: $primary-color;
-      color: white;
+      background-color: $ink-50;
+      color: $ink-800;
+    }
+
+    &:active {
+      background-color: $ink-100;
+    }
+  }
+
+  &.btn-ghost {
+    border-color: transparent;
+    background-color: transparent;
+    color: $ink-600;
+
+    &:hover {
+      background-color: $ink-100;
+      color: $ink-900;
     }
   }
 }
 
-// Card component
+// Panel/card — design-system 의 .ds-card
 .card {
-  background: $background-color;
-  border: 1px solid $border-color;
   border-radius: $border-radius-lg;
-  padding: $spacing-lg;
+  border: 1px solid $ink-200;
+  background: $ink-0;
   box-shadow: $box-shadow;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem;
+
+  // 시안 A 엔 아이콘이 없다 — 옛 .card-icon/.card-header 마크업이 아직 남아 있어도
+  // 자리만 차지하지 않도록 접어 둔다.
+  .card-icon {
+    display: none;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: $text-color;
+  }
+
+  p {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: $text-color-light;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: $box-shadow-lg;
-  }
-
-  .card-header {
-    margin-bottom: $spacing-md;
-
-    h3 {
-      margin: 0 0 $spacing-xs 0;
-      color: $primary-color;
-    }
-
-    .card-icon {
-      font-size: 2rem;
-      color: $accent-color;
-      margin-bottom: $spacing-sm;
-    }
-  }
-
-  .card-content {
-    p {
-      margin-bottom: $spacing-sm;
-      color: $text-color-light;
-    }
+    border-color: $ink-200;
   }
 }
 
-// Hero section
+// Hero — 텍스트/이미지 2열, 위아래 그라디언트 배경
 .hero {
-  background: linear-gradient(135deg, $bg-secondary 0%, $primary-color-light 30%, $accent-color 100%);
-  padding: $spacing-xl 0;
-  text-align: center;
+  border-bottom: 1px solid $ink-100;
+  background: linear-gradient(to bottom, $ink-50, $ink-0);
 
-  h1 {
-    font-family: $heading-font;
-    font-size: $font-size-h1;
-    margin-bottom: $spacing-md;
-    color: $text-color;
-    white-space: nowrap;
+  .hero-grid {
+    display: grid;
+    align-items: center;
+    gap: 2rem;
+    padding: 2.5rem 0;
 
-    @media (max-width: $mobile) {
-      font-size: 1.8rem;
-      white-space: normal;
+    @media (min-width: $mobile) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.62fr);
+      gap: 3rem;
+      padding: 5rem 0;
     }
 
-    @media (max-width: 768px) {
-      font-size: 1.6rem;
+    // SpectraLens 는 스크린샷이 더 정사각형에 가까워 1:1.05 비율을 쓴다
+    &.hero-grid-even {
+      @media (min-width: $mobile) {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      }
+    }
+  }
+
+  .eyebrow {
+    margin: 0;
+  }
+
+  h1 {
+    margin-top: 0.75rem;
+    font-size: 31px;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    white-space: normal;
+
+    @media (min-width: $mobile) {
+      font-size: 46px;
     }
   }
 
   .hero-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: $spacing-lg;
-    color: $text-color-dark;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 1rem;
+    max-width: 38ch;
+    font-size: 15.5px;
+    color: $text-color-light;
 
-    @media (max-width: $mobile) {
-      font-size: 1rem;
+    @media (min-width: $mobile) {
+      font-size: 17px;
     }
   }
 
   .hero-actions {
-    display: flex;
-    gap: $spacing-md;
-    justify-content: center;
-    margin-top: $spacing-lg;
+    margin-top: 1.5rem;
+  }
 
-    @media (max-width: $mobile) {
-      flex-direction: column;
-      align-items: center;
+  img {
+    display: block;
+    width: 100%;
+    border-radius: $border-radius-lg;
+    border: 1px solid $ink-200;
+    box-shadow: $box-shadow-xl;
+  }
+}
+
+// Example-run / highlight stats band — 어두운 배경의 4-tile 통계
+.stat-band {
+  background: $ink-900;
+  color: $ink-0;
+
+  .container {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .stat-band-label {
+    margin: 0 0 1.25rem;
+    font-family: $mono-font;
+    font-size: 11.5px;
+    letter-spacing: $tracking-caps;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat-band-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+
+    @media (min-width: $mobile) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 26px;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+
+    @media (min-width: $mobile) {
+      font-size: 34px;
+    }
+  }
+
+  .stat-label {
+    display: block;
+    margin: 0.25rem 0 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+
+    // SpectraLens 하이라이트처럼 라벨이 값보다 먼저 오는 경우
+    &.stat-label-first {
+      margin: 0 0 0.25rem;
+      font-family: $mono-font;
+      font-size: 11.5px;
+      letter-spacing: $tracking-caps;
+      text-transform: uppercase;
+    }
+  }
+
+  .stat-band-footnote {
+    margin: 1.5rem 0 0;
+    font-family: $mono-font;
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+// Section rhythm — 인접 블록끼리만 구분선을 긋는다
+.block {
+  padding: 2.5rem 0;
+
+  & + & {
+    border-top: 1px solid $ink-100;
+  }
+
+  @media (min-width: $mobile) {
+    padding: 4rem 0;
+  }
+}
+
+// 같은 리듬, 구분선 없음 — 표/차트가 이미 경계를 그리는 화면용
+.block-plain {
+  padding: 2.5rem 0;
+
+  @media (min-width: $mobile) {
+    padding: 4rem 0;
+  }
+}
+
+// 버튼 여러 개를 모바일에선 세로로 쌓고, md 이상에선 가로로 늘어놓는 공용 레이아웃.
+// 히어로 CTA, Contact 의 GitHub 버튼 쌍, Closer 액션이 모두 쓴다.
+.btn-group {
+  display: grid;
+  gap: 0.75rem;
+
+  @media (min-width: $mobile) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+
+    @media (min-width: $mobile) {
+      width: auto;
+    }
+  }
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: $mono-font;
+  font-size: 11.5px;
+  letter-spacing: $tracking-caps;
+  text-transform: uppercase;
+  color: $accent-color;
+}
+
+.caps-label {
+  font-size: 11.5px;
+  letter-spacing: $tracking-caps;
+  text-transform: uppercase;
+  color: $text-color-lighter;
+}
+
+// Section headers
+.section-header {
+  max-width: 40rem;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+
+    @media (min-width: $mobile) {
+      font-size: 28px;
+    }
+  }
+
+  .section-subtitle {
+    margin-top: 0.5rem;
+    color: $text-color-light;
+  }
+}
+
+// Page hero (About/Contact/Download/SpectraLens 타이틀 블록)
+.page-header {
+  padding: 2.5rem 0 1.5rem;
+
+  @media (min-width: $mobile) {
+    padding: 4rem 0 2rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+
+    @media (min-width: $mobile) {
+      font-size: 40px;
+    }
+  }
+
+  p {
+    margin-top: 0.75rem;
+    max-width: 46ch;
+    font-size: 15.5px;
+    color: $text-color-light;
+
+    @media (min-width: $mobile) {
+      font-size: 17px;
     }
   }
 }
@@ -137,93 +356,349 @@
 // Services grid
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: $spacing-lg;
-  margin: $spacing-xl 0;
+  gap: 1rem;
 
-  @media (max-width: $mobile) {
-    grid-template-columns: 1fr;
-    gap: $spacing-md;
+  @media (min-width: $mobile) {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-// Section headers
-.section-header {
-  text-align: center;
-  margin-bottom: $spacing-xl;
+// Requirements — 라이브 문구를 줄 단위로 그대로 세운 정의 목록
+.requirements-grid {
+  display: grid;
+  gap: 2rem 2rem;
+  margin: 0;
+
+  @media (min-width: $mobile) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .requirement-item {
+    border-top: 1px solid $ink-100;
+    padding-top: 0.75rem;
+
+    dt,
+    h4 {
+      @extend .caps-label;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    dd,
+    p {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      color: $text-color-light;
+    }
+  }
+}
+
+// Closer — 하단 CTA. 이전의 .highlight-section 자리를 대신한다
+// (mixpanel.html 의 cta_section 판별을 위해 클래스를 같이 둔다).
+.closer.highlight-section {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid $brand-600;
+  background: none;
+  border-radius: 0;
+
+  @media (min-width: $mobile) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
 
   h2 {
-    font-family: $heading-font;
-    font-size: $font-size-h2;
-    margin-bottom: $spacing-sm;
-    color: $text-color;
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+
+    @media (min-width: $mobile) {
+      font-size: 26px;
+    }
   }
 
-  .section-subtitle {
-    font-size: 1.1rem;
-    color: $text-color-lighter;
-    max-width: 800px;
-    margin: 0 auto;
+  p {
+    margin-top: 0.5rem;
+    color: $text-color-light;
   }
-}
 
-// Contact form
-.contact-form {
-  max-width: 600px;
-  margin: 0 auto;
-  background: $background-color;
-  border: 1px solid $border-color;
-  padding: $spacing-lg;
-  border-radius: $border-radius-lg;
-  box-shadow: $box-shadow;
+  .closer-actions {
+    display: grid;
+    gap: 0.75rem;
 
-  .form-group {
-    margin-bottom: $spacing-md;
-
-    label {
-      display: block;
-      margin-bottom: $spacing-xs;
-      font-weight: 500;
-      color: $text-color;
+    @media (min-width: $mobile) {
+      display: flex;
+      flex-wrap: wrap;
     }
 
-    input, textarea {
+    .btn {
       width: 100%;
-      padding: $spacing-sm;
-      border: 1px solid $border-color;
-      border-radius: $border-radius;
-      font-family: $body-font;
-      font-size: $font-size-body;
-      transition: border-color 0.3s ease;
 
-      &:focus {
-        outline: none;
-        border-color: $primary-color;
+      @media (min-width: $mobile) {
+        width: auto;
       }
     }
+  }
+}
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
+// Table (다운로드 빌드 표)
+.table-scroll {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 42rem;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    @media (min-width: $mobile) {
+      min-width: 0;
+    }
+  }
+
+  th,
+  td {
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid $ink-100;
+  }
+
+  thead th {
+    @extend .caps-label;
+    font-weight: 600;
+    border-bottom: 1px solid $ink-200;
+  }
+
+  td.file-name {
+    font-family: $mono-font;
+    font-size: 12.5px;
+    color: $text-color-lighter;
+  }
+
+  td.col-action {
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+// Contact
+.contact-grid {
+  display: grid;
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+
+  @media (min-width: $mobile) {
+    grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 0.75fr);
+    padding-bottom: 4rem;
+  }
+
+  h2 {
+    font-size: 23px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin-top: 0.5rem;
+    color: $text-color-light;
+  }
+}
+
+.contact-form {
+  align-self: flex-start;
+  border-radius: $border-radius-lg;
+  background: $ink-900;
+  color: $ink-0;
+  padding: 1.5rem;
+
+  h3 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    color: $ink-0;
+  }
+
+  > p {
+    margin-top: 0.5rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .contact-form-panel {
+    margin-top: 1.5rem;
+    border-radius: $border-radius;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1.5rem;
+    text-align: center;
+
+    h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: $ink-0;
+    }
+
+    p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .btn {
+      margin-top: 1.25rem;
+      background: $ink-0;
+      color: $ink-900;
+
+      &:hover {
+        background: $ink-100;
+      }
     }
   }
 }
 
-// Navigation breadcrumbs
-.breadcrumbs {
-  margin-bottom: $spacing-lg;
-  color: $text-color-lightest;
+// Utility classes (기존 페이지들이 계속 쓴다)
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 
-  a {
-    color: $primary-color;
-    text-decoration: none;
+.mt-sm { margin-top: $spacing-sm; }
+.mt-md { margin-top: $spacing-md; }
+.mt-lg { margin-top: $spacing-lg; }
+.mt-xl { margin-top: $spacing-xl; }
 
-    &:hover {
-      text-decoration: underline;
-    }
+.mb-sm { margin-bottom: $spacing-sm; }
+.mb-md { margin-bottom: $spacing-md; }
+.mb-lg { margin-bottom: $spacing-lg; }
+.mb-xl { margin-bottom: $spacing-xl; }
+
+.py-lg { padding-top: $spacing-lg; padding-bottom: $spacing-lg; }
+.py-xl { padding-top: $spacing-xl; padding-bottom: $spacing-xl; }
+
+img { max-width: 100%; height: auto; }
+
+// Cookie consent banner
+.cookie-consent {
+  display: none;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  border-top: 3px solid $brand-400;
+  background: $ink-0;
+  padding: 1.25rem;
+  box-shadow: 0 -4px 20px rgba(34, 133, 189, 0.25);
+
+  @media (min-width: $mobile) {
+    padding: 1.5rem;
   }
 
-  .separator {
-    margin: 0 $spacing-xs;
+  &.show {
+    display: block;
+    animation: cookie-consent-slide-up 0.5s ease-out;
+  }
+}
+
+.cookie-consent-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 72rem;
+
+  @media (min-width: $mobile) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+}
+
+.cookie-consent-text {
+  min-width: 0;
+
+  @media (min-width: $mobile) {
+    min-width: 300px;
+  }
+
+  h2 {
+    margin: 0 0 0.375rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $accent-color;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: $ink-700;
+  }
+
+  a {
+    font-weight: 500;
+    text-decoration: underline;
+  }
+}
+
+.cookie-consent-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.75rem;
+
+  button {
+    flex: 1;
+    min-height: 44px;
+    padding: 0 1rem;
+    border: 2px solid $brand-600;
+    border-radius: $border-radius;
+    font-family: $body-font;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    @media (min-width: $mobile) {
+      flex: none;
+      padding: 0 1.5rem;
+    }
+  }
+}
+
+.cookie-consent-accept {
+  background: $brand-600;
+  color: $ink-0;
+
+  &:hover {
+    background: $brand-700;
+  }
+}
+
+.cookie-consent-decline {
+  background: $ink-0;
+  color: $brand-700;
+
+  &:hover {
+    background: $brand-50;
+  }
+}
+
+@keyframes cookie-consent-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

@@ -1,18 +1,43 @@
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-content">
-      <div class="footer-links">
-        {% for item in site.navigation %}
-          {% unless item.external %}
-            <a href="{{ item.url | relative_url }}">{{ item.name }}</a>
-          {% endunless %}
-        {% endfor %}
-        <a href="https://github.com/{{ site.github.repository }}" target="_blank" rel="noopener">GitHub</a>
-      </div>
-
-      <div class="copyright">
-        &copy; {{ 'now' | date: "%Y" }} {{ site.company.name }}. Accelerating drug discovery through AI-powered proteomics.
-      </div>
+  <div class="container footer-content">
+    <div class="footer-about">
+      <a href="{{ '/' | relative_url }}" class="logo" aria-label="SynapSpec home">
+        <img src="{{ '/assets/images/favicon.png' | relative_url }}" alt="" width="460" height="539">
+        <span><b>Synap</b>Spec</span>
+      </a>
+      <p>SynapSpec is developed and maintained by Bionsight, a biotechnology company dedicated to advancing scientific discovery through AI-powered proteomics solutions.</p>
     </div>
+
+    <div class="footer-column">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Home</a></li>
+        <li><a href="{{ '/download/' | relative_url }}">Download</a></li>
+        <li><a href="{{ '/spectralens/' | relative_url }}">SpectraLens</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://docs.synapspec.ai" target="_blank" rel="noopener">Documentation</a></li>
+        <li><a href="https://docs.synapspec.ai/installation/" target="_blank" rel="noopener">Installation Guide</a></li>
+        <li><a href="https://github.com/{{ site.github.repository }}" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="{{ site.github.discussions }}" target="_blank" rel="noopener">Discussions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Bionsight</h4>
+      <ul>
+        <li><a href="{{ '/about/' | relative_url }}">About</a></li>
+        <li><a href="{{ '/contact/' | relative_url }}">Contact</a></li>
+        <li><a href="https://www.bionsight.com" target="_blank" rel="noopener">bionsight.com</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container copyright">
+    &copy; {{ 'now' | date: "%Y" }} {{ site.company.name }}. Accelerating drug discovery through AI-powered proteomics.
   </div>
 </footer>

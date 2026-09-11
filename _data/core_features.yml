@@ -1,0 +1,13 @@
+# 라이브 /about/ 의 Core Features. src/data/site.ts 의 coreFeatures 를 옮긴 것.
+- name: "Peptide Identification & Quantification"
+  description: "Advanced algorithms for accurate peptide identification with robust false discovery rate control and precise quantification across samples."
+- name: "Deep Learning-based Spectral Library Generation"
+  description: "Advanced deep learning models for accurate spectral library prediction and generation, enabling enhanced peptide identification and DIA analysis."
+- name: "Label-free Quantification"
+  description: "Support for both label-free and isobaric labeling methods for multiplexed quantitative proteomics experiments."
+- name: "Semi-Specific Support"
+  description: "Optimized workflows for data-independent acquisition and SWATH-MS analysis with spectral library generation and matching."
+- name: "Statistical Analysis & Differential Expression"
+  description: "Integrated statistical tools for differential expression analysis and multiple testing correction."
+- name: "Scalable Multi-Omics Solution"
+  description: "Developing scalable workflows applicable to diverse research areas including metaproteomics, immunoproteomics, and clinical proteomics for comprehensive biological insights."

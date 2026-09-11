@@ -1,0 +1,11 @@
+<!-- Requirements dl — Home/Download 공용. _data/requirements.yml 을 그대로 나열한다. -->
+<dl class="requirements-grid">
+  {% for req in site.data.requirements %}
+  <div class="requirement-item">
+    <dt>{{ req.term }}</dt>
+    {% for line in req.lines %}
+    <dd>{{ line }}</dd>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</dl>

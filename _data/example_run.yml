@@ -1,0 +1,23 @@
+# 홈 화면 어두운 통계 배너("Example run"). src/data/benchmarks.ts 의 exampleRun 이
+# _data/benchmarks.json 의 최신(마지막) run 에서 계산해 내는 값을, 여기서는
+# Liquid로 다시 계산하지 않고 결과만 pin 한다 — benchmark_ledger.json 을
+# 만들 때 쓴 것과 같은 방식이다.
+#
+# 소스: _data/benchmarks.json 의 runs[-1] (slug 2026-07-22, has_accuracy: true).
+#   - total_precursors_display, total_proteins_display: JSON 그대로
+#   - wall_clock: runtime_hours(7.23) * 60 = 433.8 → round 434분 → 7h 14m
+#   - max_deviation: run.accuracy[].deviation 의 |값| 중 최댓값 = |0.0828|(ECOLI) → "0.083"
+#   - footnote: dataset.name/instrument/replicates + run.instance/date
+#
+# _data/benchmarks.json 을 fetch_benchmarks.py 로 다시 돌려 최신 run 이 바뀌면
+# 이 값도 같이 다시 계산해서 갱신해야 한다.
+figures:
+  - value: "261,903"
+    label: "precursors identified"
+  - value: "17,831"
+    label: "protein groups"
+  - value: "7h 14m"
+    label: "wall clock, 6 DIA files"
+  - value: "≤ 0.083"
+    label: "median log₂ ratio deviation from target"
+footnote: "LFQBench on an Orbitrap Astral · 6 files, two conditions × 3 replicates · AWS c7i.8xlarge · run 2026-07-22"
