@@ -1,0 +1,74 @@
+---
+// _includes/benchmark/ratio-widget.html을 옮긴 것.
+// No-JS 토글: 라디오 두 개가 CSS sibling selector로 패널/각주를 바꾼다
+// (_sass/_benchmark.scss의 .bench-ratio-* 규칙). 두 축 모두 미리 렌더링해두고
+// 보이는 것만 바뀐다. 좌표는 _data/benchmark_catalog.json에 이미 계산되어 있다
+// (viewBox 0 0 500 86, position(v) = 24 + (v-min)/(max-min)*452).
+import catalog from "../../data/benchmark_catalog.json";
+---
+
+<input type="radio" name="ratio-mode" id="ratio-actual" class="bench-ratio-input" checked />
+<input type="radio" name="ratio-mode" id="ratio-relative" class="bench-ratio-input" />
+
+<div class="bench-ratio-head">
+  <div>
+    <h2>Expected and measured ratios</h2>
+    <p class="bench-axis-note" style="text-align: left;">Precursor-level LFQ · Human 1×, Yeast 2×, E. coli 0.25× A/B</p>
+  </div>
+  <div class="bench-toggle-group" role="group" aria-label="Ratio display">
+    <label for="ratio-actual" class="bench-toggle-btn">Actual ratio</label>
+    <label for="ratio-relative" class="bench-toggle-btn">Against expected</label>
+  </div>
+</div>
+
+<p class="bench-axis-note" style="text-align: left; margin-bottom: 1rem;">Dashed line: expected ratio. Dot: measured median. Band: middle 50% of measurements. A close median does not mean every measurement is close.</p>
+
+<div class="bench-ratio-panel bench-ratio-panel-actual">
+  {catalog.ratio_measurements.map((item) => (
+    <div class="bench-ratio-row">
+      <div class="bench-ratio-species">{item.species}<span class="bench-ratio-count">{item.count_display} paired precursors</span></div>
+      <svg viewBox="0 0 500 86" class="bench-ratio-svg" role="img" aria-label={`${item.species}: expected ${item.target}, median ratio ${item.measured_ratio_display}.`}>
+        {catalog.ratio_axis_ticks.actual.map((tick) => (
+          <>
+            <line x1={tick.x} x2={tick.x} y1="12" y2="54" class="bench-ratio-gridline" />
+            <text x={tick.x} y="76" text-anchor="middle" class="bench-ratio-ticklabel">{tick.label}</text>
+          </>
+        ))}
+        <rect x={item.axis.actual.lower} y="26" width={item.axis.actual.upper - item.axis.actual.lower} height="20" rx="3" class="bench-ratio-band" />
+        <line x1={item.axis.actual.target} x2={item.axis.actual.target} y1="12" y2="56" class="bench-ratio-target" />
+        <circle cx={item.axis.actual.median} cy="36" r="6" class="bench-ratio-dot" />
+      </svg>
+      <div class="bench-ratio-value">{item.measured_ratio_display}<span class="bench-ratio-value-label">measured median A/B</span></div>
+    </div>
+  ))}
+</div>
+
+<div class="bench-ratio-panel bench-ratio-panel-relative">
+  {catalog.ratio_measurements.map((item) => (
+    <div class="bench-ratio-row">
+      <div class="bench-ratio-species">{item.species}<span class="bench-ratio-count">{item.count_display} paired precursors</span></div>
+      <svg viewBox="0 0 500 86" class="bench-ratio-svg" role="img" aria-label={`${item.species}: deviation from expected ${item.deviation_percent} percent.`}>
+        {catalog.ratio_axis_ticks.relative.map((tick) => (
+          <>
+            <line x1={tick.x} x2={tick.x} y1="12" y2="54" class="bench-ratio-gridline" />
+            <text x={tick.x} y="76" text-anchor={tick.value < 0 ? "start" : tick.value > 0 ? "end" : "middle"} class="bench-ratio-ticklabel">{tick.label}</text>
+          </>
+        ))}
+        <rect x={item.axis.relative.lower} y="26" width={item.axis.relative.upper - item.axis.relative.lower} height="20" rx="3" class="bench-ratio-band" />
+        <line x1={item.axis.relative.target} x2={item.axis.relative.target} y1="12" y2="56" class="bench-ratio-target" />
+        <circle cx={item.axis.relative.median} cy="36" r="6" class="bench-ratio-dot" />
+      </svg>
+      <div class="bench-ratio-value">{item.deviation_percent > 0 ? "+" : ""}{item.deviation_percent}%<span class="bench-ratio-value-label">median deviation</span></div>
+    </div>
+  ))}
+</div>
+
+<p class="bench-axis-note bench-ratio-footnote-actual" style="text-align: left;">Ratio A/B on a log₂-spaced axis: equal distances mean equal fold changes. Bands are interquartile ranges, not confidence intervals. The outer 50% is not drawn.</p>
+<p class="bench-axis-note bench-ratio-footnote-relative" style="text-align: left;">Measured A/B divided by expected A/B, on a closer log₂-spaced axis (0.71×–1.41× expected). Bands are interquartile ranges, not confidence intervals. The outer 50% is not drawn.</p>
+
+<details class="bench-details">
+  <summary>How do I read the original LFQ scatter plot?</summary>
+  <p>Each dot is a precursor with a usable quantity in both samples. Left to right is the amount measured in B; bottom to top is the A/B ratio.</p>
+  <p>The expected horizontal lines are 0 for Human, +1 for Yeast and −2 for E. coli on the log₂ scale. Those mean 1×, 2× and 0.25×. Dots near their species' line recover the known mixture well.</p>
+  <p>The side histograms count measurements at each ratio. The final panel uses logarithmic counts to make rare, far-away measurements visible.</p>
+</details>

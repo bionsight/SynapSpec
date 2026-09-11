@@ -1,0 +1,41 @@
+---
+// _benchmarks(런 18개, benchmark_run 레이아웃)와 _benchmark_entries(kind별 8개,
+// benchmark_entry 레이아웃)를 하나의 라우트로 합친 것 — 둘 다 Jekyll에서
+// permalink가 같은 /benchmarks/:name/ 이었다. 슬러그가 겹치지 않는다
+// (런은 날짜만, 엔트리는 데이터셋 이름이거나 날짜+해시).
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import benchmarks from "../../../data/benchmarks.json";
+import entries from "../../../data/benchmark_entries.json";
+import RunBenchmark from "../../../components/benchmark/RunBenchmark.astro";
+import RecordedBenchmark from "../../../components/benchmark/RecordedBenchmark.astro";
+import ComparisonBenchmark from "../../../components/benchmark/ComparisonBenchmark.astro";
+import ImportedBenchmark from "../../../components/benchmark/ImportedBenchmark.astro";
+import PendingBenchmark from "../../../components/benchmark/PendingBenchmark.astro";
+
+export async function getStaticPaths() {
+  const runPaths = benchmarks.runs.map((run) => ({
+    params: { slug: run.slug },
+    props: { kind: "run" as const, title: `Benchmark run ${run.slug}` },
+  }));
+  const entryPaths = entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { kind: entry.kind, title: entry.title },
+  }));
+  return [...runPaths, ...entryPaths];
+}
+
+interface Props {
+  kind: "run" | "recorded" | "comparison" | "imported" | "pending";
+  title: string;
+}
+const { kind, title } = Astro.props;
+const { slug } = Astro.params;
+---
+
+<BaseLayout title={title} noindex>
+  {kind === "run" && <RunBenchmark slug={slug!} />}
+  {kind === "recorded" && <RecordedBenchmark />}
+  {kind === "comparison" && <ComparisonBenchmark slug={slug!} />}
+  {kind === "imported" && <ImportedBenchmark slug={slug!} />}
+  {kind === "pending" && <PendingBenchmark slug={slug!} />}
+</BaseLayout>

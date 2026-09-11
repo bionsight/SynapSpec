@@ -1,0 +1,10 @@
+[
+  { "kind": "pending", "slug": "lfqbench-oe480", "title": "LFQBench / OE480" },
+  { "kind": "comparison", "slug": "lfqbench-202409-archived", "title": "LFQBench / OE480 — archived comparison" },
+  { "kind": "imported", "slug": "2026-09-06-9897b894", "title": "Benchmark run 2026-09-06-9897b894" },
+  { "kind": "imported", "slug": "2026-09-07-34879e5b", "title": "Benchmark run 2026-09-07-34879e5b" },
+  { "kind": "imported", "slug": "2026-09-07-b4de5599", "title": "Benchmark run 2026-09-07-b4de5599" },
+  { "kind": "recorded", "slug": "2026-09-07-5d12a532", "title": "Benchmark run 2026-09-07-5d12a532" },
+  { "kind": "comparison", "slug": "lfqbench-202502-archived", "title": "LFQBench / Orbitrap Astral — archived comparison" },
+  { "kind": "pending", "slug": "proteobench-2th-astral", "title": "ProteoBench 2 Th / Astral" }
+]

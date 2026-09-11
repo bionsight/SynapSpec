@@ -1,0 +1,69 @@
+---
+// benchmarks/leaderboard/index.md를 옮긴 것.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import comparisons from "../../../data/benchmark_comparisons.json";
+import scatterSets from "../../../data/benchmark_comparison_scatter.json";
+
+const description =
+  "SynapSpec, DIA-NN and Spectronaut ranked by LFQ quantification accuracy on the same six LFQBench input files, per dataset";
+
+const round = (n: number, digits: number) => {
+  const factor = 10 ** digits;
+  return Math.round(n * factor) / factor;
+};
+---
+
+<BaseLayout title="LFQBench leaderboard" description={description} noindex>
+  <div class="container">
+    <div class="breadcrumbs">
+      <a href="/benchmarks/">&larr; Benchmarks</a> / Leaderboard
+    </div>
+
+    <div class="page-header">
+      <h1>LFQBench leaderboard</h1>
+      <p class="section-subtitle">SynapSpec, DIA-NN and Spectronaut on the same six LFQBench input files, ranked by quantification accuracy within each dataset.</p>
+    </div>
+
+    <div class="bench-callout">
+      Ranked by median absolute log₂ fold-change error only — lower is more accurate. This is not the
+      whole picture: a tool with more precursors identified is not automatically worse, and one with fewer is
+      not automatically more careful. See each dataset's <a href="#oe480" class="bench-link">Accuracy vs.
+      depth</a> chart for both axes together before drawing conclusions. Same caveats as the comparison pages:
+      not a current-release ranking, archived reports, execution settings not reconciled.
+    </div>
+
+    {scatterSets.map((scatter) => {
+      const record = comparisons.find((r) => r.slug === scatter.ledger_slug)!;
+      const ranked = [...scatter.tools].sort((a, b) => a.median_epsilon - b.median_epsilon);
+      const anchor = scatter.ledger_slug === "lfqbench-202409-archived" ? "oe480" : "astral";
+      return (
+        <section id={anchor} class="py-lg bench-border-t">
+          <div class="bench-header-split">
+            <h2>{record.name}</h2>
+            <a href={`/benchmarks/${scatter.ledger_slug}/`} class="bench-link">Full comparison &amp; accuracy vs. depth</a>
+          </div>
+          <div class="bench-table-wrap">
+            <table class="bench-table bench-leaderboard-table">
+              <thead>
+                <tr><th>#</th><th>Tool</th><th class="num">Median |error| (log₂ FC)</th><th class="num">Precursors identified</th></tr>
+              </thead>
+              <tbody>
+                {ranked.map((tool, index) => {
+                  const fullTool = record.tools.find((t) => t.id === tool.id)!;
+                  return (
+                    <tr class={index === 0 ? "bench-leaderboard-lead" : undefined}>
+                      <td><span class={`bench-rank-badge bench-rank-badge-${index + 1}`}>{index + 1}</span></td>
+                      <th scope="row">{tool.label}</th>
+                      <td class="num">{round(tool.median_epsilon, 3)}</td>
+                      <td class="num">{fullTool.precursors_display}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</BaseLayout>

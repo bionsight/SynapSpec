@@ -1,0 +1,232 @@
+---
+// _includes/benchmark/comparison.html을 옮긴 것. kind: comparison인 두 항목
+// (lfqbench-202409-archived, lfqbench-202502-archived)에서 쓴다. "Accuracy vs.
+// depth" 산점도는 ProteoBench(proteobench.org)의 LFQ 정확도 모듈과 같은 배치다.
+import comparisons from "../../data/benchmark_comparisons.json";
+import scatterSets from "../../data/benchmark_comparison_scatter.json";
+import { intDiv } from "../../lib/liquidMath";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const record = comparisons.find((r) => r.slug === slug)!;
+const scatter = scatterSets.find((s) => s.ledger_slug === slug);
+
+// scatter 섹션 좌표 계산 — Liquid의 `divided_by`는 두 피연산자가 정수면 정수
+// 나눗셈(버림)을 한다. y축 쪽 계산은 전부 정수(정밀도 개수)라 intDiv를 그대로
+// 옮겨야 원본과 같은 위치가 나온다. x축(median_epsilon)은 이미 float라 보통
+// 나눗셈이면 된다.
+let scatterChart: null | {
+  yMin: number;
+  yMax: number;
+  yRange: number;
+  ySteps: number;
+  xMax: number;
+  xSteps: number;
+  yTicks: { y: number; label: string }[];
+  xTicks: { x: number; label: string }[];
+  dots: { x: number; y: number; id: string; label: string; precursors: number; medianEpsilon: number }[];
+} = null;
+
+if (scatter) {
+  const epsSorted = [...scatter.tools].map((t) => t.median_epsilon).sort((a, b) => a - b);
+  const depthSorted = [...scatter.tools].map((t) => t.precursors).sort((a, b) => a - b);
+  const maxEps = epsSorted[epsSorted.length - 1];
+  const xMax = maxEps * 1.15;
+  const minDepth = depthSorted[0];
+  const maxDepth = depthSorted[depthSorted.length - 1];
+  const yMin = intDiv(minDepth, 20000) * 20000;
+  const maxDepthPad = maxDepth + 19999;
+  const yMax = intDiv(maxDepthPad, 20000) * 20000;
+  const yRange = yMax - yMin;
+  const ySteps = intDiv(yRange, 20000);
+  const xSteps = 4;
+
+  const yTicks = Array.from({ length: ySteps + 1 }, (_, i) => {
+    const tickOffset = i * 20000;
+    const tick = tickOffset + yMin;
+    const tickScaled = intDiv(tickOffset * 210, yRange);
+    return { y: 230 - tickScaled, label: `${intDiv(tick, 1000)}k` };
+  });
+
+  const xTicks = Array.from({ length: xSteps + 1 }, (_, i) => {
+    const tickVal = (xMax * i) / xSteps;
+    const tickFrac = tickVal / xMax;
+    const x = tickFrac * 550 + 70;
+    return { x, label: (Math.round(tickVal * 100) / 100).toString() };
+  });
+
+  const dots = scatter.tools.map((tool) => {
+    const xFrac = tool.median_epsilon / xMax;
+    const x = xFrac * 550 + 70;
+    const vfrac = tool.precursors - yMin;
+    const vScaled = intDiv(vfrac * 210, yRange);
+    const y = 230 - vScaled;
+    return { x, y, id: tool.id, label: tool.label, precursors: tool.precursors, medianEpsilon: tool.median_epsilon };
+  });
+
+  scatterChart = { yMin, yMax, yRange, ySteps, xMax, xSteps, yTicks, xTicks, dots };
+}
+
+const round = (n: number, digits: number) => {
+  const factor = 10 ** digits;
+  return Math.round(n * factor) / factor;
+};
+---
+
+<div class="container">
+  <div class="breadcrumbs">
+    <a href="/benchmarks/">&larr; Benchmarks</a> / Archived comparison
+  </div>
+
+  <div class="page-header">
+    <h1>{record.name}</h1>
+    <p class="section-subtitle">Three archived reports, the same six input files. A and B each contain three replicate runs.</p>
+  </div>
+
+  <div class="bench-callout">This is not a current-release ranking. Tool labels preserve source-folder labels; exact releases, execution dates, hardware and full search settings are not reconciled. Matching filenames do not establish identical search settings.</div>
+
+  <section class="py-lg">
+    <div class="bench-table-wrap">
+      <table class="bench-table">
+        <caption>Precursor q-value &lt; 0.01; decoys excluded. IDs are distinct modified-sequence and charge pairs across all six runs.</caption>
+        <thead>
+          <tr>
+            <th>Tool / source label</th>
+            <th class="num">Precursor IDs</th>
+            <th class="num">Detected in all six</th>
+            <th class="num">Median CV: A</th>
+            <th class="num">Median CV: B</th>
+          </tr>
+        </thead>
+        <tbody>
+          {record.tools.map((tool) => (
+            <tr>
+              <th scope="row">{tool.label}</th>
+              <td class="num">{tool.precursors_display}</td>
+              <td class="num">{round(tool.complete_six_percent, 1)}%<span class="bench-subvalue">{tool.complete_six_display} of {tool.precursors_display}</span></td>
+              <td class="num">{round(tool.cv.A.median_percent, 1)}%<span class="bench-subvalue">n = {tool.cv.A.count_display}</span></td>
+              <td class="num">{round(tool.cv.B.median_percent, 1)}%<span class="bench-subvalue">n = {tool.cv.B.count_display}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="bench-axis-note" style="text-align: left;">CV uses sample standard deviation / mean within one condition, only for precursors with positive finite MS2 quantities in all three replicates. Each tool has its own eligible population. Missing observations are not imputed.</p>
+  </section>
+
+  {scatterChart && (
+    <section class="py-lg bench-border-t">
+      <h2>Accuracy vs. depth</h2>
+      <p class="bench-axis-note" style="text-align: left;">
+        Same layout as ProteoBench's LFQ accuracy modules (proteobench.org): each point is one tool's
+        full run on these six files, not one point per precursor. Horizontal position is the median absolute
+        error between measured and expected log₂ fold change across the three species (species-weighted,
+        lower is more accurate); vertical position is how many precursor ions that run identified. Up and to the
+        left is more precursors identified with less error — neither axis alone ranks a tool.
+      </p>
+      <div class="bench-scatter-chart-wrap">
+        <svg viewBox="0 0 640 300" class="bench-scatter-svg" role="img" aria-label={`${record.name}: ${scatterChart.dots.length} tools plotted by median absolute log2 fold-change error against precursor ions identified. Exact values are in the table below.`}>
+          {scatterChart.yTicks.map((tick) => (
+            <>
+              <line x1="70" x2="620" y1={tick.y} y2={tick.y} class="bench-scatter-gridline" />
+              <text x="60" y={tick.y + 4} text-anchor="end" class="bench-scatter-ticklabel">{tick.label}</text>
+            </>
+          ))}
+          {scatterChart.xTicks.map((tick) => (
+            <>
+              <line x1={tick.x} x2={tick.x} y1="20" y2="230" class="bench-scatter-gridline" />
+              <text x={tick.x} y="248" text-anchor="middle" class="bench-scatter-ticklabel">{tick.label}</text>
+            </>
+          ))}
+          {scatterChart.dots.map((dot) => (
+            <circle cx={dot.x} cy={dot.y} r="7" class={`bench-scatter-dot bench-scatter-dot-${dot.id}`}>
+              <title>{dot.label}: {dot.precursors} precursors, median |error| {dot.medianEpsilon}</title>
+            </circle>
+          ))}
+          <text x="345" y="278" text-anchor="middle" class="bench-scatter-axis-title">Median absolute log₂ fold-change error (species-weighted)</text>
+        </svg>
+      </div>
+      <ul class="bench-scatter-legend">
+        {scatterChart.dots.map((dot) => (
+          <li><span class={`bench-scatter-legend-swatch bench-scatter-dot-${dot.id}`}></span>{dot.label}</li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="py-lg bench-border-t">
+    <h2>Identification, repeatability and LFQ ratios</h2>
+    <p class="bench-axis-note" style="text-align: left;">More IDs means broader coverage, not automatically better quantification. Lower CV means more consistent repeat measurements. For LFQ, a median closer to the dashed expected line and a narrower interquartile range indicate closer agreement and less spread.</p>
+    <a href={`/assets/images/benchmarks/${record.figure}`} target="_blank" rel="noreferrer" class="bench-figure-link">
+      <img src={`/assets/images/benchmarks/${record.figure}`} width="2880" height="1600" alt={`${record.name}: three-tool precursor counts, six-run completeness, within-condition CV, and species-specific LFQ median and interquartile range. Exact values follow below.`} />
+    </a>
+    <a href={`/assets/images/benchmarks/${record.figure}`} download class="bench-download-link">Download comparison PNG</a>
+
+    <div class="bench-table-wrap" style="margin-top: 1.5rem;">
+      <table class="bench-table">
+        <caption>Precursor MS2 log₂(mean A / mean B), using observed values; entities require positive means in both conditions. Mixed-species annotations are excluded. Intervals are quartiles, not confidence intervals.</caption>
+        <thead>
+          <tr><th>Tool</th><th>Species</th><th>Expected</th><th>Median</th><th>25–75%</th><th class="num">Precursors</th></tr>
+        </thead>
+        <tbody>
+          {record.tools.map((tool) =>
+            tool.ratios.map((ratio) => (
+              <tr>
+                <th scope="row">{tool.label}</th>
+                <td>{ratio.species}</td>
+                <td>{ratio.target}</td>
+                <td>{round(ratio.median, 3)}</td>
+                <td>{round(ratio.lower, 3)} – {round(ratio.upper, 3)}</td>
+                <td class="num">{ratio.count_display}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="py-lg bench-border-t">
+    <h2>Shared precursor IDs</h2>
+    <p class="bench-axis-note" style="text-align: left;">Exact modified-sequence and charge matches, across all six runs; pairwise counts overlap and must not be added together.</p>
+    <ul class="bench-overlap-list">
+      {record.overlap.map((pair) => <li>{pair.left} / {pair.right}: <strong>{pair.precursors_display}</strong></li>)}
+    </ul>
+  </section>
+
+  <details class="bench-details">
+    <summary>Input files and per-file IDs</summary>
+    <div class="bench-table-wrap" style="margin-top: 1rem;">
+      <table class="bench-table">
+        <thead>
+          <tr><th>Input stem</th>{record.tools.map((tool) => <th>{tool.label}</th>)}</tr>
+        </thead>
+        <tbody>
+          {record.files.map((name) => (
+            <tr>
+              <th scope="row">{name}</th>
+              {record.tools.map((tool) => {
+                const file = tool.files.find((f) => f.name === name);
+                return <td>{file?.precursors_display ?? "0"}</td>;
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="bench-details">
+    <summary>Limitations and reproducibility</summary>
+    <ul class="bench-limitations">
+      <li>No analysis engine was rerun. These are archived report extracts, imported on 2026-09-08.</li>
+      <li>Protein entities use tool-specific grouping definitions and are not presented as a cross-tool score.</li>
+      <li>Separate SynapSpec MBR files are not included. MBR settings in the base reports remain unverified.</li>
+      <li>Expected ratios follow the existing BION LFQ preset: human 1:1, yeast 2:1, E. coli 1:4 (A:B). Sample preparation records and full settings still need owner review.</li>
+      <li>Release, execution time, resource and analysis date: not verified. No metadata is borrowed from the September 7 run.</li>
+      <li>These internal LFQBench experiments are not labeled PXD028735; a provenance mapping is not established.</li>
+    </ul>
+  </details>
+</div>

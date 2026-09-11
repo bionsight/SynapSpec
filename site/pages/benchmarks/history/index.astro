@@ -1,0 +1,105 @@
+---
+// benchmarks/history/index.md를 옮긴 것.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import benchmarks from "../../../data/benchmarks.json";
+import catalog from "../../../data/benchmark_catalog.json";
+import { intDiv } from "../../../lib/liquidMath";
+
+const description = "Every archived SynapSpec LFQBench run on the Orbitrap Astral dataset, identification depth over time";
+
+const bm = benchmarks;
+const runsAsc = bm.runs;
+const runsDesc = [...bm.runs].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+const byCount = [...bm.runs].sort((a, b) => a.total_precursors - b.total_precursors);
+const minCount = byCount[0];
+const maxCount = byCount[byCount.length - 1];
+const minimum = intDiv(minCount.total_precursors, 20000) * 20000;
+const maximumPad = maxCount.total_precursors + 19999;
+const maximum = intDiv(maximumPad, 20000) * 20000;
+const spanRange = maximum - minimum;
+const firstRun = runsAsc[0];
+const lastRun = runsAsc[runsAsc.length - 1];
+const firstEpoch = Math.floor(new Date(firstRun.date).getTime() / 1000);
+const lastEpoch = Math.floor(new Date(lastRun.date).getTime() / 1000);
+const daySpan = lastEpoch - firstEpoch;
+const steps = intDiv(spanRange, 20000);
+const recordedRunSlug = catalog.recorded_run_slug;
+
+const yTicks = Array.from({ length: steps + 1 }, (_, i) => {
+  const tickOffset = i * 20000;
+  const tick = tickOffset + minimum;
+  const tickScaled = intDiv(tickOffset * 190, spanRange);
+  return { y: 225 - tickScaled, labelY: 225 - tickScaled + 4, label: `${intDiv(tick, 1000)}k` };
+});
+
+const dots = runsAsc.map((run) => {
+  const e = Math.floor(new Date(run.date).getTime() / 1000);
+  const dx = e - firstEpoch;
+  const dxScaled = intDiv(dx * 910, daySpan);
+  const x = 65 + dxScaled;
+  const vfrac = run.total_precursors - minimum;
+  const vScaled = intDiv(vfrac * 190, spanRange);
+  const y = 225 - vScaled;
+  return { x, y, date: run.date, display: run.total_precursors_display };
+});
+---
+
+<BaseLayout title="LFQBench / Astral history" description={description} noindex>
+  <div class="container">
+    <div class="breadcrumbs">
+      <a href="/benchmarks/">&larr; Benchmarks</a> / Dataset history
+    </div>
+
+    <div class="page-header">
+      <h1>LFQBench <span class="bench-muted">/ Orbitrap Astral</span></h1>
+      <p class="section-subtitle">{bm.coverage.run_count} archived runs from {bm.coverage.date_from} to {bm.coverage.date_to}. Same dataset, different engine runs; these are not verified release versions.</p>
+      <p class="section-subtitle"><a href={`/benchmarks/${recordedRunSlug}/`} class="bench-link">View the separately imported 7 September run</a></p>
+    </div>
+
+    <section class="py-lg">
+      <h2>Identification history</h2>
+      <div class="bench-history-chart-wrap">
+        <svg viewBox="0 0 1040 270" class="bench-history-svg" role="img" aria-label={`Distinct precursor counts across ${bm.coverage.run_count} archived LFQBench runs. Exact counts are in the table below.`}>
+          {yTicks.map((tick) => (
+            <>
+              <line x1="65" x2="975" y1={tick.y} y2={tick.y} class="bench-history-gridline" />
+              <text x="55" y={tick.labelY} text-anchor="end" class="bench-history-ticklabel">{tick.label}</text>
+            </>
+          ))}
+          {dots.map((dot) => (
+            <circle cx={dot.x} cy={dot.y} r="5" class="bench-history-dot">
+              <title>{dot.date}: {dot.display} precursors</title>
+            </circle>
+          ))}
+          <text x="65" y="255" class="bench-history-ticklabel">{firstRun.date}</text>
+          <text x="975" y="255" text-anchor="end" class="bench-history-ticklabel">{lastRun.date}</text>
+        </svg>
+      </div>
+      <p class="bench-axis-note" style="text-align: left;">The vertical axis starts at {minimum}, not zero, to show changes. Position on the horizontal axis follows run date. Changes in settings may affect counts.</p>
+    </section>
+
+    <section class="py-lg bench-border-t">
+      <h2>Archived runs</h2>
+      <div class="bench-table-wrap">
+        <table class="bench-table">
+          <thead>
+            <tr><th>Date</th><th class="num">Precursor IDs</th><th class="num">Protein IDs</th><th class="num">Elapsed time</th><th>Resource</th><th>LFQ metrics</th></tr>
+          </thead>
+          <tbody>
+            {runsDesc.map((run) => (
+              <tr>
+                <th scope="row"><a href={`/benchmarks/${run.slug}/`}>{run.date}</a></th>
+                <td class="num">{run.total_precursors_display}</td>
+                <td class="num">{run.total_proteins_display}</td>
+                <td class="num">{run.runtime_hours ? `${run.runtime_hours} h` : "—"}</td>
+                <td><code>{run.instance}</code></td>
+                <td>{run.has_accuracy ? "Measured" : "Not recorded"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="bench-axis-note" style="text-align: left;">Runtime is not directly comparable across different instance types. Counts retain the archived source fields; bars share a zero baseline and the archive peak as their maximum.</p>
+    </section>
+  </div>
+</BaseLayout>

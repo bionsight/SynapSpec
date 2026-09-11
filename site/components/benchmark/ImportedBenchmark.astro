@@ -1,0 +1,73 @@
+---
+// _includes/benchmark/imported.html을 옮긴 것. kind: imported인 3개 항목에서 쓴다.
+import imports from "../../data/benchmark_imports.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const run = imports.find((r) => r.slug === slug)!;
+const hours = Math.trunc(run.runtimeMinutes / 60);
+const minutes = run.runtimeMinutes % 60;
+---
+
+<div class="container">
+  <div class="breadcrumbs">
+    <a href="/benchmarks/">&larr; Benchmarks</a>
+  </div>
+
+  <div class="page-header">
+    <h1>LFQBench <span class="bench-muted">/ Orbitrap Astral</span></h1>
+    <p class="section-subtitle">SynapSpec · {run.started} · {run.commit}</p>
+  </div>
+
+  <section class="py-lg bench-border-y" aria-label="Run results">
+    <h2>Results</h2>
+    <p class="bench-lede">{run.totalPrecursorsDisplay}<span class="bench-lede-unit"> precursor IDs</span></p>
+    <p class="bench-axis-note" style="text-align: left;">{run.totalProteinsDisplay} reported total_proteins. Both values are transcribed from the task's Summary / summary table, not summed across files.</p>
+    <p class="bench-axis-note" style="text-align: left;">
+      {run.figure
+        ? "The original figure below includes comparator reports used by this task. Their metrics have not been reconciled with the history table."
+        : "No comparison figure has been imported for this execution."}
+      {" "}The archived comparison is a separate result bundle.
+    </p>
+  </section>
+
+  {run.figure && (
+    <section class="py-lg bench-border-b" aria-label="Run figures">
+      <h2>Analysis figures</h2>
+      <p class="bench-axis-note" style="text-align: left;">Original all_plots_summary from this ClearML task: SynapSpec, DIA-NN and Spectronaut reports. Source plotting definitions are preserved; comparator versions and settings are not independently reconciled.</p>
+      <a href={`/assets/images/benchmarks/${run.figure}`} target="_blank" rel="noreferrer" class="bench-figure-link">
+        <img src={`/assets/images/benchmarks/${run.figure}`} width="4838" height="5121" alt={`Original analysis summary for SynapSpec ${run.commit}: identification counts, completeness, CV distributions and LFQ plots with comparator reports.`} />
+      </a>
+      <div class="bench-figure-actions">
+        <a href={`/assets/images/benchmarks/${run.figure}`} target="_blank" rel="noreferrer">Open full-size figure</a>
+        <a href={`/assets/images/benchmarks/${run.figure}`} download>Download figure</a>
+      </div>
+    </section>
+  )}
+
+  <section class="py-lg">
+    <h2>Execution &amp; source</h2>
+    <dl class="bench-facts">
+      <div><dt>Status</dt><dd>{run.status}</dd></div>
+      <div><dt>Commit (task label)</dt><dd>{run.commit}</dd></div>
+      <div><dt>Started (ClearML display)</dt><dd>{run.started}</dd></div>
+      <div><dt>Completed (ClearML display)</dt><dd>{run.completed}</dd></div>
+      <div><dt>Task elapsed time</dt><dd>{hours} h {minutes} min</dd></div>
+      <div><dt>Resource tag</dt><dd>{run.resource}</dd></div>
+      <div><dt>Source Task ID</dt><dd>{run.taskId}</dd></div>
+      <div><dt>Artifact label</dt><dd>{run.artifactId}</dd></div>
+    </dl>
+    <p class="bench-axis-note" style="text-align: left;">Verified in ClearML on 2026-09-08. Dates preserve the browser's displayed clock; timezone was not independently recorded. Task elapsed time includes orchestration and differs from tool-only Runtime. Resource is an instance tag, not verified allocated hardware. Release mapping and the meaning of total_proteins are not independently reconciled.</p>
+  </section>
+
+  <section class="py-lg bench-border-t">
+    <h2>Inputs &amp; recorded configuration</h2>
+    <p class="bench-axis-note" style="text-align: left;">Six RAW files: A and B, three replicates each. FASTA: napedro_3mixed_human_yeast_ecoli_20140403_iRT.fasta. Generated library; Trypsin/P; 2 missed cleavages; up to 5 variable modifications; peptide length 7–52; charge 1–6; MBR enabled; seed 42. Differential analysis and condition-aware precursor correction enabled, quantity level pg.</p>
+    <ul class="bench-file-list">
+      {run.files.map((file) => <li>{file}</li>)}
+    </ul>
+    <p class="bench-axis-note" style="text-align: left;">Filenames match the Astral history. Input checksums, effective defaults and counting definitions across versions have not been reconciled; differences are not isolated software improvements.</p>
+  </section>
+</div>

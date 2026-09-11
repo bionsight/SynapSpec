@@ -1,0 +1,48 @@
+[
+  {
+    "ledger_slug": "lfqbench-202409-archived",
+    "tools": [
+      {
+        "id": "synapspec",
+        "label": "SynapSpec",
+        "median_epsilon": 0.1846,
+        "precursors": 81559
+      },
+      {
+        "id": "diann",
+        "label": "DIA-NN",
+        "median_epsilon": 0.1757,
+        "precursors": 108447
+      },
+      {
+        "id": "spectronaut",
+        "label": "Spectronaut",
+        "median_epsilon": 0.3294,
+        "precursors": 104099
+      }
+    ]
+  },
+  {
+    "ledger_slug": "lfqbench-202502-archived",
+    "tools": [
+      {
+        "id": "synapspec",
+        "label": "SynapSpec",
+        "median_epsilon": 0.054,
+        "precursors": 261946
+      },
+      {
+        "id": "diann",
+        "label": "DIA-NN",
+        "median_epsilon": 0.1065,
+        "precursors": 289626
+      },
+      {
+        "id": "spectronaut",
+        "label": "Spectronaut",
+        "median_epsilon": 0.0409,
+        "precursors": 300293
+      }
+    ]
+  }
+]
