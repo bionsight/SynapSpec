@@ -1,0 +1,55 @@
+---
+// _layouts/default.html을 옮긴 것. jekyll-seo-tag가 하던 일은 아래 메타 태그로 직접 쓴다.
+import "../styles/global.scss";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+import Mixpanel from "../components/Mixpanel.astro";
+import { site } from "../data/nav";
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  isHome?: boolean;
+}
+const { title, description = site.description, noindex = false, isHome = false } = Astro.props;
+const fullTitle = title ? `${title} - ${site.title}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <Mixpanel />
+  </head>
+  <body class={isHome ? "page-home" : undefined}>
+    <Header />
+
+    <main class="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <CookieConsent />
+  </body>
+</html>

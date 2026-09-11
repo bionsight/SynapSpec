@@ -1,0 +1,278 @@
+@import "variables";
+
+// 헤더/푸터만 SpectraLens 전용 어두운 톤(ink-950)을 쓴다. 나머지 섹션은
+// .hero/.stat-band/.card/.services-grid/.block 등 사이트 공용 컴포넌트를
+// spectralens/index.md 에서 그대로 재사용한다.
+
+.spectralens-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid $brand-950;
+  background: $ink-950;
+  color: $ink-0;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    height: 54px;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $ink-0;
+
+    img {
+      height: 20px;
+      width: auto;
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-left: auto;
+    font-size: 0.75rem;
+
+    a {
+      color: rgba(255, 255, 255, 0.75);
+
+      &:hover {
+        color: $ink-0;
+      }
+    }
+  }
+}
+
+.spectralens-footer {
+  background: $ink-950;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2rem 0;
+
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    font-size: 0.9rem;
+
+    @media (min-width: $mobile) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  strong {
+    display: block;
+    color: $ink-0;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.25rem;
+
+    a {
+      color: inherit;
+
+      &:hover {
+        color: $ink-0;
+      }
+    }
+  }
+}
+
+// 옛 페이지 배경/본문 폭 리셋 — spectralens 도 다른 페이지와 같은 흰 배경, 같은 컨테이너를 쓴다
+body.page-spectralens {
+  background: $ink-0;
+}
+
+// Workflow — 번호가 매겨진 4단 목록. Requirements 와 같은 리듬, 위쪽 브랜드 보더만 다르다
+.spectralens-workflow {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: $mobile) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  li {
+    border-top: 2px solid $brand-600;
+    padding-top: 1rem;
+  }
+
+  h3 {
+    margin-top: 0.25rem;
+    font-size: 1rem;
+  }
+
+  p {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: $text-color-light;
+  }
+}
+
+.spectralens-workflow-number {
+  font-family: $mono-font;
+  font-size: 11.5px;
+  color: $accent-color;
+}
+
+// Docs — 사이드 내비 + 본문
+.spectralens-doc-layout {
+  display: grid;
+  gap: 2rem;
+
+  @media (min-width: $tablet) {
+    grid-template-columns: 12rem minmax(0, 1fr);
+  }
+}
+
+.spectralens-doc-nav {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: $text-color-light;
+
+  a:hover {
+    color: $accent-color;
+  }
+}
+
+.spectralens-doc-content {
+  display: grid;
+  gap: 2.5rem;
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  h4 {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+  }
+
+  p {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: $text-color-light;
+  }
+
+  ol, ul {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: $text-color-light;
+
+    li + li {
+      margin-top: 0.25rem;
+    }
+  }
+
+  pre {
+    margin-top: 1rem;
+    overflow-x: auto;
+    border-radius: $border-radius;
+    background: $ink-900;
+    padding: 1rem;
+
+    code {
+      background: none;
+      padding: 0;
+      color: $ink-50;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.spectralens-download-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card {
+    display: block;
+    color: inherit;
+
+    &:hover {
+      border-color: $brand-300;
+    }
+  }
+}
+
+.spectralens-download-platform {
+  display: block;
+  font-weight: 600;
+}
+
+.spectralens-guide {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.spectralens-guide-step {
+  display: grid;
+  gap: 1rem;
+  border-top: 1px solid $ink-100;
+  padding-top: 1rem;
+
+  @media (min-width: $mobile) {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  img {
+    border-radius: $border-radius;
+    border: 1px solid $ink-200;
+  }
+
+  figcaption {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: $text-color-lighter;
+  }
+}
+
+.spectralens-settings-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  > div {
+    border-top: 1px solid $ink-100;
+    padding-top: 0.75rem;
+  }
+
+  dt {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  dd {
+    margin: 0.25rem 0 0;
+    font-size: 0.9rem;
+    color: $text-color-light;
+  }
+}

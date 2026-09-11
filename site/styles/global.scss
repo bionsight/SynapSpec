@@ -1,0 +1,39 @@
+@import "variables";
+@import "layout";
+@import "components";
+@import "spectralens";
+@import "benchmark";
+// Pretendard 는 시스템 폰트로만 쓴다(설치돼 있으면 우선 적용). 없는 환경을 위한
+// 한글 폴백만 웹폰트로 불러온다 — 시안 A 는 별도 heading 폰트를 쓰지 않는다.
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+// Global typography
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 $spacing-md;
+}
+
+a {
+  color: $accent-color;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $primary-color-darker;
+  }
+}
+
+// 옛 강조 섹션 클래스 — Closer(.closer)로 대체됐지만 다른 페이지가 아직
+// 참조할 수 있어 최소한의 스타일만 남긴다.
+.highlight-section:not(.closer) {
+  padding: $spacing-xl 0;
+  margin: $spacing-xl 0;
+  border-radius: $border-radius-lg;
+  background-color: $bg-secondary;
+  border: 1px solid $border-color;
+}

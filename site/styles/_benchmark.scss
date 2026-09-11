@@ -1,0 +1,875 @@
+// Benchmarks page — LFQBench validation results
+
+.bench-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $spacing-md;
+  font-size: $font-size-small;
+  color: $text-light;
+
+  i {
+    color: $primary-color;
+    margin-right: $spacing-xs * 0.6;
+  }
+}
+
+// ── Accuracy scale ──────────────────────────────────────────
+
+.bench-scale {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.bench-species {
+  padding: $spacing-md 0 $spacing-lg;
+
+  & + .bench-species {
+    border-top: 1px solid $border-color;
+  }
+}
+
+.bench-species-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+}
+
+.bench-count {
+  font-size: $font-size-small;
+  color: $text-color-lightest;
+  white-space: nowrap;
+}
+
+.bench-track {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, $border-color, $secondary-color-light, $border-color);
+  margin: $spacing-xl $spacing-sm;
+}
+
+// Median absolute deviation band
+.bench-band {
+  position: absolute;
+  top: -7px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(16, 106, 158, 0.18);
+}
+
+// Known correct answer
+.bench-target {
+  position: absolute;
+  top: -12px;
+  width: 0;
+  height: 28px;
+  border-left: 2px dashed $text-color-lighter;
+}
+
+.bench-target-label {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: $text-color-lighter;
+}
+
+// Measured median
+.bench-value {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: $primary-color;
+  box-shadow: 0 0 0 3px $background-color, 0 2px 8px rgba(16, 106, 158, 0.5);
+}
+
+.bench-value-label {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+}
+
+.bench-species-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  font-size: $font-size-small;
+  color: $text-light;
+
+  strong {
+    color: $text-color;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bench-axis-note {
+  margin-top: $spacing-md;
+  font-size: $font-size-small;
+  color: $text-color-lightest;
+  text-align: center;
+}
+
+// ── Depth stats ─────────────────────────────────────────────
+
+.bench-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-md;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.bench-stat {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs * 0.6;
+  padding: $spacing-lg;
+  text-align: center;
+  background: $bg-secondary;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+}
+
+.bench-stat-value {
+  font-family: $heading-font;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+  font-variant-numeric: tabular-nums;
+
+  small {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 1px;
+  }
+}
+
+.bench-stat-label {
+  font-size: $font-size-small;
+  color: $text-light;
+}
+
+// ── Method ──────────────────────────────────────────────────
+
+.bench-method {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+
+  h4 {
+    margin-bottom: $spacing-xs * 0.6;
+    font-size: 0.95rem;
+    color: $accent-color;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size-small;
+    color: $text-light;
+  }
+}
+
+@media (max-width: $mobile) {
+  .bench-species-head {
+    flex-direction: column;
+    gap: $spacing-xs * 0.5;
+  }
+
+  .bench-track {
+    margin-left: $spacing-lg;
+    margin-right: $spacing-lg;
+  }
+}
+
+// ── Trend bars (list page) ──────────────────────────────────
+
+.bench-trend {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 180px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-trend-bar {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  text-decoration: none;
+
+  &:hover .bench-trend-fill {
+    background: $primary-color-darker;
+  }
+}
+
+.bench-trend-fill {
+  display: block;
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: $primary-color;
+  transition: background 0.2s ease;
+}
+
+.bench-trend-date {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  color: $text-color-lightest;
+}
+
+// ── Tables ──────────────────────────────────────────────────
+
+.bench-table-wrap {
+  // 900px 로 좁혀 놨던 것 — 바로 위 .bench-header-split(제목+링크 줄)은 컨테이너
+  // 전체 폭을 쓰는데 표만 좁아서 리더보드 등에서 어긋나 보였다. 컨테이너 폭 그대로 쓴다.
+  overflow-x: auto;
+}
+
+.bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-small;
+  font-variant-numeric: tabular-nums;
+
+  th,
+  td {
+    padding: $spacing-xs $spacing-sm;
+    text-align: left;
+    border-bottom: 1px solid $border-color;
+    white-space: nowrap;
+  }
+
+  th {
+    font-family: $heading-font;
+    font-weight: 600;
+    color: $accent-color;
+    border-bottom-width: 2px;
+  }
+
+  .num {
+    text-align: right;
+  }
+
+  tbody tr:hover {
+    background: $bg-secondary;
+  }
+
+  code {
+    font-size: 0.8rem;
+    color: $text-light;
+  }
+}
+
+.bench-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: $text-color-lightest;
+
+  &.is-on {
+    background: rgba(16, 106, 158, 0.15);
+    color: $primary-color-darker;
+    font-weight: 500;
+  }
+}
+
+// ── Prev / next ─────────────────────────────────────────────
+
+.bench-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-md;
+  max-width: 860px;
+  margin: 0 auto $spacing-xl;
+  padding-top: $spacing-md;
+  border-top: 1px solid $border-color;
+  font-size: $font-size-small;
+}
+
+// ── Ported from the TanStack /benchmarks prototype ───────────
+// Four kinds hand-authored into _benchmark_entries: recorded run,
+// archived comparison, imported ClearML run, pending dataset. Plus the
+// index dataset switcher and the /benchmarks/history/ trend chart.
+// All still unlisted — see _config.yml's benchmark_entries defaults.
+
+.bench-muted {
+  font-weight: 400;
+  color: $text-light;
+}
+
+.bench-link {
+  font-size: $font-size-small;
+  font-weight: 600;
+  color: $primary-color-darker;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.bench-header-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-sm;
+}
+
+.bench-callout {
+  // .bench-table-wrap 과 같은 문제 — 900px 로 좁혀 놨던 걸 컨테이너 폭 그대로 쓰게 뺐다.
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  background: $bg-secondary;
+  font-size: $font-size-small;
+  color: $text-color-light;
+}
+
+.bench-subvalue {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: $text-color-lightest;
+}
+
+.bench-border-t {
+  border-top: 1px solid $border-color;
+}
+
+.bench-border-b {
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-border-y {
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-lede {
+  margin: $spacing-sm 0 0;
+  font-family: $heading-font;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-lede-unit {
+  font-family: $body-font;
+  font-size: $font-size-small;
+  font-weight: 500;
+  color: $text-light;
+}
+
+.bench-figure-link {
+  display: block;
+  margin-top: $spacing-md;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+  }
+}
+
+.bench-figure-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-top: $spacing-xs;
+
+  a {
+    font-size: $font-size-small;
+    color: $primary-color-darker;
+  }
+}
+
+.bench-download-link {
+  display: inline-block;
+  margin-top: $spacing-xs;
+  font-size: $font-size-small;
+  color: $primary-color-darker;
+}
+
+// ── Fact lists (dl grids) ─────────────────────────────────────
+
+.bench-facts,
+.bench-config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm $spacing-lg;
+  margin: $spacing-md 0;
+
+  @media (min-width: $mobile) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $text-color-lightest;
+  }
+
+  dd {
+    margin: 4px 0 0;
+    font-size: $font-size-small;
+  }
+}
+
+.bench-facts-top {
+  padding-top: $spacing-md;
+  border-top: 2px solid $primary-color-dark;
+
+  dd {
+    font-family: $heading-font;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bench-fact-note {
+  display: block;
+  margin-top: 3px;
+  font-family: $body-font;
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  color: $text-color-lightest;
+}
+
+.bench-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1px solid $border-color;
+
+  a {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $primary-color-darker;
+  }
+}
+
+.bench-file-list {
+  margin: $spacing-sm 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  color: $text-color-lightest;
+
+  li {
+    margin-top: 4px;
+    word-break: break-all;
+  }
+}
+
+.bench-overlap-list {
+  margin: $spacing-sm 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: $font-size-small;
+
+  li {
+    margin-top: 6px;
+  }
+
+  strong {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.bench-details {
+  margin: $spacing-md 0;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  font-size: $font-size-small;
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  p {
+    margin: $spacing-xs 0 0;
+    color: $text-light;
+  }
+}
+
+.bench-limitations {
+  margin: $spacing-sm 0 0;
+  padding-left: 1.25rem;
+  color: $text-light;
+  font-size: $font-size-small;
+
+  li {
+    margin-top: 6px;
+  }
+}
+
+.bench-pending {
+  max-width: 640px;
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+// ── No-JS toggle pattern (radio + sibling selectors) ─────────
+// Shared shell for the ratio-mode toggle and the dataset switcher.
+
+.bench-ratio-input,
+.bench-ds-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bench-toggle-group {
+  display: flex;
+  gap: $spacing-xs * 0.5;
+}
+
+.bench-toggle-btn {
+  padding: 6px 14px;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $text-light;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: $primary-color;
+  }
+}
+
+#ratio-actual:checked ~ .bench-ratio-head .bench-toggle-btn[for="ratio-actual"],
+#ratio-relative:checked ~ .bench-ratio-head .bench-toggle-btn[for="ratio-relative"],
+#dataset-oe480:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-oe480"],
+#dataset-astral:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-astral"] {
+  background: $primary-color;
+  border-color: $primary-color;
+  color: $background-color;
+}
+
+// ── Ratio widget ───────────────────────────────────────────────
+
+.bench-ratio-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-md;
+  margin-bottom: $spacing-sm;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.bench-ratio-panel-relative {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-panel-actual {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-panel-relative {
+  display: block;
+}
+
+.bench-ratio-footnote-relative {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-footnote-actual {
+  display: none;
+}
+
+#ratio-relative:checked ~ .bench-ratio-footnote-relative {
+  display: block;
+}
+
+.bench-ratio-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 150px;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid $border-color;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bench-ratio-species {
+  font-weight: 600;
+}
+
+.bench-ratio-count {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: $text-color-lightest;
+}
+
+.bench-ratio-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bench-ratio-gridline {
+  stroke: $border-color;
+}
+
+.bench-ratio-ticklabel {
+  fill: $text-color-lightest;
+  font-size: 11px;
+}
+
+.bench-ratio-band {
+  fill: rgba(16, 106, 158, 0.18);
+  stroke: $primary-color-dark;
+}
+
+.bench-ratio-target {
+  stroke: $text-color;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.bench-ratio-dot {
+  fill: $primary-color;
+  stroke: $background-color;
+  stroke-width: 2;
+}
+
+.bench-ratio-value {
+  text-align: right;
+  font-family: $heading-font;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+
+  @media (max-width: $mobile) {
+    text-align: left;
+  }
+}
+
+.bench-ratio-value-label {
+  display: block;
+  margin-top: 2px;
+  font-family: $body-font;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: $text-color-lightest;
+}
+
+// ── Dataset switcher (index page) ────────────────────────────
+
+.bench-ds-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1px solid $border-color;
+}
+
+.bench-ds-panel-astral {
+  display: none;
+}
+
+#dataset-astral:checked ~ .bench-ds-panel-oe480 {
+  display: none;
+}
+
+#dataset-astral:checked ~ .bench-ds-panel-astral {
+  display: block;
+}
+
+// The two run-history links in .bench-ds-head reuse the same panel classes,
+// so the rules above already show/hide them — just keep their "on" state inline.
+.bench-ds-head .bench-ds-panel-oe480,
+.bench-ds-head .bench-ds-panel-astral {
+  display: none;
+}
+
+#dataset-oe480:checked ~ .bench-ds-head .bench-ds-panel-oe480,
+#dataset-astral:checked ~ .bench-ds-head .bench-ds-panel-astral {
+  display: inline;
+}
+
+// ── History trend chart ───────────────────────────────────────
+
+.bench-history-chart-wrap {
+  overflow-x: auto;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+}
+
+.bench-history-svg {
+  display: block;
+  width: 100%;
+  min-width: 600px;
+  height: auto;
+}
+
+.bench-history-gridline {
+  stroke: $border-color;
+}
+
+.bench-history-ticklabel {
+  fill: $text-color-lightest;
+  font-size: 12px;
+}
+
+// 산점도 버전 — 날짜를 잇는 선 없이 점만 찍는다. 점 사이가 가까울 때도
+// 구분되도록 흰 테두리와 약간의 투명도를 준다.
+.bench-history-dot {
+  fill: $primary-color-dark;
+  fill-opacity: 0.85;
+  stroke: $background-color;
+  stroke-width: 1.5;
+}
+
+// ── Accuracy-vs-depth scatter (ProteoBench 참고) ───────────────
+// proteobench.org 의 LFQ 정확도 모듈과 같은 축: 가로 = 정확도 오차, 세로 = 깊이.
+// 점 하나 = 도구 하나. 색은 Okabe-Ito 색맹 안전 팔레트를 도구별로 고정 배정한다.
+
+.bench-scatter-chart-wrap {
+  overflow-x: auto;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+}
+
+.bench-scatter-svg {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+}
+
+.bench-scatter-gridline {
+  stroke: $border-color;
+}
+
+.bench-scatter-ticklabel {
+  fill: $text-color-lightest;
+  font-size: 12px;
+}
+
+.bench-scatter-axis-title {
+  fill: $text-color-lighter;
+  font-size: 12px;
+}
+
+.bench-scatter-dot {
+  stroke: $background-color;
+  stroke-width: 2;
+  fill-opacity: 0.9;
+
+  &-synapspec { fill: $viz-1; }
+  &-diann { fill: $viz-2; }
+  &-spectronaut { fill: $viz-3; }
+}
+
+.bench-scatter-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin: $spacing-sm 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: $font-size-small;
+  color: $text-color-light;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+}
+
+.bench-scatter-legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  // <span> 는 SVG 가 아니라 fill 이 안 먹는다 — 배경색으로 같은 팔레트를 다시 준다.
+  &.bench-scatter-dot-synapspec { background: $viz-1; }
+  &.bench-scatter-dot-diann { background: $viz-2; }
+  &.bench-scatter-dot-spectronaut { background: $viz-3; }
+}
+
+// ── Leaderboard ─────────────────────────────────────────────
+// 메달 색 대신 브랜드 톤 3단계로 순위를 표시한다 — 토큰 밖 색을 새로 안 만든다.
+
+.bench-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $background-color;
+  background: $ink-300;
+
+  &-1 { background: $primary-color; }
+  &-2 { background: $ink-400; }
+}
+
+.bench-leaderboard-lead {
+  background: $bg-secondary;
+
+  th { font-weight: 700; }
+}

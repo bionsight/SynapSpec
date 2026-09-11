@@ -1,0 +1,34 @@
+[
+  {
+    "term": "Operating System",
+    "lines": [
+      "Windows: Windows 10, 11, or Server 2016/2019/2022 (64-bit)",
+      "macOS: macOS 10.14 or higher",
+      "Linux: Ubuntu 20.04 LTS or higher"
+    ]
+  },
+  {
+    "term": "Processor",
+    "lines": ["Minimum: 4 cores", "Recommended: Intel or AMD CPU with 16 cores or more"]
+  },
+  {
+    "term": "Memory",
+    "lines": [
+      "Minimum: 16 GB RAM",
+      "Recommended: 32 GB RAM or more",
+      "Note: 4 GB RAM per thread for optimal performance"
+    ]
+  },
+  {
+    "term": "Storage",
+    "lines": [
+      "Installation: 3 GB available disk space",
+      "Data Processing: 2 TB or more (2x dataset size recommended)",
+      "Recommended: SSD for improved processing speed"
+    ]
+  },
+  {
+    "term": "Software Dependencies",
+    "lines": [".NET 8.0 or higher", "Mono"]
+  }
+]

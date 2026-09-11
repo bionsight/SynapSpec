@@ -1,4 +1,6 @@
-_site/
+node_modules/
+.astro/
+dist/
 .DS_Store
 .idea/
 .bundle/

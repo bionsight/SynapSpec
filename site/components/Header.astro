@@ -1,0 +1,53 @@
+---
+// _includes/header.html을 옮긴 것. 체크박스+라벨로 여는 모바일 nav는 JS 없이 그대로 둔다.
+import { navigation } from "../data/nav";
+import releases from "../data/releases.json";
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" hidden />
+  <div class="container header-content">
+    <a href="/" class="logo" aria-label="SynapSpec home">
+      <img src="/assets/images/favicon.png" alt="" width="460" height="539" />
+      <span><b>Synap</b>Spec</span>
+    </a>
+
+    <nav class="nav-menu" aria-label="Main navigation">
+      {navigation.map((item) =>
+        item.external ? (
+          <a href={item.url} class="external" target="_blank" rel="noopener">{item.name}</a>
+        ) : (
+          <a href={item.url} class={currentPath === item.url ? "active" : undefined}>{item.name}</a>
+        )
+      )}
+    </nav>
+
+    <span class="header-spacer" />
+    <span class="header-version">v{releases.synapspec.version}</span>
+    <a href="/download/" class="btn btn-small">Download</a>
+
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Menu">
+      <svg class="icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+      <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </label>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Main navigation">
+    <div class="container">
+      <ul class="mobile-nav-list">
+        {navigation.map((item) => (
+          <li>
+            {item.external ? (
+              <a href={item.url} class="external" target="_blank" rel="noopener">{item.name}</a>
+            ) : (
+              <a href={item.url} class={currentPath === item.url ? "active" : undefined}>{item.name}</a>
+            )}
+          </li>
+        ))}
+        <li class="header-version">v{releases.synapspec.version}</li>
+      </ul>
+    </div>
+  </nav>
+</header>

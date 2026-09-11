@@ -1,0 +1,9 @@
+{
+  "figures": [
+    { "value": "261,903", "label": "precursors identified" },
+    { "value": "17,831", "label": "protein groups" },
+    { "value": "7h 14m", "label": "wall clock, 6 DIA files" },
+    { "value": "≤ 0.083", "label": "median log₂ ratio deviation from target" }
+  ],
+  "footnote": "LFQBench on an Orbitrap Astral · 6 files, two conditions × 3 replicates · AWS c7i.8xlarge · run 2026-07-22"
+}
