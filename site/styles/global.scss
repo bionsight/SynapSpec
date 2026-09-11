@@ -31,7 +31,7 @@ a {
 // 옛 강조 섹션 클래스 — Closer(.closer)로 대체됐지만 다른 페이지가 아직
 // 참조할 수 있어 최소한의 스타일만 남긴다.
 .highlight-section:not(.closer) {
-  padding: $spacing-xl 0;
+  padding: $spacing-xl;
   margin: $spacing-xl 0;
   border-radius: $border-radius-lg;
   background-color: $bg-secondary;
