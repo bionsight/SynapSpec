@@ -119,12 +119,17 @@
     display: grid;
     align-items: center;
     gap: 2rem;
-    padding: 2.5rem 0;
+    // 위아래만 준다 — 좌우는 .container 몫이다. 이 요소가 .container와 함께
+    // 쓰여서(class="container hero-grid"), 여기서 좌우까지 쓰면 그 padding을
+    // 덮어써 버린다(선택자 특이도가 더 높다).
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
 
     @media (min-width: $mobile) {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.62fr);
       gap: 3rem;
-      padding: 5rem 0;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
     }
 
     // SpectraLens 는 스크린샷이 더 정사각형에 가까워 1:1.05 비율을 쓴다

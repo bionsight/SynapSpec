@@ -214,7 +214,10 @@ body.page-plain-hero .main-content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    padding: 2.5rem 0;
+    // 위아래만 준다 — .container와 같이 쓰여서(class="container footer-content"),
+    // 좌우까지 쓰면 .container의 padding을 덮어써 버린다.
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
 
     @media (min-width: $mobile) {
       grid-template-columns: 1.4fr repeat(3, minmax(0, 1fr));
@@ -274,7 +277,9 @@ body.page-plain-hero .main-content {
 
   .copyright {
     border-top: 1px solid $border-color;
-    padding: 1.25rem 0;
+    // .container와 같이 쓰여서(class="container copyright") 위아래만 준다.
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
     font-size: 13px;
     color: $text-color-lighter;
   }
