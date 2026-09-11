@@ -1,0 +1,68 @@
+---
+// _layouts/spectralens.html을 옮긴 것. 헤더·푸터가 site-wide 것과 다른 다크 레이아웃.
+import "../styles/global.scss";
+import CookieConsent from "../components/CookieConsent.astro";
+import Mixpanel from "../components/Mixpanel.astro";
+import spectralens from "../data/spectralens.json";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = "SpectraLens", description = spectralens.description } = Astro.props;
+const ogImage = new URL("/assets/images/spectralens/logo.png", Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/png" href="/assets/images/spectralens/favicon.png" />
+    <Mixpanel product="SpectraLens" pageType="landing_page" />
+  </head>
+  <body class="page-spectralens">
+    <header class="spectralens-site-header">
+      <div class="container header-content">
+        <a href="/spectralens/" class="logo" aria-label="SpectraLens home">
+          <img src="/assets/images/spectralens/logo.png" alt="" />
+          <span>SpectraLens</span>
+        </a>
+        <nav aria-label="SpectraLens navigation">
+          <a href="#features">Features</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#docs">Docs</a>
+          <a href="#download">Download</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <slot />
+    </main>
+
+    <footer class="spectralens-footer">
+      <div class="container footer-inner">
+        <div>
+          <strong>SpectraLens</strong>
+          <span>Targeted DIA peak inspection for focused precursor review.</span>
+        </div>
+        <div class="footer-links">
+          <a href={spectralens.release_url} target="_blank" rel="noopener">Download</a>
+          <a href={spectralens.contact_url}>Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <CookieConsent product="spectralens" />
+  </body>
+</html>

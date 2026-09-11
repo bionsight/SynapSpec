@@ -1,0 +1,54 @@
+---
+// contact/index.md를 옮긴 것.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { site } from "../../data/nav";
+
+const description = "Get in touch with Proteomics Solutions for collaborations and inquiries";
+---
+
+<BaseLayout title="Contact Us" description={description}>
+  <div class="container">
+    <div class="page-header">
+      <h1>Contact Us</h1>
+      <p>Ready to advance your research? Let's discuss how we can help.</p>
+    </div>
+
+    <section class="contact-grid">
+      <div>
+        <h2>Get in Touch</h2>
+        <p>
+          We're here to support your research goals. Whether you're interested in our services,
+          have questions about our platform, or want to explore collaboration opportunities, we'd
+          love to hear from you.
+        </p>
+
+        <h3>Email</h3>
+        <p><a href={`mailto:${site.company.email}`}>{site.company.email}</a></p>
+
+        <h3>GitHub</h3>
+        <p>For technical discussions, feature requests, and community support:</p>
+        <div class="btn-group">
+          <a href={site.github.discussions} class="btn" target="_blank" rel="noopener">Join Discussions</a>
+          <a href={site.github.issues} class="btn btn-outline" target="_blank" rel="noopener">Report Issues</a>
+        </div>
+
+        <h3>Collaborations</h3>
+        <p>
+          Interested in research collaborations or partnerships? We work with academic institutions,
+          pharmaceutical companies, and biotechnology organizations worldwide.
+        </p>
+      </div>
+
+      <aside class="contact-form">
+        <h3>Send us a Message</h3>
+        <p>Use this form to get started, or reach out directly via email or GitHub.</p>
+        <div class="contact-form-panel">
+          <h4>Prefer GitHub?</h4>
+          <p>For faster responses and to engage with our community, we recommend using GitHub:</p>
+          <a href={site.github.newDiscussion} class="btn" target="_blank" rel="noopener">Start a Discussion</a>
+          <p>Questions, ideas, and collaboration proposals are welcome!</p>
+        </div>
+      </aside>
+    </section>
+  </div>
+</BaseLayout>
