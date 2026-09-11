@@ -1,12 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  # 지금은 이 브랜치에서 워크플로 자체가 정상적으로 도는지만 확인한다 — Pages 소스는
-  # 아직 legacy(gh-page 브랜치)라 여기서 push해도 실제 배포에는 영향이 없다. 이
-  # 브랜치를 gh-page에 merge하고 Pages 소스를 Actions로 옮길 때 트리거도 gh-page로
-  # 바꾼다.
   push:
-    branches: [feat/astro-migration]
+    branches: [gh-page]
   workflow_dispatch:
 
 permissions:
