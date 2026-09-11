@@ -4,3 +4,8 @@ dist/
 .DS_Store
 .idea/
 .bundle/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
