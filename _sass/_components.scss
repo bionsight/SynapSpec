@@ -2,6 +2,9 @@
 
 // Buttons — src/ui.ts 의 button() 을 그대로 옮긴 것. primary/secondary/ghost × sm/md/lg.
 .btn {
+  // width: 100%(.btn-group, .closer-actions)와 padding/border를 같이 쓰는데
+  // content-box 그대로 두면 그만큼 트랙 밖으로 넘친다.
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -124,6 +127,13 @@
     // 덮어써 버린다(선택자 특이도가 더 높다).
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
+
+    // 모바일에선 명시적 컬럼이 없어 그리드 아이템이 암묵적으로 1열을 이룬다.
+    // grid item의 기본 min-width는 auto라 스크린샷(run_detail.png, 1280px)의
+    // 고유 너비가 트랙 최소 크기로 반영돼 뷰포트를 넘어 가로 스크롤을 만든다.
+    > * {
+      min-width: 0;
+    }
 
     @media (min-width: $mobile) {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.62fr);
