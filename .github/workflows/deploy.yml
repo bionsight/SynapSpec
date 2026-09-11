@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 지금은 이 브랜치에서 워크플로 자체가 정상적으로 도는지만 확인한다 — Pages 소스는
+  # 아직 legacy(gh-page 브랜치)라 여기서 push해도 실제 배포에는 영향이 없다. 이
+  # 브랜치를 gh-page에 merge하고 Pages 소스를 Actions로 옮길 때 트리거도 gh-page로
+  # 바꾼다.
+  push:
+    branches: [feat/astro-migration]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포 중 새 push가 와도 겹쳐 실행하지 않는다 — 이전 배포를 취소하지도 않는다.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # outDir이 기본값(dist)이라 withastro/action의 하드코딩된 "<path>/dist/"와
+      # 그대로 맞는다 — bion-design과 달리 이 저장소는 dist/를 다른 용도로 쓰지 않는다.
+      - uses: withastro/action@v3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
