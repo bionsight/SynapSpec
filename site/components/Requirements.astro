@@ -1,0 +1,13 @@
+---
+// _includes/requirements.html을 옮긴 것. Home/Download 공용.
+import requirements from "../data/requirements.json";
+---
+
+<dl class="requirements-grid">
+  {requirements.map((req) => (
+    <div class="requirement-item">
+      <dt>{req.term}</dt>
+      {req.lines.map((line) => <dd>{line}</dd>)}
+    </div>
+  ))}
+</dl>

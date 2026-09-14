@@ -1,0 +1,91 @@
+---
+// _includes/cookie-consent.html을 옮긴 것. GA는 synapspec에서만, Mixpanel은 둘 다에서 불러온다.
+interface Props {
+  product?: "synapspec" | "spectralens";
+}
+const { product = "synapspec" } = Astro.props;
+
+const script = `
+  const GA_MEASUREMENT_ID = 'G-94DZ0M7QBZ';
+  const COOKIE_CONSENT_PRODUCT = '${product}';
+
+  window.addEventListener('load', function() {
+    const consent = localStorage.getItem('cookieConsent');
+
+    if (consent === 'accepted') {
+      loadConsentedAnalytics();
+    } else if (consent === null) {
+      setTimeout(showCookieBanner, 800);
+    }
+  });
+
+  function showCookieBanner() {
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.classList.add('show');
+  }
+
+  function hideCookieBanner() {
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.classList.remove('show');
+  }
+
+  function loadConsentedAnalytics() {
+    if (COOKIE_CONSENT_PRODUCT === 'synapspec') loadGoogleAnalytics();
+    if (typeof loadMixpanelAnalytics === 'function') loadMixpanelAnalytics();
+  }
+
+  function loadGoogleAnalytics() {
+    if (window.gaLoaded) return;
+    window.gaLoaded = true;
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = \`https://www.googletagmanager.com/gtag/js?id=\${GA_MEASUREMENT_ID}\`;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  window.acceptCookies = function() {
+    localStorage.setItem('cookieConsent', 'accepted');
+    hideCookieBanner();
+    loadConsentedAnalytics();
+  };
+
+  window.declineCookies = function() {
+    localStorage.setItem('cookieConsent', 'declined');
+    hideCookieBanner();
+  };
+`;
+---
+
+<section class="cookie-consent" id="cookie-consent-banner" aria-label="Cookie and privacy consent">
+  <div class="container cookie-consent-content">
+    <div class="cookie-consent-text">
+      {product === "synapspec" ? (
+        <>
+          <h2>🍪 Cookie &amp; Privacy Consent</h2>
+          <p>
+            We use Google Analytics and Mixpanel to collect anonymized usage statistics. You can accept or
+            decline analytics cookies. <a href="/privacy/">Privacy Policy</a>
+          </p>
+        </>
+      ) : (
+        <>
+          <h2>Cookie &amp; Privacy Consent</h2>
+          <p>We collect anonymized usage statistics to improve this website. You can accept or decline analytics cookies.</p>
+        </>
+      )}
+    </div>
+    <div class="cookie-consent-actions">
+      <button class="cookie-consent-accept" type="button" onclick="acceptCookies()">Accept All</button>
+      <button class="cookie-consent-decline" type="button" onclick="declineCookies()">Decline</button>
+    </div>
+  </div>
+</section>
+
+<script is:inline set:html={script} />

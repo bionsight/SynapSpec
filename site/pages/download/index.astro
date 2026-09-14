@@ -1,0 +1,75 @@
+---
+// download/index.md를 옮긴 것.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Requirements from "../../components/Requirements.astro";
+import releases from "../../data/releases.json";
+
+const description = "Download the latest version of SynapSpec for your platform";
+const dl = releases.synapspec.downloads;
+const version = releases.synapspec.version;
+---
+
+<BaseLayout title="Download SynapSpec" description={description}>
+  <div class="container">
+    <div class="page-header">
+      <h1>Download SynapSpec</h1>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>Compatibility</th>
+            <th>Build</th>
+            <th>File</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th rowspan="2">Windows</th>
+            <td rowspan="2">Compatible with Windows 10/11</td>
+            <td>GPU</td>
+            <td class="file-name">SynapSpec-windows-{version}.zip</td>
+            <td class="col-action"><a href={dl.windows_gpu} class="btn btn-small">Download</a></td>
+          </tr>
+          <tr>
+            <td>CPU</td>
+            <td class="file-name">SynapSpec-windows-cpu-{version}.zip</td>
+            <td class="col-action"><a href={dl.windows_cpu} class="btn btn-small btn-outline">Download</a></td>
+          </tr>
+          <tr>
+            <th rowspan="2">Linux</th>
+            <td rowspan="2">Compatible with most Linux distributions</td>
+            <td>GPU</td>
+            <td class="file-name">SynapSpec-linux-{version}.tar.gz</td>
+            <td class="col-action"><a href={dl.linux_gpu} class="btn btn-small">Download</a></td>
+          </tr>
+          <tr>
+            <td>CPU</td>
+            <td class="file-name">SynapSpec-linux-cpu-{version}.tar.gz</td>
+            <td class="col-action"><a href={dl.linux_cpu} class="btn btn-small btn-outline">Download</a></td>
+          </tr>
+          <tr>
+            <th>macOS</th>
+            <td>Compatible with macOS 10.14+</td>
+            <td>—</td>
+            <td class="file-name">SynapSpec-macos-{version}.dmg</td>
+            <td class="col-action"><a href={dl.macos} class="btn btn-small">Download</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section class="block-plain highlight-section">
+      <div class="section-header">
+        <h2>System Requirements</h2>
+      </div>
+      <Requirements />
+      <div class="mt-lg">
+        <a href="https://docs.synapspec.ai/installation/" class="btn btn-outline btn-large" target="_blank" rel="noopener">View Installation Guide</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

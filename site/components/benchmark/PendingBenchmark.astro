@@ -1,0 +1,29 @@
+---
+// _includes/benchmark/pending.html을 옮긴 것. has_run: false인 dataset_catalog 항목에서 쓴다.
+import catalog from "../../data/benchmark_catalog.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const dataset = catalog.dataset_catalog.find((d) => d.slug === slug)!;
+---
+
+<div class="container">
+  <div class="breadcrumbs">
+    <a href="/benchmarks/">&larr; All datasets</a>
+  </div>
+
+  <div class="page-header">
+    <h1>{dataset.name} <span class="bench-muted">/ {dataset.instrument}</span></h1>
+  </div>
+
+  <section class="py-lg">
+    <div class="highlight-section bench-pending">
+      <h2>Results have not been imported</h2>
+      <p>This dataset preset exists, but no source run has been selected for this catalog. That does not mean the dataset or its results are unavailable.</p>
+      <p>Release, date, resource, configuration, identification counts and plots will appear after result import.</p>
+      <p class="bench-axis-note" style="text-align: left;">Preset: <code>{dataset.preset}</code></p>
+    </div>
+  </section>
+</div>

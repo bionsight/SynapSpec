@@ -1,0 +1,50 @@
+---
+// _includes/footer.html을 옮긴 것.
+import { site } from "../data/nav";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-content">
+    <div class="footer-about">
+      <a href="/" class="logo" aria-label="SynapSpec home">
+        <img src="/assets/images/favicon.png" alt="" width="460" height="539" />
+        <span><b>Synap</b>Spec</span>
+      </a>
+      <p>SynapSpec is developed and maintained by Bionsight, a biotechnology company dedicated to advancing scientific discovery through AI-powered proteomics solutions.</p>
+    </div>
+
+    <div class="footer-column">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/download/">Download</a></li>
+        <li><a href="/spectralens/">SpectraLens</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://docs.synapspec.ai" target="_blank" rel="noopener">Documentation</a></li>
+        <li><a href="https://docs.synapspec.ai/installation/" target="_blank" rel="noopener">Installation Guide</a></li>
+        <li><a href={`https://github.com/${site.github.repository}`} target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href={site.github.discussions} target="_blank" rel="noopener">Discussions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Bionsight</h4>
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a href="https://www.bionsight.com" target="_blank" rel="noopener">bionsight.com</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container copyright">
+    &copy; {year} {site.company.name}. Accelerating drug discovery through AI-powered proteomics.
+  </div>
+</footer>

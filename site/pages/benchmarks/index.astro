@@ -1,0 +1,96 @@
+---
+// benchmarks/index.md를 옮긴 것. No-JS 데이터셋 토글은 라디오+라벨로 그대로 둔다.
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ledgers from "../../data/benchmark_ledger.json";
+
+const description =
+  "SynapSpec benchmark history on the LFQBench standard dataset — three-tool comparisons on fixed inputs, and every recorded run over time";
+
+const [oe480, astral] = ledgers;
+---
+
+<BaseLayout title="Benchmarks" description={description} noindex>
+  <div class="container">
+    <div class="page-header">
+      <h1>Benchmarks</h1>
+      <p>Fixed input files. Three analysis tools. Recorded runs over time.</p>
+    </div>
+
+    <input type="radio" name="dataset" id="dataset-oe480" class="bench-ds-input" checked />
+    <input type="radio" name="dataset" id="dataset-astral" class="bench-ds-input" />
+
+    <div class="bench-ds-head">
+      <div class="bench-toggle-group" role="group" aria-label="Dataset">
+        <label for="dataset-oe480" class="bench-toggle-btn">{oe480.name}</label>
+        <label for="dataset-astral" class="bench-toggle-btn">{astral.name}</label>
+      </div>
+      <a href="#run-history-oe480" class="bench-ds-panel-oe480 bench-link">Run history ({oe480.rows.length})</a>
+      <a href="#run-history-astral" class="bench-ds-panel-astral bench-link">Run history ({astral.rows.length})</a>
+    </div>
+
+    {ledgers.map((ledger) => {
+      const isAstral = ledger.id === astral.id;
+      const panelClass = isAstral ? "bench-ds-panel-astral" : "bench-ds-panel-oe480";
+      const anchor = isAstral ? "run-history-astral" : "run-history-oe480";
+      const comparisonRow = ledger.rows[ledger.rows.length - 1];
+      return (
+        <div class={`bench-ds-panel ${panelClass}`}>
+          <section class="block" aria-label="Selected results">
+            <div class="section-header">
+              <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
+            </div>
+            <p class="bench-axis-note" style="text-align: left;">{ledger.name} &middot; {ledger.files.length} input files &middot; Archived comparison; execution date not recorded</p>
+            <p class="bench-axis-note" style="text-align: left;"><a href={`/benchmarks/${comparisonRow.sourceSlug}/`} class="bench-link">Run details &amp; source</a></p>
+            <p class="bench-axis-note" style="text-align: left;">Same six input filenames across tools. Releases, full settings and input checksums are not reconciled; this is not a controlled current-release ranking.</p>
+            <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} target="_blank" rel="noreferrer" class="bench-figure-link">
+              <img src={`/assets/images/benchmarks/${ledger.comparison.figure}`} width="2880" height="1600" alt={`${ledger.name}: SynapSpec, DIA-NN and Spectronaut precursor IDs, six-run completeness, CV and Human, Yeast, E. coli LFQ median and IQR.`} />
+            </a>
+            <div class="bench-figure-actions">
+              <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} target="_blank" rel="noreferrer">Open full-size figure</a>
+              <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} download>Download PNG</a>
+            </div>
+          </section>
+
+          <section id={anchor} class="block">
+            <div class="section-header">
+              <h2>Run history</h2>
+              <p class="section-subtitle">One row per recorded execution or comparison bundle, newest dated runs first. Open a run to view its detailed results and figures. Dates are source display dates; undated comparisons are listed separately at the end.</p>
+            </div>
+            <div class="bench-table-wrap" style="max-width: 100%;">
+              <table class="bench-table">
+                <caption>Precursor IDs by tool &middot; &ldquo;&mdash;&rdquo; means not linked, not zero. Matching filenames do not prove identical file contents, settings or counting definitions; changes are descriptive, not isolated software improvements.</caption>
+                <thead>
+                  <tr><th>Run / date</th><th>Commit / source</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
+                </thead>
+                <tbody>
+                  {ledger.rows.map((row) => (
+                    <tr>
+                      <th scope="row">
+                        <a href={`/benchmarks/${row.sourceSlug}/`}>{row.date ?? "Undated comparison"}</a>
+                        <span class="bench-subvalue">{row.label}</span>
+                      </th>
+                      <td>{row.commit ? row.commit : row.comparisonSlug ? "Folder labels only" : "Not recorded"}</td>
+                      {row.counts_display.map((value) => <td class="num">{value ?? "—"}</td>)}
+                      <td class="num">{row.runtime ? `${Math.round(row.runtime * 100) / 100} h` : "—"}</td>
+                      <td>{row.resource ?? "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="bench-axis-note" style="text-align: left;">
+              {ledger.rows.length > 1
+                ? `${ledger.rows.length - 1} dated SynapSpec records and one undated three-tool bundle. Only one imported three-tool bundle is available for this dataset.`
+                : "Only one imported three-tool bundle is available for this dataset. A repeated-run history is not yet available."}
+            </p>
+          </section>
+
+          <details class="bench-details bench-border-t" style="border-top: 1px solid var(--bench-border, #e2e2e2); border-radius: 0; padding-top: 1.25rem;">
+            <summary>Fixed input-file list</summary>
+            <ul class="bench-file-list">{ledger.files.map((file) => <li>{file}</li>)}</ul>
+          </details>
+        </div>
+      );
+    })}
+  </div>
+</BaseLayout>

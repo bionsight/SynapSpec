@@ -1,0 +1,264 @@
+---
+// spectralens/index.md를 옮긴 것.
+import SpectralensLayout from "../../layouts/SpectralensLayout.astro";
+import product from "../../data/spectralens.json";
+
+const description =
+  "SpectraLens is a targeted DIA peak inspection desktop tool for quickly checking precursor and fragment peaks in raw mass spectrometry files.";
+---
+
+<SpectralensLayout title={product.name} description={description}>
+  <section class="hero">
+    <div class="container hero-grid hero-grid-even">
+      <div>
+        <p class="eyebrow">DIA peak inspection</p>
+        <h1>{product.name}</h1>
+        <p class="hero-subtitle">{product.tagline}.</p>
+        <p class="hero-subtitle">
+          SpectraLens is built for the moment when you do not want to run a full DIA pipeline. Load raw
+          files, enter the precursor you care about, and quickly inspect the MS1/MS2 peak evidence.
+        </p>
+        <div class="hero-actions btn-group">
+          <a href={product.release_url} class="btn btn-large" target="_blank" rel="noopener">Download Latest</a>
+          <a href="#docs" class="btn btn-large btn-outline">Read Docs</a>
+        </div>
+      </div>
+      <img src="/assets/images/spectralens/spectralens_window.png" alt="SpectraLens desktop application showing precursor selection and XIC peak plots" />
+    </div>
+  </section>
+
+  <section class="stat-band">
+    <div class="container stat-band-grid">
+      {product.highlights.map((item) => (
+        <div>
+          <span class="stat-label stat-label-first">{item.label}</span>
+          <strong class="stat-value">{item.value}</strong>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <div class="container">
+    <section id="features" class="block">
+      <p class="eyebrow">Why it exists</p>
+      <div class="section-header">
+        <h2>Fast answers before a full analysis run</h2>
+        <p class="section-subtitle">
+          SpectraLens is for targeted visual confirmation: a few precursors, selected raw files, and
+          immediate chromatographic evidence without waiting for a full DIA analysis workflow.
+        </p>
+      </div>
+      <div class="services-grid">
+        {product.features.map((feature) => (
+          <article class="card">
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="workflow" class="block">
+      <p class="eyebrow">Workflow</p>
+      <div class="section-header">
+        <h2>From raw file to peak evidence</h2>
+      </div>
+      <ol class="spectralens-workflow">
+        {product.workflow.map((step, index) => (
+          <li>
+            <span class="spectralens-workflow-number">{index + 1}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="docs" class="block">
+      <p class="eyebrow">Docs</p>
+      <div class="section-header">
+        <h2>Install and use SpectraLens</h2>
+        <p class="section-subtitle">
+          This page keeps the working notes and user docs together because SpectraLens has a focused surface area.
+        </p>
+      </div>
+
+      <div class="spectralens-doc-layout">
+        <nav class="spectralens-doc-nav" aria-label="SpectraLens documentation sections">
+          <a href="#download">Download</a>
+          <a href="#troubleshooting">Troubleshooting</a>
+          <a href="#quick-start">Quick start</a>
+          <a href="#precursor-input">Precursor input</a>
+          <a href="#settings">Settings</a>
+          <a href="#outputs">Outputs</a>
+          <a href="#support">Support</a>
+        </nav>
+
+        <article class="spectralens-doc-content">
+          <section id="download">
+            <h3>Download</h3>
+            <p>
+              SpectraLens is distributed as a desktop application for macOS and Windows. Download the
+              binary for your platform, launch it locally, and create a workspace to inspect DIA precursor peaks.
+            </p>
+            <div class="spectralens-download-grid">
+              <a href={product.download.macos_url} class="card" target="_blank" rel="noopener">
+                <span class="spectralens-download-platform">macOS</span>
+                <span>Desktop app</span>
+              </a>
+              <a href={product.download.windows_url} class="card" target="_blank" rel="noopener">
+                <span class="spectralens-download-platform">Windows</span>
+                <span>Desktop app</span>
+              </a>
+            </div>
+          </section>
+
+          <section id="troubleshooting">
+            <h3>Troubleshooting</h3>
+            <h4>macOS: app cannot be opened because the developer cannot be verified</h4>
+            <p>
+              Due to macOS Gatekeeper security settings, you may need to manually approve SpectraLens
+              because the current macOS build may not have an Apple Developer code signature.
+            </p>
+            <ol>
+              <li>Open <strong>System Settings</strong> or <strong>System Preferences</strong>.</li>
+              <li>Go to <strong>Privacy &amp; Security</strong>.</li>
+              <li>Scroll down to the <strong>Security</strong> section.</li>
+              <li>
+                Find the message about SpectraLens being blocked because it is not from an identified
+                developer, then click <strong>Open Anyway</strong>.
+              </li>
+            </ol>
+            <p>After approving the app, open SpectraLens again from Finder or Launchpad.</p>
+          </section>
+
+          <section id="quick-start">
+            <h3>Quick start</h3>
+            <p>
+              Start by creating or opening a local workspace. SpectraLens keeps selected raw files,
+              target precursors, settings, and exported results inside that workspace.
+            </p>
+
+            <div class="spectralens-guide">
+              <article class="spectralens-guide-step">
+                <div class="spectralens-guide-copy">
+                  <span class="caps-label">Step 1</span>
+                  <h4>Add raw files</h4>
+                  <p>
+                    Open the Raw Files panel, click <strong>Add files</strong>, and choose the raw files you want
+                    to inspect. After the files are listed, tick the checkbox for the file or files that
+                    should be included in the targeted analysis.
+                  </p>
+                </div>
+                <figure>
+                  <img src="/assets/images/spectralens/select_raw_files.png" alt="SpectraLens Raw Files panel with two raw files listed and selected" loading="lazy" />
+                  <figcaption>Add raw files, then select the files to use for analysis.</figcaption>
+                </figure>
+              </article>
+
+              <article class="spectralens-guide-step">
+                <div class="spectralens-guide-copy">
+                  <span class="caps-label">Step 2</span>
+                  <h4>Open the precursor input dialog</h4>
+                  <p>Click <strong>Add precursors</strong> below the precursor list to open the sequence input dialog.</p>
+                </div>
+                <figure>
+                  <img src="/assets/images/spectralens/add_sequences.png" alt="SpectraLens Add Precursors dialog opened over the precursor list" loading="lazy" />
+                  <figcaption>Use Add precursors to open the sequence input dialog.</figcaption>
+                </figure>
+              </article>
+
+              <article class="spectralens-guide-step">
+                <div class="spectralens-guide-copy">
+                  <span class="caps-label">Step 3</span>
+                  <h4>Enter target sequences</h4>
+                  <p>
+                    Add the sequence or precursor you want to check, then click <strong>Add</strong>. Use UniMod
+                    notation for modifications, such as <code>C(UniMod:4)</code>. Separate multiple sequences with
+                    line breaks or commas. Add a charge state after a period, such as <code>PEPTIDESEQ.2</code>.
+                  </p>
+                </div>
+                <figure>
+                  <img src="/assets/images/spectralens/fill_sequences.png" alt="SpectraLens Add Precursors dialog with three target sequences entered" loading="lazy" />
+                  <figcaption>Enter one or more target sequences, then add them to the precursor list.</figcaption>
+                </figure>
+              </article>
+
+              <article class="spectralens-guide-step">
+                <div class="spectralens-guide-copy">
+                  <span class="caps-label">Step 4</span>
+                  <h4>Select precursors and run</h4>
+                  <p>
+                    Select the sequence rows you want to analyze. Anchor precursors are used for RT-iRT mapping.
+                    SpectraLens automatically fills many settings from the raw file metadata, but you can adjust
+                    tolerances, instrument, NCE, RT window, and fragment limits in <strong>Experiment Settings</strong>
+                    when needed. Click <strong>Analyze</strong> to extract and inspect the target peaks. Setup
+                    collapses into the icon rail once the run succeeds, so the results get the full window.
+                  </p>
+                </div>
+                <figure>
+                  <img src="/assets/images/spectralens/select_seqs_settings.png" alt="SpectraLens setup with every raw file and precursor selected, ready to analyze" loading="lazy" />
+                  <figcaption>Select target sequences, review settings, and run Analyze.</figcaption>
+                </figure>
+              </article>
+            </div>
+          </section>
+
+          <section id="precursor-input">
+            <h3>Precursor input</h3>
+            <p>
+              Paste one sequence per line or separate multiple entries with commas. Add a charge suffix with
+              <code>.2</code> or <code>.3</code> when you want a specific charge state. If the charge is omitted,
+              SpectraLens predicts likely charge states and iRT values.
+            </p>
+            <pre><code>{`PEPTIDESEQ.2
+PEPC(UniMod:4)TIDESEQ.3
+AA[Hex(1)HexNAc(2)]DD
+PEPTIDES(UniMod:21)EQ,PEPTIDEM(UniMod:35)SEQ`}</code></pre>
+          </section>
+
+          <section id="settings">
+            <h3>Settings reference</h3>
+            <dl class="spectralens-settings-list">
+              {product.settings.map((setting) => (
+                <div>
+                  <dt>{setting.name}</dt>
+                  <dd>{setting.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section id="outputs">
+            <h3>Outputs</h3>
+            <p>
+              SpectraLens keeps precursor rows, local file status, analysis settings, and extracted result tables
+              inside the selected workspace. Use Export CSV from the visualization panel to save a reviewable result
+              table for downstream notes or manual curation.
+            </p>
+          </section>
+
+          <section id="support">
+            <h3>Support &amp; community</h3>
+            <p>SpectraLens uses GitHub Discussions and Issues for community support, bug reports, and feature ideas.</p>
+            <ul>
+              <li>
+                <strong>Questions and usage help:</strong>
+                ask in <a href={`${product.repository_url}/discussions`} target="_blank" rel="noopener">GitHub Discussions</a>.
+              </li>
+              <li>
+                <strong>Bug reports:</strong>
+                open a <a href={`${product.repository_url}/issues`} target="_blank" rel="noopener">GitHub Issue</a>
+                with your operating system, SpectraLens version, input file type, and a short description of what happened.
+              </li>
+              <li>
+                <strong>Feature ideas:</strong>
+                share suggestions in Discussions so they can be discussed before becoming issues.
+              </li>
+            </ul>
+          </section>
+        </article>
+      </div>
+    </section>
+  </div>
+</SpectralensLayout>

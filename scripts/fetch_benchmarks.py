@@ -4,8 +4,9 @@
 읽기 전용 — ClearML의 어떤 데이터도 수정하지 않는다.
 
 생성물:
-    _data/benchmarks.json      전체 이력 (리스트 페이지가 읽음)
-    _benchmarks/<날짜>.md      run 하나당 상세 페이지 stub
+    site/data/benchmarks.json  전체 이력 — Astro의 getStaticPaths가 이 배열에서
+                               바로 런 상세 페이지를 만든다. Jekyll 시절의
+                               _benchmarks/<날짜>.md stub은 더 필요 없다.
 
 준비 (최초 1회):
     clearml-init      # ClearML UI 의 credentials 블록을 붙여넣기
@@ -37,8 +38,7 @@ PROJECT = "DeepMSFlow/lfq/astral"
 BENCHMARK_TAG = "bion-lfq-astral"
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = ROOT / "_data" / "benchmarks.json"
-COLLECTION_DIR = ROOT / "_benchmarks"
+DATA_PATH = ROOT / "site" / "data" / "benchmarks.json"
 
 # DeepMSFlow instrumentation/parsers/lfq_constants.py 의 bion_lfq_astral 프리셋과 일치해야 한다.
 TARGET_LOG2_RATIOS = {"HUMAN": 0.0, "ECOLI": -2.0, "YEAS8": 1.0}
@@ -195,33 +195,6 @@ def build_run(task_id: str, branch: str) -> dict | None:
     }
 
 
-def write_collection(runs: list[dict]) -> None:
-    """run 마다 상세 페이지 stub 을 쓰고, 더 이상 없는 stub 은 지운다."""
-    COLLECTION_DIR.mkdir(parents=True, exist_ok=True)
-    wanted = set()
-
-    for run in runs:
-        path = COLLECTION_DIR / f"{run['slug']}.md"
-        wanted.add(path.name)
-        path.write_text(
-            "---\n"
-            "# 이 파일은 scripts/fetch_benchmarks.py 가 생성합니다. 직접 수정하지 마세요.\n"
-            "layout: benchmark_run\n"
-            f"slug: \"{run['slug']}\"\n"
-            f"date: {run['date']}\n"
-            f"title: \"Benchmark run {run['date']}\"\n"
-            "noindex: true\n"
-            "sitemap: false\n"
-            "---\n",
-            encoding="utf-8",
-        )
-
-    for stale in COLLECTION_DIR.glob("*.md"):
-        if stale.name not in wanted:
-            stale.unlink()
-            log(f"  제거: {stale.name}")
-
-
 def main() -> None:
     args = parse_args()
 
@@ -314,10 +287,8 @@ def main() -> None:
 
     DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
     DATA_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    write_collection(runs)
 
     log(f"\n작성 완료: {DATA_PATH}")
-    log(f"          {COLLECTION_DIR}/  ({len(runs)}개 stub)")
     log(f"  {len(runs)} runs,  {runs[0]['date']} ~ {latest['date']}")
 
 
