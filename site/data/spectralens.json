@@ -19,32 +19,32 @@
   "features": [
     {
       "title": "Precursor-centered inspection",
-      "icon": "fas fa-crosshairs",
+      "icon": "crosshair",
       "text": "Add the peptide sequence and charge state you want to verify, then inspect only the targeted signal instead of processing the full experiment."
     },
     {
       "title": "Interactive XIC views",
-      "icon": "fas fa-chart-line",
+      "icon": "chart-line",
       "text": "Review precursor-level MS1 XICs and fragment-level MS2 XICs with linear or log scale, legends, and optional TIC or base peak overlays."
     },
     {
       "title": "iRT and charge prediction",
-      "icon": "fas fa-brain",
+      "icon": "brain",
       "text": "Use model-based iRT and charge predictions to seed a focused search window when library information is incomplete."
     },
     {
       "title": "Spectrum context",
-      "icon": "fas fa-wave-square",
+      "icon": "audio-waveform",
       "text": "Compare experimental and predicted spectra so a peak can be checked with chromatographic and fragment evidence together."
     },
     {
       "title": "Raw file workspace",
-      "icon": "fas fa-folder-open",
+      "icon": "folder-open",
       "text": "Create a local workspace, add raw files, and reuse converted files during repeated precursor checks."
     },
     {
       "title": "Exportable review",
-      "icon": "fas fa-file-csv",
+      "icon": "file-spreadsheet",
       "text": "Export analysis results as CSV for review notes, sharing, or downstream manual curation."
     }
   ],
