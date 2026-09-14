@@ -153,6 +153,13 @@ body.page-spectralens {
   display: grid;
   gap: 2.5rem;
 
+  // 본문 문장 속 인라인 링크(#support의 "ask in GitHub Discussions" 등)는
+  // 링크 텍스트와 둘레 텍스트의 대비가 3:1 미만이라 색만으로는 구분이 안 된다
+  // — 밑줄을 더한다. .card는 다운로드 버튼이라 제외한다.
+  a:not(.card) {
+    text-decoration: underline;
+  }
+
   h3 {
     font-size: 1.25rem;
   }
