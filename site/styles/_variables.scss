@@ -59,7 +59,10 @@ $border-color: $ink-200;
 
 // Typography — Pretendard 우선, 없으면 시스템 산세리프. 별도 heading 폰트를
 // 쓰지 않는다(시안 A 는 굵기로만 위계를 준다).
-$heading-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard Variable', Pretendard,
+// Pretendard Variable을 global.scss에서 실제 웹폰트로 불러온다 — 시스템 폰트
+// 키워드(-apple-system, Segoe UI)를 그 앞에 두면 브라우저가 항상 거기서 매칭을
+// 끝내 버려서 Pretendard 차례가 오지 않는다. 반드시 맨 앞에 와야 한다.
+$heading-font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI',
   'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, Helvetica, Arial, sans-serif;
 $body-font: $heading-font;
 $mono-font: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
