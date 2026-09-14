@@ -8,9 +8,10 @@
   font-size: $font-size-small;
   color: $text-light;
 
-  i {
+  .icon {
     color: $primary-color;
     margin-right: $spacing-xs * 0.6;
+    vertical-align: -2px;
   }
 }
 
