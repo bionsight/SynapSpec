@@ -1,11 +1,34 @@
+// CSS 스펙상 @import는 @charset 다음, 다른 모든 규칙보다 앞에 와야 유효하다.
+// 아래 variables/layout/components/... 는 전부 Sass 파일이라 컴파일 시 내용이
+// 그대로 인라인되어 실제 CSS 규칙이 먼저 나와 버린다 — 그 뒤에 있던 웹폰트
+// @import는 무효화되어 빌드에서 통째로 사라졌다(예전 Noto Sans KR도 마찬가지
+// 이유로 한 번도 로드된 적이 없었을 것이다). 그래서 이 파일의 첫 줄이어야 한다.
+//
+// Pretendard를 실제 웹폰트로 불러온다. $heading-font 스택엔 이름만 올려두고
+// -apple-system/Segoe UI를 그보다 앞에 둬서 브라우저가 Pretendard 차례까지 가지
+// 않게 해뒀던 별도 순서 버그도 _variables.scss에서 같이 고쳤다. dynamic-subset은
+// 필요한 유니코드 범위만 잘라 받아오는 버전이라 풀세트보다 훨씬 가볍다.
+@import url('https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
 @import "variables";
 @import "layout";
 @import "components";
 @import "spectralens";
 @import "benchmark";
-// Pretendard 는 시스템 폰트로만 쓴다(설치돼 있으면 우선 적용). 없는 환경을 위한
-// 한글 폴백만 웹폰트로 불러온다 — 시안 A 는 별도 heading 폰트를 쓰지 않는다.
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+// label은 ARIA in HTML 스펙상 aria-label을 허용하지 않는다(accessible name이
+// label text content로 계산된다) — 텍스트 없는 label은 이 클래스로 대신한다.
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 // Global typography
 h1, h2, h3, h4, h5, h6 {

@@ -120,7 +120,7 @@ code {
     display: none;
     font-family: $mono-font;
     font-size: 0.75rem;
-    color: $text-color-lighter;
+    color: $text-color-light;
 
     @media (min-width: $mobile) {
       display: inline;
@@ -229,7 +229,8 @@ body.page-plain-hero .main-content {
     grid-column: 1 / -1;
     max-width: 26ch;
     font-size: 13px;
-    color: $text-color-lighter;
+    // $text-color-lighter는 이 배경(bg-secondary)에서 대비율 3.32 — $text-color-light를 쓴다.
+    color: $text-color-light;
 
     .logo {
       margin-bottom: 0.75rem;
@@ -241,13 +242,13 @@ body.page-plain-hero .main-content {
   }
 
   .footer-column {
-    h4 {
+    h3 {
       margin: 0 0 0.75rem;
       font-size: 11.5px;
       font-weight: 600;
       letter-spacing: $tracking-caps;
       text-transform: uppercase;
-      color: $text-color-lighter;
+      color: $text-color-light;
     }
 
     ul {
@@ -281,6 +282,6 @@ body.page-plain-hero .main-content {
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     font-size: 13px;
-    color: $text-color-lighter;
+    color: $text-color-light;
   }
 }

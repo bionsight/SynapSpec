@@ -44,7 +44,7 @@
 
 .bench-count {
   font-size: $font-size-small;
-  color: $text-color-lightest;
+  color: $text-color-light;
   white-space: nowrap;
 }
 
@@ -81,7 +81,7 @@
   transform: translateX(-50%);
   white-space: nowrap;
   font-size: 0.72rem;
-  color: $text-color-lighter;
+  color: $text-color-light;
 }
 
 // Measured median
@@ -123,7 +123,7 @@
 .bench-axis-note {
   margin-top: $spacing-md;
   font-size: $font-size-small;
-  color: $text-color-lightest;
+  color: $text-color-light;
   text-align: center;
 }
 
@@ -241,7 +241,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.68rem;
-  color: $text-color-lightest;
+  color: $text-color-light;
 }
 
 // ── Tables ──────────────────────────────────────────────────
@@ -292,7 +292,7 @@
   padding: 1px 8px;
   border-radius: 999px;
   font-size: 0.72rem;
-  color: $text-color-lightest;
+  color: $text-color-light;
 
   &.is-on {
     background: rgba(16, 106, 158, 0.15);
@@ -359,7 +359,7 @@
   display: block;
   margin-top: 2px;
   font-size: 0.78rem;
-  color: $text-color-lightest;
+  color: $text-color-light;
 }
 
 .bench-border-t {
@@ -440,7 +440,7 @@
     font-size: 0.72rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: $text-color-lightest;
+    color: $text-color-light;
   }
 
   dd {
@@ -469,7 +469,7 @@
   font-weight: 400;
   text-transform: none;
   letter-spacing: normal;
-  color: $text-color-lightest;
+  color: $text-color-light;
 }
 
 .bench-section-nav {
@@ -491,7 +491,7 @@
   padding: 0;
   list-style: none;
   font-size: 0.8rem;
-  color: $text-color-lightest;
+  color: $text-color-light;
 
   li {
     margin-top: 4px;
@@ -652,7 +652,7 @@
   margin-top: 2px;
   font-size: 0.72rem;
   font-weight: 400;
-  color: $text-color-lightest;
+  color: $text-color-light;
 }
 
 .bench-ratio-svg {
@@ -666,7 +666,7 @@
 }
 
 .bench-ratio-ticklabel {
-  fill: $text-color-lightest;
+  fill: $text-color-light;
   font-size: 11px;
 }
 
@@ -705,7 +705,7 @@
   font-family: $body-font;
   font-size: 0.7rem;
   font-weight: 400;
-  color: $text-color-lightest;
+  color: $text-color-light;
 }
 
 // ── Dataset switcher (index page) ────────────────────────────
@@ -765,7 +765,7 @@
 }
 
 .bench-history-ticklabel {
-  fill: $text-color-lightest;
+  fill: $text-color-light;
   font-size: 12px;
 }
 
@@ -801,12 +801,12 @@
 }
 
 .bench-scatter-ticklabel {
-  fill: $text-color-lightest;
+  fill: $text-color-light;
   font-size: 12px;
 }
 
 .bench-scatter-axis-title {
-  fill: $text-color-lighter;
+  fill: $text-color-light;
   font-size: 12px;
 }
 
