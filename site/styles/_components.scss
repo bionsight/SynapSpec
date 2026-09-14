@@ -90,10 +90,16 @@
   box-shadow: $box-shadow;
   padding: 1.5rem;
 
-  // 시안 A 엔 아이콘이 없다 — 옛 .card-icon/.card-header 마크업이 아직 남아 있어도
-  // 자리만 차지하지 않도록 접어 둔다.
   .card-icon {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.75rem;
+    border-radius: $border-radius;
+    background: $brand-50;
+    color: $brand-700;
   }
 
   h3 {
