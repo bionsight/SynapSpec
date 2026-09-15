@@ -1,10 +1,15 @@
 ---
-// _includes/benchmark/recorded.html을 옮긴 것. kind: recorded인 항목 하나
-// (2026-09-07-5d12a532)에서만 쓴다.
+// _includes/benchmark/recorded.html을 옮긴 것. kind: recorded인 항목에서 쓴다.
+// catalog.recorded_runs 는 slug로 찾는 맵 — 여러 데이터셋(astral, oe480, ...)을 공유한다.
 import catalog from "../../data/benchmark_catalog.json";
 import RatioWidget from "./RatioWidget.astro";
 
-const run = catalog.recorded_run;
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
+const run = entry.recorded_run;
 ---
 
 <div class="container">
@@ -14,15 +19,15 @@ const run = catalog.recorded_run;
 
   <div class="page-header bench-header-split">
     <div>
-      <h1>LFQBench <span class="bench-muted">/ Orbitrap Astral</span></h1>
-      <p class="section-subtitle">A &times; 3 + B &times; 3 · completed run · <code>5d12a532</code></p>
+      <h1>{entry.title} <span class="bench-muted">/ {entry.instrument}</span></h1>
+      <p class="section-subtitle">A &times; 3 + B &times; 3 · completed run · <code>{entry.commit}</code></p>
     </div>
     <a href="/benchmarks/history/" class="bench-link">Dataset history</a>
   </div>
 
   <dl class="bench-facts bench-facts-top">
-    <div><dt>Release</dt><dd>Not mapped<span class="bench-fact-note">Commit 5d12a532</span></dd></div>
-    <div><dt>Run date</dt><dd>{run.date}<span class="bench-fact-note">00:59–06:28 · ClearML display</span></dd></div>
+    <div><dt>Release</dt><dd>Not mapped<span class="bench-fact-note">Commit {entry.commit}</span></dd></div>
+    <div><dt>Run date</dt><dd>{run.date}<span class="bench-fact-note">{entry.time_range_display} · ClearML display</span></dd></div>
     <div><dt>Elapsed time</dt><dd>{run.runtime_display}<span class="bench-fact-note">Task wall-clock time</span></dd></div>
     <div><dt>Resource</dt><dd>{run.instance}<span class="bench-fact-note">Instance tag, not host capacity</span></dd></div>
   </dl>
@@ -33,13 +38,13 @@ const run = catalog.recorded_run;
 
   <section id="configuration" class="py-lg bench-border-t">
     <h2>Run configuration</h2>
-    <p class="bench-axis-note" style="text-align: left;">Recorded configuration · bion_lfq_astral.yaml</p>
+    <p class="bench-axis-note" style="text-align: left;">Recorded configuration · {entry.config_file}</p>
     <dl class="bench-config-grid">
-      {catalog.recorded_config.map((pair) => <div><dt>{pair[0]}</dt><dd>{pair[1]}</dd></div>)}
+      {entry.recorded_config.map((pair) => <div><dt>{pair[0]}</dt><dd>{pair[1]}</dd></div>)}
     </dl>
     <details class="bench-details">
       <summary>Additional recorded settings</summary>
-      <p>FASTA: napedro_3mixed_human_yeast_ecoli_20140403_iRT.fasta</p>
+      <p>FASTA: {entry.fasta}</p>
       <p>Differential analysis enabled · condition-aware precursor correction on · quantity level: pg · output: parquet.</p>
       <p>Only explicitly recorded settings are shown. FDR thresholds and release mapping have not been verified for this run.</p>
     </details>
@@ -70,12 +75,12 @@ const run = catalog.recorded_run;
   </section>
 
   <section id="lfq-metrics" class="py-lg bench-border-t">
-    <RatioWidget />
+    <RatioWidget slug={slug} />
   </section>
 
   <section id="source-record" class="py-lg bench-border-t">
     <h2>Source record</h2>
-    <p class="bench-axis-note" style="text-align: left;">ClearML run at commit 5d12a532, checked on 7 September 2026. Date and time retain the source display; its timezone has not been established. Resource describes the recorded instance tag.</p>
+    <p class="bench-axis-note" style="text-align: left;">ClearML run at commit {entry.commit}, checked on {entry.checked_display}. Date and time retain the source display; its timezone has not been established. Resource describes the recorded instance tag.</p>
     <p class="bench-axis-note" style="text-align: left;">Ratios use mean quantity in A divided by mean quantity in B for each precursor with positive quantities in both conditions. Quartiles and medians below are transformed from logged log₂ ratios. One run does not establish performance on other datasets or a ranking against other tools.</p>
     <a href="/benchmarks/" class="bench-link">All datasets</a>
   </section>

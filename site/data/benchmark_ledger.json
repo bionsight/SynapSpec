@@ -264,6 +264,26 @@
     },
     "rows": [
       {
+        "id": "lfqbench-oe480",
+        "date": "2026-09-14",
+        "label": "SynapSpec run · PXD028735 raw files",
+        "sourceSlug": "lfqbench-oe480",
+        "comparisonSlug": null,
+        "counts": [
+          75346,
+          null,
+          null
+        ],
+        "runtime": 4.2125,
+        "resource": "c7i.8xlarge",
+        "commit": "fcaf6278",
+        "counts_display": [
+          "75,346",
+          null,
+          null
+        ]
+      },
+      {
         "id": "lfqbench-202409-archived",
         "date": null,
         "label": "3-tool comparison · v092 folder",
