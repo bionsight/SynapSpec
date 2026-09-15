@@ -1,5 +1,13 @@
 // Benchmarks page — LFQBench validation results
 
+// .section-header는 site/styles/_components.scss에서 max-width: 40rem으로
+// 짧은 마케팅 카피용으로 만들어졌다. Run history처럼 긴 설명 문단이 그 바로
+// 아래의 전체 폭 표(.bench-table-wrap)와 짝을 이루는 곳에서는 40rem이 표보다
+// 훨씬 좁아서 줄바꿈이 어색해진다. 그런 자리에서만 폭 제한을 푼다.
+.bench-section-wide {
+  max-width: none;
+}
+
 .bench-meta {
   display: flex;
   flex-wrap: wrap;
