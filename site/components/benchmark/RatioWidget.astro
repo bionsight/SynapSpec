@@ -5,6 +5,12 @@
 // 보이는 것만 바뀐다. 좌표는 _data/benchmark_catalog.json에 이미 계산되어 있다
 // (viewBox 0 0 500 86, position(v) = 24 + (v-min)/(max-min)*452).
 import catalog from "../../data/benchmark_catalog.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 ---
 
 <input type="radio" name="ratio-mode" id="ratio-actual" class="bench-ratio-input" checked />
@@ -24,7 +30,7 @@ import catalog from "../../data/benchmark_catalog.json";
 <p class="bench-axis-note" style="text-align: left; margin-bottom: 1rem;">Dashed line: expected ratio. Dot: measured median. Band: middle 50% of measurements. A close median does not mean every measurement is close.</p>
 
 <div class="bench-ratio-panel bench-ratio-panel-actual">
-  {catalog.ratio_measurements.map((item) => (
+  {entry.ratio_measurements.map((item) => (
     <div class="bench-ratio-row">
       <div class="bench-ratio-species">{item.species}<span class="bench-ratio-count">{item.count_display} paired precursors</span></div>
       <svg viewBox="0 0 500 86" class="bench-ratio-svg" role="img" aria-label={`${item.species}: expected ${item.target}, median ratio ${item.measured_ratio_display}.`}>
@@ -44,7 +50,7 @@ import catalog from "../../data/benchmark_catalog.json";
 </div>
 
 <div class="bench-ratio-panel bench-ratio-panel-relative">
-  {catalog.ratio_measurements.map((item) => (
+  {entry.ratio_measurements.map((item) => (
     <div class="bench-ratio-row">
       <div class="bench-ratio-species">{item.species}<span class="bench-ratio-count">{item.count_display} paired precursors</span></div>
       <svg viewBox="0 0 500 86" class="bench-ratio-svg" role="img" aria-label={`${item.species}: deviation from expected ${item.deviation_percent} percent.`}>

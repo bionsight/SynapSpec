@@ -34,7 +34,7 @@ const { slug } = Astro.params;
 
 <BaseLayout title={title} noindex>
   {kind === "run" && <RunBenchmark slug={slug!} />}
-  {kind === "recorded" && <RecordedBenchmark />}
+  {kind === "recorded" && <RecordedBenchmark slug={slug!} />}
   {kind === "comparison" && <ComparisonBenchmark slug={slug!} />}
   {kind === "imported" && <ImportedBenchmark slug={slug!} />}
   {kind === "pending" && <PendingBenchmark slug={slug!} />}

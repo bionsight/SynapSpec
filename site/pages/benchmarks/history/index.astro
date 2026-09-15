@@ -23,7 +23,7 @@ const firstEpoch = Math.floor(new Date(firstRun.date).getTime() / 1000);
 const lastEpoch = Math.floor(new Date(lastRun.date).getTime() / 1000);
 const daySpan = lastEpoch - firstEpoch;
 const steps = intDiv(spanRange, 20000);
-const recordedRunSlug = catalog.recorded_run_slug;
+const recordedRunSlug = catalog.dataset_catalog.find((d) => d.slug === "lfqbench-astral")!.run_slug;
 
 const yTicks = Array.from({ length: steps + 1 }, (_, i) => {
   const tickOffset = i * 20000;
