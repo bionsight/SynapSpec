@@ -342,6 +342,8 @@
   .section-subtitle {
     margin-top: 0.5rem;
     color: $text-color-light;
+    // 미지원 브라우저는 그냥 기본 줄바꿈으로 넘어간다 — 점진적 개선.
+    text-wrap: balance;
   }
 }
 
