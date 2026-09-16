@@ -418,6 +418,195 @@
           "42"
         ]
       ]
+    },
+    "proteobench-2th-astral": {
+      "run_slug": "proteobench-2th-astral",
+      "title": "ProteoBench 2 Th",
+      "instrument": "Astral",
+      "commit": "00adf78c",
+      "config_file": "proteobench_2th_astral.yaml",
+      "fasta": "ProteoBenchFASTA_MixedSpecies_HYE.fasta",
+      "time_range_display": "04:10–14:09 UTC",
+      "checked_display": "16 September 2026",
+      "recorded_run": {
+        "slug": "proteobench-2th-astral",
+        "date": "2026-07-31",
+        "instance": "c7i.4xlarge",
+        "runtime_hours": 9.9759902778,
+        "runtime_display": "9 h 59 min",
+        "total_precursors": 124737,
+        "total_precursors_display": "124,737",
+        "total_proteins": 16160,
+        "total_proteins_display": "16,160",
+        "files_in_experiment": 6,
+        "files": [
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_A_REP1",
+            "condition": "A",
+            "replicate": 1,
+            "precursors": 105220,
+            "precursors_display": "105,220",
+            "proteins": 15397,
+            "proteins_display": "15,397"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_A_REP2",
+            "condition": "A",
+            "replicate": 2,
+            "precursors": 109096,
+            "precursors_display": "109,096",
+            "proteins": 15772,
+            "proteins_display": "15,772"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_A_REP3",
+            "condition": "A",
+            "replicate": 3,
+            "precursors": 107007,
+            "precursors_display": "107,007",
+            "proteins": 15546,
+            "proteins_display": "15,546"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_B_REP1",
+            "condition": "B",
+            "replicate": 1,
+            "precursors": 108951,
+            "precursors_display": "108,951",
+            "proteins": 15578,
+            "proteins_display": "15,578"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_B_REP2",
+            "condition": "B",
+            "replicate": 2,
+            "precursors": 108933,
+            "precursors_display": "108,933",
+            "proteins": 15597,
+            "proteins_display": "15,597"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_B_REP3",
+            "condition": "B",
+            "replicate": 3,
+            "precursors": 113003,
+            "precursors_display": "113,003",
+            "proteins": 16018,
+            "proteins_display": "16,018"
+          }
+        ]
+      },
+      "ratio_measurements": [
+        {
+          "species": "Human",
+          "count": 83965,
+          "count_display": "83,965",
+          "target": 0,
+          "median": -0.0188155044,
+          "lower": -0.2258993803,
+          "upper": 0.1457562595,
+          "measured_ratio_display": "0.987×",
+          "deviation_percent": -1.3,
+          "axis": {
+            "actual": {
+              "target": 306.5,
+              "median": 304.374,
+              "lower": 280.973,
+              "upper": 322.97
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 241.495,
+              "lower": 147.893,
+              "upper": 315.882
+            }
+          }
+        },
+        {
+          "species": "Yeast",
+          "count": 24396,
+          "count_display": "24,396",
+          "target": 1,
+          "median": 0.8376537314,
+          "lower": 0.5532245243,
+          "upper": 1.0330013879,
+          "measured_ratio_display": "1.787×",
+          "deviation_percent": -10.6,
+          "axis": {
+            "actual": {
+              "target": 419.5,
+              "median": 401.155,
+              "lower": 369.014,
+              "upper": 423.229
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 176.619,
+              "lower": 48.057,
+              "upper": 264.917
+            }
+          }
+        },
+        {
+          "species": "E. coli",
+          "count": 6220,
+          "count_display": "6,220",
+          "target": -2,
+          "median": -1.5205273716,
+          "lower": -1.8927802641,
+          "upper": -0.7411789413,
+          "measured_ratio_display": "0.349×",
+          "deviation_percent": 39.4,
+          "axis": {
+            "actual": {
+              "target": 80.5,
+              "median": 134.68,
+              "lower": 92.616,
+              "upper": 222.747
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 466.722,
+              "lower": 298.463,
+              "upper": 818.987
+            }
+          }
+        }
+      ],
+      "recorded_config": [
+        [
+          "Library",
+          "Generated from FASTA"
+        ],
+        [
+          "Enzyme",
+          "Trypsin/P"
+        ],
+        [
+          "Missed cleavages",
+          "1"
+        ],
+        [
+          "Match between runs",
+          "On"
+        ],
+        [
+          "Peptide length",
+          "7–52 residues"
+        ],
+        [
+          "Precursor charge",
+          "1–5"
+        ],
+        [
+          "Maximum variable modifications",
+          "1"
+        ],
+        [
+          "Random seed",
+          "42"
+        ]
+      ]
     }
   },
   "dataset_catalog": [
@@ -446,7 +635,10 @@
       "name": "ProteoBench 2 Th",
       "instrument": "Astral",
       "preset": "proteobench_2th_astral",
-      "has_run": false
+      "has_run": true,
+      "run_slug": "proteobench-2th-astral",
+      "commit": "00adf78c",
+      "key_config": "MBR on · Trypsin/P · 1 missed cleavage"
     }
   ]
 }
