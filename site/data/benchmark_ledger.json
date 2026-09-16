@@ -650,6 +650,26 @@
         ]
       },
       {
+        "id": "proteobench-2th-astral",
+        "date": "2026-07-31",
+        "label": "SynapSpec run · ProteoBench 2 Th mix (HYE)",
+        "sourceSlug": "proteobench-2th-astral",
+        "comparisonSlug": null,
+        "counts": [
+          124737,
+          null,
+          null
+        ],
+        "runtime": 9.9759902778,
+        "resource": "c7i.4xlarge",
+        "commit": "00adf78c",
+        "counts_display": [
+          "124,737",
+          null,
+          null
+        ]
+      },
+      {
         "id": "2026-07-22",
         "date": "2026-07-22",
         "label": "SynapSpec run",
