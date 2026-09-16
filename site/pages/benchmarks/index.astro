@@ -60,7 +60,7 @@ const [oe480, astral] = ledgers;
               <table class="bench-table">
                 <caption>Precursor IDs by tool &middot; &ldquo;&mdash;&rdquo; means not linked, not zero. Matching filenames do not prove identical file contents, settings or counting definitions; changes are descriptive, not isolated software improvements.</caption>
                 <thead>
-                  <tr><th>Run / date</th><th>Commit / source</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
+                  <tr><th>Run / date</th><th>Release version</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut (v21.0)</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
                 </thead>
                 <tbody>
                   {ledger.rows.map((row) => (
@@ -69,7 +69,7 @@ const [oe480, astral] = ledgers;
                         <a href={`/benchmarks/${row.sourceSlug}/`}>{row.date ?? "Undated comparison"}</a>
                         <span class="bench-subvalue">{row.label}</span>
                       </th>
-                      <td>{row.commit ? row.commit : row.comparisonSlug ? "Folder labels only" : "Not recorded"}</td>
+                      <td>{row.release_version ?? "—"}</td>
                       {row.counts_display.map((value) => <td class="num">{value ?? "—"}</td>)}
                       <td class="num">{row.runtime ? `${Math.round(row.runtime * 100) / 100} h` : "—"}</td>
                       <td>{row.resource ?? "—"}</td>

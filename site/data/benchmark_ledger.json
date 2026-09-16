@@ -277,6 +277,7 @@
         "runtime": 4.2125,
         "resource": "c7i.8xlarge",
         "commit": "fcaf6278",
+        "release_version": "≈v0.12.4",
         "counts_display": [
           "75,346",
           null,
@@ -297,6 +298,7 @@
         "runtime": null,
         "resource": null,
         "commit": null,
+        "release_version": "v0.9.2",
         "counts_display": [
           "81,559",
           "108,447",
@@ -583,6 +585,7 @@
         "runtime": 6.15,
         "resource": "c7i.8xlarge",
         "commit": "b4de5599",
+        "release_version": "≈v0.11.0",
         "counts_display": [
           "259,474",
           null,
@@ -603,6 +606,7 @@
         "runtime": 7.35,
         "resource": "c7i.8xlarge",
         "commit": "34879e5b",
+        "release_version": "≈v0.11.0",
         "counts_display": [
           "275,106",
           null,
@@ -623,6 +627,7 @@
         "runtime": 5.483333333333333,
         "resource": "c7i.8xlarge",
         "commit": "5d12a532",
+        "release_version": "≈v0.11.0",
         "counts_display": [
           "252,078",
           null,
@@ -643,6 +648,7 @@
         "runtime": 6.566666666666666,
         "resource": "c7i.8xlarge",
         "commit": "9897b894",
+        "release_version": null,
         "counts_display": [
           "261,436",
           null,
@@ -663,6 +669,7 @@
         "runtime": 9.9759902778,
         "resource": "c7i.4xlarge",
         "commit": "00adf78c",
+        "release_version": "v0.10.4",
         "counts_display": [
           "124,737",
           null,
@@ -683,6 +690,7 @@
         "runtime": 7.23,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "261,903",
           null,
@@ -703,6 +711,7 @@
         "runtime": 9.02,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "261,656",
           null,
@@ -723,6 +732,7 @@
         "runtime": 6.93,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "262,469",
           null,
@@ -743,6 +753,7 @@
         "runtime": 7.36,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "263,136",
           null,
@@ -763,6 +774,7 @@
         "runtime": 9.49,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "263,241",
           null,
@@ -783,6 +795,7 @@
         "runtime": 11.7,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "261,014",
           null,
@@ -803,6 +816,7 @@
         "runtime": 7.56,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "263,220",
           null,
@@ -823,6 +837,7 @@
         "runtime": 11.95,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "221,419",
           null,
@@ -843,6 +858,7 @@
         "runtime": 9.7,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "223,062",
           null,
@@ -863,6 +879,7 @@
         "runtime": 18.68,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "225,586",
           null,
@@ -883,6 +900,7 @@
         "runtime": 18.82,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "191,366",
           null,
@@ -903,6 +921,7 @@
         "runtime": 29.18,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "187,315",
           null,
@@ -923,6 +942,7 @@
         "runtime": 27.76,
         "resource": "g5.4xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "190,067",
           null,
@@ -943,6 +963,7 @@
         "runtime": 38.9,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "187,315",
           null,
@@ -963,6 +984,7 @@
         "runtime": 17.41,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "185,728",
           null,
@@ -983,6 +1005,7 @@
         "runtime": 14.21,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "211,947",
           null,
@@ -1003,6 +1026,7 @@
         "runtime": 12.18,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "226,959",
           null,
@@ -1023,6 +1047,7 @@
         "runtime": 18.16,
         "resource": "c7i.8xlarge",
         "commit": null,
+        "release_version": null,
         "counts_display": [
           "208,698",
           null,
@@ -1043,6 +1068,7 @@
         "runtime": null,
         "resource": null,
         "commit": null,
+        "release_version": "v0.9.2",
         "counts_display": [
           "261,946",
           "289,626",
