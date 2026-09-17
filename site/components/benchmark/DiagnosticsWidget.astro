@@ -1,0 +1,106 @@
+---
+// Native reinterpretation of two of the three ClearML diagnostic-plot images
+// (data_completeness, cv_distribution), rendered with Plotly.js instead of
+// hand-built SVG so all four benchmark charts share one rendering approach.
+// The third image (lfq_scatter_precursor) is handled by ScatterWidget.astro.
+// Values are recomputed from the run's own precursors.parquet, using the same
+// pivot/CV logic as instrumentation/parsers/distribution.py (get_cv_df).
+//
+// Data crosses the server/client boundary as a JSON string in a data-*
+// attribute (not `<script define:vars>` — Astro always inlines those scripts,
+// which drops npm-package and TS imports; see docs/client-side-scripts).
+import catalog from "../../data/benchmark_catalog.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
+const diagnostics = (entry as { diagnostics?: any }).diagnostics;
+---
+
+{diagnostics && (
+  <div class="bench-diagnostics-grid" data-diagnostics={JSON.stringify(diagnostics)}>
+    <figure class="bench-diagnostic">
+      <div data-chart="completeness" class="bench-plotly-target"></div>
+      <figcaption>Data completeness</figcaption>
+    </figure>
+    <figure class="bench-diagnostic">
+      <div data-chart="cv" class="bench-plotly-target"></div>
+      <figcaption>CV distribution</figcaption>
+    </figure>
+  </div>
+)}
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, COLORS } from "../../lib/plotlyTheme";
+
+  document.querySelectorAll<HTMLElement>("[data-diagnostics]").forEach((container) => {
+    const diagnostics = JSON.parse(container.dataset.diagnostics!);
+    const completenessEl = container.querySelector<HTMLElement>('[data-chart="completeness"]');
+    const cvEl = container.querySelector<HTMLElement>('[data-chart="cv"]');
+    if (!completenessEl || !cvEl) return;
+
+    const completeness = diagnostics.data_completeness;
+    Plotly.newPlot(
+      completenessEl,
+      [
+        {
+          type: "bar",
+          x: completeness.bars.map((b: any) => String(b.n)),
+          y: completeness.bars.map((b: any) => b.count),
+          text: completeness.bars.map((b: any) => b.count_display),
+          textposition: "outside",
+          marker: { color: COLORS.primary },
+          hovertemplate: "Detected in %{x} file(s)<br>%{y:,} precursors<extra></extra>",
+        },
+      ],
+      baseLayout({
+        xaxis: { ...axisStyle, title: { text: "Detected in N files" }, showgrid: false },
+        yaxis: { ...axisStyle, title: { text: "Precursor count" } },
+      }),
+      baseConfig,
+    );
+
+    const cv = diagnostics.cv_distribution;
+    const items = [
+      { key: "precursor", label: "Precursor" },
+      { key: "protein", label: "Protein" },
+    ];
+    Plotly.newPlot(
+      cvEl,
+      [
+        {
+          type: "box",
+          x: items.map((i) => i.label),
+          q1: items.map((i) => cv[i.key].p25),
+          median: items.map((i) => cv[i.key].median),
+          q3: items.map((i) => cv[i.key].p75),
+          lowerfence: items.map((i) => cv[i.key].p5),
+          upperfence: items.map((i) => cv[i.key].p95),
+          text: items.map((i) => cv[i.key].median_display),
+          marker: { color: COLORS.primary },
+          fillcolor: COLORS.primaryLight,
+          line: { color: COLORS.primaryDark },
+          boxpoints: false,
+          hovertemplate: "%{x}<br>median CV %{text}<extra></extra>",
+        },
+      ],
+      baseLayout({
+        xaxis: { ...axisStyle, showgrid: false },
+        yaxis: { ...axisStyle, title: { text: "Quantity CV" }, tickformat: ".0%" },
+        annotations: items.map((i) => ({
+          x: i.label,
+          y: cv[i.key].median,
+          text: `<b>${cv[i.key].median_display}</b>`,
+          showarrow: false,
+          yanchor: "bottom",
+          yshift: 8,
+          font: { color: COLORS.text, size: 13 },
+        })),
+      }),
+      baseConfig,
+    );
+  });
+</script>

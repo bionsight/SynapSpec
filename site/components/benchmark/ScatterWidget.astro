@@ -1,0 +1,86 @@
+---
+// Native reinterpretation of the third ClearML diagnostic image
+// (lfq_scatter_precursor). One point per precursor with both A and B
+// quantities positive: x = log2(mean quantity in B), y = log2(A/B).
+// Point-level data is too large for benchmark_catalog.json (loaded on every
+// benchmarks page) so it ships as a separate file under public/data/benchmarks/,
+// fetched only on this run's own detail page.
+// Values match instrumentation/parsers/lfq.py's get_lfq_quantification exactly
+// (mean quantity per precursor per condition, log2(B) and log2(A/B)).
+// Marginal histograms from the original image are left out — the ratio and
+// quartile widgets above already cover per-species distribution shape.
+import catalog from "../../data/benchmark_catalog.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
+const ratios = (entry as { ratio_measurements?: any[] }).ratio_measurements;
+const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
+---
+
+{ratios && (
+  <figure class="bench-diagnostic" data-scatter-url={dataUrl}>
+    <div data-chart="scatter" class="bench-plotly-target bench-plotly-target-tall"></div>
+    <figcaption>LFQ precursor scatter</figcaption>
+  </figure>
+)}
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, SPECIES_COLORS, COLORS } from "../../lib/plotlyTheme";
+
+  const TARGETS: Record<string, number> = { Human: 0, Yeast: 1, "E. coli": -2 };
+
+  document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach(async (container) => {
+    const el = container.querySelector<HTMLElement>('[data-chart="scatter"]');
+    if (!el) return;
+
+    const url = container.dataset.scatterUrl!;
+    const response = await fetch(url);
+    if (!response.ok) {
+      el.textContent = "Scatter data failed to load.";
+      return;
+    }
+    const bySpecies: Record<string, { x: number[]; y: number[] }> = await response.json();
+    const species = Object.keys(bySpecies);
+
+    const traces = species.map((label) => ({
+      type: "scattergl",
+      mode: "markers",
+      name: label,
+      x: bySpecies[label].x,
+      y: bySpecies[label].y,
+      marker: { color: SPECIES_COLORS[label] ?? COLORS.primary, size: 4, opacity: 0.45 },
+      hovertemplate: `${label}<br>log₂(B) %{x:.2f}<br>log₂(A/B) %{y:.2f}<extra></extra>`,
+    }));
+
+    const shapes = species
+      .filter((label) => label in TARGETS)
+      .map((label) => ({
+        type: "line",
+        xref: "paper",
+        x0: 0,
+        x1: 1,
+        yref: "y",
+        y0: TARGETS[label],
+        y1: TARGETS[label],
+        line: { color: SPECIES_COLORS[label] ?? COLORS.text, width: 1, dash: "dot" },
+      }));
+
+    Plotly.newPlot(
+      el,
+      traces,
+      baseLayout({
+        showlegend: true,
+        legend: { orientation: "h", y: -0.2 },
+        xaxis: { ...axisStyle, title: { text: "log₂(mean quantity in B)" } },
+        yaxis: { ...axisStyle, title: { text: "log₂(A/B)" } },
+        shapes,
+        margin: { t: 10, r: 20, b: 90, l: 60 },
+      }),
+      baseConfig,
+    );
+  });
+</script>

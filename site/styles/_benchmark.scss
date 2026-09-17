@@ -639,82 +639,77 @@
   display: block;
 }
 
-.bench-ratio-row {
+// ── Quartile widget ──────────────────────────────────────────
+
+.bench-quartile {
+  margin-top: $spacing-lg;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $border-color;
+
+  h3 {
+    margin: 0 0 $spacing-xs;
+  }
+}
+
+.bench-quartile-grid {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) 150px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: $spacing-md;
-  padding: $spacing-sm 0;
-  border-bottom: 1px solid $border-color;
+}
 
-  @media (max-width: $mobile) {
-    grid-template-columns: 1fr;
+.bench-quartile-item {
+  text-align: center;
+}
+
+.bench-quartile-species {
+  font-weight: 600;
+  margin-bottom: $spacing-xs * 0.5;
+}
+
+// ── Diagnostics widget (data completeness + CV distribution) ───
+
+.bench-diagnostics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+// Stacks DiagnosticsWidget and ScatterWidget with a gap. Uses flex `gap`
+// rather than margin + sibling selectors: each widget also renders its own
+// <script type="module"> tag as a sibling in between them, and a script tag
+// (display: none by default) never takes up a flex/grid slot, so `gap` still
+// only measures space between the boxes that actually render.
+.bench-diagnostic-plots-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.bench-diagnostic {
+  margin: 0;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: $spacing-sm;
+
+  figcaption {
+    margin-top: $spacing-xs;
+    text-align: center;
+    font-size: $font-size-small;
+    color: $text-light;
   }
 }
 
-.bench-ratio-species {
-  font-weight: 600;
-}
-
-.bench-ratio-count {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.72rem;
-  font-weight: 400;
-  color: $text-color-light;
-}
-
-.bench-ratio-svg {
-  display: block;
+// Shared sizing for every Plotly chart container on the benchmark pages —
+// Plotly renders at 0 height without an explicit one, and `responsive: true`
+// in baseConfig needs a sized parent to resize into.
+.bench-plotly-target {
   width: 100%;
-  height: auto;
+  min-height: 260px;
 }
 
-.bench-ratio-gridline {
-  stroke: $border-color;
-}
-
-.bench-ratio-ticklabel {
-  fill: $text-color-light;
-  font-size: 11px;
-}
-
-.bench-ratio-band {
-  fill: rgba(16, 106, 158, 0.18);
-  stroke: $primary-color-dark;
-}
-
-.bench-ratio-target {
-  stroke: $text-color;
-  stroke-width: 2;
-  stroke-dasharray: 4 3;
-}
-
-.bench-ratio-dot {
-  fill: $primary-color;
-  stroke: $background-color;
-  stroke-width: 2;
-}
-
-.bench-ratio-value {
-  text-align: right;
-  font-family: $heading-font;
-  font-size: 1.2rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-
-  @media (max-width: $mobile) {
-    text-align: left;
-  }
-}
-
-.bench-ratio-value-label {
-  display: block;
-  margin-top: 2px;
-  font-family: $body-font;
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: $text-color-light;
+.bench-plotly-target-tall {
+  min-height: 480px;
 }
 
 // ── Dataset switcher (index page) ────────────────────────────

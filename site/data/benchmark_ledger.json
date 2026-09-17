@@ -264,6 +264,27 @@
     },
     "rows": [
       {
+        "id": "pxd028735-v0.12.4",
+        "date": "2026-09-16",
+        "label": "SynapSpec v0.12.4 run · PXD028735 raw files",
+        "sourceSlug": "pxd028735-v0.12.4",
+        "comparisonSlug": null,
+        "counts": [
+          81669,
+          null,
+          null
+        ],
+        "counts_display": [
+          "81,669",
+          null,
+          null
+        ],
+        "runtime": 4.4060916667,
+        "resource": "c7i.8xlarge",
+        "commit": "5fdaefd0",
+        "release_version": "v0.12.4"
+      },
+      {
         "id": "lfqbench-oe480",
         "date": "2026-09-14",
         "label": "SynapSpec run · PXD028735 raw files",
@@ -283,48 +304,6 @@
           null,
           null
         ]
-      },
-      {
-        "id": "lfqbench-202409-archived",
-        "date": null,
-        "label": "3-tool comparison · v092 folder",
-        "sourceSlug": "lfqbench-202409-archived",
-        "comparisonSlug": "lfqbench-202409-archived",
-        "counts": [
-          81559,
-          108447,
-          104099
-        ],
-        "runtime": null,
-        "resource": null,
-        "commit": null,
-        "release_version": "v0.9.2",
-        "counts_display": [
-          "81,559",
-          "108,447",
-          "104,099"
-        ]
-      },
-      {
-        "id": "pxd028735-v0.9.2",
-        "date": "2026-09-16",
-        "label": "SynapSpec v0.9.2 run · PXD028735 raw files",
-        "sourceSlug": "pxd028735-v0.9.2",
-        "comparisonSlug": null,
-        "counts": [
-          86079,
-          null,
-          null
-        ],
-        "counts_display": [
-          "86,079",
-          null,
-          null
-        ],
-        "runtime": 4.6066888889,
-        "resource": "c7i.8xlarge",
-        "commit": "af9dd5a5",
-        "release_version": "v0.9.2"
       },
       {
         "id": "pxd028735-v0.11.0",
@@ -348,25 +327,46 @@
         "release_version": "v0.11.0"
       },
       {
-        "id": "pxd028735-v0.12.4",
+        "id": "pxd028735-v0.9.2",
         "date": "2026-09-16",
-        "label": "SynapSpec v0.12.4 run · PXD028735 raw files",
-        "sourceSlug": "pxd028735-v0.12.4",
+        "label": "SynapSpec v0.9.2 run · PXD028735 raw files",
+        "sourceSlug": "pxd028735-v0.9.2",
         "comparisonSlug": null,
         "counts": [
-          81669,
+          86079,
           null,
           null
         ],
         "counts_display": [
-          "81,669",
+          "86,079",
           null,
           null
         ],
-        "runtime": 4.4060916667,
+        "runtime": 4.6066888889,
         "resource": "c7i.8xlarge",
-        "commit": "5fdaefd0",
-        "release_version": "v0.12.4"
+        "commit": "af9dd5a5",
+        "release_version": "v0.9.2"
+      },
+      {
+        "id": "lfqbench-202409-archived",
+        "date": null,
+        "label": "3-tool comparison · v092 folder",
+        "sourceSlug": "lfqbench-202409-archived",
+        "comparisonSlug": "lfqbench-202409-archived",
+        "counts": [
+          81559,
+          108447,
+          104099
+        ],
+        "runtime": null,
+        "resource": null,
+        "commit": null,
+        "release_version": "v0.9.2",
+        "counts_display": [
+          "81,559",
+          "108,447",
+          "104,099"
+        ]
       }
     ]
   },
@@ -635,529 +635,25 @@
     },
     "rows": [
       {
-        "id": "2026-09-07-b4de5599",
-        "date": "2026-09-07",
-        "label": "SynapSpec run · 17:25",
-        "sourceSlug": "2026-09-07-b4de5599",
-        "comparisonSlug": null,
-        "counts": [
-          259474,
-          null,
-          null
-        ],
-        "runtime": 6.15,
-        "resource": "c7i.8xlarge",
-        "commit": "b4de5599",
-        "release_version": "≈v0.11.0",
-        "counts_display": [
-          "259,474",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-09-07-34879e5b",
-        "date": "2026-09-07",
-        "label": "SynapSpec run · 16:30",
-        "sourceSlug": "2026-09-07-34879e5b",
-        "comparisonSlug": null,
-        "counts": [
-          275106,
-          null,
-          null
-        ],
-        "runtime": 7.35,
-        "resource": "c7i.8xlarge",
-        "commit": "34879e5b",
-        "release_version": "≈v0.11.0",
-        "counts_display": [
-          "275,106",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-09-07-5d12a532",
-        "date": "2026-09-07",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-09-07-5d12a532",
-        "comparisonSlug": null,
-        "counts": [
-          252078,
-          null,
-          null
-        ],
-        "runtime": 5.483333333333333,
-        "resource": "c7i.8xlarge",
-        "commit": "5d12a532",
-        "release_version": "≈v0.11.0",
-        "counts_display": [
-          "252,078",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-09-06-9897b894",
-        "date": "2026-09-06",
-        "label": "SynapSpec run · 21:04",
-        "sourceSlug": "2026-09-06-9897b894",
-        "comparisonSlug": null,
-        "counts": [
-          261436,
-          null,
-          null
-        ],
-        "runtime": 6.566666666666666,
-        "resource": "c7i.8xlarge",
-        "commit": "9897b894",
-        "release_version": null,
-        "counts_display": [
-          "261,436",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "proteobench-2th-astral",
-        "date": "2026-07-31",
-        "label": "SynapSpec run · ProteoBench 2 Th mix (HYE)",
-        "sourceSlug": "proteobench-2th-astral",
-        "comparisonSlug": null,
-        "counts": [
-          124737,
-          null,
-          null
-        ],
-        "runtime": 9.9759902778,
-        "resource": "c7i.4xlarge",
-        "commit": "00adf78c",
-        "release_version": "v0.10.4",
-        "counts_display": [
-          "124,737",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-07-22",
-        "date": "2026-07-22",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-07-22",
-        "comparisonSlug": null,
-        "counts": [
-          261903,
-          null,
-          null
-        ],
-        "runtime": 7.23,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "261,903",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-07-16",
-        "date": "2026-07-16",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-07-16",
-        "comparisonSlug": null,
-        "counts": [
-          261656,
-          null,
-          null
-        ],
-        "runtime": 9.02,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "261,656",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-07-14",
-        "date": "2026-07-14",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-07-14",
-        "comparisonSlug": null,
-        "counts": [
-          262469,
-          null,
-          null
-        ],
-        "runtime": 6.93,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "262,469",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-07-12",
-        "date": "2026-07-12",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-07-12",
-        "comparisonSlug": null,
-        "counts": [
-          263136,
-          null,
-          null
-        ],
-        "runtime": 7.36,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "263,136",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-07-07",
-        "date": "2026-07-07",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-07-07",
-        "comparisonSlug": null,
-        "counts": [
-          263241,
-          null,
-          null
-        ],
-        "runtime": 9.49,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "263,241",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-06-04",
-        "date": "2026-06-04",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-06-04",
-        "comparisonSlug": null,
-        "counts": [
-          261014,
-          null,
-          null
-        ],
-        "runtime": 11.7,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "261,014",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-06-02",
-        "date": "2026-06-02",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-06-02",
-        "comparisonSlug": null,
-        "counts": [
-          263220,
-          null,
-          null
-        ],
-        "runtime": 7.56,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "263,220",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-05-19",
-        "date": "2026-05-19",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-05-19",
-        "comparisonSlug": null,
-        "counts": [
-          221419,
-          null,
-          null
-        ],
-        "runtime": 11.95,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "221,419",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-05-15",
-        "date": "2026-05-15",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-05-15",
-        "comparisonSlug": null,
-        "counts": [
-          223062,
-          null,
-          null
-        ],
-        "runtime": 9.7,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "223,062",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-04-04",
-        "date": "2026-04-04",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-04-04",
-        "comparisonSlug": null,
-        "counts": [
-          225586,
-          null,
-          null
-        ],
-        "runtime": 18.68,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "225,586",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-03-31",
-        "date": "2026-03-31",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-03-31",
-        "comparisonSlug": null,
-        "counts": [
-          191366,
-          null,
-          null
-        ],
-        "runtime": 18.82,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "191,366",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-03-30",
-        "date": "2026-03-30",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-03-30",
-        "comparisonSlug": null,
-        "counts": [
-          187315,
-          null,
-          null
-        ],
-        "runtime": 29.18,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "187,315",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-03-29",
-        "date": "2026-03-29",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-03-29",
-        "comparisonSlug": null,
-        "counts": [
-          190067,
-          null,
-          null
-        ],
-        "runtime": 27.76,
-        "resource": "g5.4xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "190,067",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-03-26",
-        "date": "2026-03-26",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-03-26",
-        "comparisonSlug": null,
-        "counts": [
-          187315,
-          null,
-          null
-        ],
-        "runtime": 38.9,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "187,315",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-03-13",
-        "date": "2026-03-13",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-03-13",
-        "comparisonSlug": null,
-        "counts": [
-          185728,
-          null,
-          null
-        ],
-        "runtime": 17.41,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "185,728",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-01-25",
-        "date": "2026-01-25",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-01-25",
-        "comparisonSlug": null,
-        "counts": [
-          211947,
-          null,
-          null
-        ],
-        "runtime": 14.21,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "211,947",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-01-15",
-        "date": "2026-01-15",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-01-15",
-        "comparisonSlug": null,
-        "counts": [
-          226959,
-          null,
-          null
-        ],
-        "runtime": 12.18,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "226,959",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "2026-01-10",
-        "date": "2026-01-10",
-        "label": "SynapSpec run",
-        "sourceSlug": "2026-01-10",
-        "comparisonSlug": null,
-        "counts": [
-          208698,
-          null,
-          null
-        ],
-        "runtime": 18.16,
-        "resource": "c7i.8xlarge",
-        "commit": null,
-        "release_version": null,
-        "counts_display": [
-          "208,698",
-          null,
-          null
-        ]
-      },
-      {
-        "id": "lfqbench-202502-archived",
-        "date": null,
-        "label": "3-tool comparison · v092 folder",
-        "sourceSlug": "lfqbench-202502-archived",
-        "comparisonSlug": "lfqbench-202502-archived",
-        "counts": [
-          261946,
-          289626,
-          300293
-        ],
-        "runtime": null,
-        "resource": null,
-        "commit": null,
-        "release_version": "v0.9.2",
-        "counts_display": [
-          "261,946",
-          "289,626",
-          "300,293"
-        ]
-      },
-      {
-        "id": "proteobench-v0.9.2",
+        "id": "proteobench-v0.12.4",
         "date": "2026-09-16",
-        "label": "SynapSpec v0.9.2 run · ProteoBench 2 Th mix (HYE)",
-        "sourceSlug": "proteobench-v0.9.2",
+        "label": "SynapSpec v0.12.4 run · ProteoBench 2 Th mix (HYE)",
+        "sourceSlug": "proteobench-v0.12.4",
         "comparisonSlug": null,
         "counts": [
-          127056,
+          124093,
           null,
           null
         ],
         "counts_display": [
-          "127,056",
+          "124,093",
           null,
           null
         ],
-        "runtime": 4.4537777778,
+        "runtime": 4.3503833333,
         "resource": "c7i.4xlarge",
-        "commit": "af9dd5a5",
-        "release_version": "v0.9.2"
+        "commit": "5fdaefd0",
+        "release_version": "v0.12.4"
       },
       {
         "id": "proteobench-v0.11.0",
@@ -1181,25 +677,25 @@
         "release_version": "v0.11.0"
       },
       {
-        "id": "proteobench-v0.12.4",
+        "id": "proteobench-v0.9.2",
         "date": "2026-09-16",
-        "label": "SynapSpec v0.12.4 run · ProteoBench 2 Th mix (HYE)",
-        "sourceSlug": "proteobench-v0.12.4",
+        "label": "SynapSpec v0.9.2 run · ProteoBench 2 Th mix (HYE)",
+        "sourceSlug": "proteobench-v0.9.2",
         "comparisonSlug": null,
         "counts": [
-          124093,
+          127056,
           null,
           null
         ],
         "counts_display": [
-          "124,093",
+          "127,056",
           null,
           null
         ],
-        "runtime": 4.3503833333,
+        "runtime": 4.4537777778,
         "resource": "c7i.4xlarge",
-        "commit": "5fdaefd0",
-        "release_version": "v0.12.4"
+        "commit": "af9dd5a5",
+        "release_version": "v0.9.2"
       }
     ]
   }

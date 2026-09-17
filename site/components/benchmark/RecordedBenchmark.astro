@@ -3,6 +3,9 @@
 // catalog.recorded_runs 는 slug로 찾는 맵 — 여러 데이터셋(astral, oe480, ...)을 공유한다.
 import catalog from "../../data/benchmark_catalog.json";
 import RatioWidget from "./RatioWidget.astro";
+import QuartileWidget from "./QuartileWidget.astro";
+import DiagnosticsWidget from "./DiagnosticsWidget.astro";
+import ScatterWidget from "./ScatterWidget.astro";
 
 interface Props {
   slug: string;
@@ -10,6 +13,8 @@ interface Props {
 const { slug } = Astro.props;
 const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const run = entry.recorded_run;
+// Only the release-tag-pinned runs have per-run diagnostics recorded so far.
+const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
 ---
 
 <div class="container">
@@ -33,8 +38,24 @@ const run = entry.recorded_run;
   </dl>
 
   <nav class="bench-section-nav" aria-label="Run sections">
-    <a href="#configuration">Configuration</a><a href="#raw-files">Raw files</a><a href="#lfq-metrics">LFQ metrics</a><a href="#source-record">Source record</a>
+    {diagnostics && <a href="#diagnostic-plots">Diagnostic plots</a>}<a href="#lfq-metrics">LFQ metrics</a><a href="#configuration">Configuration</a><a href="#raw-files">Raw files</a><a href="#source-record">Source record</a>
   </nav>
+
+  {diagnostics && (
+    <section id="diagnostic-plots" class="py-lg bench-border-t">
+      <h2>Diagnostic plots</h2>
+      <p class="bench-axis-note" style="text-align: left;">Recomputed from the run's own parquet output and rendered with Plotly — hover any chart for exact values.</p>
+      <div class="bench-diagnostic-plots-stack">
+        <DiagnosticsWidget slug={slug} />
+        <ScatterWidget slug={slug} />
+      </div>
+    </section>
+  )}
+
+  <section id="lfq-metrics" class="py-lg bench-border-t">
+    <RatioWidget slug={slug} />
+    <QuartileWidget slug={slug} />
+  </section>
 
   <section id="configuration" class="py-lg bench-border-t">
     <h2>Run configuration</h2>
@@ -72,10 +93,6 @@ const run = entry.recorded_run;
       </table>
     </div>
     <p class="bench-axis-note" style="text-align: left;">Across the analysis: {run.total_precursors_display} distinct precursors; {run.total_proteins_display} reported total_proteins. These are not sums of the rows. Protein counting scopes differ. File sizes and acquisition durations have not been imported.</p>
-  </section>
-
-  <section id="lfq-metrics" class="py-lg bench-border-t">
-    <RatioWidget slug={slug} />
   </section>
 
   <section id="source-record" class="py-lg bench-border-t">

@@ -32,7 +32,6 @@ const [oe480, astral] = ledgers;
       const isAstral = ledger.id === astral.id;
       const panelClass = isAstral ? "bench-ds-panel-astral" : "bench-ds-panel-oe480";
       const anchor = isAstral ? "run-history-astral" : "run-history-oe480";
-      const comparisonRow = ledger.rows[ledger.rows.length - 1];
       return (
         <div class={`bench-ds-panel ${panelClass}`}>
           <section class="block" aria-label="Selected results">
@@ -40,7 +39,7 @@ const [oe480, astral] = ledgers;
               <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
             </div>
             <p class="bench-axis-note" style="text-align: left;">{ledger.name} &middot; {ledger.files.length} input files &middot; Archived comparison; execution date not recorded</p>
-            <p class="bench-axis-note" style="text-align: left;"><a href={`/benchmarks/${comparisonRow.sourceSlug}/`} class="bench-link">Run details &amp; source</a></p>
+            <p class="bench-axis-note" style="text-align: left;"><a href={`/benchmarks/${ledger.id}/`} class="bench-link">Run details &amp; source</a></p>
             <p class="bench-axis-note" style="text-align: left;">Same six input filenames across tools. Releases, full settings and input checksums are not reconciled; this is not a controlled current-release ranking.</p>
             <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} target="_blank" rel="noreferrer" class="bench-figure-link">
               <img src={`/assets/images/benchmarks/${ledger.comparison.figure}`} width="2880" height="1600" alt={`${ledger.name}: SynapSpec, DIA-NN and Spectronaut precursor IDs, six-run completeness, CV and Human, Yeast, E. coli LFQ median and IQR.`} />
