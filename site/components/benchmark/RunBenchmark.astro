@@ -50,10 +50,6 @@ const run = bm.runs.find((r) => r.slug === slug)!;
     <section class="py-lg">
       <div class="section-header">
         <h2>Quantification Accuracy</h2>
-        <p class="section-subtitle">
-          LFQBench mixes human, yeast and <em>E.&nbsp;coli</em> proteins into two samples at
-          fixed, known ratios. A perfect result lands exactly on the target line.
-        </p>
       </div>
 
       <div class="bench-scale">
@@ -87,12 +83,6 @@ const run = bm.runs.find((r) => r.slug === slug)!;
             </div>
           );
         })}
-
-        <p class="bench-axis-note">
-          Horizontal axis: log<sub>2</sub> ratio between the two samples.
-          The shaded band shows the median absolute deviation — how tightly
-          individual measurements cluster around the target.
-        </p>
       </div>
     </section>
   ) : (
@@ -108,10 +98,6 @@ const run = bm.runs.find((r) => r.slug === slug)!;
   <section class="py-lg">
     <div class="section-header">
       <h2>Per-file Results</h2>
-      <p class="section-subtitle">
-        Each of the {run.files_in_experiment} raw files, analysed independently.
-        Mass and retention-time errors indicate calibration quality.
-      </p>
     </div>
 
     <div class="bench-table-wrap">

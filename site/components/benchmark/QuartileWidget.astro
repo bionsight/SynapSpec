@@ -17,7 +17,6 @@ const quartiles = (entry as { quartile_measurements?: any[] }).quartile_measurem
 {quartiles && (
   <div class="bench-quartile" data-quartiles={JSON.stringify(quartiles)}>
     <h3>Accuracy by intensity quartile</h3>
-    <p class="bench-axis-note" style="text-align: left; margin-bottom: 1rem;">Q1 is the lowest-intensity quarter of paired precursors, Q4 the highest. Dashed line: expected ratio. Line: measured median per quartile. Band: middle 50% of that quartile.</p>
     <div class="bench-quartile-grid">
       {quartiles.map((item: any) => (
         <div class="bench-quartile-item">
@@ -26,7 +25,6 @@ const quartiles = (entry as { quartile_measurements?: any[] }).quartile_measurem
         </div>
       ))}
     </div>
-    <p class="bench-axis-note" style="text-align: left;">Log₂-spaced axis, fixed across runs. Bands are interquartile ranges within that quartile's own measurements, not confidence intervals.</p>
   </div>
 )}
 

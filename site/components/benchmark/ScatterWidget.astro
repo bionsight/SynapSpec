@@ -10,6 +10,7 @@
 // Marginal histograms from the original image are left out — the ratio and
 // quartile widgets above already cover per-species distribution shape.
 import catalog from "../../data/benchmark_catalog.json";
+import Icon from "../Icon.astro";
 
 interface Props {
   slug: string;
@@ -22,7 +23,12 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
 
 {ratios && (
   <figure class="bench-diagnostic" data-scatter-url={dataUrl}>
-    <div data-chart="scatter" class="bench-plotly-target bench-plotly-target-tall bench-plotly-fade"></div>
+    <div data-chart="scatter" class="bench-plotly-target bench-plotly-target-tall">
+      <div class="bench-plotly-loading">
+        <Icon name="loader-circle" size={20} class="bench-spin" />
+        Loading precursor-level data…
+      </div>
+    </div>
     <figcaption>LFQ precursor scatter</figcaption>
   </figure>
 )}
@@ -37,12 +43,17 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
     const el = container.querySelector<HTMLElement>('[data-chart="scatter"]');
     if (!el) return;
 
+    // The loading indicator markup is already in the DOM (see the .astro
+    // template). Plotly.newPlot only ever adds its own elements to the
+    // target div — it doesn't know about (or clear out) markup it didn't
+    // create itself — so this has to be removed by hand once the data's in.
     const url = container.dataset.scatterUrl!;
     const response = await fetch(url);
     if (!response.ok) {
       el.textContent = "Scatter data failed to load.";
       return;
     }
+    el.querySelector(".bench-plotly-loading")?.remove();
     const bySpecies: Record<string, { x: number[]; y: number[] }> = await response.json();
     const species = Object.keys(bySpecies);
 
@@ -81,6 +92,6 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
         margin: { t: 10, r: 20, b: 90, l: 60 },
       }),
       baseConfig,
-    ).then(() => el.classList.add("is-visible"));
+    );
   });
 </script>

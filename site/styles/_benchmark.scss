@@ -720,10 +720,36 @@
 .bench-plotly-target {
   width: 100%;
   min-height: 260px;
+  position: relative;
 }
 
 .bench-plotly-target-tall {
   min-height: 480px;
+}
+
+// Shown in a .bench-plotly-target while its data is still being fetched
+// (ScatterWidget's point file runs to over a megabyte) — absolutely
+// positioned over the same box the chart will occupy, so nothing shifts
+// once Plotly.newPlot clears it away and draws in its place.
+.bench-plotly-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  color: $text-light;
+  font-size: $font-size-small;
+}
+
+.bench-spin {
+  animation: bench-spin 1s linear infinite;
+}
+
+@keyframes bench-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // Plain CSS fade-in for the chart types Plotly can't smoothly animate itself

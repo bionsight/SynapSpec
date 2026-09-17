@@ -52,7 +52,6 @@ const dots = runsAsc.map((run) => {
 
     <div class="page-header">
       <h1>LFQBench <span class="bench-muted">/ Orbitrap Astral</span></h1>
-      <p class="section-subtitle">{bm.coverage.run_count} archived runs from {bm.coverage.date_from} to {bm.coverage.date_to}. Same dataset, different engine runs; these are not verified release versions.</p>
       <p class="section-subtitle"><a href={`/benchmarks/${recordedRunSlug}/`} class="bench-link">View the separately imported 7 September run</a></p>
     </div>
 
@@ -75,7 +74,6 @@ const dots = runsAsc.map((run) => {
           <text x="975" y="255" text-anchor="end" class="bench-history-ticklabel">{lastRun.date}</text>
         </svg>
       </div>
-      <p class="bench-axis-note" style="text-align: left;">The vertical axis starts at {minimum}, not zero, to show changes. Position on the horizontal axis follows run date. Changes in settings may affect counts.</p>
     </section>
 
     <section class="py-lg bench-border-t">
@@ -99,7 +97,6 @@ const dots = runsAsc.map((run) => {
           </tbody>
         </table>
       </div>
-      <p class="bench-axis-note" style="text-align: left;">Runtime is not directly comparable across different instance types. Counts retain the archived source fields; bars share a zero baseline and the archive peak as their maximum.</p>
     </section>
   </div>
 </BaseLayout>
