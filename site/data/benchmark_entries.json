@@ -6,5 +6,11 @@
   { "kind": "imported", "slug": "2026-09-07-b4de5599", "title": "Benchmark run 2026-09-07-b4de5599" },
   { "kind": "recorded", "slug": "2026-09-07-5d12a532", "title": "Benchmark run 2026-09-07-5d12a532" },
   { "kind": "comparison", "slug": "lfqbench-202502-archived", "title": "LFQBench / Orbitrap Astral — archived comparison" },
-  { "kind": "recorded", "slug": "proteobench-2th-astral", "title": "ProteoBench 2 Th / Astral" }
+  { "kind": "recorded", "slug": "proteobench-2th-astral", "title": "ProteoBench 2 Th / Astral" },
+  { "kind": "recorded", "slug": "pxd028735-v0.9.2", "title": "PXD028735 / SynapSpec v0.9.2" },
+  { "kind": "recorded", "slug": "pxd028735-v0.11.0", "title": "PXD028735 / SynapSpec v0.11.0" },
+  { "kind": "recorded", "slug": "pxd028735-v0.12.4", "title": "PXD028735 / SynapSpec v0.12.4" },
+  { "kind": "recorded", "slug": "proteobench-v0.9.2", "title": "ProteoBench 2 Th / SynapSpec v0.9.2" },
+  { "kind": "recorded", "slug": "proteobench-v0.11.0", "title": "ProteoBench 2 Th / SynapSpec v0.11.0" },
+  { "kind": "recorded", "slug": "proteobench-v0.12.4", "title": "ProteoBench 2 Th / SynapSpec v0.12.4" }
 ]
