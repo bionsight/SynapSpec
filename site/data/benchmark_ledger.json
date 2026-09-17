@@ -285,27 +285,6 @@
         "release_version": "v0.12.4"
       },
       {
-        "id": "lfqbench-oe480",
-        "date": "2026-09-14",
-        "label": "SynapSpec run · PXD028735 raw files",
-        "sourceSlug": "lfqbench-oe480",
-        "comparisonSlug": null,
-        "counts": [
-          75346,
-          null,
-          null
-        ],
-        "runtime": 4.2125,
-        "resource": "c7i.8xlarge",
-        "commit": "fcaf6278",
-        "release_version": "≈v0.12.4",
-        "counts_display": [
-          "75,346",
-          null,
-          null
-        ]
-      },
-      {
         "id": "pxd028735-v0.11.0",
         "date": "2026-09-16",
         "label": "SynapSpec v0.11.0 run · PXD028735 raw files",
@@ -346,27 +325,6 @@
         "resource": "c7i.8xlarge",
         "commit": "af9dd5a5",
         "release_version": "v0.9.2"
-      },
-      {
-        "id": "lfqbench-202409-archived",
-        "date": null,
-        "label": "3-tool comparison · v092 folder",
-        "sourceSlug": "lfqbench-202409-archived",
-        "comparisonSlug": "lfqbench-202409-archived",
-        "counts": [
-          81559,
-          108447,
-          104099
-        ],
-        "runtime": null,
-        "resource": null,
-        "commit": null,
-        "release_version": "v0.9.2",
-        "counts_display": [
-          "81,559",
-          "108,447",
-          "104,099"
-        ]
       }
     ]
   },

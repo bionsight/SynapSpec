@@ -5,6 +5,7 @@
 import comparisons from "../../data/benchmark_comparisons.json";
 import scatterSets from "../../data/benchmark_comparison_scatter.json";
 import { intDiv } from "../../lib/liquidMath";
+import ComparisonWidget from "./ComparisonWidget.astro";
 
 interface Props {
   slug: string;
@@ -159,10 +160,7 @@ const round = (n: number, digits: number) => {
   <section class="py-lg bench-border-t">
     <h2>Identification, repeatability and LFQ ratios</h2>
     <p class="bench-axis-note" style="text-align: left;">More IDs means broader coverage, not automatically better quantification. Lower CV means more consistent repeat measurements. For LFQ, a median closer to the dashed expected line and a narrower interquartile range indicate closer agreement and less spread.</p>
-    <a href={`/assets/images/benchmarks/${record.figure}`} target="_blank" rel="noreferrer" class="bench-figure-link">
-      <img src={`/assets/images/benchmarks/${record.figure}`} width="2880" height="1600" alt={`${record.name}: three-tool precursor counts, six-run completeness, within-condition CV, and species-specific LFQ median and interquartile range. Exact values follow below.`} />
-    </a>
-    <a href={`/assets/images/benchmarks/${record.figure}`} download class="bench-download-link">Download comparison PNG</a>
+    <ComparisonWidget slug={slug} />
 
     <div class="bench-table-wrap" style="margin-top: 1.5rem;">
       <table class="bench-table">

@@ -42,7 +42,7 @@ const ratios = entry.ratio_measurements as any[];
 
 <script>
   import Plotly from "plotly.js-cartesian-dist-min";
-  import { baseLayout, axisStyle, baseConfig, COLORS, SPECIES_COLORS } from "../../lib/plotlyTheme";
+  import { baseLayout, axisStyle, baseConfig, COLORS, SPECIES_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
 
   const LOG2_TICKS = [-2, -1, 0, 1, 2];
   const LOG2_LABELS = ["0.25×", "0.5×", "1×", "2×", "4×"];
@@ -125,9 +125,9 @@ const ratios = entry.ratio_measurements as any[];
   }
 
   document.querySelectorAll<HTMLElement>('[data-chart="ratio-actual"]').forEach((el) => {
-    renderPanel(el, JSON.parse(el.dataset.ratios!), "actual");
+    drawWhenVisible(el, () => renderPanel(el, JSON.parse(el.dataset.ratios!), "actual"));
   });
   document.querySelectorAll<HTMLElement>('[data-chart="ratio-relative"]').forEach((el) => {
-    renderPanel(el, JSON.parse(el.dataset.ratios!), "relative");
+    drawWhenVisible(el, () => renderPanel(el, JSON.parse(el.dataset.ratios!), "relative"));
   });
 </script>

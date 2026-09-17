@@ -2,6 +2,7 @@
 // benchmarks/index.md를 옮긴 것. No-JS 데이터셋 토글은 라디오+라벨로 그대로 둔다.
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ledgers from "../../data/benchmark_ledger.json";
+import ComparisonWidget from "../../components/benchmark/ComparisonWidget.astro";
 
 const description =
   "SynapSpec benchmark history on the LFQBench standard dataset — three-tool comparisons on fixed inputs, and every recorded run over time";
@@ -41,13 +42,7 @@ const [oe480, astral] = ledgers;
             <p class="bench-axis-note" style="text-align: left;">{ledger.name} &middot; {ledger.files.length} input files &middot; Archived comparison; execution date not recorded</p>
             <p class="bench-axis-note" style="text-align: left;"><a href={`/benchmarks/${ledger.id}/`} class="bench-link">Run details &amp; source</a></p>
             <p class="bench-axis-note" style="text-align: left;">Same six input filenames across tools. Releases, full settings and input checksums are not reconciled; this is not a controlled current-release ranking.</p>
-            <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} target="_blank" rel="noreferrer" class="bench-figure-link">
-              <img src={`/assets/images/benchmarks/${ledger.comparison.figure}`} width="2880" height="1600" alt={`${ledger.name}: SynapSpec, DIA-NN and Spectronaut precursor IDs, six-run completeness, CV and Human, Yeast, E. coli LFQ median and IQR.`} />
-            </a>
-            <div class="bench-figure-actions">
-              <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} target="_blank" rel="noreferrer">Open full-size figure</a>
-              <a href={`/assets/images/benchmarks/${ledger.comparison.figure}`} download>Download PNG</a>
-            </div>
+            <ComparisonWidget slug={ledger.id} />
           </section>
 
           <section id={anchor} class="block">

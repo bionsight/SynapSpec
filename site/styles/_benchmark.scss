@@ -686,6 +686,20 @@
   gap: $spacing-md;
 }
 
+// Six-panel tool-comparison figure (ComparisonWidget): two rows of three,
+// same flex-gap approach as the stack above.
+.bench-comparison-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.bench-comparison-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $spacing-md;
+}
+
 .bench-diagnostic {
   margin: 0;
   border: 1px solid $border-color;

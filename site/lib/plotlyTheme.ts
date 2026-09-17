@@ -20,6 +20,15 @@ export const SPECIES_COLORS: Record<string, string> = {
   "E. coli": "#0f9b8e",
 };
 
+// Tool colors for the three-tool comparison charts — Okabe-Ito colorblind-safe
+// palette, matching the $viz-1/2/3 already used by the hand-built "Accuracy vs
+// depth" SVG scatter on the same page (_benchmark.scss's .bench-scatter-dot-*).
+export const TOOL_COLORS: Record<string, string> = {
+  synapspec: "#0072b2",
+  diann: "#e69f00",
+  spectronaut: "#009e73",
+};
+
 export const FONT_FAMILY =
   "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
 
@@ -47,3 +56,26 @@ export const axisStyle = {
 };
 
 export const baseConfig = { displayModeBar: false, responsive: true };
+
+// Plotly sizes a chart from its container's rendered width at draw time. A
+// container inside a CSS-only radio/label toggle (the no-JS tab pattern used
+// throughout these pages) is `display: none` at first paint whenever it isn't
+// the default-selected tab, so drawing into it eagerly bakes in some fallback
+// size that's wrong once CSS reveals the real (usually narrower) width later.
+//
+// Rather than draw wrong and fix it up with a resize, defer the draw itself:
+// wait for a ResizeObserver notification carrying a real, nonzero width —
+// immediately, if the target is already visible, or once CSS gives it a box
+// later. A zero-width entry is ignored and left observing: some browsers
+// fire an initial callback for a target that isn't actually being rendered
+// yet (contrary to spec — see https://github.com/w3c/csswg-drafts/issues/11280),
+// and disconnecting on that one would draw once against a fake size and
+// never get another chance to redraw once the element is genuinely shown.
+export function drawWhenVisible(el: Element, draw: () => void) {
+  const observer = new ResizeObserver((entries) => {
+    if (entries[0].contentRect.width === 0) return;
+    observer.disconnect();
+    draw();
+  });
+  observer.observe(el);
+}
