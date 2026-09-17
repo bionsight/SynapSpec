@@ -712,6 +712,18 @@
   min-height: 480px;
 }
 
+// Plain CSS fade-in for the chart types Plotly can't smoothly animate itself
+// (bar, box, scattergl all redraw instantly — see plotlyTheme.ts). QuartileWidget
+// uses a real Plotly.animate transition instead and skips this class.
+.bench-plotly-fade {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  &.is-visible {
+    opacity: 1;
+  }
+}
+
 // ── Dataset switcher (index page) ────────────────────────────
 
 .bench-ds-head {

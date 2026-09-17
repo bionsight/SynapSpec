@@ -22,7 +22,7 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
 
 {ratios && (
   <figure class="bench-diagnostic" data-scatter-url={dataUrl}>
-    <div data-chart="scatter" class="bench-plotly-target bench-plotly-target-tall"></div>
+    <div data-chart="scatter" class="bench-plotly-target bench-plotly-target-tall bench-plotly-fade"></div>
     <figcaption>LFQ precursor scatter</figcaption>
   </figure>
 )}
@@ -81,6 +81,6 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
         margin: { t: 10, r: 20, b: 90, l: 60 },
       }),
       baseConfig,
-    );
+    ).then(() => el.classList.add("is-visible"));
   });
 </script>

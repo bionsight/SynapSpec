@@ -22,11 +22,11 @@ const diagnostics = (entry as { diagnostics?: any }).diagnostics;
 {diagnostics && (
   <div class="bench-diagnostics-grid" data-diagnostics={JSON.stringify(diagnostics)}>
     <figure class="bench-diagnostic">
-      <div data-chart="completeness" class="bench-plotly-target"></div>
+      <div data-chart="completeness" class="bench-plotly-target bench-plotly-fade"></div>
       <figcaption>Data completeness</figcaption>
     </figure>
     <figure class="bench-diagnostic">
-      <div data-chart="cv" class="bench-plotly-target"></div>
+      <div data-chart="cv" class="bench-plotly-target bench-plotly-fade"></div>
       <figcaption>CV distribution</figcaption>
     </figure>
   </div>
@@ -61,7 +61,7 @@ const diagnostics = (entry as { diagnostics?: any }).diagnostics;
         yaxis: { ...axisStyle, title: { text: "Precursor count" } },
       }),
       baseConfig,
-    );
+    ).then(() => completenessEl.classList.add("is-visible"));
 
     const cv = diagnostics.cv_distribution;
     const items = [
@@ -101,6 +101,6 @@ const diagnostics = (entry as { diagnostics?: any }).diagnostics;
         })),
       }),
       baseConfig,
-    );
+    ).then(() => cvEl.classList.add("is-visible"));
   });
 </script>

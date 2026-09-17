@@ -50,6 +50,10 @@ const quartiles = (entry as { quartile_measurements?: any[] }).quartile_measurem
       const upperErr = item.points.map((p: any) => p.upper - p.median);
       const lowerErr = item.points.map((p: any) => p.median - p.lower);
 
+      // Entrance animation: start every point flat on the expected-ratio line
+      // (no error bars yet), then animate to the real measured median + IQR.
+      // Only `scatter` traces get a smooth Plotly transition — bar/box traces
+      // jump instantly — so this widget is the one place that's worth it.
       Plotly.newPlot(
         el,
         [
@@ -57,9 +61,9 @@ const quartiles = (entry as { quartile_measurements?: any[] }).quartile_measurem
             type: "scatter",
             mode: "lines+markers",
             x: labels,
-            y: medians,
-            error_y: { type: "data", symmetric: false, array: upperErr, arrayminus: lowerErr, color, thickness: 1.5, width: 4 },
-            line: { color, width: 2 },
+            y: labels.map(() => item.target),
+            error_y: { type: "data", symmetric: false, array: labels.map(() => 0), arrayminus: labels.map(() => 0), color, thickness: 1.5, width: 4 },
+            line: { color, width: 2, simplify: false },
             marker: { color, size: 8 },
             text: item.points.map((p: any) => `${p.count_display} precursors`),
             hovertemplate: "%{x}<br>median %{y:.2f} log₂<br>%{text}<extra></extra>",
@@ -81,7 +85,13 @@ const quartiles = (entry as { quartile_measurements?: any[] }).quartile_measurem
           ],
         }),
         baseConfig,
-      );
+      ).then(() => {
+        Plotly.animate(
+          el,
+          { data: [{ y: medians, error_y: { array: upperErr, arrayminus: lowerErr } }] },
+          { transition: { duration: 600, easing: "cubic-in-out" }, frame: { duration: 600, redraw: false } },
+        );
+      });
     });
   });
 </script>

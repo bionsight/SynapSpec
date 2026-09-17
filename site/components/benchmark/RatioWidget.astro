@@ -27,18 +27,18 @@ const ratios = entry.ratio_measurements as any[];
   </div>
 </div>
 
-<p class="bench-axis-note" style="text-align: left; margin-bottom: 1rem;">Dashed line: expected ratio. Box: middle 50% of measurements, line at the median. A close median does not mean every measurement is close.</p>
+<p class="bench-axis-note" style="text-align: left; margin-bottom: 1rem;">Gray dashed line: expected ratio. Dot: measured median. Bar: middle 50% of measurements. A close median does not mean every measurement is close.</p>
 
 <div class="bench-ratio-panel bench-ratio-panel-actual">
-  <div data-chart="ratio-actual" class="bench-plotly-target" data-ratios={JSON.stringify(ratios)}></div>
+  <div data-chart="ratio-actual" class="bench-plotly-target bench-plotly-fade" data-ratios={JSON.stringify(ratios)}></div>
 </div>
 
 <div class="bench-ratio-panel bench-ratio-panel-relative">
-  <div data-chart="ratio-relative" class="bench-plotly-target" data-ratios={JSON.stringify(ratios)}></div>
+  <div data-chart="ratio-relative" class="bench-plotly-target bench-plotly-fade" data-ratios={JSON.stringify(ratios)}></div>
 </div>
 
-<p class="bench-axis-note bench-ratio-footnote-actual" style="text-align: left;">Ratio A/B on a log₂-spaced axis: equal distances mean equal fold changes. Box is the interquartile range, not a confidence interval.</p>
-<p class="bench-axis-note bench-ratio-footnote-relative" style="text-align: left;">Measured A/B divided by expected A/B, on a closer log₂-spaced axis. Box is the interquartile range, not a confidence interval.</p>
+<p class="bench-axis-note bench-ratio-footnote-actual" style="text-align: left;">Ratio A/B on a log₂-spaced axis: equal distances mean equal fold changes. The bar is the interquartile range, not a confidence interval.</p>
+<p class="bench-axis-note bench-ratio-footnote-relative" style="text-align: left;">Measured A/B divided by expected A/B, on a closer log₂-spaced axis. The bar is the interquartile range, not a confidence interval.</p>
 
 <script>
   import Plotly from "plotly.js-cartesian-dist-min";
@@ -49,7 +49,7 @@ const ratios = entry.ratio_measurements as any[];
   const DEV_TICKS = [-0.5, -0.25, 0, 0.25, 0.5];
   const DEV_LABELS = ["-50%", "-25%", "Expected", "+25%", "+50%"];
 
-  function targetShapes(values: number[], color: string) {
+  function targetShapes(values: number[]) {
     return values.map((v, idx) => ({
       type: "line",
       xref: "x",
@@ -58,33 +58,48 @@ const ratios = entry.ratio_measurements as any[];
       x1: v,
       y0: idx - 0.4,
       y1: idx + 0.4,
-      line: { color, width: 2, dash: "dash" },
+      line: { color: COLORS.textLight, width: 2, dash: "dash" },
     }));
   }
 
+  // Dot + horizontal bar instead of a box plot: a box's "rectangle with a
+  // second line inside it" reads as two competing marks (median vs. quartile
+  // edges) at a glance. One colored dot for the median plus a plain range bar
+  // for the IQR, with the expected value called out separately in gray, is
+  // the same information read more directly — "here's what we got, here's
+  // what a bar plotted point closer to the target would look like."
   function renderPanel(el: HTMLElement, ratios: any[], mode: "actual" | "relative") {
     const species = ratios.map((r) => r.species);
     const colors = species.map((s) => SPECIES_COLORS[s] ?? COLORS.primary);
     const isActual = mode === "actual";
 
-    const q1 = ratios.map((r) => (isActual ? r.lower : r.lower - r.target));
+    const lower = ratios.map((r) => (isActual ? r.lower : r.lower - r.target));
     const median = ratios.map((r) => (isActual ? r.median : r.median - r.target));
-    const q3 = ratios.map((r) => (isActual ? r.upper : r.upper - r.target));
+    const upper = ratios.map((r) => (isActual ? r.upper : r.upper - r.target));
     const targetValues = isActual ? ratios.map((r) => r.target) : ratios.map(() => 0);
+    const valueLabels = ratios.map((r) =>
+      isActual ? r.measured_ratio_display : `${r.deviation_percent > 0 ? "+" : ""}${r.deviation_percent}%`,
+    );
 
     Plotly.newPlot(
       el,
       [
         {
-          type: "box",
+          type: "scatter",
+          mode: "markers",
           orientation: "h",
           y: species,
-          q1,
-          median,
-          q3,
-          marker: { color: colors },
-          fillcolor: COLORS.primaryLight,
-          boxpoints: false,
+          x: median,
+          error_x: {
+            type: "data",
+            symmetric: false,
+            array: upper.map((v, i) => v - median[i]),
+            arrayminus: median.map((v, i) => v - lower[i]),
+            color: COLORS.primaryDark,
+            thickness: 4,
+            width: 8,
+          },
+          marker: { color: colors, size: 16, line: { color: COLORS.background, width: 2 } },
           text: ratios.map((r) => `${r.measured_ratio_display} measured median A/B, ${r.count_display} paired precursors`),
           hovertemplate: "%{y}<br>%{text}<extra></extra>",
         },
@@ -94,11 +109,19 @@ const ratios = entry.ratio_measurements as any[];
           ? { ...axisStyle, tickvals: LOG2_TICKS, ticktext: LOG2_LABELS, range: [-2.5, 1.5] }
           : { ...axisStyle, tickvals: DEV_TICKS, ticktext: DEV_LABELS, range: [-0.5, 0.5] },
         yaxis: { ...axisStyle, showgrid: false },
-        shapes: targetShapes(targetValues, COLORS.text),
-        margin: { t: 10, r: 20, b: 40, l: 70 },
+        shapes: targetShapes(targetValues),
+        annotations: species.map((label, idx) => ({
+          x: median[idx],
+          y: label,
+          text: `<b>${valueLabels[idx]}</b>`,
+          showarrow: false,
+          yshift: 26,
+          font: { color: COLORS.text, size: 13 },
+        })),
+        margin: { t: 20, r: 20, b: 40, l: 70 },
       }),
       baseConfig,
-    );
+    ).then(() => el.classList.add("is-visible"));
   }
 
   document.querySelectorAll<HTMLElement>('[data-chart="ratio-actual"]').forEach((el) => {
