@@ -42,6 +42,31 @@ sitemap.xml 에도 포함돼 있었다. 또한 이 저장소는 public 이므로
 
 ### 3. 데이터
 
+- [x] **DIA-NN 단발 수치 import (2026-09-18).** `DiaNN/lfq/oe480/PXD028735`,
+      `DiaNN/lfq/astral` 에서 유효한 DIA-NN run을 각각 하나씩 찾아 `report.parquet` 을
+      S3(`s3://bionlab-clearml/DiaNN/...`)에서 직접 내려받고 duckdb로 집계해
+      `site/data/benchmark_imports.json` 에 `imported` 등급으로 넣었다
+      (`pxd028735-diann`, `proteobench-2th-astral-diann`). ClearML 쪽 `summary`
+      리포트 테이블은 이 두 task 모두 생성되지 않았다 — 콘솔 로그에
+      `Precursors file not found: /root/output/precursors.parquet` 에러가 있고,
+      `parsers.metric.parse_metrics` 가 SynapSpec 쪽 비교 파서를 재사용하다가 실패한
+      것으로 보인다(아래 "경쟁 도구 비교" 항목과 같은 근본 원인). 그래서 숫자는 ClearML
+      Summary 표가 아니라 report.parquet 을 직접 파싱해서 얻었다:
+      - PXD028735 (task `5d5ec6c2…`, commit `14c551d4`, 2026-02-04, 2:07h):
+        precursors 103,433 · protein groups 9,951
+      - ProteoBench 2 Th mix, HYE / Astral (task `9c5cbc9e…`, commit `0f88c370`,
+        2026-06-26, 4:16h): precursors 286,311 · protein groups 16,858
+      - Spectronaut 쪽은 ClearML 전체를 뒤져도(프로젝트/태스크/태그 어디에도)
+        run이 없다. `benchmark_ledger.json` 의 Spectronaut 칸은 계속 "—". 대신
+        `/export/data_ms/reports/LFQBench/PXD028735/Alpha/` 에 Spectronaut
+        DirectDIA 리포트(`spectronaut_v19_7`, `spectronaut_v19_7_hybrid`)가 완주
+        상태로 있는 걸 확인했다 — precursor 99,562 / protein group 8,302
+        (hybrid는 112,053 / 8,674). 아직 사이트에는 반영 안 했다.
+      - **이 두 숫자는 species별 ratio·CV·completeness가 없는 단순 집계일 뿐이다.**
+        진짜 3-tool 비교(`lfqbench-202409-archived`/`lfqbench-202502-archived`
+        같은 급)를 만들려면 아래 "경쟁 도구 비교" 항목에 있는 대로 DeepMSFlow
+        `instrumentation/parsers/lfq.py` 의 4-tool 비교 코드를 이 report.parquet
+        에 대해 직접 돌려야 한다 — 아직 안 했다.
 - [ ] **정확도 지표 커버리지.** 18건 중 1건(2026-07-22)만 `lfq_ratio_statistics` 를 갖는다.
       LFQ 파서가 2026-07 에 도입돼서 그 이전 run 에는 없다. main 에 벤치마크가 더 돌면
       스크립트 재실행만으로 채워진다.
@@ -62,6 +87,10 @@ sitemap.xml 에도 포함돼 있었다. 또한 이 저장소는 public 이므로
       결과가 parquet 아티팩트에만 있어서, 비교하려면 LFQBench 분석을 직접 돌려야 한다.
       DeepMSFlow `instrumentation/parsers/lfq.py` 에 4-tool 비교 코드
       (`Previous SynapSpec` / `Current SynapSpec` / `DIA-NN` / `Spectronaut`)가 이미 있다.
+      위 "데이터" 절의 DIA-NN 단발 수치 import는 이 4-tool 비교를 대신하는 게 아니라,
+      precursor/protein 총계만 급하게 뽑아 둔 것이다. Spectronaut 은 이제 원본 리포트
+      위치(`/export/data_ms/reports/LFQBench/PXD028735/Alpha/`)를 알고 있으니, DIA-NN
+      쪽까지 포함해 이 4-tool 비교 코드를 직접 돌리는 게 다음 단계다.
 
 ### 5. 운영
 
