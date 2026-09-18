@@ -18,7 +18,6 @@
 // prepare_lfq_dataframe/get_lfq_quantification species+condition logic.
 import catalog from "../../data/benchmark_catalog.json";
 import ledgers from "../../data/benchmark_ledger.json";
-import Icon from "../Icon.astro";
 
 interface Props {
   slug: string;
@@ -40,7 +39,6 @@ const diannDataUrl = diannRef ? `/data/benchmarks/scatter-${diannRef.sourceSlug}
       <figure class="bench-diagnostic">
         <div data-chart="scatter-synapspec" class="bench-plotly-target bench-plotly-target-tall">
           <div class="bench-plotly-loading">
-            <Icon name="loader-circle" size={20} class="bench-spin" />
             Loading precursor-level data…
           </div>
         </div>
@@ -50,7 +48,6 @@ const diannDataUrl = diannRef ? `/data/benchmarks/scatter-${diannRef.sourceSlug}
         <figure class="bench-diagnostic">
           <div data-chart="scatter-diann" class="bench-plotly-target bench-plotly-target-tall">
             <div class="bench-plotly-loading">
-              <Icon name="loader-circle" size={20} class="bench-spin" />
               Loading precursor-level data…
             </div>
           </div>

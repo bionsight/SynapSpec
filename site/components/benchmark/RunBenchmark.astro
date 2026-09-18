@@ -1,6 +1,6 @@
 ---
 // _layouts/benchmark_run.html을 옮긴 것. _benchmarks 컬렉션(18개 날짜 슬러그)에서 쓴다.
-import Icon from "../Icon.astro";
+import { FlaskConical, Server, Clock } from "@lucide/astro";
 import benchmarks from "../../data/benchmarks.json";
 
 interface Props {
@@ -23,9 +23,9 @@ const run = bm.runs.find((r) => r.slug === slug)!;
 
   <section class="py-lg">
     <div class="bench-meta">
-      <span><Icon name="flask-conical" size={14} /> {bm.dataset.name} &middot; {bm.dataset.instrument}</span>
-      <span><Icon name="server" size={14} /> AWS {run.instance}</span>
-      {run.runtime_hours && <span><Icon name="clock" size={14} /> {run.runtime_hours} h</span>}
+      <span><FlaskConical size={14} class="icon" /> {bm.dataset.name} &middot; {bm.dataset.instrument}</span>
+      <span><Server size={14} class="icon" /> AWS {run.instance}</span>
+      {run.runtime_hours && <span><Clock size={14} class="icon" /> {run.runtime_hours} h</span>}
     </div>
   </section>
 
