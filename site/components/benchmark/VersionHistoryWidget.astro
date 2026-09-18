@@ -2,10 +2,15 @@
 // Replaces the old Run history table for `benchmarks/index.astro`. With the
 // per-day historical rows trimmed down to one row per SynapSpec release
 // version, a table with a single numeric column read as mostly empty space.
-// A small bar chart reads better at this row count and gives DIA-NN/
-// Spectronaut somewhere to sit as a reference line instead of as a column
-// that's "—" in every row but one — same dashed-line-plus-label pattern
-// ComparisonWidget's ratio charts use for the "Expected" line.
+// A small bar chart reads better at this row count.
+//
+// The DIA-NN/Spectronaut reference line is opt-in, not drawn on load: the
+// team wants this page to read as SynapSpec's own leaderboard-style track
+// record first, not a "we're behind DIA-NN" chart every visitor sees
+// immediately. Opening the <details> below adds the line via Plotly.relayout
+// instead of redrawing — same dashed-line-plus-label shape/annotation pair
+// ComparisonWidget's ratio charts use for the "Expected" line, just applied
+// after the fact.
 interface Row {
   date: string | null;
   label: string;
@@ -37,24 +42,31 @@ const references = toolReferences.filter((ref): ref is ToolReference & { value: 
 
 <div class="bench-version-history" data-rows={JSON.stringify(chartRows)} data-references={JSON.stringify(references)}>
   <div data-chart="versions" class="bench-plotly-target bench-plotly-fade"></div>
-</div>
 
-<p class="bench-axis-note" style="text-align: left;">
-  Runs:{" "}
-  {chartRows.map((row, i) => (
-    <>
-      {i > 0 && " · "}
-      <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date}</a>
-    </>
-  ))}
-  {references.length > 0 && " — "}
-  {references.map((ref, i) => (
-    <>
-      {i > 0 && " · "}
-      <a href={`/benchmarks/${ref.sourceSlug}/`} class="bench-link">{ref.tool} reference</a>
-    </>
-  ))}
-</p>
+  <p class="bench-axis-note" style="text-align: left;">
+    Runs:{" "}
+    {chartRows.map((row, i) => (
+      <>
+        {i > 0 && " · "}
+        <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date}</a>
+      </>
+    ))}
+  </p>
+
+  {references.length > 0 && (
+    <details class="bench-details" data-compare-toggle>
+      <summary>Compare to {references.map((r) => r.tool).join(" & ")}</summary>
+      <p class="bench-axis-note" style="text-align: left;">
+        {references.map((ref, i) => (
+          <>
+            {i > 0 && " · "}
+            {ref.tool}{" "}<a href={`/benchmarks/${ref.sourceSlug}/`} class="bench-link">{ref.display}</a> ({ref.date})
+          </>
+        ))}
+      </p>
+    </details>
+  )}
+</div>
 
 <script>
   import Plotly from "plotly.js-cartesian-dist-min";
@@ -79,7 +91,30 @@ const references = toolReferences.filter((ref): ref is ToolReference & { value: 
 
     const allValues = [...values, ...references.map((r) => r.value)].filter((v) => typeof v === "number");
     const maxVal = Math.max(...allValues, 0);
+    // Headroom reserved up front (not just for the bars) so revealing the
+    // reference line later doesn't rescale the y-axis under it.
     const yMax = maxVal * 1.2;
+
+    const referenceShapes = references.map((ref) => ({
+      type: "line",
+      xref: "paper",
+      x0: 0,
+      x1: 1,
+      yref: "y",
+      y0: ref.value,
+      y1: ref.value,
+      line: { color: toolColor(ref.tool), width: 1.5, dash: "dash" },
+    }));
+    const referenceAnnotations = references.map((ref) => ({
+      x: 0,
+      xref: "paper",
+      xanchor: "left",
+      y: ref.value,
+      text: `${ref.tool} ${ref.display}`,
+      showarrow: false,
+      yshift: 10,
+      font: { size: 11, color: toolColor(ref.tool) },
+    }));
 
     drawWhenVisible(el, () => {
       Plotly.newPlot(
@@ -99,29 +134,15 @@ const references = toolReferences.filter((ref): ref is ToolReference & { value: 
         baseLayout({
           xaxis: { ...axisStyle, title: { text: "SynapSpec release" }, showgrid: false },
           yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
-          shapes: references.map((ref) => ({
-            type: "line",
-            xref: "paper",
-            x0: 0,
-            x1: 1,
-            yref: "y",
-            y0: ref.value,
-            y1: ref.value,
-            line: { color: toolColor(ref.tool), width: 1.5, dash: "dash" },
-          })),
-          annotations: references.map((ref) => ({
-            x: 0,
-            xref: "paper",
-            xanchor: "left",
-            y: ref.value,
-            text: `${ref.tool} ${ref.display}`,
-            showarrow: false,
-            yshift: 10,
-            font: { size: 11, color: toolColor(ref.tool) },
-          })),
         }),
         baseConfig,
-      ).then(() => el.classList.add("is-visible"));
+      ).then(() => {
+        el.classList.add("is-visible");
+        const details = container.querySelector<HTMLDetailsElement>("[data-compare-toggle]");
+        details?.addEventListener("toggle", () => {
+          Plotly.relayout(el, details.open ? { shapes: referenceShapes, annotations: referenceAnnotations } : { shapes: [], annotations: [] });
+        });
+      });
     });
   });
 </script>
