@@ -905,32 +905,12 @@
   &.bench-scatter-dot-spectronaut { background: $viz-3; }
 }
 
-// ── Run history chart + compare select (VersionHistoryWidget) ─
-// Bars default to SynapSpec only — own track record first. The select adds
-// a DIA-NN/Spectronaut reference line via Plotly.relayout on change, so
-// nothing redraws from scratch. Bars are themselves links (click handler in
-// the widget's script sets the cursor and navigates on plotly_click) — this
-// used to be a separate table of the same numbers with the links in it.
+// ── Run history chart (VersionHistoryWidget) ──────────────────
+// Bars default to SynapSpec only — own track record first. Hovering a bar
+// reveals a DIA-NN/Spectronaut bar next to it (Plotly.restyle on an
+// initially-all-null trace, barmode "group"), and clicking either bar opens
+// that run's detail page.
 
 .bench-version-chart-block {
   margin-bottom: $spacing-lg;
-}
-
-.bench-version-chart-controls {
-  display: flex;
-  align-items: center;
-  gap: $spacing-xs;
-  margin-bottom: $spacing-sm;
-  font-size: $font-size-small;
-  color: $text-light;
-}
-
-.bench-version-select {
-  padding: 4px 8px;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-  background: $background-color;
-  color: $text-color;
-  font-family: $body-font;
-  font-size: $font-size-small;
 }

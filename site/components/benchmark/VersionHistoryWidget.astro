@@ -1,12 +1,11 @@
 ---
 // Run history for `benchmarks/index.astro`: a bar chart of SynapSpec's own
-// precursor counts by release. Defaults to SynapSpec-only bars — reads as
-// its own track record first — and a <select> lets the visitor overlay a
-// DIA-NN/Spectronaut reference line on demand, redrawn via Plotly.relayout
-// on `change` (same dashed-line-plus-label shapes/annotations
-// ComparisonWidget's ratio charts use for "Expected"). Clicking a bar opens
-// that run's detail page — this used to be a separate table of the same
-// numbers with the links; the chart is the whole thing now.
+// precursor counts by release, reading as its own track record first — no
+// DIA-NN/Spectronaut bar drawn on load. Hovering (or focusing, for
+// keyboard) a bar reveals that tool's bar right next to it via
+// Plotly.restyle on a second, initially-all-null trace in barmode "group" —
+// nothing gets redrawn from scratch. Clicking a bar (SynapSpec's or a
+// revealed reference's) opens that run's detail page.
 interface Row {
   date: string | null;
   label: string;
@@ -25,25 +24,18 @@ interface ToolReference {
   sourceSlug: string | null;
 }
 interface Props {
-  id: string;
   rows: Row[];
   toolReferences: ToolReference[];
 }
-const { id, rows, toolReferences } = Astro.props;
+const { rows, toolReferences } = Astro.props;
 
-const selectId = `bench-compare-select-${id}`;
+const usableReferences = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string; sourceSlug: string } => ref.value !== null);
 ---
 
-<div class="bench-version-chart-block" data-rows={JSON.stringify(rows)} data-references={JSON.stringify(toolReferences)}>
-  <div class="bench-version-chart-controls">
-    <label for={selectId}>Compare with</label>
-    <select id={selectId} class="bench-version-select" data-compare-select>
-      <option value="">SynapSpec only</option>
-      {toolReferences.map((ref) => (
-        <option value={ref.tool} disabled={ref.value === null}>{ref.tool}{ref.value === null ? " (no run recorded)" : ""}</option>
-      ))}
-    </select>
-  </div>
+<div class="bench-version-chart-block" data-rows={JSON.stringify(rows)} data-references={JSON.stringify(usableReferences)}>
+  {usableReferences.length > 0 && (
+    <p class="bench-axis-note" style="text-align: left;">Hover a bar to compare with {usableReferences.map((r) => r.tool).join(" & ")}.</p>
+  )}
   <div data-chart="versions" class="bench-plotly-target bench-plotly-fade"></div>
 </div>
 
@@ -57,7 +49,6 @@ const selectId = `bench-compare-select-${id}`;
     const rows: any[] = JSON.parse(container.dataset.rows!);
     const references: any[] = JSON.parse(container.dataset.references!);
     const el = container.querySelector<HTMLElement>('[data-chart="versions"]');
-    const select = container.querySelector<HTMLSelectElement>("[data-compare-select]");
     if (!el) return;
 
     // Rows arrive newest-first; the chart reads left-to-right as a
@@ -72,81 +63,82 @@ const selectId = `bench-compare-select-${id}`;
       r.runtime ? `${Math.round(r.runtime * 100) / 100} h` : "—",
       r.resource ?? "—",
     ]);
+    const hiddenRefY = () => labels.map(() => null);
 
-    const usableRefs = references.filter((r) => r.value !== null);
-    // Headroom reserved for the tallest possible reference line up front, so
-    // picking a tool from the select doesn't rescale the y-axis under it.
-    const allValues = [...values, ...usableRefs.map((r) => r.value)].filter((v) => typeof v === "number");
+    // Headroom reserved for every reference bar up front, so revealing one
+    // on hover never rescales the y-axis under the SynapSpec bars.
+    const allValues = [...values, ...references.map((r) => r.value)].filter((v) => typeof v === "number");
     const maxVal = Math.max(...allValues, 0);
     const yMax = maxVal * 1.2;
 
-    const shapesFor = (tool: string) => {
-      const ref = usableRefs.find((r) => r.tool === tool);
-      if (!ref) return { shapes: [], annotations: [] };
-      return {
-        shapes: [
-          {
-            type: "line",
-            xref: "paper",
-            x0: 0,
-            x1: 1,
-            yref: "y",
-            y0: ref.value,
-            y1: ref.value,
-            line: { color: toolColor(ref.tool), width: 1.5, dash: "dash" },
-          },
-        ],
-        annotations: [
-          {
-            x: 0,
-            xref: "paper",
-            xanchor: "left",
-            y: ref.value,
-            text: `${ref.tool} ${ref.display}`,
-            showarrow: false,
-            yshift: 10,
-            font: { size: 11, color: toolColor(ref.tool) },
-          },
-        ],
-      };
-    };
+    const traces: any[] = [
+      {
+        type: "bar",
+        name: "SynapSpec",
+        x: labels,
+        y: values,
+        text: displays,
+        textposition: "outside",
+        customdata,
+        marker: { color: TOOL_COLORS.synapspec },
+        hovertemplate: "SynapSpec %{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
+      },
+      ...references.map((ref) => ({
+        type: "bar",
+        name: ref.tool,
+        x: labels,
+        y: hiddenRefY(),
+        text: hiddenRefY(),
+        textposition: "outside",
+        marker: { color: toolColor(ref.tool) },
+        hovertemplate: `${ref.tool} %{text} precursor IDs<extra></extra>`,
+      })),
+    ];
 
     drawWhenVisible(el, () => {
       Plotly.newPlot(
         el,
-        [
-          {
-            type: "bar",
-            x: labels,
-            y: values,
-            text: displays,
-            textposition: "outside",
-            customdata,
-            marker: { color: TOOL_COLORS.synapspec },
-            hovertemplate: "%{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
-          },
-        ],
+        traces,
         baseLayout({
+          barmode: "group",
           xaxis: { ...axisStyle, title: { text: "SynapSpec release" }, showgrid: false },
           yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
         }),
         baseConfig,
       ).then((gd: any) => {
         el.classList.add("is-visible");
-        select?.addEventListener("change", () => {
-          const { shapes, annotations } = shapesFor(select.value);
-          Plotly.relayout(el, { shapes, annotations });
-        });
 
-        // Bars link to that run's detail page — pointer cursor only while
-        // actually over a bar, not the chart's padding/axes.
-        gd.on("plotly_hover", () => { el.style.cursor = "pointer"; });
-        gd.on("plotly_unhover", () => { el.style.cursor = ""; });
+        const reveal = (index: number) => {
+          references.forEach((ref, i) => {
+            const y = labels.map((_: unknown, li: number) => (li === index ? ref.value : null));
+            const text = labels.map((_: unknown, li: number) => (li === index ? ref.display : null));
+            Plotly.restyle(el, { y: [y], text: [text] }, [i + 1]);
+          });
+        };
+        const hide = () => {
+          references.forEach((_, i) => Plotly.restyle(el, { y: [hiddenRefY()], text: [hiddenRefY()] }, [i + 1]));
+        };
+
+        gd.on("plotly_hover", (event: any) => {
+          const point = event.points?.[0];
+          if (!point) return;
+          el.style.cursor = "pointer";
+          if (references.length > 0) reveal(point.pointIndex);
+        });
+        gd.on("plotly_unhover", () => {
+          el.style.cursor = "";
+          if (references.length > 0) hide();
+        });
         gd.on("plotly_click", (event: any) => {
           const point = event.points?.[0];
           if (!point) return;
-          const slug = sourceSlugs[point.pointIndex];
-          if (slug) window.location.href = `/benchmarks/${slug}/`;
+          if (point.curveNumber === 0) {
+            const slug = sourceSlugs[point.pointIndex];
+            if (slug) window.location.href = `/benchmarks/${slug}/`;
+          } else {
+            const ref = references[point.curveNumber - 1];
+            if (ref?.sourceSlug) window.location.href = `/benchmarks/${ref.sourceSlug}/`;
+          }
         });
       });
     });
