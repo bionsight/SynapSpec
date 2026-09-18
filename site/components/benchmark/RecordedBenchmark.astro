@@ -26,11 +26,8 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
     <a href="/benchmarks/">&larr; Benchmarks</a> / Run detail
   </div>
 
-  <div class="page-header bench-header-split">
-    <div>
-      <h1>{entry.title} <span class="bench-muted">/ {entry.instrument}</span></h1>
-    </div>
-    <a href="/benchmarks/history/" class="bench-link">Dataset history</a>
+  <div class="page-header">
+    <h1>{entry.title} <span class="bench-muted">/ {entry.instrument}</span></h1>
   </div>
 
   <p class="bench-run-date">{run.date}</p>

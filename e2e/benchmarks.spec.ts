@@ -21,16 +21,6 @@ test.describe("benchmarks index", () => {
   });
 });
 
-test.describe("history", () => {
-  test("plots every archived run and lists them newest-first", async ({ page }) => {
-    await page.goto("/benchmarks/history/");
-    await expect(page.locator("h1")).toHaveText(/LFQBench/);
-    await expect(page.locator(".bench-history-dot")).toHaveCount(18);
-    const firstRow = page.locator(".bench-table-wrap tbody tr").first();
-    await expect(firstRow).toContainText("2026-07-22"); // 가장 최근 날짜가 맨 위(내림차순)
-  });
-});
-
 test.describe("benchmark detail pages, one per kind", () => {
   test("run — has prev/next pager and per-file table", async ({ page }) => {
     await page.goto("/benchmarks/2026-07-22/");

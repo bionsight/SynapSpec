@@ -836,40 +836,6 @@
   display: inline;
 }
 
-// ── History trend chart ───────────────────────────────────────
-
-.bench-history-chart-wrap {
-  overflow-x: auto;
-  padding: $spacing-md;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-}
-
-.bench-history-svg {
-  display: block;
-  width: 100%;
-  min-width: 600px;
-  height: auto;
-}
-
-.bench-history-gridline {
-  stroke: $border-color;
-}
-
-.bench-history-ticklabel {
-  fill: $text-color-light;
-  font-size: 12px;
-}
-
-// 산점도 버전 — 날짜를 잇는 선 없이 점만 찍는다. 점 사이가 가까울 때도
-// 구분되도록 흰 테두리와 약간의 투명도를 준다.
-.bench-history-dot {
-  fill: $primary-color-dark;
-  fill-opacity: 0.85;
-  stroke: $background-color;
-  stroke-width: 1.5;
-}
-
 // ── Accuracy-vs-depth scatter (ProteoBench 참고) ───────────────
 // proteobench.org 의 LFQ 정확도 모듈과 같은 축: 가로 = 정확도 오차, 세로 = 깊이.
 // 점 하나 = 도구 하나. 색은 Okabe-Ito 색맹 안전 팔레트를 도구별로 고정 배정한다.
