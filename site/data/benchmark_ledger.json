@@ -325,28 +325,11 @@
         "resource": "c7i.8xlarge",
         "commit": "af9dd5a5",
         "release_version": "v0.9.2"
-      },
-      {
-        "id": "pxd028735-diann",
-        "date": "2026-02-04",
-        "label": "DIA-NN run · PXD028735 raw files",
-        "sourceSlug": "pxd028735-diann",
-        "comparisonSlug": null,
-        "counts": [
-          null,
-          103433,
-          null
-        ],
-        "counts_display": [
-          null,
-          "103,433",
-          null
-        ],
-        "runtime": 2.1166666667,
-        "resource": "c7i.8xlarge",
-        "commit": "14c551d4",
-        "release_version": null
       }
+    ],
+    "toolReferences": [
+      { "tool": "DIA-NN", "display": "103,433", "date": "2026-02-04", "sourceSlug": "pxd028735-diann" },
+      { "tool": "Spectronaut", "display": null, "date": null, "sourceSlug": null }
     ]
   },
   {
@@ -675,28 +658,11 @@
         "resource": "c7i.4xlarge",
         "commit": "af9dd5a5",
         "release_version": "v0.9.2"
-      },
-      {
-        "id": "proteobench-2th-astral-diann",
-        "date": "2026-06-26",
-        "label": "DIA-NN run · ProteoBench 2 Th mix (HYE)",
-        "sourceSlug": "proteobench-2th-astral-diann",
-        "comparisonSlug": null,
-        "counts": [
-          null,
-          286311,
-          null
-        ],
-        "counts_display": [
-          null,
-          "286,311",
-          null
-        ],
-        "runtime": 4.2666666667,
-        "resource": "c7i.8xlarge",
-        "commit": "0f88c370",
-        "release_version": null
       }
+    ],
+    "toolReferences": [
+      { "tool": "DIA-NN", "display": "286,311", "date": "2026-06-26", "sourceSlug": "proteobench-2th-astral-diann" },
+      { "tool": "Spectronaut", "display": null, "date": null, "sourceSlug": null }
     ]
   }
 ]

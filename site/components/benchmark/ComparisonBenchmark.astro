@@ -74,6 +74,10 @@ const round = (n: number, digits: number) => {
   const factor = 10 ** digits;
   return Math.round(n * factor) / factor;
 };
+
+// Drops the source-folder suffix ("SynapSpec (v092 folder)" -> "SynapSpec")
+// for on-page display. ComparisonWidget does the same for its chart labels.
+const shortLabel = (label: string) => label.replace(/\s*\(.*\)$/, "");
 ---
 
 <div class="container">
@@ -100,11 +104,11 @@ const round = (n: number, digits: number) => {
         <tbody>
           {record.tools.map((tool) => (
             <tr>
-              <th scope="row">{tool.label}</th>
+              <th scope="row">{shortLabel(tool.label)}</th>
               <td class="num">{tool.precursors_display}</td>
-              <td class="num">{round(tool.complete_six_percent, 1)}%<span class="bench-subvalue">{tool.complete_six_display} of {tool.precursors_display}</span></td>
-              <td class="num">{round(tool.cv.A.median_percent, 1)}%<span class="bench-subvalue">n = {tool.cv.A.count_display}</span></td>
-              <td class="num">{round(tool.cv.B.median_percent, 1)}%<span class="bench-subvalue">n = {tool.cv.B.count_display}</span></td>
+              <td class="num">{round(tool.complete_six_percent, 1)}%</td>
+              <td class="num">{round(tool.cv.A.median_percent, 1)}%</td>
+              <td class="num">{round(tool.cv.B.median_percent, 1)}%</td>
             </tr>
           ))}
         </tbody>
@@ -148,35 +152,6 @@ const round = (n: number, digits: number) => {
   <section class="py-lg bench-border-t">
     <h2>Identification, repeatability and LFQ ratios</h2>
     <ComparisonWidget slug={slug} />
-
-    <div class="bench-table-wrap" style="margin-top: 1.5rem;">
-      <table class="bench-table">
-        <thead>
-          <tr><th>Tool</th><th>Species</th><th>Expected</th><th>Median</th><th>25–75%</th><th class="num">Precursors</th></tr>
-        </thead>
-        <tbody>
-          {record.tools.map((tool) =>
-            tool.ratios.map((ratio) => (
-              <tr>
-                <th scope="row">{tool.label}</th>
-                <td>{ratio.species}</td>
-                <td>{ratio.target}</td>
-                <td>{round(ratio.median, 3)}</td>
-                <td>{round(ratio.lower, 3)} – {round(ratio.upper, 3)}</td>
-                <td class="num">{ratio.count_display}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="py-lg bench-border-t">
-    <h2>Shared precursor IDs</h2>
-    <ul class="bench-overlap-list">
-      {record.overlap.map((pair) => <li>{pair.left} / {pair.right}: <strong>{pair.precursors_display}</strong></li>)}
-    </ul>
   </section>
 
   <details class="bench-details">
@@ -184,7 +159,7 @@ const round = (n: number, digits: number) => {
     <div class="bench-table-wrap" style="margin-top: 1rem;">
       <table class="bench-table">
         <thead>
-          <tr><th>Input stem</th>{record.tools.map((tool) => <th>{tool.label}</th>)}</tr>
+          <tr><th>Input stem</th>{record.tools.map((tool) => <th>{shortLabel(tool.label)}</th>)}</tr>
         </thead>
         <tbody>
           {record.files.map((name) => (

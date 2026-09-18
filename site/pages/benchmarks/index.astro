@@ -46,11 +46,24 @@ const [oe480, astral] = ledgers;
             <div class="section-header bench-section-wide">
               <h2>Run history</h2>
             </div>
+            <p class="bench-axis-note" style="text-align: left;">
+              Reference (single run, not repeated over time):{" "}
+              {ledger.toolReferences.map((ref, i) => (
+                <>
+                  {i > 0 && " · "}
+                  {ref.display ? (
+                    <>{ref.tool}{" "}<a href={`/benchmarks/${ref.sourceSlug}/`} class="bench-link">{ref.display}</a> ({ref.date})</>
+                  ) : (
+                    <>{ref.tool} &mdash; no run recorded</>
+                  )}
+                </>
+              ))}
+            </p>
             <div class="bench-table-wrap" style="max-width: 100%;">
               <table class="bench-table">
                 <caption>Precursor IDs by tool &middot; &ldquo;&mdash;&rdquo; means not linked, not zero.</caption>
                 <thead>
-                  <tr><th>Run / date</th><th>Release version</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut (v21.0)</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
+                  <tr><th>Run / date</th><th>Release version</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
                 </thead>
                 <tbody>
                   {ledger.rows.map((row) => (
