@@ -1,16 +1,10 @@
 ---
-// Replaces the old Run history table (and, before that, a bar chart) for
-// `benchmarks/index.astro`. The team wants this section to read as
-// SynapSpec's own leaderboard-style track record first — a bar chart still
-// puts a number in front of every visitor before they've asked for it, so
-// this is plain stat cards instead. Each card is itself the link to that
-// run's detail page (no separate "Runs:" line needed).
-//
-// The DIA-NN/Spectronaut comparison is opt-in per card: it sits behind the
-// precursor count and only shows on hover/focus of that count, via a plain
-// CSS sibling selector (`.bench-version-card-compare` is empty height,
-// `opacity: 0` until its preceding sibling is `:hover`/`:focus`) — no JS,
-// works with keyboard focus too.
+// Replaces the old Run history table (then a bar chart, then stat cards) for
+// `benchmarks/index.astro`. Landed back on a table — this reads as a
+// leaderboard more naturally than cards do at three rows, and stays compact
+// if more releases get added later. Only difference from a plain table: the
+// DIA-NN/Spectronaut comparison isn't a column (it'd be "—" in every row but
+// one). It's a sibling element revealed on row hover/focus, pure CSS.
 interface Row {
   date: string | null;
   label: string;
@@ -37,26 +31,30 @@ const { rows, toolReferences } = Astro.props;
 const references = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string } => ref.value !== null);
 ---
 
-<div class="bench-version-cards">
-  {rows.map((row) => (
-    <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-version-card">
-      <span class="bench-version-card-label">{row.release_version ?? row.date ?? "Undated"}</span>
-      <span class="bench-version-card-value">
-        {row.counts_display[0] ?? "—"}
-        <span class="bench-version-card-unit">precursor IDs</span>
-      </span>
-      {references.length > 0 && (
-        <span class="bench-version-card-compare">
-          {references.map((ref, i) => (
-            <>
-              {i > 0 && " · "}
-              <span class={`bench-version-card-tool bench-version-card-tool-${ref.tool.toLowerCase().replace(/[^a-z]/g, "")}`}>
-                {ref.tool} {ref.display}
+<div class="bench-table-wrap">
+  <table class="bench-table bench-version-table">
+    <thead>
+      <tr><th>Release</th><th class="num">SynapSpec precursor IDs</th></tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <th scope="row"><a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date ?? "Undated"}</a></th>
+          <td class="num">
+            {row.counts_display[0] ?? "—"}
+            {references.length > 0 && (
+              <span class="bench-version-compare">
+                {references.map((ref, i) => (
+                  <>
+                    {i > 0 && " · "}
+                    <span class={`bench-tool bench-tool-${ref.tool.toLowerCase().replace(/[^a-z]/g, "")}`}>{ref.tool} {ref.display}</span>
+                  </>
+                ))}
               </span>
-            </>
-          ))}
-        </span>
-      )}
-    </a>
-  ))}
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 </div>

@@ -15,7 +15,7 @@ test.describe("benchmarks index", () => {
 
   test("run history rows link to a run detail page", async ({ page }) => {
     await page.goto("/benchmarks/");
-    const link = page.locator(".bench-ds-panel-oe480 .bench-version-cards a").first();
+    const link = page.locator(".bench-ds-panel-oe480 .bench-version-table a").first();
     await expect(link).toHaveAttribute("href", /^\/benchmarks\//);
   });
 });
