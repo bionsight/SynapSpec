@@ -906,11 +906,34 @@
 }
 
 // ── Run history chart (VersionHistoryWidget) ──────────────────
-// Bars default to SynapSpec only — own track record first. Hovering a bar
-// reveals a DIA-NN/Spectronaut bar next to it (Plotly.restyle on an
-// initially-all-null trace, barmode "group"), and clicking either bar opens
-// that run's detail page.
+// Bars default to SynapSpec only — own track record first. The button below
+// toggles a dashed DIA-NN/Spectronaut reference line via Plotly.relayout,
+// and clicking a bar opens that run's detail page.
 
 .bench-version-chart-block {
   margin-bottom: $spacing-lg;
+}
+
+.bench-version-compare-btn {
+  margin-top: $spacing-sm;
+  padding: 6px 14px;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  background: $background-color;
+  font-family: $body-font;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $text-light;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: $primary-color;
+  }
+
+  &[aria-pressed="true"] {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $background-color;
+  }
 }

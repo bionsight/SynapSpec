@@ -1,11 +1,11 @@
 ---
 // Run history for `benchmarks/index.astro`: a bar chart of SynapSpec's own
 // precursor counts by release, reading as its own track record first — no
-// DIA-NN/Spectronaut bar drawn on load. Hovering (or focusing, for
-// keyboard) a bar reveals that tool's bar right next to it via
-// Plotly.restyle on a second, initially-all-null trace in barmode "group" —
-// nothing gets redrawn from scratch. Clicking a bar (SynapSpec's or a
-// revealed reference's) opens that run's detail page.
+// DIA-NN/Spectronaut line drawn on load. A button below the chart
+// ("Compare with DIA-NN") toggles a dashed reference line + label via
+// Plotly.relayout (same shapes/annotations pattern ComparisonWidget's ratio
+// charts use for "Expected"), so nothing redraws from scratch. Clicking a
+// bar opens that run's detail page.
 interface Row {
   date: string | null;
   label: string;
@@ -33,10 +33,12 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
 ---
 
 <div class="bench-version-chart-block" data-rows={JSON.stringify(rows)} data-references={JSON.stringify(usableReferences)}>
-  {usableReferences.length > 0 && (
-    <p class="bench-axis-note" style="text-align: left;">Hover a bar to compare with {usableReferences.map((r) => r.tool).join(" & ")}.</p>
-  )}
   <div data-chart="versions" class="bench-plotly-target bench-plotly-fade"></div>
+  {usableReferences.length > 0 && (
+    <button type="button" class="bench-version-compare-btn" data-compare-toggle aria-pressed="false">
+      Compare with {usableReferences.map((r) => r.tool).join(" & ")}
+    </button>
+  )}
 </div>
 
 <script>
@@ -49,6 +51,7 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
     const rows: any[] = JSON.parse(container.dataset.rows!);
     const references: any[] = JSON.parse(container.dataset.references!);
     const el = container.querySelector<HTMLElement>('[data-chart="versions"]');
+    const toggle = container.querySelector<HTMLButtonElement>("[data-compare-toggle]");
     if (!el) return;
 
     // Rows arrive newest-first; the chart reads left-to-right as a
@@ -63,44 +66,50 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
       r.runtime ? `${Math.round(r.runtime * 100) / 100} h` : "—",
       r.resource ?? "—",
     ]);
-    const hiddenRefY = () => labels.map(() => null);
 
-    // Headroom reserved for every reference bar up front, so revealing one
-    // on hover never rescales the y-axis under the SynapSpec bars.
+    // Headroom reserved for the tallest reference line up front, so toggling
+    // it on never rescales the y-axis under the SynapSpec bars.
     const allValues = [...values, ...references.map((r) => r.value)].filter((v) => typeof v === "number");
     const maxVal = Math.max(...allValues, 0);
     const yMax = maxVal * 1.2;
 
-    const traces: any[] = [
-      {
-        type: "bar",
-        name: "SynapSpec",
-        x: labels,
-        y: values,
-        text: displays,
-        textposition: "outside",
-        customdata,
-        marker: { color: TOOL_COLORS.synapspec },
-        hovertemplate: "SynapSpec %{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
-      },
-      ...references.map((ref) => ({
-        type: "bar",
-        name: ref.tool,
-        x: labels,
-        y: hiddenRefY(),
-        text: hiddenRefY(),
-        textposition: "outside",
-        marker: { color: toolColor(ref.tool) },
-        hovertemplate: `${ref.tool} %{text} precursor IDs<extra></extra>`,
-      })),
-    ];
+    const referenceShapes = references.map((ref) => ({
+      type: "line",
+      xref: "paper",
+      x0: 0,
+      x1: 1,
+      yref: "y",
+      y0: ref.value,
+      y1: ref.value,
+      line: { color: toolColor(ref.tool), width: 1.5, dash: "dash" },
+    }));
+    const referenceAnnotations = references.map((ref) => ({
+      x: 0,
+      xref: "paper",
+      xanchor: "left",
+      y: ref.value,
+      text: `${ref.tool} ${ref.display}`,
+      showarrow: false,
+      yshift: 10,
+      font: { size: 11, color: toolColor(ref.tool) },
+    }));
 
     drawWhenVisible(el, () => {
       Plotly.newPlot(
         el,
-        traces,
+        [
+          {
+            type: "bar",
+            x: labels,
+            y: values,
+            text: displays,
+            textposition: "outside",
+            customdata,
+            marker: { color: TOOL_COLORS.synapspec },
+            hovertemplate: "%{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
+          },
+        ],
         baseLayout({
-          barmode: "group",
           xaxis: { ...axisStyle, title: { text: "SynapSpec release" }, showgrid: false },
           yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
         }),
@@ -108,37 +117,19 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
       ).then((gd: any) => {
         el.classList.add("is-visible");
 
-        const reveal = (index: number) => {
-          references.forEach((ref, i) => {
-            const y = labels.map((_: unknown, li: number) => (li === index ? ref.value : null));
-            const text = labels.map((_: unknown, li: number) => (li === index ? ref.display : null));
-            Plotly.restyle(el, { y: [y], text: [text] }, [i + 1]);
-          });
-        };
-        const hide = () => {
-          references.forEach((_, i) => Plotly.restyle(el, { y: [hiddenRefY()], text: [hiddenRefY()] }, [i + 1]));
-        };
-
-        gd.on("plotly_hover", (event: any) => {
-          const point = event.points?.[0];
-          if (!point) return;
-          el.style.cursor = "pointer";
-          if (references.length > 0) reveal(point.pointIndex);
-        });
-        gd.on("plotly_unhover", () => {
-          el.style.cursor = "";
-          if (references.length > 0) hide();
-        });
+        gd.on("plotly_hover", () => { el.style.cursor = "pointer"; });
+        gd.on("plotly_unhover", () => { el.style.cursor = ""; });
         gd.on("plotly_click", (event: any) => {
           const point = event.points?.[0];
           if (!point) return;
-          if (point.curveNumber === 0) {
-            const slug = sourceSlugs[point.pointIndex];
-            if (slug) window.location.href = `/benchmarks/${slug}/`;
-          } else {
-            const ref = references[point.curveNumber - 1];
-            if (ref?.sourceSlug) window.location.href = `/benchmarks/${ref.sourceSlug}/`;
-          }
+          const slug = sourceSlugs[point.pointIndex];
+          if (slug) window.location.href = `/benchmarks/${slug}/`;
+        });
+
+        toggle?.addEventListener("click", () => {
+          const active = toggle.getAttribute("aria-pressed") === "true";
+          toggle.setAttribute("aria-pressed", active ? "false" : "true");
+          Plotly.relayout(el, active ? { shapes: [], annotations: [] } : { shapes: referenceShapes, annotations: referenceAnnotations });
         });
       });
     });
