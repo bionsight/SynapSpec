@@ -694,6 +694,23 @@
   margin-top: $spacing-md;
 }
 
+// ScatterWidget's side-by-side SynapSpec/DIA-NN panels — same auto-fit
+// breakpoint as .bench-diagnostics-grid, so the pair collapses to one
+// column at the same width the diagnostics grid does.
+.bench-scatter-compare-label {
+  margin: 0 0 $spacing-sm;
+  font-size: $font-size-small;
+  font-weight: 600;
+  color: $text-color-light;
+  text-align: center;
+}
+
+.bench-scatter-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-md;
+}
+
 // Stacks DiagnosticsWidget and ScatterWidget with a gap. Uses flex `gap`
 // rather than margin + sibling selectors: each widget also renders its own
 // <script type="module"> tag as a sibling in between them, and a script tag

@@ -9,7 +9,15 @@
 // (mean quantity per precursor per condition, log2(B) and log2(A/B)).
 // Marginal histograms from the original image are left out — the ratio and
 // quartile widgets above already cover per-species distribution shape.
+//
+// When this run's dataset has a DIA-NN reference (same lookup DiagnosticsWidget
+// uses), DIA-NN's own precursor cloud renders as a second, side-by-side panel
+// instead of overlaid on the same axes — two ~100k-300k-point clouds stacked
+// on one plot would just be noise on noise. DIA-NN's file is computed the
+// same way, from its own report.parquet run through the same
+// prepare_lfq_dataframe/get_lfq_quantification species+condition logic.
 import catalog from "../../data/benchmark_catalog.json";
+import ledgers from "../../data/benchmark_ledger.json";
 import Icon from "../Icon.astro";
 
 interface Props {
@@ -19,18 +27,38 @@ const { slug } = Astro.props;
 const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const ratios = (entry as { ratio_measurements?: any[] }).ratio_measurements;
 const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
+
+const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
+const diannRef = ledger?.toolReferences.find((r) => r.tool === "DIA-NN" && r.sourceSlug);
+const diannDataUrl = diannRef ? `/data/benchmarks/scatter-${diannRef.sourceSlug}.json` : null;
 ---
 
 {ratios && (
-  <figure class="bench-diagnostic" data-scatter-url={dataUrl}>
-    <div data-chart="scatter" class="bench-plotly-target bench-plotly-target-tall">
-      <div class="bench-plotly-loading">
-        <Icon name="loader-circle" size={20} class="bench-spin" />
-        Loading precursor-level data…
-      </div>
+  <div class="bench-scatter-compare" data-scatter-url={dataUrl} data-diann-scatter-url={diannDataUrl ?? ""}>
+    {diannDataUrl && <p class="bench-scatter-compare-label">LFQ precursor scatter</p>}
+    <div class={diannDataUrl ? "bench-scatter-compare-grid" : undefined}>
+      <figure class="bench-diagnostic">
+        <div data-chart="scatter-synapspec" class="bench-plotly-target bench-plotly-target-tall">
+          <div class="bench-plotly-loading">
+            <Icon name="loader-circle" size={20} class="bench-spin" />
+            Loading precursor-level data…
+          </div>
+        </div>
+        <figcaption>{diannDataUrl ? "SynapSpec" : "LFQ precursor scatter"}</figcaption>
+      </figure>
+      {diannDataUrl && (
+        <figure class="bench-diagnostic">
+          <div data-chart="scatter-diann" class="bench-plotly-target bench-plotly-target-tall">
+            <div class="bench-plotly-loading">
+              <Icon name="loader-circle" size={20} class="bench-spin" />
+              Loading precursor-level data…
+            </div>
+          </div>
+          <figcaption>DIA-NN</figcaption>
+        </figure>
+      )}
     </div>
-    <figcaption>LFQ precursor scatter</figcaption>
-  </figure>
+  </div>
 )}
 
 <script>
@@ -39,30 +67,51 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
 
   const TARGETS: Record<string, number> = { Human: 0, Yeast: 1, "E. coli": -2 };
 
-  document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach(async (container) => {
-    const el = container.querySelector<HTMLElement>('[data-chart="scatter"]');
-    if (!el) return;
+  type Cloud = Record<string, { x: number[]; y: number[] }>;
 
-    // The loading indicator markup is already in the DOM (see the .astro
-    // template). Plotly.newPlot only ever adds its own elements to the
-    // target div — it doesn't know about (or clear out) markup it didn't
-    // create itself — so this has to be removed by hand once the data's in.
-    const url = container.dataset.scatterUrl!;
+  async function fetchCloud(url: string): Promise<Cloud | null> {
     const response = await fetch(url);
-    if (!response.ok) {
-      el.textContent = "Scatter data failed to load.";
-      return;
+    if (!response.ok) return null;
+    return response.json();
+  }
+
+  // Plain loop instead of Math.min(...arr)/Math.max(...arr) — spreading a
+  // ~300k-element array into a function call can blow the call stack.
+  function extendRange(range: [number, number], values: number[]): [number, number] {
+    let [lo, hi] = range;
+    for (const v of values) {
+      if (v < lo) lo = v;
+      if (v > hi) hi = v;
     }
-    el.querySelector(".bench-plotly-loading")?.remove();
-    const bySpecies: Record<string, { x: number[]; y: number[] }> = await response.json();
-    const species = Object.keys(bySpecies);
+    return [lo, hi];
+  }
+
+  function cloudRanges(clouds: Cloud[]): { x: [number, number]; y: [number, number] } {
+    let x: [number, number] = [Infinity, -Infinity];
+    let y: [number, number] = [Infinity, -Infinity];
+    for (const cloud of clouds) {
+      for (const label of Object.keys(cloud)) {
+        x = extendRange(x, cloud[label].x);
+        y = extendRange(y, cloud[label].y);
+      }
+    }
+    return { x, y };
+  }
+
+  function padRange([lo, hi]: [number, number], fraction: number): [number, number] {
+    const pad = (hi - lo) * fraction;
+    return [lo - pad, hi + pad];
+  }
+
+  function drawScatter(el: HTMLElement, cloud: Cloud, fixedRange?: { x: [number, number]; y: [number, number] }) {
+    const species = Object.keys(cloud);
 
     const traces = species.map((label) => ({
       type: "scattergl",
       mode: "markers",
       name: label,
-      x: bySpecies[label].x,
-      y: bySpecies[label].y,
+      x: cloud[label].x,
+      y: cloud[label].y,
       marker: { color: SPECIES_COLORS[label] ?? COLORS.primary, size: 4, opacity: 0.45 },
       hovertemplate: `${label}<br>log₂(B) %{x:.2f}<br>log₂(A/B) %{y:.2f}<extra></extra>`,
     }));
@@ -86,12 +135,60 @@ const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
       baseLayout({
         showlegend: true,
         legend: { orientation: "h", y: -0.2 },
-        xaxis: { ...axisStyle, title: { text: "log₂(mean quantity in B)" } },
-        yaxis: { ...axisStyle, title: { text: "log₂(A/B)" } },
+        xaxis: { ...axisStyle, title: { text: "log₂(mean quantity in B)" }, ...(fixedRange ? { range: fixedRange.x } : {}) },
+        yaxis: { ...axisStyle, title: { text: "log₂(A/B)" }, ...(fixedRange ? { range: fixedRange.y } : {}) },
         shapes,
         margin: { t: 10, r: 20, b: 90, l: 60 },
       }),
       baseConfig,
     );
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach(async (container) => {
+    const synapspecEl = container.querySelector<HTMLElement>('[data-chart="scatter-synapspec"]');
+    const diannEl = container.querySelector<HTMLElement>('[data-chart="scatter-diann"]');
+    if (!synapspecEl) return;
+
+    const url = container.dataset.scatterUrl!;
+    const diannUrl = container.dataset.diannScatterUrl;
+
+    if (!diannUrl) {
+      // Single-panel path — no DIA-NN reference for this dataset.
+      const cloud = await fetchCloud(url);
+      if (!cloud) {
+        synapspecEl.textContent = "Scatter data failed to load.";
+        return;
+      }
+      synapspecEl.querySelector(".bench-plotly-loading")?.remove();
+      drawScatter(synapspecEl, cloud);
+      return;
+    }
+
+    const [synapspecCloud, diannCloud] = await Promise.all([fetchCloud(url), fetchCloud(diannUrl)]);
+
+    // Loading indicators come off as each side resolves, independently —
+    // one tool's data shouldn't sit behind a spinner just because the
+    // other tool's (much larger, for DIA-NN) file is still downloading.
+    if (synapspecCloud) synapspecEl.querySelector(".bench-plotly-loading")?.remove();
+    if (diannCloud && diannEl) diannEl.querySelector(".bench-plotly-loading")?.remove();
+
+    if (!synapspecCloud || !diannCloud) {
+      if (!synapspecCloud) synapspecEl.textContent = "Scatter data failed to load.";
+      if (!diannCloud && diannEl) diannEl.textContent = "Scatter data failed to load.";
+      // Fall back to whichever side did load, with its own auto-ranged axes.
+      if (synapspecCloud) drawScatter(synapspecEl, synapspecCloud);
+      if (diannCloud && diannEl) drawScatter(diannEl, diannCloud);
+      return;
+    }
+
+    // Same axis range on both panels — otherwise a tighter or wider cloud
+    // on one side reads as "more/less spread" when it's really just a
+    // different auto-range, and the whole point of the side-by-side is a
+    // fair visual comparison.
+    const ranges = cloudRanges([synapspecCloud, diannCloud]);
+    const fixedRange = { x: padRange(ranges.x, 0.04), y: padRange(ranges.y, 0.04) };
+
+    drawScatter(synapspecEl, synapspecCloud, fixedRange);
+    if (diannEl) drawScatter(diannEl, diannCloud, fixedRange);
   });
 </script>
