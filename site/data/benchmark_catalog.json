@@ -3281,6 +3281,63 @@
           "p95": 0.6045892477035523
         }
       }
+    },
+    "pxd028735-spectronaut": {
+      "data_completeness": {
+        "n_files": 6,
+        "bars": [
+          {
+            "n": 1,
+            "count": 252,
+            "count_display": "252"
+          },
+          {
+            "n": 2,
+            "count": 1104,
+            "count_display": "1,104"
+          },
+          {
+            "n": 3,
+            "count": 11502,
+            "count_display": "11,502"
+          },
+          {
+            "n": 4,
+            "count": 7232,
+            "count_display": "7,232"
+          },
+          {
+            "n": 5,
+            "count": 9169,
+            "count_display": "9,169"
+          },
+          {
+            "n": 6,
+            "count": 70397,
+            "count_display": "70,397"
+          }
+        ]
+      },
+      "cv_distribution": {
+        "precursor": {
+          "count": 99182,
+          "median": 0.42367562504508804,
+          "median_display": "42.4%",
+          "p5": 0.07578240449340279,
+          "p25": 0.2100093130148695,
+          "p75": 0.6703767123799761,
+          "p95": 0.9929581621949096
+        },
+        "protein": {
+          "count": 8289,
+          "median": 0.250513389835735,
+          "median_display": "25.1%",
+          "p5": 0.0448737153405547,
+          "p25": 0.10453870268189767,
+          "p75": 0.46184475189681407,
+          "p95": 0.7426187623298433
+        }
+      }
     }
   },
   "tool_ratios": {
@@ -3352,6 +3409,41 @@
         "upper": 1.0037827822906726,
         "measured_ratio_display": "1.830×",
         "deviation_percent": -8.5
+      }
+    ],
+    "pxd028735-spectronaut": [
+      {
+        "species": "Human",
+        "count": 64759,
+        "count_display": "64,759",
+        "target": 0.0,
+        "median": -0.07533215342815004,
+        "lower": -0.44061489185478286,
+        "upper": 0.1360817654480863,
+        "measured_ratio_display": "0.949×",
+        "deviation_percent": -5.1
+      },
+      {
+        "species": "E. coli",
+        "count": 3697,
+        "count_display": "3,697",
+        "target": -2.0,
+        "median": -2.4458921106081135,
+        "lower": -3.2398977391221795,
+        "upper": -2.0187121734748867,
+        "measured_ratio_display": "0.184×",
+        "deviation_percent": -26.6
+      },
+      {
+        "species": "Yeast",
+        "count": 17774,
+        "count_display": "17,774",
+        "target": 1.0,
+        "median": 1.215116435587447,
+        "lower": 1.0002279995996792,
+        "upper": 1.694623320303041,
+        "measured_ratio_display": "2.322×",
+        "deviation_percent": 16.1
       }
     ]
   },
@@ -3584,6 +3676,122 @@
             "upper": 0.9810165927913652,
             "count": 13651,
             "count_display": "13,651"
+          }
+        ]
+      }
+    ],
+    "pxd028735-spectronaut": [
+      {
+        "species": "Human",
+        "target": 0.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 0.24513037070668264,
+            "lower": -0.45449331686427774,
+            "upper": 2.3255230812754206,
+            "count": 16190,
+            "count_display": "16,190"
+          },
+          {
+            "quartile": "Q2",
+            "median": -0.14556680789862922,
+            "lower": -0.6197018716865101,
+            "upper": 0.1659487047127363,
+            "count": 16189,
+            "count_display": "16,189"
+          },
+          {
+            "quartile": "Q3",
+            "median": -0.11855857307795259,
+            "lower": -0.4480980524749273,
+            "upper": 0.0389885250063713,
+            "count": 16190,
+            "count_display": "16,190"
+          },
+          {
+            "quartile": "Q4",
+            "median": -0.07465491354195755,
+            "lower": -0.1954240210015971,
+            "upper": -0.012606572498582134,
+            "count": 16190,
+            "count_display": "16,190"
+          }
+        ]
+      },
+      {
+        "species": "E. coli",
+        "target": -2.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -2.2917808502721897,
+            "lower": -3.37300136650029,
+            "upper": -0.573016040083181,
+            "count": 924,
+            "count_display": "924"
+          },
+          {
+            "quartile": "Q2",
+            "median": -2.8995172566898972,
+            "lower": -3.5895382967772353,
+            "upper": -2.294227301243808,
+            "count": 924,
+            "count_display": "924"
+          },
+          {
+            "quartile": "Q3",
+            "median": -2.6459240469920235,
+            "lower": -3.2337982853609466,
+            "upper": -2.2391972310659023,
+            "count": 924,
+            "count_display": "924"
+          },
+          {
+            "quartile": "Q4",
+            "median": -2.1596023723206597,
+            "lower": -2.4204573492532737,
+            "upper": -2.022839092074444,
+            "count": 925,
+            "count_display": "925"
+          }
+        ]
+      },
+      {
+        "species": "Yeast",
+        "target": 1.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 1.9894572265369121,
+            "lower": 1.3336111974187497,
+            "upper": 2.753275789994062,
+            "count": 4444,
+            "count_display": "4,444"
+          },
+          {
+            "quartile": "Q2",
+            "median": 1.3983818332501348,
+            "lower": 0.9717130978935065,
+            "upper": 1.7659709743868826,
+            "count": 4443,
+            "count_display": "4,443"
+          },
+          {
+            "quartile": "Q3",
+            "median": 1.1938307415828295,
+            "lower": 0.9646432197300431,
+            "upper": 1.390546380792284,
+            "count": 4443,
+            "count_display": "4,443"
+          },
+          {
+            "quartile": "Q4",
+            "median": 1.0647521711800594,
+            "lower": 0.971928121580939,
+            "upper": 1.1376881887365378,
+            "count": 4444,
+            "count_display": "4,444"
           }
         ]
       }

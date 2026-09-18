@@ -4,11 +4,11 @@
 // (_sass/_benchmark.scss의 .bench-ratio-panel-*). 두 모드 모두 페이지 로드 시
 // 함께 그려두고, 보이는 것만 CSS로 바뀐다 — 탭 전환에 JS가 필요 없다.
 //
-// DIA-NN 참조가 있으면(같은 ledger 조회를 DiagnosticsWidget/ScatterWidget과
-// 공유) 종별 점을 위아래로 살짝 띄워 두 tool을 나란히 보여준다. 값은
-// instrumentation/parsers/lfq.py의 get_lfq_ratio_statistics와 같은 로직
-// (median/25%/75%/count, deviation_percent)으로 DIA-NN의 report.parquet에서
-// 직접 계산했다.
+// DIA-NN/Spectronaut 참조가 있으면(같은 ledger 조회를 DiagnosticsWidget/
+// ScatterWidget과 공유) 종별 점을 위아래로 살짝 띄워 여러 tool을 나란히
+// 보여준다. 값은 instrumentation/parsers/lfq.py의 get_lfq_ratio_statistics와
+// 같은 로직(median/25%/75%/count, deviation_percent)으로 각 tool의
+// report.parquet에서 직접 계산했다.
 import catalog from "../../data/benchmark_catalog.json";
 import ledgers from "../../data/benchmark_ledger.json";
 
@@ -20,10 +20,13 @@ const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const ratios = entry.ratio_measurements as any[];
 
 const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
-const diannRef = ledger?.toolReferences.find((r) => r.tool === "DIA-NN" && r.sourceSlug);
-const diannRatios = diannRef
-  ? (catalog as { tool_ratios?: Record<string, any[]> }).tool_ratios?.[diannRef.sourceSlug as string]
-  : undefined;
+const extraTools = ["DIA-NN", "Spectronaut"]
+  .map((tool) => {
+    const ref = ledger?.toolReferences.find((r) => r.tool === tool && r.sourceSlug);
+    const rows = ref ? (catalog as { tool_ratios?: Record<string, any[]> }).tool_ratios?.[ref.sourceSlug as string] : undefined;
+    return rows ? { tool, ratios: rows } : null;
+  })
+  .filter((t): t is { tool: string; ratios: any[] } => t !== null);
 ---
 
 <input type="radio" name="ratio-mode" id="ratio-actual" class="bench-ratio-input" checked />
@@ -44,7 +47,7 @@ const diannRatios = diannRef
     data-chart="ratio-actual"
     class="bench-plotly-target bench-plotly-fade"
     data-ratios={JSON.stringify(ratios)}
-    data-diann-ratios={diannRatios ? JSON.stringify(diannRatios) : ""}
+    data-extra-ratios={extraTools.length ? JSON.stringify(extraTools) : ""}
   ></div>
 </div>
 
@@ -53,7 +56,7 @@ const diannRatios = diannRef
     data-chart="ratio-relative"
     class="bench-plotly-target bench-plotly-fade"
     data-ratios={JSON.stringify(ratios)}
-    data-diann-ratios={diannRatios ? JSON.stringify(diannRatios) : ""}
+    data-extra-ratios={extraTools.length ? JSON.stringify(extraTools) : ""}
   ></div>
 </div>
 
@@ -66,6 +69,23 @@ const diannRatios = diannRef
   const LOG2_LABELS = ["0.25×", "0.5×", "1×", "2×", "4×"];
   const DEV_TICKS = [-0.5, -0.25, 0, 0.25, 0.5];
   const DEV_LABELS = ["-50%", "-25%", "Expected", "+25%", "+50%"];
+
+  const toolColor = (tool: string) => TOOL_COLORS[tool.toLowerCase().replace(/[^a-z]/g, "")] ?? COLORS.textLight;
+
+  // Per-series vertical offset (data units) and annotation pixel yshift,
+  // keyed by how many series share a species row. The two-series values
+  // match what shipped for DIA-NN alone — added tools extend the pattern
+  // rather than renumbering it.
+  const OFFSET_STEPS: Record<number, number[]> = {
+    1: [0],
+    2: [-0.16, 0.16],
+    3: [-0.22, 0, 0.22],
+  };
+  const LABEL_YSHIFTS: Record<number, number[]> = {
+    1: [26],
+    2: [-20, 20],
+    3: [-28, 14, 44],
+  };
 
   function targetShapes(values: number[]) {
     return values.map((v, idx) => ({
@@ -81,10 +101,10 @@ const diannRatios = diannRef
   }
 
   // Numeric y positions (0, 1, 2 for the three species rows) instead of
-  // category strings — with DIA-NN present, each tool's dot needs its own
-  // small vertical offset off that row's center so the two don't sit on
-  // top of each other. Bar/box traces get this "group" behavior from
-  // Plotly for free; scatter doesn't, so it's done by hand here.
+  // category strings — with extra tools present, each series needs its own
+  // small vertical offset off that row's center so they don't sit on top of
+  // each other. Bar/box traces get this "group" behavior from Plotly for
+  // free; scatter doesn't, so it's done by hand here.
   function seriesFor(rows: any[], mode: "actual" | "relative") {
     const isActual = mode === "actual";
     return {
@@ -97,7 +117,7 @@ const diannRatios = diannRef
     };
   }
 
-  function dotTrace(name: string, positions: number[], species: string[], rows: any[], series: ReturnType<typeof seriesFor>, color: string) {
+  function dotTrace(name: string, positions: number[], species: string[], rows: any[], series: ReturnType<typeof seriesFor>, color: string | string[]) {
     return {
       type: "scatter",
       mode: "markers",
@@ -110,7 +130,7 @@ const diannRatios = diannRef
         symmetric: false,
         array: series.upper.map((v, i) => v - series.median[i]),
         arrayminus: series.median.map((v, i) => v - series.lower[i]),
-        color,
+        color: Array.isArray(color) ? COLORS.primaryDark : color,
         thickness: 4,
         width: 8,
       },
@@ -137,7 +157,7 @@ const diannRatios = diannRef
   // for the IQR, with the expected value called out separately in gray, is
   // the same information read more directly — "here's what we got, here's
   // what a bar plotted point closer to the target would look like."
-  function renderPanel(el: HTMLElement, ratios: any[], diannRatios: any[] | null, mode: "actual" | "relative") {
+  function renderPanel(el: HTMLElement, ratios: any[], extraTools: { tool: string; ratios: any[] }[], mode: "actual" | "relative") {
     const species = ratios.map((r) => r.species);
     const positions = species.map((_, i) => i);
     const isActual = mode === "actual";
@@ -146,25 +166,25 @@ const diannRatios = diannRef
     const traces: any[] = [];
     const annotations: any[] = [];
 
-    if (diannRatios) {
-      const offset = 0.16;
-      const synapPositions = positions.map((p) => p - offset);
-      const diannPositions = positions.map((p) => p + offset);
-      // DIA-NN rows aren't guaranteed the same species order as SynapSpec's
-      // — match by species name rather than array index.
-      const diannRows = species.map((label) => diannRatios.find((r: any) => r.species === label));
+    if (extraTools.length > 0) {
+      const allNames = ["SynapSpec", ...extraTools.map((t) => t.tool)];
+      const n = allNames.length;
+      const offsets = OFFSET_STEPS[n] ?? allNames.map((_, i) => (i - (n - 1) / 2) * 0.16);
+      const yshifts = LABEL_YSHIFTS[n] ?? allNames.map((_, i) => (i - (n - 1) / 2) * 24);
 
-      const synapSeries = seriesFor(ratios, mode);
-      const diannSeries = seriesFor(diannRows, mode);
+      const allRows = [ratios, ...extraTools.map((t) => species.map((label) => t.ratios.find((r: any) => r.species === label)))];
 
-      traces.push(dotTrace("SynapSpec", synapPositions, species, ratios, synapSeries, TOOL_COLORS.synapspec));
-      traces.push(dotTrace("DIA-NN", diannPositions, species, diannRows, diannSeries, TOOL_COLORS.diann));
-      annotations.push(...valueAnnotations(synapPositions, synapSeries, -20));
-      annotations.push(...valueAnnotations(diannPositions, diannSeries, 20));
+      allNames.forEach((name, i) => {
+        const rows = allRows[i];
+        const series = seriesFor(rows, mode);
+        const rowPositions = positions.map((p) => p + offsets[i]);
+        traces.push(dotTrace(name, rowPositions, species, rows, series, toolColor(name)));
+        annotations.push(...valueAnnotations(rowPositions, series, yshifts[i]));
+      });
     } else {
       const colors = species.map((s) => SPECIES_COLORS[s] ?? COLORS.primary);
       const synapSeries = seriesFor(ratios, mode);
-      traces.push({ ...dotTrace("SynapSpec", positions, species, ratios, synapSeries, COLORS.primaryDark), marker: { color: colors, size: 16, line: { color: COLORS.background, width: 2 } } });
+      traces.push(dotTrace("SynapSpec", positions, species, ratios, synapSeries, colors));
       annotations.push(...valueAnnotations(positions, synapSeries, 26));
     }
 
@@ -178,7 +198,7 @@ const diannRatios = diannRef
         yaxis: { ...axisStyle, showgrid: false, tickmode: "array", tickvals: positions, ticktext: species, range: [-0.6, positions.length - 1 + 0.6] },
         shapes: targetShapes(targetValues),
         annotations,
-        ...(diannRatios
+        ...(extraTools.length > 0
           ? { showlegend: true, legend: { orientation: "h", y: -0.22 }, margin: { t: 20, r: 20, b: 70, l: 70 } }
           : { margin: { t: 20, r: 20, b: 40, l: 70 } }),
       }),
@@ -187,11 +207,11 @@ const diannRatios = diannRef
   }
 
   document.querySelectorAll<HTMLElement>('[data-chart="ratio-actual"]').forEach((el) => {
-    const diannRatios = el.dataset.diannRatios ? JSON.parse(el.dataset.diannRatios) : null;
-    drawWhenVisible(el, () => renderPanel(el, JSON.parse(el.dataset.ratios!), diannRatios, "actual"));
+    const extraTools = el.dataset.extraRatios ? JSON.parse(el.dataset.extraRatios) : [];
+    drawWhenVisible(el, () => renderPanel(el, JSON.parse(el.dataset.ratios!), extraTools, "actual"));
   });
   document.querySelectorAll<HTMLElement>('[data-chart="ratio-relative"]').forEach((el) => {
-    const diannRatios = el.dataset.diannRatios ? JSON.parse(el.dataset.diannRatios) : null;
-    drawWhenVisible(el, () => renderPanel(el, JSON.parse(el.dataset.ratios!), diannRatios, "relative"));
+    const extraTools = el.dataset.extraRatios ? JSON.parse(el.dataset.extraRatios) : [];
+    drawWhenVisible(el, () => renderPanel(el, JSON.parse(el.dataset.ratios!), extraTools, "relative"));
   });
 </script>

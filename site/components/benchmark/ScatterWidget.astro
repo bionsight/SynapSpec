@@ -10,11 +10,11 @@
 // Marginal histograms from the original image are left out — the ratio and
 // quartile widgets above already cover per-species distribution shape.
 //
-// When this run's dataset has a DIA-NN reference (same lookup DiagnosticsWidget
-// uses), DIA-NN's own precursor cloud renders as a second, side-by-side panel
-// instead of overlaid on the same axes — two ~100k-300k-point clouds stacked
-// on one plot would just be noise on noise. DIA-NN's file is computed the
-// same way, from its own report.parquet run through the same
+// When this run's dataset has DIA-NN/Spectronaut references (same lookup
+// DiagnosticsWidget uses), each renders as its own side-by-side panel instead
+// of overlaid on the same axes — two or three ~100k-300k-point clouds
+// stacked on one plot would just be noise on noise. Each tool's file is
+// computed the same way, from its own report.parquet run through the same
 // prepare_lfq_dataframe/get_lfq_quantification species+condition logic.
 import catalog from "../../data/benchmark_catalog.json";
 import ledgers from "../../data/benchmark_ledger.json";
@@ -27,33 +27,39 @@ const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const ratios = (entry as { ratio_measurements?: any[] }).ratio_measurements;
 const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
 
+const toolKey = (tool: string) => tool.toLowerCase().replace(/[^a-z]/g, "");
+
 const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
-const diannRef = ledger?.toolReferences.find((r) => r.tool === "DIA-NN" && r.sourceSlug);
-const diannDataUrl = diannRef ? `/data/benchmarks/scatter-${diannRef.sourceSlug}.json` : null;
+const extraTools = ["DIA-NN", "Spectronaut"]
+  .map((tool) => {
+    const ref = ledger?.toolReferences.find((r) => r.tool === tool && r.sourceSlug);
+    return ref ? { tool, dataUrl: `/data/benchmarks/scatter-${ref.sourceSlug}.json` } : null;
+  })
+  .filter((t): t is { tool: string; dataUrl: string } => t !== null);
 ---
 
 {ratios && (
-  <div class="bench-scatter-compare" data-scatter-url={dataUrl} data-diann-scatter-url={diannDataUrl ?? ""}>
-    {diannDataUrl && <p class="bench-scatter-compare-label">LFQ precursor scatter</p>}
-    <div class={diannDataUrl ? "bench-scatter-compare-grid" : undefined}>
+  <div class="bench-scatter-compare" data-scatter-url={dataUrl} data-extra-scatter={extraTools.length ? JSON.stringify(extraTools) : ""}>
+    {extraTools.length > 0 && <p class="bench-scatter-compare-label">LFQ precursor scatter</p>}
+    <div class={extraTools.length > 0 ? "bench-scatter-compare-grid" : undefined}>
       <figure class="bench-diagnostic">
         <div data-chart="scatter-synapspec" class="bench-plotly-target bench-plotly-target-tall">
           <div class="bench-plotly-loading">
             Loading precursor-level data…
           </div>
         </div>
-        <figcaption>{diannDataUrl ? "SynapSpec" : "LFQ precursor scatter"}</figcaption>
+        <figcaption>{extraTools.length > 0 ? "SynapSpec" : "LFQ precursor scatter"}</figcaption>
       </figure>
-      {diannDataUrl && (
+      {extraTools.map((t) => (
         <figure class="bench-diagnostic">
-          <div data-chart="scatter-diann" class="bench-plotly-target bench-plotly-target-tall">
+          <div data-chart={`scatter-${toolKey(t.tool)}`} class="bench-plotly-target bench-plotly-target-tall">
             <div class="bench-plotly-loading">
               Loading precursor-level data…
             </div>
           </div>
-          <figcaption>DIA-NN</figcaption>
+          <figcaption>{t.tool}</figcaption>
         </figure>
-      )}
+      ))}
     </div>
   </div>
 )}
@@ -143,14 +149,21 @@ const diannDataUrl = diannRef ? `/data/benchmarks/scatter-${diannRef.sourceSlug}
 
   document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach(async (container) => {
     const synapspecEl = container.querySelector<HTMLElement>('[data-chart="scatter-synapspec"]');
-    const diannEl = container.querySelector<HTMLElement>('[data-chart="scatter-diann"]');
     if (!synapspecEl) return;
 
     const url = container.dataset.scatterUrl!;
-    const diannUrl = container.dataset.diannScatterUrl;
+    const extraTools: { tool: string; dataUrl: string }[] = container.dataset.extraScatter
+      ? JSON.parse(container.dataset.extraScatter)
+      : [];
 
-    if (!diannUrl) {
-      // Single-panel path — no DIA-NN reference for this dataset.
+    const panels = extraTools.map((t) => ({
+      tool: t.tool,
+      el: container.querySelector<HTMLElement>(`[data-chart="scatter-${t.tool.toLowerCase().replace(/[^a-z]/g, "")}"]`),
+      url: t.dataUrl,
+    }));
+
+    if (panels.length === 0) {
+      // Single-panel path — no extra tool reference for this dataset.
       const cloud = await fetchCloud(url);
       if (!cloud) {
         synapspecEl.textContent = "Scatter data failed to load.";
@@ -161,31 +174,40 @@ const diannDataUrl = diannRef ? `/data/benchmarks/scatter-${diannRef.sourceSlug}
       return;
     }
 
-    const [synapspecCloud, diannCloud] = await Promise.all([fetchCloud(url), fetchCloud(diannUrl)]);
+    const [synapspecCloud, ...extraClouds] = await Promise.all([fetchCloud(url), ...panels.map((p) => fetchCloud(p.url))]);
 
-    // Loading indicators come off as each side resolves, independently —
-    // one tool's data shouldn't sit behind a spinner just because the
-    // other tool's (much larger, for DIA-NN) file is still downloading.
+    // Loading indicators come off as each side resolves, independently — one
+    // tool's data shouldn't sit behind a "loading" label just because
+    // another tool's (much larger, for some) file is still downloading.
     if (synapspecCloud) synapspecEl.querySelector(".bench-plotly-loading")?.remove();
-    if (diannCloud && diannEl) diannEl.querySelector(".bench-plotly-loading")?.remove();
+    panels.forEach((p, i) => {
+      if (extraClouds[i] && p.el) p.el.querySelector(".bench-plotly-loading")?.remove();
+    });
 
-    if (!synapspecCloud || !diannCloud) {
+    const allLoaded = synapspecCloud && extraClouds.every((c) => c);
+    if (!allLoaded) {
       if (!synapspecCloud) synapspecEl.textContent = "Scatter data failed to load.";
-      if (!diannCloud && diannEl) diannEl.textContent = "Scatter data failed to load.";
-      // Fall back to whichever side did load, with its own auto-ranged axes.
+      panels.forEach((p, i) => {
+        if (!extraClouds[i] && p.el) p.el.textContent = "Scatter data failed to load.";
+      });
+      // Fall back to whichever side(s) did load, each with its own auto-ranged axes.
       if (synapspecCloud) drawScatter(synapspecEl, synapspecCloud);
-      if (diannCloud && diannEl) drawScatter(diannEl, diannCloud);
+      panels.forEach((p, i) => {
+        if (extraClouds[i] && p.el) drawScatter(p.el, extraClouds[i]!);
+      });
       return;
     }
 
-    // Same axis range on both panels — otherwise a tighter or wider cloud
-    // on one side reads as "more/less spread" when it's really just a
+    // Same axis range on every panel — otherwise a tighter or wider cloud on
+    // one side reads as "more/less spread" when it's really just a
     // different auto-range, and the whole point of the side-by-side is a
     // fair visual comparison.
-    const ranges = cloudRanges([synapspecCloud, diannCloud]);
+    const ranges = cloudRanges([synapspecCloud, ...extraClouds] as Cloud[]);
     const fixedRange = { x: padRange(ranges.x, 0.04), y: padRange(ranges.y, 0.04) };
 
     drawScatter(synapspecEl, synapspecCloud, fixedRange);
-    if (diannEl) drawScatter(diannEl, diannCloud, fixedRange);
+    panels.forEach((p, i) => {
+      if (p.el) drawScatter(p.el, extraClouds[i]!, fixedRange);
+    });
   });
 </script>

@@ -5,9 +5,10 @@
 // _data/benchmark_catalog.json's quartile_measurements, built in
 // build_quartile_data.py from ClearML's lfq_quartile_statistics table.
 //
-// DIA-NN reference (same ledger lookup as the other widgets) overlays as a
-// second line per species, computed the same way — get_lfq_quartile_statistics
-// from instrumentation/parsers/lfq.py, on DIA-NN's own quantification arrays.
+// DIA-NN/Spectronaut references (same ledger lookup as the other widgets)
+// overlay as extra lines per species, computed the same way —
+// get_lfq_quartile_statistics from instrumentation/parsers/lfq.py, on each
+// tool's own quantification arrays.
 import catalog from "../../data/benchmark_catalog.json";
 import ledgers from "../../data/benchmark_ledger.json";
 
@@ -19,17 +20,20 @@ const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const quartiles = (entry as { quartile_measurements?: any[] }).quartile_measurements;
 
 const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
-const diannRef = ledger?.toolReferences.find((r) => r.tool === "DIA-NN" && r.sourceSlug);
-const diannQuartiles = diannRef
-  ? (catalog as { tool_quartiles?: Record<string, any[]> }).tool_quartiles?.[diannRef.sourceSlug as string]
-  : undefined;
+const extraTools = ["DIA-NN", "Spectronaut"]
+  .map((tool) => {
+    const ref = ledger?.toolReferences.find((r) => r.tool === tool && r.sourceSlug);
+    const rows = ref ? (catalog as { tool_quartiles?: Record<string, any[]> }).tool_quartiles?.[ref.sourceSlug as string] : undefined;
+    return rows ? { tool, quartiles: rows } : null;
+  })
+  .filter((t): t is { tool: string; quartiles: any[] } => t !== null);
 ---
 
 {quartiles && (
   <div
     class="bench-quartile"
     data-quartiles={JSON.stringify(quartiles)}
-    data-diann-quartiles={diannQuartiles ? JSON.stringify(diannQuartiles) : ""}
+    data-extra-quartiles={extraTools.length ? JSON.stringify(extraTools) : ""}
   >
     <h3>Accuracy by intensity quartile</h3>
     <div class="bench-quartile-grid">
@@ -49,6 +53,18 @@ const diannQuartiles = diannRef
 
   const LOG2_TICKS = [-2, -1, 0, 1, 2];
   const LOG2_LABELS = ["0.25×", "0.5×", "1×", "2×", "4×"];
+
+  const toolColor = (tool: string) => TOOL_COLORS[tool.toLowerCase().replace(/[^a-z]/g, "")] ?? COLORS.textLight;
+
+  // Per-series horizontal offset (data units), keyed by how many series
+  // share the same quartile x-position. The two-series values match what
+  // shipped for DIA-NN alone — added tools extend the pattern rather than
+  // renumbering it.
+  const OFFSET_STEPS: Record<number, number[]> = {
+    1: [0],
+    2: [-0.08, 0.08],
+    3: [-0.12, 0, 0.12],
+  };
 
   function seriesFor(points: any[]) {
     return {
@@ -75,35 +91,44 @@ const diannQuartiles = diannRef
 
   document.querySelectorAll<HTMLElement>("[data-quartiles]").forEach((container) => {
     const quartiles = JSON.parse(container.dataset.quartiles!);
-    const diannQuartiles = container.dataset.diannQuartiles ? JSON.parse(container.dataset.diannQuartiles) : null;
+    const extraTools: { tool: string; quartiles: any[] }[] = container.dataset.extraQuartiles
+      ? JSON.parse(container.dataset.extraQuartiles)
+      : [];
 
     quartiles.forEach((item: any) => {
       const el = container.querySelector<HTMLElement>(`[data-chart="${item.species}"]`);
       if (!el) return;
 
-      const diannItem = diannQuartiles?.find((d: any) => d.species === item.species) ?? null;
       const labels = item.points.map((p: any) => p.quartile);
       const positions = labels.map((_: string, i: number) => i);
-      const offset = diannItem ? 0.08 : 0;
       const color = SPECIES_COLORS[item.species] ?? COLORS.primary;
 
-      const synap = seriesFor(item.points);
-      const traces: any[] = [
-        lineTrace(
-          "SynapSpec",
-          positions.map((p: number) => p - offset),
-          item.target,
-          item.points,
-          diannItem ? TOOL_COLORS.synapspec : color,
-        ),
-      ];
+      const extraItems = extraTools
+        .map((t) => {
+          const found = t.quartiles.find((d: any) => d.species === item.species);
+          return found ? { tool: t.tool, item: found } : null;
+        })
+        .filter((t): t is { tool: string; item: any } => t !== null);
 
-      let diannSeries: ReturnType<typeof seriesFor> | null = null;
-      if (diannItem) {
-        diannSeries = seriesFor(diannItem.points);
-        traces.push(
-          lineTrace("DIA-NN", positions.map((p: number) => p + offset), diannItem.target, diannItem.points, TOOL_COLORS.diann),
-        );
+      const traces: any[] = [];
+      const frames: any[] = [];
+
+      if (extraItems.length > 0) {
+        const allNames = ["SynapSpec", ...extraItems.map((t) => t.tool)];
+        const n = allNames.length;
+        const offsets = OFFSET_STEPS[n] ?? allNames.map((_, i) => (i - (n - 1) / 2) * 0.08);
+        const allItems = [item, ...extraItems.map((t) => t.item)];
+
+        allNames.forEach((name, i) => {
+          const it = allItems[i];
+          const series = seriesFor(it.points);
+          traces.push(lineTrace(name, positions.map((p: number) => p + offsets[i]), it.target, it.points, toolColor(name)));
+          frames.push({ y: series.medians, error_y: { array: series.upperErr, arrayminus: series.lowerErr } });
+        });
+      } else {
+        const series = seriesFor(item.points);
+        traces.push(lineTrace("SynapSpec", positions, item.target, item.points, color));
+        frames.push({ y: series.medians, error_y: { array: series.upperErr, arrayminus: series.lowerErr } });
       }
 
       // Entrance animation: start every point flat on the expected-ratio line
@@ -127,12 +152,10 @@ const diannQuartiles = diannRef
               line: { color: COLORS.text, width: 1.5, dash: "dash" },
             },
           ],
-          ...(diannItem ? { showlegend: true, legend: { orientation: "h", y: -0.3 } } : {}),
+          ...(extraItems.length > 0 ? { showlegend: true, legend: { orientation: "h", y: -0.3 } } : {}),
         }),
         baseConfig,
       ).then(() => {
-        const frames = [{ y: synap.medians, error_y: { array: synap.upperErr, arrayminus: synap.lowerErr } }];
-        if (diannSeries) frames.push({ y: diannSeries.medians, error_y: { array: diannSeries.upperErr, arrayminus: diannSeries.lowerErr } });
         Plotly.animate(
           el,
           { data: frames },

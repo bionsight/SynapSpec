@@ -328,8 +328,20 @@
       }
     ],
     "toolReferences": [
-      { "tool": "DIA-NN", "value": 103433, "display": "103,433", "date": "2026-02-04", "sourceSlug": "pxd028735-diann" },
-      { "tool": "Spectronaut", "value": null, "display": null, "date": null, "sourceSlug": null }
+      {
+        "tool": "DIA-NN",
+        "value": 103433,
+        "display": "103,433",
+        "date": "2026-02-04",
+        "sourceSlug": "pxd028735-diann"
+      },
+      {
+        "tool": "Spectronaut",
+        "value": 99656,
+        "display": "99,656",
+        "date": "2025-02-19",
+        "sourceSlug": "pxd028735-spectronaut"
+      }
     ]
   },
   {
@@ -661,8 +673,20 @@
       }
     ],
     "toolReferences": [
-      { "tool": "DIA-NN", "value": 286311, "display": "286,311", "date": "2026-06-26", "sourceSlug": "proteobench-2th-astral-diann" },
-      { "tool": "Spectronaut", "value": null, "display": null, "date": null, "sourceSlug": null }
+      {
+        "tool": "DIA-NN",
+        "value": 286311,
+        "display": "286,311",
+        "date": "2026-06-26",
+        "sourceSlug": "proteobench-2th-astral-diann"
+      },
+      {
+        "tool": "Spectronaut",
+        "value": null,
+        "display": null,
+        "date": null,
+        "sourceSlug": null
+      }
     ]
   }
 ]
