@@ -10,13 +10,14 @@ test.describe("benchmarks index", () => {
     await page.locator('label[for="dataset-astral"]').click();
     await expect(page.locator("#dataset-astral")).toBeChecked();
     // 라디오 상태는 바뀌지만 두 패널 다 DOM에는 있다 — 보이는 건 CSS다.
-    await expect(page.locator(".bench-ds-panel-astral .bench-table-wrap")).toBeVisible();
+    await expect(page.locator(".bench-ds-panel-astral .bench-version-chart-block")).toBeVisible();
   });
 
-  test("run history rows link to a run detail page", async ({ page }) => {
+  test("clicking a run history bar opens that run's detail page", async ({ page }) => {
     await page.goto("/benchmarks/");
-    const link = page.locator(".bench-ds-panel-oe480 .bench-version-table a").first();
-    await expect(link).toHaveAttribute("href", /^\/benchmarks\//);
+    const bar = page.locator(".bench-ds-panel-oe480 .bench-version-chart-block .point path").first();
+    await bar.click();
+    await expect(page).toHaveURL(/\/benchmarks\/[^/]+\/$/);
   });
 });
 
