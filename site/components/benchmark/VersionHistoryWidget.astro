@@ -35,37 +35,28 @@ interface Props {
 const { rows, toolReferences } = Astro.props;
 
 const references = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string } => ref.value !== null);
-
-const delta = (value: number, reference: number) => {
-  const pct = ((value - reference) / reference) * 100;
-  const rounded = Math.round(pct * 10) / 10;
-  return rounded > 0 ? `+${rounded}%` : `${rounded}%`;
-};
 ---
 
 <div class="bench-version-cards">
-  {rows.map((row) => {
-    const value = row.counts[0];
-    return (
-      <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-version-card">
-        <span class="bench-version-card-label">{row.release_version ?? row.date ?? "Undated"}</span>
-        <span class="bench-version-card-value">
-          {row.counts_display[0] ?? "—"}
-          <span class="bench-version-card-unit">precursor IDs</span>
+  {rows.map((row) => (
+    <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-version-card">
+      <span class="bench-version-card-label">{row.release_version ?? row.date ?? "Undated"}</span>
+      <span class="bench-version-card-value">
+        {row.counts_display[0] ?? "—"}
+        <span class="bench-version-card-unit">precursor IDs</span>
+      </span>
+      {references.length > 0 && (
+        <span class="bench-version-card-compare">
+          {references.map((ref, i) => (
+            <>
+              {i > 0 && " · "}
+              <span class={`bench-version-card-tool bench-version-card-tool-${ref.tool.toLowerCase().replace(/[^a-z]/g, "")}`}>
+                {ref.tool} {ref.display}
+              </span>
+            </>
+          ))}
         </span>
-        {value !== null && references.length > 0 && (
-          <span class="bench-version-card-compare">
-            {references.map((ref, i) => (
-              <>
-                {i > 0 && " · "}
-                <span class={`bench-version-card-tool bench-version-card-tool-${ref.tool.toLowerCase().replace(/[^a-z]/g, "")}`}>
-                  {ref.tool} {ref.display} ({delta(value, ref.value)})
-                </span>
-              </>
-            ))}
-          </span>
-        )}
-      </a>
-    );
-  })}
+      )}
+    </a>
+  ))}
 </div>
