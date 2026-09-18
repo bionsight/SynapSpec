@@ -15,9 +15,10 @@ const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const run = entry.recorded_run;
 // Only the release-tag-pinned runs have per-run diagnostics recorded so far.
 const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
-// Only the PXD028735 runs have a public source record (PRIDE) on file —
-// when present, it replaces the full raw-file table and the separate
-// "Source record" section with one link.
+// Only the PXD028735 runs have a public source record (PRIDE) on file.
+// ProteoBench/Astral doesn't have one we know of yet, so for now it just
+// skips the raw-files/source-record area entirely rather than showing a
+// stale table or a dead link.
 const sourceUrl = (entry as { source_url?: string }).source_url;
 ---
 
@@ -59,38 +60,9 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
     </details>
   </section>
 
-  <section id="raw-files" class="pb-lg">
-    {sourceUrl ? (
+  {sourceUrl && (
+    <section id="raw-files" class="pb-lg">
       <a href={sourceUrl} class="bench-link" target="_blank" rel="noopener">Raw files: {entry.title} on PRIDE Archive ↗</a>
-    ) : (
-      <>
-        <h2>Raw files</h2>
-        <div class="bench-table-wrap">
-          <table class="bench-table">
-            <thead>
-              <tr><th>File name</th><th>Condition</th><th>Replicate</th><th class="num">Precursor IDs</th><th class="num">Protein accessions</th></tr>
-            </thead>
-            <tbody>
-              {run.files.map((file) => (
-                <tr>
-                  <th scope="row"><code>{file.name}</code></th>
-                  <td>{file.condition}</td>
-                  <td>{file.replicate}</td>
-                  <td class="num">{file.precursors_display}</td>
-                  <td class="num">{file.proteins_display}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </>
-    )}
-  </section>
-
-  {!sourceUrl && (
-    <section id="source-record" class="py-lg bench-border-t">
-      <h2>Source record</h2>
-      <a href="/benchmarks/" class="bench-link">All datasets</a>
     </section>
   )}
 </div>
