@@ -1,6 +1,6 @@
 ---
 // _layouts/benchmark_run.html을 옮긴 것. _benchmarks 컬렉션(18개 날짜 슬러그)에서 쓴다.
-import Icon from "../Icon.astro";
+import { FlaskConical, Server, Clock } from "@lucide/astro";
 import benchmarks from "../../data/benchmarks.json";
 
 interface Props {
@@ -23,9 +23,9 @@ const run = bm.runs.find((r) => r.slug === slug)!;
 
   <section class="py-lg">
     <div class="bench-meta">
-      <span><Icon name="flask-conical" size={14} /> {bm.dataset.name} &middot; {bm.dataset.instrument}</span>
-      <span><Icon name="server" size={14} /> AWS {run.instance}</span>
-      {run.runtime_hours && <span><Icon name="clock" size={14} /> {run.runtime_hours} h</span>}
+      <span><FlaskConical size={14} class="icon" /> {bm.dataset.name} &middot; {bm.dataset.instrument}</span>
+      <span><Server size={14} class="icon" /> AWS {run.instance}</span>
+      {run.runtime_hours && <span><Clock size={14} class="icon" /> {run.runtime_hours} h</span>}
     </div>
   </section>
 
@@ -50,10 +50,6 @@ const run = bm.runs.find((r) => r.slug === slug)!;
     <section class="py-lg">
       <div class="section-header">
         <h2>Quantification Accuracy</h2>
-        <p class="section-subtitle">
-          LFQBench mixes human, yeast and <em>E.&nbsp;coli</em> proteins into two samples at
-          fixed, known ratios. A perfect result lands exactly on the target line.
-        </p>
       </div>
 
       <div class="bench-scale">
@@ -87,12 +83,6 @@ const run = bm.runs.find((r) => r.slug === slug)!;
             </div>
           );
         })}
-
-        <p class="bench-axis-note">
-          Horizontal axis: log<sub>2</sub> ratio between the two samples.
-          The shaded band shows the median absolute deviation — how tightly
-          individual measurements cluster around the target.
-        </p>
       </div>
     </section>
   ) : (
@@ -108,10 +98,6 @@ const run = bm.runs.find((r) => r.slug === slug)!;
   <section class="py-lg">
     <div class="section-header">
       <h2>Per-file Results</h2>
-      <p class="section-subtitle">
-        Each of the {run.files_in_experiment} raw files, analysed independently.
-        Mass and retention-time errors indicate calibration quality.
-      </p>
     </div>
 
     <div class="bench-table-wrap">

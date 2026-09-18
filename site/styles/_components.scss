@@ -352,7 +352,7 @@
   padding: 2.5rem 0 1.5rem;
 
   @media (min-width: $mobile) {
-    padding: 4rem 0 2rem;
+    padding: 2rem 0;
   }
 
   h1 {
@@ -606,6 +606,9 @@
 .mb-md { margin-bottom: $spacing-md; }
 .mb-lg { margin-bottom: $spacing-lg; }
 .mb-xl { margin-bottom: $spacing-xl; }
+
+.pt-lg { padding-top: $spacing-lg; }
+.pb-lg { padding-bottom: $spacing-lg; }
 
 .py-lg { padding-top: $spacing-lg; padding-bottom: $spacing-lg; }
 .py-xl { padding-top: $spacing-xl; padding-bottom: $spacing-xl; }

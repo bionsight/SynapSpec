@@ -2,7 +2,7 @@
 // index.md를 옮긴 것.
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Requirements from "../components/Requirements.astro";
-import Icon from "../components/Icon.astro";
+import { ICONS } from "../lib/icons";
 import services from "../data/services.json";
 import exampleRun from "../data/example_run.json";
 
@@ -51,13 +51,16 @@ const description =
         <p class="section-subtitle">Comprehensive software solution for DIA-MS data processing and analysis in proteomics research.</p>
       </div>
       <div class="services-grid">
-        {services.map((service) => (
-          <article class="card">
-            <div class="card-icon"><Icon name={service.icon} /></div>
-            <h3>{service.name}</h3>
-            <p>{service.description}</p>
-          </article>
-        ))}
+        {services.map((service) => {
+          const ServiceIcon = ICONS[service.icon as keyof typeof ICONS];
+          return (
+            <article class="card">
+              <div class="card-icon"><ServiceIcon size={20} class="icon" /></div>
+              <h3>{service.name}</h3>
+              <p>{service.description}</p>
+            </article>
+          );
+        })}
       </div>
     </section>
 

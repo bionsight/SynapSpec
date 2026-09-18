@@ -70,5 +70,54 @@
       "20250206_OA_OP_LFQBench_B_R2.raw",
       "20250206_OA_OP_LFQBench_B_R3.raw"
     ]
+  },
+  {
+    "slug": "pxd028735-diann",
+    "commit": "14c551d4",
+    "taskId": "5d5ec6c239224fa38b16b0f67af566ef",
+    "artifactId": "ca9c0254",
+    "started": "2026-02-04 17:07",
+    "completed": "2026-02-04 19:15",
+    "runtimeMinutes": 127,
+    "totalPrecursors": 103433,
+    "totalPrecursorsDisplay": "103,433",
+    "totalProteins": 9951,
+    "totalProteinsDisplay": "9,951",
+    "status": "Completed",
+    "resource": "c7i.8xlarge",
+    "figure": null,
+    "datasetSubtitle": "OE480",
+    "files": [
+      "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_01.raw",
+      "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_02.raw",
+      "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_03.raw",
+      "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_01.raw",
+      "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_02.raw",
+      "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_03.raw"
+    ]
+  },
+  {
+    "slug": "proteobench-2th-astral-diann",
+    "commit": "0f88c370",
+    "taskId": "9c5cbc9e4e8e40c6adcaf4ad827cfa51",
+    "artifactId": "b4572ab8",
+    "started": "2026-06-26 10:31",
+    "completed": "2026-06-26 14:48",
+    "runtimeMinutes": 256,
+    "totalPrecursors": 286311,
+    "totalPrecursorsDisplay": "286,311",
+    "totalProteins": 16858,
+    "totalProteinsDisplay": "16,858",
+    "status": "Completed",
+    "resource": "c7i.8xlarge",
+    "figure": null,
+    "files": [
+      "20250206_OA_OP_LFQBench_A_R1.raw",
+      "20250206_OA_OP_LFQBench_A_R2.raw",
+      "20250206_OA_OP_LFQBench_A_R3.raw",
+      "20250206_OA_OP_LFQBench_B_R1.raw",
+      "20250206_OA_OP_LFQBench_B_R2.raw",
+      "20250206_OA_OP_LFQBench_B_R3.raw"
+    ]
   }
 ]

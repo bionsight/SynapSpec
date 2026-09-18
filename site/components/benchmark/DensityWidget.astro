@@ -1,0 +1,42 @@
+---
+// Per-species log2(A/B) ratio distribution, one KDE curve per species, as a
+// pre-rendered static image (scripts/render_density_images.py) — same
+// approach as ScatterWidget, and for the same reason: the source data is
+// each precursor's log2(A/B) (the same scatter-{slug}.json point clouds
+// ScatterWidget reads), so drawing it client-side would mean the same
+// multi-megabyte fetch + heavy compute (a KDE over ~100k-300k points per
+// tool) that made the scatter panels freeze the page.
+//
+// This replaced RatioWidget's "Expected and measured ratios" (a single point
+// estimate + error bar per species) site-wide — not just on the runs that
+// have this point-level data — so every recorded run reads the same way
+// instead of some showing a point-estimate chart and others a distribution.
+// Runs without diagnostics just don't get an LFQ-metrics ratio view at all
+// now (RecordedBenchmark.astro only renders this section when diagnostics
+// exist).
+import catalog from "../../data/benchmark_catalog.json";
+import ledgers from "../../data/benchmark_ledger.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
+const ratios = (entry as { ratio_measurements?: any[] }).ratio_measurements;
+const imageUrl = `/data/benchmarks/density-${slug}.png`;
+
+const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
+const extraTools = ["DIA-NN", "Spectronaut"].filter((tool) =>
+  ledger?.toolReferences.some((r) => r.tool === tool && r.sourceSlug),
+);
+const imageAlt = `log2(A/B) ratio density by species — ${["SynapSpec", ...extraTools].join(" vs. ")}`;
+---
+
+{ratios && (
+  <div class="bench-scatter-compare">
+    <p class="bench-scatter-compare-label">Ratio density by species</p>
+    <figure class="bench-diagnostic">
+      <img src={imageUrl} alt={imageAlt} loading="lazy" class="bench-scatter-image" />
+    </figure>
+  </div>
+)}
