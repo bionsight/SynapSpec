@@ -29,14 +29,6 @@ test.describe("benchmark detail pages, one per kind", () => {
     await expect(page.locator(".bench-pager a")).toHaveCount(1); // 마지막 런이라 prev만 있다
   });
 
-  test("recorded — ratio widget toggles between actual and relative axes", async ({ page }) => {
-    await page.goto("/benchmarks/2026-09-07-5d12a532/");
-    await expect(page.locator("h1")).toContainText("LFQBench");
-    await expect(page.locator("#ratio-actual")).toBeChecked();
-    await page.locator('label[for="ratio-relative"]').click();
-    await expect(page.locator("#ratio-relative")).toBeChecked();
-  });
-
   test("comparison — renders the accuracy-vs-depth scatter with one dot per tool", async ({ page }) => {
     await page.goto("/benchmarks/lfqbench-202409-archived/");
     await expect(page.locator("h1")).toHaveText("LFQBench / OE480");

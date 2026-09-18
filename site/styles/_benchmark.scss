@@ -65,7 +65,12 @@
   position: relative;
   height: 4px;
   border-radius: 2px;
-  background: linear-gradient(90deg, $border-color, $secondary-color-light, $border-color);
+  background: linear-gradient(
+    90deg,
+    $border-color,
+    $secondary-color-light,
+    $border-color
+  );
   margin: $spacing-xl $spacing-sm;
 }
 
@@ -106,7 +111,9 @@
   margin: -7px 0 0 -7px;
   border-radius: 50%;
   background: $primary-color;
-  box-shadow: 0 0 0 3px $background-color, 0 2px 8px rgba(16, 106, 158, 0.5);
+  box-shadow:
+    0 0 0 3px $background-color,
+    0 2px 8px rgba(16, 106, 158, 0.5);
 }
 
 .bench-value-label {
@@ -474,7 +481,7 @@
 // this page needs right under the h1.
 .bench-run-date {
   margin: 0;
-  padding-top: $spacing-lg;
+  padding-top: $spacing-md;
   border-top: 1px solid $border-color;
   font-size: $font-size-small;
   color: $text-color-light;
@@ -572,7 +579,6 @@
 // ── No-JS toggle pattern (radio + sibling selectors) ─────────
 // Shared shell for the ratio-mode toggle and the dataset switcher.
 
-.bench-ratio-input,
 .bench-ds-input {
   position: absolute;
   opacity: 0;
@@ -593,68 +599,31 @@
   color: $text-light;
   cursor: pointer;
   user-select: none;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 
   &:hover {
     border-color: $primary-color;
   }
 }
 
-#ratio-actual:checked ~ .bench-ratio-head .bench-toggle-btn[for="ratio-actual"],
-#ratio-relative:checked ~ .bench-ratio-head .bench-toggle-btn[for="ratio-relative"],
 #dataset-oe480:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-oe480"],
-#dataset-astral:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-astral"] {
+#dataset-astral:checked
+  ~ .bench-ds-head
+  .bench-toggle-btn[for="dataset-astral"] {
   background: $primary-color;
   border-color: $primary-color;
   color: $background-color;
 }
 
-// ── Ratio widget ───────────────────────────────────────────────
-
-.bench-ratio-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: $spacing-md;
-  margin-bottom: $spacing-sm;
-
-  h2 {
-    margin: 0;
-  }
-}
-
-.bench-ratio-panel-relative {
-  display: none;
-}
-
-#ratio-relative:checked ~ .bench-ratio-panel-actual {
-  display: none;
-}
-
-#ratio-relative:checked ~ .bench-ratio-panel-relative {
-  display: block;
-}
-
-.bench-ratio-footnote-relative {
-  display: none;
-}
-
-#ratio-relative:checked ~ .bench-ratio-footnote-actual {
-  display: none;
-}
-
-#ratio-relative:checked ~ .bench-ratio-footnote-relative {
-  display: block;
-}
-
 // ── Quartile widget ──────────────────────────────────────────
+// No top border/margin of its own — it's the sole occupant of its section
+// now that RatioWidget is gone, so the section's own py-lg/border-t already
+// separates it from whatever comes before.
 
 .bench-quartile {
-  margin-top: $spacing-lg;
-  padding-top: $spacing-lg;
-  border-top: 1px solid $border-color;
-
   h3 {
     margin: 0 0 $spacing-xs;
   }
@@ -681,24 +650,23 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: $spacing-md;
-  margin-top: $spacing-md;
 }
 
-// ScatterWidget's side-by-side SynapSpec/DIA-NN panels — same auto-fit
-// breakpoint as .bench-diagnostics-grid, so the pair collapses to one
-// column at the same width the diagnostics grid does.
 .bench-scatter-compare-label {
-  margin: 0 0 $spacing-sm;
+  margin: 0 $spacing-md $spacing-md $spacing-md;
   font-size: $font-size-small;
   font-weight: 600;
   color: $text-color-light;
   text-align: center;
 }
 
-.bench-scatter-compare-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: $spacing-md;
+// ScatterWidget's chart is a pre-rendered image (scripts/render_scatter_images.py)
+// with every tool's panel already laid out side by side inside it, so it just
+// scales to the container width instead of needing a CSS grid of its own.
+.bench-scatter-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 // Six-panel tool-comparison figure (ComparisonWidget): two rows of three,
@@ -736,25 +704,6 @@
   width: 100%;
   min-height: 260px;
   position: relative;
-}
-
-.bench-plotly-target-tall {
-  min-height: 480px;
-}
-
-// Shown in a .bench-plotly-target while its data is still being fetched
-// (ScatterWidget's point file runs to over a megabyte) — absolutely
-// positioned over the same box the chart will occupy, so nothing shifts
-// once Plotly.newPlot clears it away and draws in its place.
-.bench-plotly-loading {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-xs;
-  color: $text-light;
-  font-size: $font-size-small;
 }
 
 // Plain CSS fade-in for the chart types Plotly can't smoothly animate itself
@@ -842,9 +791,15 @@
   stroke-width: 2;
   fill-opacity: 0.9;
 
-  &-synapspec { fill: $viz-1; }
-  &-diann { fill: $viz-2; }
-  &-spectronaut { fill: $viz-3; }
+  &-synapspec {
+    fill: $viz-1;
+  }
+  &-diann {
+    fill: $viz-2;
+  }
+  &-spectronaut {
+    fill: $viz-3;
+  }
 }
 
 .bench-scatter-legend {
@@ -871,9 +826,15 @@
   border-radius: 50%;
 
   // <span> 는 SVG 가 아니라 fill 이 안 먹는다 — 배경색으로 같은 팔레트를 다시 준다.
-  &.bench-scatter-dot-synapspec { background: $viz-1; }
-  &.bench-scatter-dot-diann { background: $viz-2; }
-  &.bench-scatter-dot-spectronaut { background: $viz-3; }
+  &.bench-scatter-dot-synapspec {
+    background: $viz-1;
+  }
+  &.bench-scatter-dot-diann {
+    background: $viz-2;
+  }
+  &.bench-scatter-dot-spectronaut {
+    background: $viz-3;
+  }
 }
 
 // ── Run history chart (VersionHistoryWidget) ──────────────────
@@ -896,7 +857,10 @@
   font-weight: 600;
   color: $text-light;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 
   &:hover {
     border-color: $primary-color;
@@ -917,4 +881,10 @@
 // (toggled to "pointer" on bar hover) show through instead.
 .bench-version-chart-block .js-plotly-plot .draglayer.cursor-crosshair {
   cursor: inherit;
+}
+
+.recorded-benchmark-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
 }

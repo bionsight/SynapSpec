@@ -79,31 +79,3 @@ export function drawWhenVisible(el: Element, draw: () => void) {
   });
   observer.observe(el);
 }
-
-// Different problem from drawWhenVisible: that one waits for a CSS-hidden
-// panel to become shown (width goes 0 → real), which happens on first paint
-// for anything not behind a no-JS toggle — no use for deferring work on an
-// ordinary, always-visible container. This one waits for the user to
-// actually scroll near the element, for widgets whose data is one or more
-// multi-megabyte fetches (ScatterWidget's per-tool point clouds) rather than
-// something already inlined in the page HTML — so the fetch + Plotly draw
-// don't run, and jank the page, until there's a reason to.
-//
-// rootMargin gives it a head start: the callback fires while the element is
-// still `rootMargin` away from the viewport, so on a normal scroll-down read
-// the data is usually already loaded by the time it comes into view.
-export function whenNearViewport(el: Element, callback: () => void, rootMargin = "600px") {
-  if (typeof IntersectionObserver === "undefined") {
-    callback();
-    return;
-  }
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (!entries[0].isIntersecting) return;
-      observer.disconnect();
-      callback();
-    },
-    { rootMargin },
-  );
-  observer.observe(el);
-}
