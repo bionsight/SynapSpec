@@ -75,11 +75,49 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
     const reservedSlots = Math.max(chartRows.length + 4, 8);
     const barWidth = 0.45;
 
-    // Headroom reserved for the tallest reference line up front, so toggling
-    // it on never rescales the y-axis under the SynapSpec bars.
+    // A dashed-outline "ghost" bar right after the last real run, taller
+    // than the rest with an arrow annotation — makes the empty slots read
+    // as "the next run lands here" instead of just trailing off.
+    const ghostPosition = chartRows.length;
+
+    // Headroom reserved for the tallest reference line and the ghost bar up
+    // front, so toggling the reference line on never rescales the y-axis
+    // under the SynapSpec bars.
     const allValues = [...values, ...references.map((r) => r.value)].filter((v) => typeof v === "number");
     const maxVal = Math.max(...allValues, 0);
-    const yMax = maxVal * 1.2;
+    const ghostHeight = maxVal * 1.08;
+    const yMax = maxVal * 1.4;
+
+    const ghostAnnotation = {
+      x: ghostPosition,
+      y: ghostHeight,
+      xref: "x",
+      yref: "y",
+      text: "Next run will be soon",
+      showarrow: true,
+      arrowhead: 2,
+      arrowsize: 1,
+      arrowwidth: 1,
+      arrowcolor: COLORS.textLight,
+      standoff: 10,
+      ax: 40,
+      ay: -30,
+      font: { size: 11, color: COLORS.textLight },
+    };
+
+    // Bar traces don't support a dashed marker outline in Plotly.js — a
+    // shape rectangle does, so the ghost bar is a shape, not a trace.
+    const ghostShape = {
+      type: "rect",
+      xref: "x",
+      x0: ghostPosition - barWidth / 2,
+      x1: ghostPosition + barWidth / 2,
+      yref: "y",
+      y0: 0,
+      y1: ghostHeight,
+      line: { color: COLORS.textLight, width: 1.5, dash: "dash" },
+      fillcolor: "rgba(0,0,0,0)",
+    };
 
     const referenceShapes = references.map((ref) => ({
       type: "line",
@@ -117,6 +155,19 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
             marker: { color: TOOL_COLORS.synapspec },
             hovertemplate: "%{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
           },
+          {
+            // Invisible bar over the ghost shape, just to give it a hover
+            // hit target — real bars are a Plotly trace so they get pointer
+            // cursor + tooltip for free; the ghost is a shape, so it needs
+            // this to behave the same way on hover.
+            type: "bar",
+            x: [ghostPosition],
+            y: [ghostHeight],
+            width: barWidth,
+            marker: { color: "rgba(0,0,0,0)" },
+            hovertemplate: "Next run — check back soon<extra></extra>",
+            showlegend: false,
+          },
         ],
         baseLayout({
           xaxis: {
@@ -130,6 +181,13 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
             range: [-0.75, reservedSlots - 0.25],
           },
           yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
+          shapes: [ghostShape],
+          annotations: [ghostAnnotation],
+          // Plotly's default dragmode ("zoom") puts its own drag-rect layer on
+          // top with an inline crosshair cursor, which wins over the pointer
+          // cursor set on hover below. This chart isn't zoomable, so turn it
+          // off rather than fight the layering.
+          dragmode: false,
         }),
         baseConfig,
       ).then((gd: any) => {
@@ -139,7 +197,7 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
         gd.on("plotly_unhover", () => { el.style.cursor = ""; });
         gd.on("plotly_click", (event: any) => {
           const point = event.points?.[0];
-          if (!point) return;
+          if (!point || point.curveNumber !== 0) return;
           const slug = sourceSlugs[point.pointIndex];
           if (slug) window.location.href = `/benchmarks/${slug}/`;
         });
@@ -147,7 +205,12 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
         toggle?.addEventListener("click", () => {
           const active = toggle.getAttribute("aria-pressed") === "true";
           toggle.setAttribute("aria-pressed", active ? "false" : "true");
-          Plotly.relayout(el, active ? { shapes: [], annotations: [] } : { shapes: referenceShapes, annotations: referenceAnnotations });
+          Plotly.relayout(
+            el,
+            active
+              ? { shapes: [ghostShape], annotations: [ghostAnnotation] }
+              : { shapes: [ghostShape, ...referenceShapes], annotations: [ghostAnnotation, ...referenceAnnotations] },
+          );
         });
       });
     });
