@@ -67,6 +67,14 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
       r.resource ?? "—",
     ]);
 
+    // Fixed numeric slots instead of a categorical axis, so bars stay a
+    // constant narrow width and pack against the left — the empty slots on
+    // the right read as "more runs land here", not as a chart that's
+    // already full.
+    const positions = chartRows.map((_, i) => i);
+    const reservedSlots = Math.max(chartRows.length + 4, 8);
+    const barWidth = 0.45;
+
     // Headroom reserved for the tallest reference line up front, so toggling
     // it on never rescales the y-axis under the SynapSpec bars.
     const allValues = [...values, ...references.map((r) => r.value)].filter((v) => typeof v === "number");
@@ -100,8 +108,9 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
         [
           {
             type: "bar",
-            x: labels,
+            x: positions,
             y: values,
+            width: barWidth,
             text: displays,
             textposition: "outside",
             customdata,
@@ -110,7 +119,16 @@ const usableReferences = toolReferences.filter((ref): ref is ToolReference & { v
           },
         ],
         baseLayout({
-          xaxis: { ...axisStyle, title: { text: "SynapSpec release" }, showgrid: false },
+          xaxis: {
+            ...axisStyle,
+            title: { text: "SynapSpec release" },
+            showgrid: false,
+            zeroline: false,
+            tickmode: "array",
+            tickvals: positions,
+            ticktext: labels,
+            range: [-0.75, reservedSlots - 0.25],
+          },
           yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
         }),
         baseConfig,
