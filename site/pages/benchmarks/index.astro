@@ -3,6 +3,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ledgers from "../../data/benchmark_ledger.json";
 import ComparisonWidget from "../../components/benchmark/ComparisonWidget.astro";
+import VersionHistoryWidget from "../../components/benchmark/VersionHistoryWidget.astro";
 
 const description =
   "SynapSpec benchmark history on the LFQBench standard dataset — three-tool comparisons on fixed inputs, and every recorded run over time";
@@ -46,40 +47,7 @@ const [oe480, astral] = ledgers;
             <div class="section-header bench-section-wide">
               <h2>Run history</h2>
             </div>
-            <p class="bench-axis-note" style="text-align: left;">
-              Reference (single run, not repeated over time):{" "}
-              {ledger.toolReferences.map((ref, i) => (
-                <>
-                  {i > 0 && " · "}
-                  {ref.display ? (
-                    <>{ref.tool}{" "}<a href={`/benchmarks/${ref.sourceSlug}/`} class="bench-link">{ref.display}</a> ({ref.date})</>
-                  ) : (
-                    <>{ref.tool} &mdash; no run recorded</>
-                  )}
-                </>
-              ))}
-            </p>
-            <div class="bench-table-wrap" style="max-width: 100%;">
-              <table class="bench-table">
-                <caption>Precursor IDs by tool &middot; &ldquo;&mdash;&rdquo; means not linked, not zero.</caption>
-                <thead>
-                  <tr><th>Run / date</th><th>Release version</th><th class="num">SynapSpec</th><th class="num">DIA-NN</th><th class="num">Spectronaut</th><th class="num">SynapSpec time</th><th>Resource</th></tr>
-                </thead>
-                <tbody>
-                  {ledger.rows.map((row) => (
-                    <tr>
-                      <th scope="row">
-                        <a href={`/benchmarks/${row.sourceSlug}/`}>{row.date ?? "Undated comparison"}</a>
-                      </th>
-                      <td>{row.release_version ?? "—"}</td>
-                      {row.counts_display.map((value) => <td class="num">{value ?? "—"}</td>)}
-                      <td class="num">{row.runtime ? `${Math.round(row.runtime * 100) / 100} h` : "—"}</td>
-                      <td>{row.resource ?? "—"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <VersionHistoryWidget rows={ledger.rows} toolReferences={ledger.toolReferences} />
           </section>
 
           <details class="bench-details bench-border-t" style="border-top: 1px solid var(--bench-border, #e2e2e2); border-radius: 0; padding-top: 1.25rem;">
