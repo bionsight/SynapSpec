@@ -1,0 +1,220 @@
+---
+// Native reinterpretation of the archived comparisons' static six-panel PNG
+// (record.figure) — three bar charts (precursor IDs, six-run completeness,
+// within-condition CV) plus one median+IQR dot chart per species, matching
+// the RatioWidget style used on recorded-run pages. Same six small-plots
+// pattern as DiagnosticsWidget/QuartileWidget rather than one multi-panel
+// Plotly figure, so there's no subplot-domain math to hand-tune.
+import comparisons from "../../data/benchmark_comparisons.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const record = comparisons.find((r) => r.slug === slug);
+---
+
+{record && (
+  <div class="bench-comparison-grid" data-comparison={JSON.stringify(record.tools)}>
+    <div class="bench-comparison-row">
+      <figure class="bench-diagnostic">
+        <div data-chart="ids" class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>Unique precursor IDs</figcaption>
+      </figure>
+      <figure class="bench-diagnostic">
+        <div data-chart="complete" class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>Detected in all six runs</figcaption>
+      </figure>
+      <figure class="bench-diagnostic">
+        <div data-chart="cv" class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>Within-condition median CV</figcaption>
+      </figure>
+    </div>
+    <div class="bench-comparison-row">
+      <figure class="bench-diagnostic">
+        <div data-chart="ratio-HUMAN" class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>Human: LFQ ratio median and IQR</figcaption>
+      </figure>
+      <figure class="bench-diagnostic">
+        <div data-chart="ratio-YEAS8" class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>Yeast: LFQ ratio median and IQR</figcaption>
+      </figure>
+      <figure class="bench-diagnostic">
+        <div data-chart="ratio-ECOLI" class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>E. coli: LFQ ratio median and IQR</figcaption>
+      </figure>
+    </div>
+  </div>
+)}
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
+
+  const SPECIES_LABEL: Record<string, string> = { HUMAN: "Human", YEAS8: "Yeast", ECOLI: "E. coli" };
+
+  // Three ticks — 0, half, and the rounded max — instead of Plotly's default
+  // ~7, so the axis reads at a glance instead of as a ladder of "k" labels.
+  // Rounds to the nearest 50k so the half-tick lands on a clean number too.
+  function niceTicks(max: number) {
+    const rounded = Math.max(50000, Math.ceil(max / 50000) * 50000);
+    const half = rounded / 2;
+    const label = (v: number) => (v === 0 ? "0" : `${v / 1000}k`);
+    return { tickvals: [0, half, rounded], ticktext: [label(0), label(half), label(rounded)], range: [0, rounded * 1.15] };
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-comparison]").forEach((container) => {
+    const tools: any[] = JSON.parse(container.dataset.comparison!);
+    const fullLabels = tools.map((t) => t.label);
+    // Axis ticks use the short tool name only — "SynapSpec (v092 folder)" etc.
+    // forced Plotly to rotate and truncate the label. The full source-folder
+    // label (load-bearing for this "not reconciled" archived comparison)
+    // still shows on hover via customdata.
+    const labels = fullLabels.map((l) => l.replace(/\s*\(.*\)$/, ""));
+    const colors = tools.map((t) => TOOL_COLORS[t.id] ?? COLORS.primary);
+
+    const idsEl = container.querySelector<HTMLElement>('[data-chart="ids"]');
+    if (idsEl) {
+      const idsTicks = niceTicks(Math.max(...tools.map((t) => t.precursors)));
+      drawWhenVisible(idsEl, () => {
+        Plotly.newPlot(
+          idsEl,
+          [
+            {
+              type: "bar",
+              x: labels,
+              customdata: fullLabels,
+              y: tools.map((t) => t.precursors),
+              text: tools.map((t) => t.precursors_display),
+              textposition: "outside",
+              marker: { color: colors },
+              hovertemplate: "%{customdata}<br>%{text} precursor IDs<extra></extra>",
+            },
+          ],
+          baseLayout({
+            xaxis: { ...axisStyle, showgrid: false },
+            yaxis: { ...axisStyle, title: { text: "Modified sequence + charge" }, ...idsTicks },
+          }),
+          baseConfig,
+        ).then(() => idsEl.classList.add("is-visible"));
+      });
+    }
+
+    const completeEl = container.querySelector<HTMLElement>('[data-chart="complete"]');
+    if (completeEl) {
+      drawWhenVisible(completeEl, () => {
+        Plotly.newPlot(
+          completeEl,
+          [
+            {
+              type: "bar",
+              x: labels,
+              customdata: fullLabels,
+              y: tools.map((t) => t.complete_six_percent),
+              text: tools.map((t) => `${Math.round(t.complete_six_percent * 10) / 10}%`),
+              textposition: "outside",
+              marker: { color: colors },
+              hovertemplate: "%{customdata}<br>%{text} of identified precursors<extra></extra>",
+            },
+          ],
+          baseLayout({
+            xaxis: { ...axisStyle, showgrid: false },
+            yaxis: { ...axisStyle, title: { text: "% of each tool's identified precursors" }, range: [0, 100] },
+          }),
+          baseConfig,
+        ).then(() => completeEl.classList.add("is-visible"));
+      });
+    }
+
+    const cvEl = container.querySelector<HTMLElement>('[data-chart="cv"]');
+    if (cvEl) {
+      drawWhenVisible(cvEl, () => {
+        Plotly.newPlot(
+          cvEl,
+          [
+            {
+              type: "bar",
+              name: "Condition A",
+              x: labels,
+              customdata: fullLabels,
+              y: tools.map((t) => t.cv.A.median_percent),
+              marker: { color: colors },
+              hovertemplate: "%{customdata} · Condition A<br>median CV %{y:.1f}%<extra></extra>",
+            },
+            {
+              type: "bar",
+              name: "Condition B",
+              x: labels,
+              customdata: fullLabels,
+              y: tools.map((t) => t.cv.B.median_percent),
+              marker: { color: colors, pattern: { shape: "/" } },
+              hovertemplate: "%{customdata} · Condition B<br>median CV %{y:.1f}%<extra></extra>",
+            },
+          ],
+          baseLayout({
+            showlegend: true,
+            legend: { orientation: "h", y: -0.2 },
+            xaxis: { ...axisStyle, showgrid: false },
+            yaxis: { ...axisStyle, title: { text: "Median CV (%, positive quantity in all 3 replicates)" } },
+          }),
+          baseConfig,
+        ).then(() => cvEl.classList.add("is-visible"));
+      });
+    }
+
+    for (const key of Object.keys(SPECIES_LABEL)) {
+      const el = container.querySelector<HTMLElement>(`[data-chart="ratio-${key}"]`);
+      if (!el) continue;
+
+      const rows = tools.map((t) => t.ratios.find((r: any) => r.species === key));
+      const target = rows[0]?.target ?? 0;
+
+      drawWhenVisible(el, () => {
+        Plotly.newPlot(
+          el,
+          [
+            {
+              type: "scatter",
+              mode: "markers",
+              x: labels,
+              customdata: fullLabels,
+              y: rows.map((r: any) => r.median),
+              error_y: {
+                type: "data",
+                symmetric: false,
+                array: rows.map((r: any) => r.upper - r.median),
+                arrayminus: rows.map((r: any) => r.median - r.lower),
+                color: COLORS.primaryDark,
+                thickness: 2,
+                width: 6,
+              },
+              marker: { color: colors, size: 12, line: { color: COLORS.background, width: 2 } },
+              text: rows.map((r: any) => `median ${Math.round(r.median * 1000) / 1000}, n = ${r.count_display}`),
+              hovertemplate: "%{customdata}<br>%{text}<extra></extra>",
+            },
+          ],
+          baseLayout({
+            xaxis: { ...axisStyle, showgrid: false },
+            yaxis: { ...axisStyle, title: { text: "log₂(mean A / mean B) · precursor MS2" } },
+            shapes: [
+              {
+                type: "line",
+                xref: "paper",
+                x0: 0,
+                x1: 1,
+                yref: "y",
+                y0: target,
+                y1: target,
+                line: { color: COLORS.textLight, width: 1.5, dash: "dash" },
+              },
+            ],
+            annotations: [
+              { x: 1, xref: "paper", xanchor: "right", y: target, text: "Expected", showarrow: false, yshift: 10, font: { size: 11, color: COLORS.textLight } },
+            ],
+          }),
+          baseConfig,
+        ).then(() => el.classList.add("is-visible"));
+      });
+    }
+  });
+</script>

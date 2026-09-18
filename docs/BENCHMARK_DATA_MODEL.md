@@ -13,7 +13,7 @@
 | `benchmark_catalog.json` | recorded 등급 run의 전체 데이터 + 프리셋 카탈로그 | `RecordedBenchmark.astro`, `RatioWidget.astro`, `PendingBenchmark.astro`, `history/index.astro` |
 | `benchmark_imports.json` | ClearML summary만 가볍게 옮긴 run (imported 등급) | `ImportedBenchmark.astro` |
 | `benchmark_ledger.json` | 데이터셋(OE480/Astral)별 run history 표 | `benchmarks/index.astro` |
-| `benchmark_comparisons.json` + `benchmark_comparison_scatter.json` | SynapSpec·DIA-NN·Spectronaut 3-tool 비교, 리더보드 | `ComparisonBenchmark.astro`, `leaderboard/index.astro` |
+| `benchmark_comparisons.json` + `benchmark_comparison_scatter.json` | SynapSpec·DIA-NN·Spectronaut 3-tool 비교 | `ComparisonBenchmark.astro` |
 | `benchmarks.json` | Astral 전용 run 이력. `scripts/fetch_benchmarks.py` 산출물 | `history/index.astro`, `[slug]/index.astro`(kind: run) |
 
 ## 라우팅: kind 네 가지

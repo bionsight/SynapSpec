@@ -1,5 +1,9 @@
 // Benchmarks page — LFQBench validation results
 
+.breadcrumbs {
+  margin-top: $spacing-md;
+}
+
 // .section-header는 site/styles/_components.scss에서 max-width: 40rem으로
 // 짧은 마케팅 카피용으로 만들어졌다. Run history처럼 긴 설명 문단이 그 바로
 // 아래의 전체 폭 표(.bench-table-wrap)와 짝을 이루는 곳에서는 40rem이 표보다
@@ -134,6 +138,12 @@
   font-size: $font-size-small;
   color: $text-color-light;
   text-align: center;
+}
+
+// Used where the note sits next to/under a left-aligned heading or link
+// instead of standing alone under a centered chart.
+.bench-axis-note-left {
+  text-align: left;
 }
 
 // ── Depth stats ─────────────────────────────────────────────
@@ -458,16 +468,16 @@
   }
 }
 
-.bench-facts-top {
-  padding-top: $spacing-md;
-  border-top: 2px solid $primary-color-dark;
-
-  dd {
-    font-family: $heading-font;
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
+// Run detail page header — just the run date, small and muted, under a thin
+// divider. Used to be a four-item facts bar (release/date/runtime/resource);
+// release was always "Not mapped" and the rest read as more prominent than
+// this page needs right under the h1.
+.bench-run-date {
+  margin: 0;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $border-color;
+  font-size: $font-size-small;
+  color: $text-color-light;
 }
 
 .bench-fact-note {
@@ -479,20 +489,6 @@
   text-transform: none;
   letter-spacing: normal;
   color: $text-color-light;
-}
-
-.bench-section-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-md;
-  padding-bottom: $spacing-sm;
-  border-bottom: 1px solid $border-color;
-
-  a {
-    font-size: $font-size-small;
-    font-weight: 600;
-    color: $primary-color-darker;
-  }
 }
 
 .bench-file-list {
@@ -524,7 +520,7 @@
 }
 
 .bench-details {
-  margin: $spacing-md 0;
+  margin-bottom: $spacing-md;
   padding: $spacing-md;
   border: 1px solid $border-color;
   border-radius: $border-radius;
@@ -539,6 +535,19 @@
     margin: $spacing-xs 0 0;
     color: $text-light;
   }
+
+  // A table right after <summary> needs its own top gap — .bench-table-wrap
+  // has none on its own since it's usually the first thing in its section.
+  .bench-table-wrap {
+    margin-top: $spacing-sm;
+  }
+}
+
+// Used where a .bench-details sits directly under a section divider
+// (.bench-border-t) instead of standing as its own boxed panel.
+.bench-details-flat {
+  border-radius: 0;
+  padding-top: 1.25rem;
 }
 
 .bench-limitations {
@@ -639,82 +648,125 @@
   display: block;
 }
 
-.bench-ratio-row {
+// ── Quartile widget ──────────────────────────────────────────
+
+.bench-quartile {
+  margin-top: $spacing-lg;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $border-color;
+
+  h3 {
+    margin: 0 0 $spacing-xs;
+  }
+}
+
+.bench-quartile-grid {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr) 150px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: $spacing-md;
-  padding: $spacing-sm 0;
-  border-bottom: 1px solid $border-color;
+}
 
-  @media (max-width: $mobile) {
-    grid-template-columns: 1fr;
+.bench-quartile-item {
+  text-align: center;
+}
+
+.bench-quartile-species {
+  font-weight: 600;
+  margin-bottom: $spacing-xs * 0.5;
+}
+
+// ── Diagnostics widget (data completeness + CV distribution) ───
+
+.bench-diagnostics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+// ScatterWidget's side-by-side SynapSpec/DIA-NN panels — same auto-fit
+// breakpoint as .bench-diagnostics-grid, so the pair collapses to one
+// column at the same width the diagnostics grid does.
+.bench-scatter-compare-label {
+  margin: 0 0 $spacing-sm;
+  font-size: $font-size-small;
+  font-weight: 600;
+  color: $text-color-light;
+  text-align: center;
+}
+
+.bench-scatter-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-md;
+}
+
+// Six-panel tool-comparison figure (ComparisonWidget): two rows of three,
+// same flex-gap approach as the stack above.
+.bench-comparison-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.bench-comparison-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $spacing-md;
+}
+
+.bench-diagnostic {
+  margin: 0;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: $spacing-sm;
+
+  figcaption {
+    margin-top: $spacing-xs;
+    text-align: center;
+    font-size: $font-size-small;
+    color: $text-light;
   }
 }
 
-.bench-ratio-species {
-  font-weight: 600;
-}
-
-.bench-ratio-count {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.72rem;
-  font-weight: 400;
-  color: $text-color-light;
-}
-
-.bench-ratio-svg {
-  display: block;
+// Shared sizing for every Plotly chart container on the benchmark pages —
+// Plotly renders at 0 height without an explicit one, and `responsive: true`
+// in baseConfig needs a sized parent to resize into.
+.bench-plotly-target {
   width: 100%;
-  height: auto;
+  min-height: 260px;
+  position: relative;
 }
 
-.bench-ratio-gridline {
-  stroke: $border-color;
+.bench-plotly-target-tall {
+  min-height: 480px;
 }
 
-.bench-ratio-ticklabel {
-  fill: $text-color-light;
-  font-size: 11px;
+// Shown in a .bench-plotly-target while its data is still being fetched
+// (ScatterWidget's point file runs to over a megabyte) — absolutely
+// positioned over the same box the chart will occupy, so nothing shifts
+// once Plotly.newPlot clears it away and draws in its place.
+.bench-plotly-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  color: $text-light;
+  font-size: $font-size-small;
 }
 
-.bench-ratio-band {
-  fill: rgba(16, 106, 158, 0.18);
-  stroke: $primary-color-dark;
-}
+// Plain CSS fade-in for the chart types Plotly can't smoothly animate itself
+// (bar, box, scattergl all redraw instantly — see plotlyTheme.ts). QuartileWidget
+// uses a real Plotly.animate transition instead and skips this class.
+.bench-plotly-fade {
+  opacity: 0;
+  transition: opacity 0.4s ease;
 
-.bench-ratio-target {
-  stroke: $text-color;
-  stroke-width: 2;
-  stroke-dasharray: 4 3;
-}
-
-.bench-ratio-dot {
-  fill: $primary-color;
-  stroke: $background-color;
-  stroke-width: 2;
-}
-
-.bench-ratio-value {
-  text-align: right;
-  font-family: $heading-font;
-  font-size: 1.2rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-
-  @media (max-width: $mobile) {
-    text-align: left;
+  &.is-visible {
+    opacity: 1;
   }
-}
-
-.bench-ratio-value-label {
-  display: block;
-  margin-top: 2px;
-  font-family: $body-font;
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: $text-color-light;
 }
 
 // ── Dataset switcher (index page) ────────────────────────────
@@ -751,40 +803,6 @@
 #dataset-oe480:checked ~ .bench-ds-head .bench-ds-panel-oe480,
 #dataset-astral:checked ~ .bench-ds-head .bench-ds-panel-astral {
   display: inline;
-}
-
-// ── History trend chart ───────────────────────────────────────
-
-.bench-history-chart-wrap {
-  overflow-x: auto;
-  padding: $spacing-md;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-}
-
-.bench-history-svg {
-  display: block;
-  width: 100%;
-  min-width: 600px;
-  height: auto;
-}
-
-.bench-history-gridline {
-  stroke: $border-color;
-}
-
-.bench-history-ticklabel {
-  fill: $text-color-light;
-  font-size: 12px;
-}
-
-// 산점도 버전 — 날짜를 잇는 선 없이 점만 찍는다. 점 사이가 가까울 때도
-// 구분되도록 흰 테두리와 약간의 투명도를 준다.
-.bench-history-dot {
-  fill: $primary-color-dark;
-  fill-opacity: 0.85;
-  stroke: $background-color;
-  stroke-width: 1.5;
 }
 
 // ── Accuracy-vs-depth scatter (ProteoBench 참고) ───────────────
@@ -858,27 +876,45 @@
   &.bench-scatter-dot-spectronaut { background: $viz-3; }
 }
 
-// ── Leaderboard ─────────────────────────────────────────────
-// 메달 색 대신 브랜드 톤 3단계로 순위를 표시한다 — 토큰 밖 색을 새로 안 만든다.
+// ── Run history chart (VersionHistoryWidget) ──────────────────
+// Bars default to SynapSpec only — own track record first. The button below
+// toggles a dashed DIA-NN/Spectronaut reference line via Plotly.relayout,
+// and clicking a bar opens that run's detail page.
 
-.bench-rank-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: $background-color;
-  background: $ink-300;
-
-  &-1 { background: $primary-color; }
-  &-2 { background: $ink-400; }
+.bench-version-chart-block {
+  margin-bottom: $spacing-lg;
 }
 
-.bench-leaderboard-lead {
-  background: $bg-secondary;
+.bench-version-compare-btn {
+  margin-top: $spacing-sm;
+  padding: 6px 14px;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  background: $background-color;
+  font-family: $body-font;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $text-light;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 
-  th { font-weight: 700; }
+  &:hover {
+    border-color: $primary-color;
+  }
+
+  &[aria-pressed="true"] {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $background-color;
+  }
+}
+
+// Plotly's draglayer carries its own `cursor-crosshair` class (from its
+// default "zoom" dragmode) with higher specificity than anything we set on
+// the container via JS. VersionHistoryWidget turns dragmode off — this
+// chart isn't zoomable — but the class still ships with the built-in
+// stylesheet, so neutralize it here and let the container's own cursor
+// (toggled to "pointer" on bar hover) show through instead.
+.bench-version-chart-block .js-plotly-plot .draglayer.cursor-crosshair {
+  cursor: inherit;
 }

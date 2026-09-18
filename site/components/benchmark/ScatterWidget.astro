@@ -1,0 +1,226 @@
+---
+// Native reinterpretation of the third ClearML diagnostic image
+// (lfq_scatter_precursor). One point per precursor with both A and B
+// quantities positive: x = log2(mean quantity in B), y = log2(A/B).
+// Point-level data is too large for benchmark_catalog.json (loaded on every
+// benchmarks page) so it ships as a separate file under public/data/benchmarks/,
+// fetched only on this run's own detail page.
+// Values match instrumentation/parsers/lfq.py's get_lfq_quantification exactly
+// (mean quantity per precursor per condition, log2(B) and log2(A/B)).
+// Marginal histograms from the original image are left out — the ratio and
+// quartile widgets above already cover per-species distribution shape.
+//
+// When this run's dataset has DIA-NN/Spectronaut references (same lookup
+// DiagnosticsWidget uses), each renders as its own side-by-side panel instead
+// of overlaid on the same axes — two or three ~100k-300k-point clouds
+// stacked on one plot would just be noise on noise. Each tool's file is
+// computed the same way, from its own report.parquet run through the same
+// prepare_lfq_dataframe/get_lfq_quantification species+condition logic.
+import catalog from "../../data/benchmark_catalog.json";
+import ledgers from "../../data/benchmark_ledger.json";
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
+const ratios = (entry as { ratio_measurements?: any[] }).ratio_measurements;
+const dataUrl = `/data/benchmarks/scatter-${slug}.json`;
+
+const toolKey = (tool: string) => tool.toLowerCase().replace(/[^a-z]/g, "");
+
+const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
+const extraTools = ["DIA-NN", "Spectronaut"]
+  .map((tool) => {
+    const ref = ledger?.toolReferences.find((r) => r.tool === tool && r.sourceSlug);
+    return ref ? { tool, dataUrl: `/data/benchmarks/scatter-${ref.sourceSlug}.json` } : null;
+  })
+  .filter((t): t is { tool: string; dataUrl: string } => t !== null);
+---
+
+{ratios && (
+  <div class="bench-scatter-compare" data-scatter-url={dataUrl} data-extra-scatter={extraTools.length ? JSON.stringify(extraTools) : ""}>
+    {extraTools.length > 0 && <p class="bench-scatter-compare-label">LFQ precursor scatter</p>}
+    <div class={extraTools.length > 0 ? "bench-scatter-compare-grid" : undefined}>
+      <figure class="bench-diagnostic">
+        <div data-chart="scatter-synapspec" class="bench-plotly-target bench-plotly-target-tall">
+          <div class="bench-plotly-loading">
+            Loading precursor-level data…
+          </div>
+        </div>
+        <figcaption>{extraTools.length > 0 ? "SynapSpec" : "LFQ precursor scatter"}</figcaption>
+      </figure>
+      {extraTools.map((t) => (
+        <figure class="bench-diagnostic">
+          <div data-chart={`scatter-${toolKey(t.tool)}`} class="bench-plotly-target bench-plotly-target-tall">
+            <div class="bench-plotly-loading">
+              Loading precursor-level data…
+            </div>
+          </div>
+          <figcaption>{t.tool}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+)}
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, SPECIES_COLORS, COLORS, whenNearViewport } from "../../lib/plotlyTheme";
+
+  const TARGETS: Record<string, number> = { Human: 0, Yeast: 1, "E. coli": -2 };
+
+  type Cloud = Record<string, { x: number[]; y: number[] }>;
+
+  async function fetchCloud(url: string): Promise<Cloud | null> {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return response.json();
+  }
+
+  // Plain loop instead of Math.min(...arr)/Math.max(...arr) — spreading a
+  // ~300k-element array into a function call can blow the call stack.
+  function extendRange(range: [number, number], values: number[]): [number, number] {
+    let [lo, hi] = range;
+    for (const v of values) {
+      if (v < lo) lo = v;
+      if (v > hi) hi = v;
+    }
+    return [lo, hi];
+  }
+
+  function cloudRanges(clouds: Cloud[]): { x: [number, number]; y: [number, number] } {
+    let x: [number, number] = [Infinity, -Infinity];
+    let y: [number, number] = [Infinity, -Infinity];
+    for (const cloud of clouds) {
+      for (const label of Object.keys(cloud)) {
+        x = extendRange(x, cloud[label].x);
+        y = extendRange(y, cloud[label].y);
+      }
+    }
+    return { x, y };
+  }
+
+  function padRange([lo, hi]: [number, number], fraction: number): [number, number] {
+    const pad = (hi - lo) * fraction;
+    return [lo - pad, hi + pad];
+  }
+
+  function drawScatter(el: HTMLElement, cloud: Cloud, fixedRange?: { x: [number, number]; y: [number, number] }) {
+    const species = Object.keys(cloud);
+
+    const traces = species.map((label) => ({
+      type: "scattergl",
+      mode: "markers",
+      name: label,
+      x: cloud[label].x,
+      y: cloud[label].y,
+      marker: { color: SPECIES_COLORS[label] ?? COLORS.primary, size: 4, opacity: 0.45 },
+      hovertemplate: `${label}<br>log₂(B) %{x:.2f}<br>log₂(A/B) %{y:.2f}<extra></extra>`,
+    }));
+
+    const shapes = species
+      .filter((label) => label in TARGETS)
+      .map((label) => ({
+        type: "line",
+        xref: "paper",
+        x0: 0,
+        x1: 1,
+        yref: "y",
+        y0: TARGETS[label],
+        y1: TARGETS[label],
+        line: { color: SPECIES_COLORS[label] ?? COLORS.text, width: 1, dash: "dot" },
+      }));
+
+    Plotly.newPlot(
+      el,
+      traces,
+      baseLayout({
+        showlegend: true,
+        legend: { orientation: "h", y: -0.2 },
+        xaxis: { ...axisStyle, title: { text: "log₂(mean quantity in B)" }, ...(fixedRange ? { range: fixedRange.x } : {}) },
+        yaxis: { ...axisStyle, title: { text: "log₂(A/B)" }, ...(fixedRange ? { range: fixedRange.y } : {}) },
+        shapes,
+        margin: { t: 10, r: 20, b: 90, l: 60 },
+      }),
+      baseConfig,
+    );
+  }
+
+  // Each of a run's SynapSpec/DIA-NN/Spectronaut point clouds is a
+  // multi-megabyte fetch, and Plotly.newPlot over 100k+ scattergl points
+  // isn't free either — doing that for every panel the instant the page
+  // loads is what made the run-detail page janky. whenNearViewport holds
+  // it off (fetch included) until the user has actually scrolled close to
+  // this section, with enough of a head start (rootMargin) that on a normal
+  // scroll-down read the data's usually already there by the time it's in
+  // view — the loading label is the fallback for a faster scroll, not the
+  // common case.
+  async function loadAndDraw(container: HTMLElement) {
+    const synapspecEl = container.querySelector<HTMLElement>('[data-chart="scatter-synapspec"]');
+    if (!synapspecEl) return;
+
+    const url = container.dataset.scatterUrl!;
+    const extraTools: { tool: string; dataUrl: string }[] = container.dataset.extraScatter
+      ? JSON.parse(container.dataset.extraScatter)
+      : [];
+
+    const panels = extraTools.map((t) => ({
+      tool: t.tool,
+      el: container.querySelector<HTMLElement>(`[data-chart="scatter-${t.tool.toLowerCase().replace(/[^a-z]/g, "")}"]`),
+      url: t.dataUrl,
+    }));
+
+    if (panels.length === 0) {
+      // Single-panel path — no extra tool reference for this dataset.
+      const cloud = await fetchCloud(url);
+      if (!cloud) {
+        synapspecEl.textContent = "Scatter data failed to load.";
+        return;
+      }
+      synapspecEl.querySelector(".bench-plotly-loading")?.remove();
+      drawScatter(synapspecEl, cloud);
+      return;
+    }
+
+    const [synapspecCloud, ...extraClouds] = await Promise.all([fetchCloud(url), ...panels.map((p) => fetchCloud(p.url))]);
+
+    // Loading indicators come off as each side resolves, independently — one
+    // tool's data shouldn't sit behind a "loading" label just because
+    // another tool's (much larger, for some) file is still downloading.
+    if (synapspecCloud) synapspecEl.querySelector(".bench-plotly-loading")?.remove();
+    panels.forEach((p, i) => {
+      if (extraClouds[i] && p.el) p.el.querySelector(".bench-plotly-loading")?.remove();
+    });
+
+    const allLoaded = synapspecCloud && extraClouds.every((c) => c);
+    if (!allLoaded) {
+      if (!synapspecCloud) synapspecEl.textContent = "Scatter data failed to load.";
+      panels.forEach((p, i) => {
+        if (!extraClouds[i] && p.el) p.el.textContent = "Scatter data failed to load.";
+      });
+      // Fall back to whichever side(s) did load, each with its own auto-ranged axes.
+      if (synapspecCloud) drawScatter(synapspecEl, synapspecCloud);
+      panels.forEach((p, i) => {
+        if (extraClouds[i] && p.el) drawScatter(p.el, extraClouds[i]!);
+      });
+      return;
+    }
+
+    // Same axis range on every panel — otherwise a tighter or wider cloud on
+    // one side reads as "more/less spread" when it's really just a
+    // different auto-range, and the whole point of the side-by-side is a
+    // fair visual comparison.
+    const ranges = cloudRanges([synapspecCloud, ...extraClouds] as Cloud[]);
+    const fixedRange = { x: padRange(ranges.x, 0.04), y: padRange(ranges.y, 0.04) };
+
+    drawScatter(synapspecEl, synapspecCloud, fixedRange);
+    panels.forEach((p, i) => {
+      if (p.el) drawScatter(p.el, extraClouds[i]!, fixedRange);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach((container) => {
+    whenNearViewport(container, () => loadAndDraw(container));
+  });
+</script>

@@ -1,7 +1,7 @@
 ---
 // spectralens/index.md를 옮긴 것.
 import SpectralensLayout from "../../layouts/SpectralensLayout.astro";
-import Icon from "../../components/Icon.astro";
+import { ICONS } from "../../lib/icons";
 import product from "../../data/spectralens.json";
 
 const description =
@@ -56,13 +56,16 @@ const description =
         </p>
       </div>
       <div class="services-grid">
-        {product.features.map((feature) => (
-          <article class="card">
-            <div class="card-icon"><Icon name={feature.icon} /></div>
-            <h3>{feature.title}</h3>
-            <p>{feature.text}</p>
-          </article>
-        ))}
+        {product.features.map((feature) => {
+          const FeatureIcon = ICONS[feature.icon as keyof typeof ICONS];
+          return (
+            <article class="card">
+              <div class="card-icon"><FeatureIcon size={20} class="icon" /></div>
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
+            </article>
+          );
+        })}
       </div>
     </section>
 

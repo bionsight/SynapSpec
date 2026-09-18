@@ -10,36 +10,14 @@ test.describe("benchmarks index", () => {
     await page.locator('label[for="dataset-astral"]').click();
     await expect(page.locator("#dataset-astral")).toBeChecked();
     // 라디오 상태는 바뀌지만 두 패널 다 DOM에는 있다 — 보이는 건 CSS다.
-    await expect(page.locator(".bench-ds-panel-astral .bench-table-wrap")).toBeVisible();
+    await expect(page.locator(".bench-ds-panel-astral .bench-version-chart-block")).toBeVisible();
   });
 
-  test("run history rows link to a run detail page", async ({ page }) => {
+  test("clicking a run history bar opens that run's detail page", async ({ page }) => {
     await page.goto("/benchmarks/");
-    const link = page.locator(".bench-ds-panel-oe480 .bench-table-wrap a").first();
-    await expect(link).toHaveAttribute("href", /^\/benchmarks\//);
-  });
-});
-
-test.describe("leaderboard", () => {
-  test("ranks tools by median epsilon within each dataset", async ({ page }) => {
-    await page.goto("/benchmarks/leaderboard/");
-    await expect(page.locator("h1")).toHaveText("LFQBench leaderboard");
-    const oe480Rows = page.locator("#oe480 tbody tr");
-    await expect(oe480Rows).toHaveCount(3);
-    // OE480: DIA-NN(0.176) < SynapSpec(0.185) < Spectronaut(0.329)
-    await expect(oe480Rows.nth(0)).toContainText("DIA-NN");
-    await expect(oe480Rows.nth(0).locator(".bench-rank-badge")).toHaveText("1");
-    await expect(oe480Rows.nth(0)).toHaveClass(/bench-leaderboard-lead/);
-  });
-});
-
-test.describe("history", () => {
-  test("plots every archived run and lists them newest-first", async ({ page }) => {
-    await page.goto("/benchmarks/history/");
-    await expect(page.locator("h1")).toHaveText(/LFQBench/);
-    await expect(page.locator(".bench-history-dot")).toHaveCount(18);
-    const firstRow = page.locator(".bench-table-wrap tbody tr").first();
-    await expect(firstRow).toContainText("2026-07-22"); // 가장 최근 날짜가 맨 위(내림차순)
+    const bar = page.locator(".bench-ds-panel-oe480 .bench-version-chart-block .point path").first();
+    await bar.click();
+    await expect(page).toHaveURL(/\/benchmarks\/[^/]+\/$/);
   });
 });
 

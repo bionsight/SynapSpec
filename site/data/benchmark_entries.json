@@ -12,5 +12,7 @@
   { "kind": "recorded", "slug": "pxd028735-v0.12.4", "title": "PXD028735 / SynapSpec v0.12.4" },
   { "kind": "recorded", "slug": "proteobench-v0.9.2", "title": "ProteoBench 2 Th / SynapSpec v0.9.2" },
   { "kind": "recorded", "slug": "proteobench-v0.11.0", "title": "ProteoBench 2 Th / SynapSpec v0.11.0" },
-  { "kind": "recorded", "slug": "proteobench-v0.12.4", "title": "ProteoBench 2 Th / SynapSpec v0.12.4" }
+  { "kind": "recorded", "slug": "proteobench-v0.12.4", "title": "ProteoBench 2 Th / SynapSpec v0.12.4" },
+  { "kind": "imported", "slug": "pxd028735-diann", "title": "PXD028735 / DIA-NN" },
+  { "kind": "imported", "slug": "proteobench-2th-astral-diann", "title": "ProteoBench 2 Th / DIA-NN" }
 ]
