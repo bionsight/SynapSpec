@@ -3282,5 +3282,311 @@
         }
       }
     }
+  },
+  "tool_ratios": {
+    "pxd028735-diann": [
+      {
+        "species": "Human",
+        "count": 59549,
+        "count_display": "59,549",
+        "target": 0.0,
+        "median": -0.09501935449310414,
+        "lower": -0.3249549163358978,
+        "upper": 0.045497388245268985,
+        "measured_ratio_display": "0.936×",
+        "deviation_percent": -6.4
+      },
+      {
+        "species": "E. coli",
+        "count": 2506,
+        "count_display": "2,506",
+        "target": -2.0,
+        "median": -2.079240369994793,
+        "lower": -2.4374905194565923,
+        "upper": -1.8541232027410537,
+        "measured_ratio_display": "0.237×",
+        "deviation_percent": -5.3
+      },
+      {
+        "species": "Yeast",
+        "count": 16493,
+        "count_display": "16,493",
+        "target": 1.0,
+        "median": 1.0712426990551458,
+        "lower": 0.8764896866913799,
+        "upper": 1.305847308673635,
+        "measured_ratio_display": "2.101×",
+        "deviation_percent": 5.1
+      }
+    ],
+    "proteobench-2th-astral-diann": [
+      {
+        "species": "Human",
+        "count": 196821,
+        "count_display": "196,821",
+        "target": 0.0,
+        "median": -0.05109918891923635,
+        "lower": -0.1589467983932202,
+        "upper": 0.06024107344853436,
+        "measured_ratio_display": "0.965×",
+        "deviation_percent": -3.5
+      },
+      {
+        "species": "E. coli",
+        "count": 18321,
+        "count_display": "18,321",
+        "target": -2.0,
+        "median": -1.847573874063218,
+        "lower": -2.012934407535233,
+        "upper": -1.5590132614262537,
+        "measured_ratio_display": "0.278×",
+        "deviation_percent": 11.1
+      },
+      {
+        "species": "Yeast",
+        "count": 54601,
+        "count_display": "54,601",
+        "target": 1.0,
+        "median": 0.8715631259928165,
+        "lower": 0.6855552279907047,
+        "upper": 1.0037827822906726,
+        "measured_ratio_display": "1.830×",
+        "deviation_percent": -8.5
+      }
+    ]
+  },
+  "tool_quartiles": {
+    "pxd028735-diann": [
+      {
+        "species": "Human",
+        "target": 0.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -0.05606880733062088,
+            "lower": -0.32919590151459155,
+            "upper": 0.18826186531410988,
+            "count": 14887,
+            "count_display": "14,887"
+          },
+          {
+            "quartile": "Q2",
+            "median": -0.09895985543408335,
+            "lower": -0.3570134020171418,
+            "upper": 0.08830769599291236,
+            "count": 14887,
+            "count_display": "14,887"
+          },
+          {
+            "quartile": "Q3",
+            "median": -0.11390184969260264,
+            "lower": -0.3438120430740204,
+            "upper": 0.01574758164012149,
+            "count": 14887,
+            "count_display": "14,887"
+          },
+          {
+            "quartile": "Q4",
+            "median": -0.09556529631903771,
+            "lower": -0.25112833866731316,
+            "upper": -0.01942291590777236,
+            "count": 14888,
+            "count_display": "14,888"
+          }
+        ]
+      },
+      {
+        "species": "E. coli",
+        "target": -2.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -2.0672827814646038,
+            "lower": -2.5482624331851187,
+            "upper": -1.458709539962846,
+            "count": 627,
+            "count_display": "627"
+          },
+          {
+            "quartile": "Q2",
+            "median": -2.1596474126475034,
+            "lower": -2.5506351941412535,
+            "upper": -1.8143554063263814,
+            "count": 626,
+            "count_display": "626"
+          },
+          {
+            "quartile": "Q3",
+            "median": -2.140529423407428,
+            "lower": -2.4681590341747905,
+            "upper": -1.9146171370538996,
+            "count": 626,
+            "count_display": "626"
+          },
+          {
+            "quartile": "Q4",
+            "median": -2.032517251755664,
+            "lower": -2.180315110572991,
+            "upper": -1.9219443472528268,
+            "count": 627,
+            "count_display": "627"
+          }
+        ]
+      },
+      {
+        "species": "Yeast",
+        "target": 1.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 1.3052404426121387,
+            "lower": 0.9400877143620314,
+            "upper": 1.6247556630422515,
+            "count": 4123,
+            "count_display": "4,123"
+          },
+          {
+            "quartile": "Q2",
+            "median": 1.1181401190025257,
+            "lower": 0.8271537386262644,
+            "upper": 1.367806779320484,
+            "count": 4123,
+            "count_display": "4,123"
+          },
+          {
+            "quartile": "Q3",
+            "median": 1.053717947126352,
+            "lower": 0.860953772680523,
+            "upper": 1.2138921226210382,
+            "count": 4123,
+            "count_display": "4,123"
+          },
+          {
+            "quartile": "Q4",
+            "median": 1.0103050260908801,
+            "lower": 0.8856863191718953,
+            "upper": 1.0877522689719794,
+            "count": 4124,
+            "count_display": "4,124"
+          }
+        ]
+      }
+    ],
+    "proteobench-2th-astral-diann": [
+      {
+        "species": "Human",
+        "target": 0.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -0.015608749008917655,
+            "lower": -0.22538403480124833,
+            "upper": 0.19156877459538957,
+            "count": 49205,
+            "count_display": "49,205"
+          },
+          {
+            "quartile": "Q2",
+            "median": -0.04932753140792091,
+            "lower": -0.18379160669426556,
+            "upper": 0.0812449747191963,
+            "count": 49205,
+            "count_display": "49,205"
+          },
+          {
+            "quartile": "Q3",
+            "median": -0.05546307696340403,
+            "lower": -0.1512866196765958,
+            "upper": 0.036480011822676656,
+            "count": 49205,
+            "count_display": "49,205"
+          },
+          {
+            "quartile": "Q4",
+            "median": -0.059353310652284316,
+            "lower": -0.12186276589499032,
+            "upper": 0.0021201483461237725,
+            "count": 49206,
+            "count_display": "49,206"
+          }
+        ]
+      },
+      {
+        "species": "E. coli",
+        "target": -2.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -1.639635943072829,
+            "lower": -1.9758603618538648,
+            "upper": -1.2280621643525027,
+            "count": 4580,
+            "count_display": "4,580"
+          },
+          {
+            "quartile": "Q2",
+            "median": -1.7401165444867188,
+            "lower": -1.977124520190682,
+            "upper": -1.4466378375733135,
+            "count": 4580,
+            "count_display": "4,580"
+          },
+          {
+            "quartile": "Q3",
+            "median": -1.8658439026950233,
+            "lower": -2.0111896496593054,
+            "upper": -1.663454176369265,
+            "count": 4580,
+            "count_display": "4,580"
+          },
+          {
+            "quartile": "Q4",
+            "median": -1.9454190311169053,
+            "lower": -2.0380746037799797,
+            "upper": -1.8418948487363014,
+            "count": 4581,
+            "count_display": "4,581"
+          }
+        ]
+      },
+      {
+        "species": "Yeast",
+        "target": 1.0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 0.8886085591510868,
+            "lower": 0.621946771886815,
+            "upper": 1.1284888871757166,
+            "count": 13650,
+            "count_display": "13,650"
+          },
+          {
+            "quartile": "Q2",
+            "median": 0.8211072842533236,
+            "lower": 0.6113153948570429,
+            "upper": 0.9924228320379926,
+            "count": 13650,
+            "count_display": "13,650"
+          },
+          {
+            "quartile": "Q3",
+            "median": 0.8461909237193972,
+            "lower": 0.6727277026533228,
+            "upper": 0.9731165716723155,
+            "count": 13650,
+            "count_display": "13,650"
+          },
+          {
+            "quartile": "Q4",
+            "median": 0.9054256606049065,
+            "lower": 0.8147763595421651,
+            "upper": 0.9810165927913652,
+            "count": 13651,
+            "count_display": "13,651"
+          }
+        ]
+      }
+    ]
   }
 }
