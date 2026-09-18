@@ -39,7 +39,7 @@ const [oe480, astral] = ledgers;
             <div class="section-header">
               <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
             </div>
-            <p class="bench-axis-note" style="text-align: left;"><a href={`/benchmarks/${ledger.id}/`} class="bench-link">Run details &amp; source</a></p>
+            <p class="bench-axis-note bench-axis-note-left"><a href={`/benchmarks/${ledger.id}/`} class="bench-link">Run details &amp; source</a></p>
             <ComparisonWidget slug={ledger.id} />
           </section>
 
@@ -50,7 +50,7 @@ const [oe480, astral] = ledgers;
             <VersionHistoryWidget rows={ledger.rows} toolReferences={ledger.toolReferences} />
           </section>
 
-          <details class="bench-details bench-border-t" style="border-top: 1px solid var(--bench-border, #e2e2e2); border-radius: 0; padding-top: 1.25rem;">
+          <details class="bench-details bench-border-t bench-details-flat">
             <summary>Fixed input-file list</summary>
             <ul class="bench-file-list">{ledger.files.map((file) => <li>{file}</li>)}</ul>
           </details>

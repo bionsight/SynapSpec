@@ -156,7 +156,7 @@ const shortLabel = (label: string) => label.replace(/\s*\(.*\)$/, "");
 
   <details class="bench-details">
     <summary>Input files and per-file IDs</summary>
-    <div class="bench-table-wrap" style="margin-top: 1rem;">
+    <div class="bench-table-wrap">
       <table class="bench-table">
         <thead>
           <tr><th>Input stem</th>{record.tools.map((tool) => <th>{shortLabel(tool.label)}</th>)}</tr>

@@ -136,6 +136,12 @@
   text-align: center;
 }
 
+// Used where the note sits next to/under a left-aligned heading or link
+// instead of standing alone under a centered chart.
+.bench-axis-note-left {
+  text-align: left;
+}
+
 // ── Depth stats ─────────────────────────────────────────────
 
 .bench-stats {
@@ -539,6 +545,19 @@
     margin: $spacing-xs 0 0;
     color: $text-light;
   }
+
+  // A table right after <summary> needs its own top gap — .bench-table-wrap
+  // has none on its own since it's usually the first thing in its section.
+  .bench-table-wrap {
+    margin-top: $spacing-sm;
+  }
+}
+
+// Used where a .bench-details sits directly under a section divider
+// (.bench-border-t) instead of standing as its own boxed panel.
+.bench-details-flat {
+  border-radius: 0;
+  padding-top: 1.25rem;
 }
 
 .bench-limitations {
