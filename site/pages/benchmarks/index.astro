@@ -47,7 +47,7 @@ const [oe480, astral] = ledgers;
             <div class="section-header bench-section-wide">
               <h2>Run history</h2>
             </div>
-            <VersionHistoryWidget rows={ledger.rows} toolReferences={ledger.toolReferences} />
+            <VersionHistoryWidget id={ledger.id} rows={ledger.rows} toolReferences={ledger.toolReferences} />
           </section>
 
           <details class="bench-details bench-border-t" style="border-top: 1px solid var(--bench-border, #e2e2e2); border-radius: 0; padding-top: 1.25rem;">

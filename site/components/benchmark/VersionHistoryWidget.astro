@@ -1,12 +1,14 @@
 ---
-// Replaces the old Run history table (then a bar chart, then stat cards) for
-// `benchmarks/index.astro`. Landed back on a table — this reads as a
-// leaderboard more naturally than cards do at three rows, and stays compact
-// if more releases get added later. Only difference from a plain table: the
-// DIA-NN/Spectronaut comparison isn't a column (it'd be "—" in every row but
-// one). It's a speech-bubble tooltip anchored to the precursor count,
-// revealed on hover of that count (or focus of the row, for keyboard) —
-// pure CSS, no JS.
+// Run history for `benchmarks/index.astro`: a table of SynapSpec's own
+// precursor counts by release (reads as a leaderboard, stays compact as
+// releases accumulate) plus an opt-in chart above it. The chart defaults to
+// SynapSpec-only bars — same "own track record first" reasoning as the
+// table — and a <select> lets the visitor overlay a DIA-NN/Spectronaut
+// reference line on demand, redrawn via Plotly.relayout on `change`
+// (same dashed-line-plus-label shapes/annotations ComparisonWidget's ratio
+// charts use for "Expected"). The table's precursor value also carries a
+// speech-bubble tooltip on hover/focus for a comparison at a glance without
+// touching the select.
 interface Row {
   date: string | null;
   label: string;
@@ -25,28 +27,43 @@ interface ToolReference {
   sourceSlug: string | null;
 }
 interface Props {
+  id: string;
   rows: Row[];
   toolReferences: ToolReference[];
 }
-const { rows, toolReferences } = Astro.props;
+const { id, rows, toolReferences } = Astro.props;
 
-const references = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string } => ref.value !== null);
+const usableReferences = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string } => ref.value !== null);
+const selectId = `bench-compare-select-${id}`;
 ---
+
+<div class="bench-version-chart-block" data-rows={JSON.stringify(rows)} data-references={JSON.stringify(toolReferences)}>
+  <div class="bench-version-chart-controls">
+    <label for={selectId}>Compare with</label>
+    <select id={selectId} class="bench-version-select" data-compare-select>
+      <option value="">SynapSpec only</option>
+      {toolReferences.map((ref) => (
+        <option value={ref.tool} disabled={ref.value === null}>{ref.tool}{ref.value === null ? " (no run recorded)" : ""}</option>
+      ))}
+    </select>
+  </div>
+  <div data-chart="versions" class="bench-plotly-target bench-plotly-fade"></div>
+</div>
 
 <table class="bench-table bench-version-table">
   <thead>
-    <tr><th>Release</th><th class="num">SynapSpec precursor IDs</th></tr>
+    <tr><th>Release</th><th class="bench-version-table-value">SynapSpec precursor IDs</th></tr>
   </thead>
   <tbody>
     {rows.map((row) => (
       <tr>
         <th scope="row"><a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date ?? "Undated"}</a></th>
-        <td class="num">
+        <td class="bench-version-table-value">
           <span class="bench-version-value-wrap">
             {row.counts_display[0] ?? "—"}
-            {references.length > 0 && (
+            {usableReferences.length > 0 && (
               <span class="bench-version-compare" role="tooltip">
-                {references.map((ref, i) => (
+                {usableReferences.map((ref, i) => (
                   <>
                     {i > 0 && " · "}
                     <span class={`bench-tool bench-tool-${ref.tool.toLowerCase().replace(/[^a-z]/g, "")}`}>{ref.tool} {ref.display}</span>
@@ -60,3 +77,97 @@ const references = toolReferences.filter((ref): ref is ToolReference & { value: 
     ))}
   </tbody>
 </table>
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
+
+  const toolColor = (tool: string) => TOOL_COLORS[tool.toLowerCase().replace(/[^a-z]/g, "")] ?? COLORS.textLight;
+
+  document.querySelectorAll<HTMLElement>("[data-rows]").forEach((container) => {
+    const rows: any[] = JSON.parse(container.dataset.rows!);
+    const references: any[] = JSON.parse(container.dataset.references!);
+    const el = container.querySelector<HTMLElement>('[data-chart="versions"]');
+    const select = container.querySelector<HTMLSelectElement>("[data-compare-select]");
+    if (!el) return;
+
+    // Rows arrive newest-first (for the table); the chart reads left-to-right
+    // as a timeline, so oldest first.
+    const chartRows = [...rows].reverse();
+    const labels = chartRows.map((r) => r.release_version ?? r.date ?? "—");
+    const values = chartRows.map((r) => r.counts[0]);
+    const displays = chartRows.map((r) => r.counts_display[0]);
+    const customdata = chartRows.map((r) => [
+      r.date ?? "—",
+      r.runtime ? `${Math.round(r.runtime * 100) / 100} h` : "—",
+      r.resource ?? "—",
+    ]);
+
+    const usableRefs = references.filter((r) => r.value !== null);
+    // Headroom reserved for the tallest possible reference line up front, so
+    // picking a tool from the select doesn't rescale the y-axis under it.
+    const allValues = [...values, ...usableRefs.map((r) => r.value)].filter((v) => typeof v === "number");
+    const maxVal = Math.max(...allValues, 0);
+    const yMax = maxVal * 1.2;
+
+    const shapesFor = (tool: string) => {
+      const ref = usableRefs.find((r) => r.tool === tool);
+      if (!ref) return { shapes: [], annotations: [] };
+      return {
+        shapes: [
+          {
+            type: "line",
+            xref: "paper",
+            x0: 0,
+            x1: 1,
+            yref: "y",
+            y0: ref.value,
+            y1: ref.value,
+            line: { color: toolColor(ref.tool), width: 1.5, dash: "dash" },
+          },
+        ],
+        annotations: [
+          {
+            x: 0,
+            xref: "paper",
+            xanchor: "left",
+            y: ref.value,
+            text: `${ref.tool} ${ref.display}`,
+            showarrow: false,
+            yshift: 10,
+            font: { size: 11, color: toolColor(ref.tool) },
+          },
+        ],
+      };
+    };
+
+    drawWhenVisible(el, () => {
+      Plotly.newPlot(
+        el,
+        [
+          {
+            type: "bar",
+            x: labels,
+            y: values,
+            text: displays,
+            textposition: "outside",
+            customdata,
+            marker: { color: TOOL_COLORS.synapspec },
+            hovertemplate: "%{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
+          },
+        ],
+        baseLayout({
+          xaxis: { ...axisStyle, title: { text: "SynapSpec release" }, showgrid: false },
+          yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
+        }),
+        baseConfig,
+      ).then(() => {
+        el.classList.add("is-visible");
+        select?.addEventListener("change", () => {
+          const { shapes, annotations } = shapesFor(select.value);
+          Plotly.relayout(el, { shapes, annotations });
+        });
+      });
+    });
+  });
+</script>

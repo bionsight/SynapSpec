@@ -965,3 +965,39 @@
   &.bench-tool-diann { color: $viz-2; }
   &.bench-tool-spectronaut { color: $viz-3; }
 }
+
+// .bench-table th/td already set text-align: left at equal specificity
+// (.bench-table td) — th.foo/td.foo ties it and wins on source order, but
+// pin it explicitly so this doesn't depend on where this rule sits in the file.
+.bench-version-table th.bench-version-table-value,
+.bench-version-table td.bench-version-table-value {
+  text-align: center;
+}
+
+// ── Run history chart + compare select (VersionHistoryWidget) ─
+// Bars default to SynapSpec only — same "own track record first" reasoning
+// as the table below it. The select adds a DIA-NN/Spectronaut reference
+// line via Plotly.relayout on change, so nothing redraws from scratch.
+
+.bench-version-chart-block {
+  margin-bottom: $spacing-lg;
+}
+
+.bench-version-chart-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-sm;
+  font-size: $font-size-small;
+  color: $text-light;
+}
+
+.bench-version-select {
+  padding: 4px 8px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  background: $background-color;
+  color: $text-color;
+  font-family: $body-font;
+  font-size: $font-size-small;
+}
