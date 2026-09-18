@@ -20,6 +20,14 @@ sitemap.xml 에도 포함돼 있었다. 또한 이 저장소는 public 이므로
 벤치마크 수치와 내부 ClearML 프로젝트 경로(`DeepMSFlow/lfq/astral`)가 남아 있다.
 자격증명과 내부 호스트명은 커밋되지 않았다.
 
+**2026-09-18: `/benchmarks/leaderboard/` 페이지를 지웠다.** 도구별 순위표라
+OE480에서 SynapSpec이 2위(DIA-NN보다 낮은 정확도), Astral에서도 2위
+(Spectronaut보다 낮은 정확도)로 나왔는데, 회사 포지셔닝과 맞지 않는다는
+판단이었다. 근거 데이터(`benchmark_comparisons.json`,
+`benchmark_comparison_scatter.json`)는 그대로 남아 있고 `ComparisonBenchmark.astro`의
+"Accuracy vs. depth" 차트에서 계속 쓴다 — 지워진 건 그 데이터를 등수로 요약해
+보여주던 페이지 하나뿐이다.
+
 ## TODO
 
 ### 1. 공개 전환 (팀장 승인 후)

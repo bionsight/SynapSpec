@@ -904,28 +904,3 @@
   &.bench-scatter-dot-diann { background: $viz-2; }
   &.bench-scatter-dot-spectronaut { background: $viz-3; }
 }
-
-// ── Leaderboard ─────────────────────────────────────────────
-// 메달 색 대신 브랜드 톤 3단계로 순위를 표시한다 — 토큰 밖 색을 새로 안 만든다.
-
-.bench-rank-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: $background-color;
-  background: $ink-300;
-
-  &-1 { background: $primary-color; }
-  &-2 { background: $ink-400; }
-}
-
-.bench-leaderboard-lead {
-  background: $bg-secondary;
-
-  th { font-weight: 700; }
-}

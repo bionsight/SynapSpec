@@ -15,21 +15,8 @@ test.describe("benchmarks index", () => {
 
   test("run history rows link to a run detail page", async ({ page }) => {
     await page.goto("/benchmarks/");
-    const link = page.locator(".bench-ds-panel-oe480 .bench-table-wrap a").first();
+    const link = page.locator(".bench-ds-panel-oe480 .bench-version-history a").first();
     await expect(link).toHaveAttribute("href", /^\/benchmarks\//);
-  });
-});
-
-test.describe("leaderboard", () => {
-  test("ranks tools by median epsilon within each dataset", async ({ page }) => {
-    await page.goto("/benchmarks/leaderboard/");
-    await expect(page.locator("h1")).toHaveText("LFQBench leaderboard");
-    const oe480Rows = page.locator("#oe480 tbody tr");
-    await expect(oe480Rows).toHaveCount(3);
-    // OE480: DIA-NN(0.176) < SynapSpec(0.185) < Spectronaut(0.329)
-    await expect(oe480Rows.nth(0)).toContainText("DIA-NN");
-    await expect(oe480Rows.nth(0).locator(".bench-rank-badge")).toHaveText("1");
-    await expect(oe480Rows.nth(0)).toHaveClass(/bench-leaderboard-lead/);
   });
 });
 
