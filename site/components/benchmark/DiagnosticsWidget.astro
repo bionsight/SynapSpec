@@ -6,10 +6,17 @@
 // Values are recomputed from the run's own precursors.parquet, using the same
 // pivot/CV logic as instrumentation/parsers/distribution.py (get_cv_df).
 //
+// When this run's dataset has a DIA-NN reference (benchmark_ledger.json's
+// toolReferences), both charts add DIA-NN as a second series — computed the
+// same way, from DIA-NN's own report.parquet, via preprocess.py's column
+// mapping + the same get_cv_df/get_detection_frequency_df logic — so it's a
+// like-for-like comparison, not just SynapSpec's own numbers restyled.
+//
 // Data crosses the server/client boundary as a JSON string in a data-*
 // attribute (not `<script define:vars>` — Astro always inlines those scripts,
 // which drops npm-package and TS imports; see docs/client-side-scripts).
 import catalog from "../../data/benchmark_catalog.json";
+import ledgers from "../../data/benchmark_ledger.json";
 
 interface Props {
   slug: string;
@@ -17,10 +24,20 @@ interface Props {
 const { slug } = Astro.props;
 const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const diagnostics = (entry as { diagnostics?: any }).diagnostics;
+
+const ledger = ledgers.find((l) => l.rows.some((r) => r.sourceSlug === slug));
+const diannRef = ledger?.toolReferences.find((r) => r.tool === "DIA-NN" && r.sourceSlug);
+const diannDiagnostics = diannRef
+  ? (catalog as { tool_diagnostics?: Record<string, any> }).tool_diagnostics?.[diannRef.sourceSlug as string]
+  : undefined;
 ---
 
 {diagnostics && (
-  <div class="bench-diagnostics-grid" data-diagnostics={JSON.stringify(diagnostics)}>
+  <div
+    class="bench-diagnostics-grid"
+    data-diagnostics={JSON.stringify(diagnostics)}
+    data-diann-diagnostics={diannDiagnostics ? JSON.stringify(diannDiagnostics) : ""}
+  >
     <figure class="bench-diagnostic">
       <div data-chart="completeness" class="bench-plotly-target bench-plotly-fade"></div>
       <figcaption>Data completeness</figcaption>
@@ -34,31 +51,61 @@ const diagnostics = (entry as { diagnostics?: any }).diagnostics;
 
 <script>
   import Plotly from "plotly.js-cartesian-dist-min";
-  import { baseLayout, axisStyle, baseConfig, COLORS } from "../../lib/plotlyTheme";
+  import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS } from "../../lib/plotlyTheme";
+
+  // DIA-NN's box fill needs the same "light tint of the line color" look
+  // SynapSpec's box already has (COLORS.primaryLight next to primaryDark) —
+  // there's no separate light token per tool, so tint TOOL_COLORS.diann here.
+  const withAlpha = (hex: string, alpha: number) => {
+    const n = parseInt(hex.slice(1), 16);
+    const r = (n >> 16) & 255;
+    const g = (n >> 8) & 255;
+    const b = n & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
 
   document.querySelectorAll<HTMLElement>("[data-diagnostics]").forEach((container) => {
     const diagnostics = JSON.parse(container.dataset.diagnostics!);
+    const diannDiagnostics = container.dataset.diannDiagnostics ? JSON.parse(container.dataset.diannDiagnostics) : null;
     const completenessEl = container.querySelector<HTMLElement>('[data-chart="completeness"]');
     const cvEl = container.querySelector<HTMLElement>('[data-chart="cv"]');
     if (!completenessEl || !cvEl) return;
 
     const completeness = diagnostics.data_completeness;
+    const completenessTraces: any[] = [
+      {
+        type: "bar",
+        name: "SynapSpec",
+        x: completeness.bars.map((b: any) => String(b.n)),
+        y: completeness.bars.map((b: any) => b.count),
+        text: completeness.bars.map((b: any) => b.count_display),
+        textposition: "outside",
+        marker: { color: TOOL_COLORS.synapspec },
+        hovertemplate: "SynapSpec<br>Detected in %{x} file(s)<br>%{y:,} precursors<extra></extra>",
+      },
+    ];
+    if (diannDiagnostics) {
+      const dc = diannDiagnostics.data_completeness;
+      completenessTraces.push({
+        type: "bar",
+        name: "DIA-NN",
+        x: dc.bars.map((b: any) => String(b.n)),
+        y: dc.bars.map((b: any) => b.count),
+        text: dc.bars.map((b: any) => b.count_display),
+        textposition: "outside",
+        marker: { color: TOOL_COLORS.diann },
+        hovertemplate: "DIA-NN<br>Detected in %{x} file(s)<br>%{y:,} precursors<extra></extra>",
+      });
+    }
     Plotly.newPlot(
       completenessEl,
-      [
-        {
-          type: "bar",
-          x: completeness.bars.map((b: any) => String(b.n)),
-          y: completeness.bars.map((b: any) => b.count),
-          text: completeness.bars.map((b: any) => b.count_display),
-          textposition: "outside",
-          marker: { color: COLORS.primary },
-          hovertemplate: "Detected in %{x} file(s)<br>%{y:,} precursors<extra></extra>",
-        },
-      ],
+      completenessTraces,
       baseLayout({
         xaxis: { ...axisStyle, title: { text: "Detected in N files" }, showgrid: false },
         yaxis: { ...axisStyle, title: { text: "Precursor count" } },
+        ...(diannDiagnostics
+          ? { barmode: "group", showlegend: true, legend: { orientation: "h", x: 0, y: 1.15 }, margin: { t: 34, r: 20, b: 40, l: 50 } }
+          : {}),
       }),
       baseConfig,
     ).then(() => completenessEl.classList.add("is-visible"));
@@ -68,37 +115,67 @@ const diagnostics = (entry as { diagnostics?: any }).diagnostics;
       { key: "precursor", label: "Precursor" },
       { key: "protein", label: "Protein" },
     ];
+    const cvTraces: any[] = [
+      {
+        type: "box",
+        name: "SynapSpec",
+        x: items.map((i) => i.label),
+        q1: items.map((i) => cv[i.key].p25),
+        median: items.map((i) => cv[i.key].median),
+        q3: items.map((i) => cv[i.key].p75),
+        lowerfence: items.map((i) => cv[i.key].p5),
+        upperfence: items.map((i) => cv[i.key].p95),
+        text: items.map((i) => cv[i.key].median_display),
+        marker: { color: COLORS.primary },
+        fillcolor: COLORS.primaryLight,
+        line: { color: COLORS.primaryDark },
+        boxpoints: false,
+        hovertemplate: "SynapSpec %{x}<br>median CV %{text}<extra></extra>",
+      },
+    ];
+    if (diannDiagnostics) {
+      const cv2 = diannDiagnostics.cv_distribution;
+      cvTraces.push({
+        type: "box",
+        name: "DIA-NN",
+        x: items.map((i) => i.label),
+        q1: items.map((i) => cv2[i.key].p25),
+        median: items.map((i) => cv2[i.key].median),
+        q3: items.map((i) => cv2[i.key].p75),
+        lowerfence: items.map((i) => cv2[i.key].p5),
+        upperfence: items.map((i) => cv2[i.key].p95),
+        text: items.map((i) => cv2[i.key].median_display),
+        marker: { color: TOOL_COLORS.diann },
+        fillcolor: withAlpha(TOOL_COLORS.diann, 0.3),
+        line: { color: TOOL_COLORS.diann },
+        boxpoints: false,
+        hovertemplate: "DIA-NN %{x}<br>median CV %{text}<extra></extra>",
+      });
+    }
     Plotly.newPlot(
       cvEl,
-      [
-        {
-          type: "box",
-          x: items.map((i) => i.label),
-          q1: items.map((i) => cv[i.key].p25),
-          median: items.map((i) => cv[i.key].median),
-          q3: items.map((i) => cv[i.key].p75),
-          lowerfence: items.map((i) => cv[i.key].p5),
-          upperfence: items.map((i) => cv[i.key].p95),
-          text: items.map((i) => cv[i.key].median_display),
-          marker: { color: COLORS.primary },
-          fillcolor: COLORS.primaryLight,
-          line: { color: COLORS.primaryDark },
-          boxpoints: false,
-          hovertemplate: "%{x}<br>median CV %{text}<extra></extra>",
-        },
-      ],
+      cvTraces,
       baseLayout({
         xaxis: { ...axisStyle, showgrid: false },
         yaxis: { ...axisStyle, title: { text: "Quantity CV" }, tickformat: ".0%" },
-        annotations: items.map((i) => ({
-          x: i.label,
-          y: cv[i.key].median,
-          text: `<b>${cv[i.key].median_display}</b>`,
-          showarrow: false,
-          yanchor: "bottom",
-          yshift: 8,
-          font: { color: COLORS.text, size: 13 },
-        })),
+        // The bolded median label above each box only has one fixed spot per
+        // x category — with a second, grouped box trace it would sit between
+        // both boxes instead of over either one, so it's dropped in favor of
+        // the legend + hover (which stays per-trace and unambiguous) once
+        // DIA-NN is present.
+        ...(diannDiagnostics
+          ? { boxmode: "group", showlegend: true, legend: { orientation: "h", x: 0, y: 1.15 }, margin: { t: 34, r: 20, b: 40, l: 50 } }
+          : {
+              annotations: items.map((i) => ({
+                x: i.label,
+                y: cv[i.key].median,
+                text: `<b>${cv[i.key].median_display}</b>`,
+                showarrow: false,
+                yanchor: "bottom",
+                yshift: 8,
+                font: { color: COLORS.text, size: 13 },
+              })),
+            }),
       }),
       baseConfig,
     ).then(() => cvEl.classList.add("is-visible"));
