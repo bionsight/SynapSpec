@@ -464,16 +464,16 @@
   }
 }
 
-.bench-facts-top {
+// Run detail page header — just the run date, small and muted, under a thin
+// divider. Used to be a four-item facts bar (release/date/runtime/resource);
+// release was always "Not mapped" and the rest read as more prominent than
+// this page needs right under the h1.
+.bench-run-date {
+  margin: 0;
   padding-top: $spacing-md;
-  border-top: 2px solid $primary-color-dark;
-
-  dd {
-    font-family: $heading-font;
-    font-size: 1.1rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
+  border-top: 1px solid $border-color;
+  font-size: $font-size-small;
+  color: $text-color-light;
 }
 
 .bench-fact-note {
@@ -530,7 +530,7 @@
 }
 
 .bench-details {
-  margin: $spacing-md 0;
+  margin-bottom: $spacing-md;
   padding: $spacing-md;
   border: 1px solid $border-color;
   border-radius: $border-radius;

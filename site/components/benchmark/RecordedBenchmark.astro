@@ -15,6 +15,10 @@ const entry = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const run = entry.recorded_run;
 // Only the release-tag-pinned runs have per-run diagnostics recorded so far.
 const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
+// Only the PXD028735 runs have a public source record (PRIDE) on file —
+// when present, it replaces the full raw-file table and the separate
+// "Source record" section with one link.
+const sourceUrl = (entry as { source_url?: string }).source_url;
 ---
 
 <div class="container">
@@ -29,15 +33,10 @@ const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
     <a href="/benchmarks/history/" class="bench-link">Dataset history</a>
   </div>
 
-  <dl class="bench-facts bench-facts-top">
-    <div><dt>Release</dt><dd>Not mapped</dd></div>
-    <div><dt>Run date</dt><dd>{run.date}</dd></div>
-    <div><dt>Elapsed time</dt><dd>{run.runtime_display}</dd></div>
-    <div><dt>Resource</dt><dd>{run.instance}</dd></div>
-  </dl>
+  <p class="bench-run-date">{run.date}</p>
 
   <nav class="bench-section-nav" aria-label="Run sections">
-    {diagnostics && <a href="#diagnostic-plots">Diagnostic plots</a>}<a href="#lfq-metrics">LFQ metrics</a><a href="#configuration">Configuration</a><a href="#raw-files">Raw files</a><a href="#source-record">Source record</a>
+    {diagnostics && <a href="#diagnostic-plots">Diagnostic plots</a>}<a href="#lfq-metrics">LFQ metrics</a><a href="#configuration">Configuration</a><a href="#raw-files">Raw files</a>{!sourceUrl && <a href="#source-record">Source record</a>}
   </nav>
 
   {diagnostics && (
@@ -55,7 +54,7 @@ const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
     <QuartileWidget slug={slug} />
   </section>
 
-  <section id="configuration" class="py-lg bench-border-t">
+  <section id="configuration" class="pt-lg bench-border-t">
     <h2>Run configuration</h2>
     <dl class="bench-config-grid">
       {entry.recorded_config.map((pair) => <div><dt>{pair[0]}</dt><dd>{pair[1]}</dd></div>)}
@@ -67,30 +66,38 @@ const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
     </details>
   </section>
 
-  <section id="raw-files" class="py-lg bench-border-t">
-    <h2>Raw files</h2>
-    <div class="bench-table-wrap">
-      <table class="bench-table">
-        <thead>
-          <tr><th>File name</th><th>Condition</th><th>Replicate</th><th class="num">Precursor IDs</th><th class="num">Protein accessions</th></tr>
-        </thead>
-        <tbody>
-          {run.files.map((file) => (
-            <tr>
-              <th scope="row"><code>{file.name}</code></th>
-              <td>{file.condition}</td>
-              <td>{file.replicate}</td>
-              <td class="num">{file.precursors_display}</td>
-              <td class="num">{file.proteins_display}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+  <section id="raw-files" class="pb-lg">
+    {sourceUrl ? (
+      <a href={sourceUrl} class="bench-link" target="_blank" rel="noopener">Raw files: {entry.title} on PRIDE Archive ↗</a>
+    ) : (
+      <>
+        <h2>Raw files</h2>
+        <div class="bench-table-wrap">
+          <table class="bench-table">
+            <thead>
+              <tr><th>File name</th><th>Condition</th><th>Replicate</th><th class="num">Precursor IDs</th><th class="num">Protein accessions</th></tr>
+            </thead>
+            <tbody>
+              {run.files.map((file) => (
+                <tr>
+                  <th scope="row"><code>{file.name}</code></th>
+                  <td>{file.condition}</td>
+                  <td>{file.replicate}</td>
+                  <td class="num">{file.precursors_display}</td>
+                  <td class="num">{file.proteins_display}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )}
   </section>
 
-  <section id="source-record" class="py-lg bench-border-t">
-    <h2>Source record</h2>
-    <a href="/benchmarks/" class="bench-link">All datasets</a>
-  </section>
+  {!sourceUrl && (
+    <section id="source-record" class="py-lg bench-border-t">
+      <h2>Source record</h2>
+      <a href="/benchmarks/" class="bench-link">All datasets</a>
+    </section>
+  )}
 </div>
