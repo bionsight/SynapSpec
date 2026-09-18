@@ -1,5 +1,9 @@
 // Benchmarks page — LFQBench validation results
 
+.breadcrumbs {
+  margin-top: $spacing-md;
+}
+
 // .section-header는 site/styles/_components.scss에서 max-width: 40rem으로
 // 짧은 마케팅 카피용으로 만들어졌다. Run history처럼 긴 설명 문단이 그 바로
 // 아래의 전체 폭 표(.bench-table-wrap)와 짝을 이루는 곳에서는 40rem이 표보다
@@ -470,7 +474,7 @@
 // this page needs right under the h1.
 .bench-run-date {
   margin: 0;
-  padding-top: $spacing-md;
+  padding-top: $spacing-lg;
   border-top: 1px solid $border-color;
   font-size: $font-size-small;
   color: $text-color-light;
@@ -485,20 +489,6 @@
   text-transform: none;
   letter-spacing: normal;
   color: $text-color-light;
-}
-
-.bench-section-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-md;
-  padding-bottom: $spacing-sm;
-  border-bottom: 1px solid $border-color;
-
-  a {
-    font-size: $font-size-small;
-    font-weight: 600;
-    color: $primary-color-darker;
-  }
 }
 
 .bench-file-list {

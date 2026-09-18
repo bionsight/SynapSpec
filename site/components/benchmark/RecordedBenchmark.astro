@@ -32,12 +32,8 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
 
   <p class="bench-run-date">{run.date}</p>
 
-  <nav class="bench-section-nav" aria-label="Run sections">
-    {diagnostics && <a href="#diagnostic-plots">Diagnostic plots</a>}<a href="#lfq-metrics">LFQ metrics</a><a href="#configuration">Configuration</a><a href="#raw-files">Raw files</a>{!sourceUrl && <a href="#source-record">Source record</a>}
-  </nav>
-
   {diagnostics && (
-    <section id="diagnostic-plots" class="py-lg bench-border-t">
+    <section id="diagnostic-plots" class="py-lg">
       <h2>Diagnostic plots</h2>
       <div class="bench-diagnostic-plots-stack">
         <DiagnosticsWidget slug={slug} />
