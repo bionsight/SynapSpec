@@ -66,7 +66,7 @@ const extraTools = ["DIA-NN", "Spectronaut"]
 
 <script>
   import Plotly from "plotly.js-cartesian-dist-min";
-  import { baseLayout, axisStyle, baseConfig, SPECIES_COLORS, COLORS } from "../../lib/plotlyTheme";
+  import { baseLayout, axisStyle, baseConfig, SPECIES_COLORS, COLORS, whenNearViewport } from "../../lib/plotlyTheme";
 
   const TARGETS: Record<string, number> = { Human: 0, Yeast: 1, "E. coli": -2 };
 
@@ -147,7 +147,16 @@ const extraTools = ["DIA-NN", "Spectronaut"]
     );
   }
 
-  document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach(async (container) => {
+  // Each of a run's SynapSpec/DIA-NN/Spectronaut point clouds is a
+  // multi-megabyte fetch, and Plotly.newPlot over 100k+ scattergl points
+  // isn't free either — doing that for every panel the instant the page
+  // loads is what made the run-detail page janky. whenNearViewport holds
+  // it off (fetch included) until the user has actually scrolled close to
+  // this section, with enough of a head start (rootMargin) that on a normal
+  // scroll-down read the data's usually already there by the time it's in
+  // view — the loading label is the fallback for a faster scroll, not the
+  // common case.
+  async function loadAndDraw(container: HTMLElement) {
     const synapspecEl = container.querySelector<HTMLElement>('[data-chart="scatter-synapspec"]');
     if (!synapspecEl) return;
 
@@ -209,5 +218,9 @@ const extraTools = ["DIA-NN", "Spectronaut"]
     panels.forEach((p, i) => {
       if (p.el) drawScatter(p.el, extraClouds[i]!, fixedRange);
     });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-scatter-url]").forEach((container) => {
+    whenNearViewport(container, () => loadAndDraw(container));
   });
 </script>

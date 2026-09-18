@@ -36,10 +36,7 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
   {diagnostics && (
     <section id="diagnostic-plots" class="py-lg">
       <h2>Diagnostic plots</h2>
-      <div class="bench-diagnostic-plots-stack">
-        <DiagnosticsWidget slug={slug} />
-        <ScatterWidget slug={slug} />
-      </div>
+      <DiagnosticsWidget slug={slug} />
     </section>
   )}
 
@@ -47,6 +44,12 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
     <RatioWidget slug={slug} />
     <QuartileWidget slug={slug} />
   </section>
+
+  {diagnostics && (
+    <section id="lfq-scatter" class="py-lg bench-border-t">
+      <ScatterWidget slug={slug} />
+    </section>
+  )}
 
   <section id="configuration" class="pt-lg bench-border-t">
     <h2>Run configuration</h2>

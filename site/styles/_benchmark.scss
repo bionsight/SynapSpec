@@ -701,17 +701,6 @@
   gap: $spacing-md;
 }
 
-// Stacks DiagnosticsWidget and ScatterWidget with a gap. Uses flex `gap`
-// rather than margin + sibling selectors: each widget also renders its own
-// <script type="module"> tag as a sibling in between them, and a script tag
-// (display: none by default) never takes up a flex/grid slot, so `gap` still
-// only measures space between the boxes that actually render.
-.bench-diagnostic-plots-stack {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-md;
-}
-
 // Six-panel tool-comparison figure (ComparisonWidget): two rows of three,
 // same flex-gap approach as the stack above.
 .bench-comparison-grid {
