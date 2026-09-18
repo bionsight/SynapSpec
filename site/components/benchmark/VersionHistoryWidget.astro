@@ -1,16 +1,16 @@
 ---
-// Replaces the old Run history table for `benchmarks/index.astro`. With the
-// per-day historical rows trimmed down to one row per SynapSpec release
-// version, a table with a single numeric column read as mostly empty space.
-// A small bar chart reads better at this row count.
+// Replaces the old Run history table (and, before that, a bar chart) for
+// `benchmarks/index.astro`. The team wants this section to read as
+// SynapSpec's own leaderboard-style track record first — a bar chart still
+// puts a number in front of every visitor before they've asked for it, so
+// this is plain stat cards instead. Each card is itself the link to that
+// run's detail page (no separate "Runs:" line needed).
 //
-// The DIA-NN/Spectronaut reference line is opt-in, not drawn on load: the
-// team wants this page to read as SynapSpec's own leaderboard-style track
-// record first, not a "we're behind DIA-NN" chart every visitor sees
-// immediately. Opening the <details> below adds the line via Plotly.relayout
-// instead of redrawing — same dashed-line-plus-label shape/annotation pair
-// ComparisonWidget's ratio charts use for the "Expected" line, just applied
-// after the fact.
+// The DIA-NN/Spectronaut comparison is opt-in per card: it sits behind the
+// precursor count and only shows on hover/focus of that count, via a plain
+// CSS sibling selector (`.bench-version-card-compare` is empty height,
+// `opacity: 0` until its preceding sibling is `:hover`/`:focus`) — no JS,
+// works with keyboard focus too.
 interface Row {
   date: string | null;
   label: string;
@@ -34,115 +34,38 @@ interface Props {
 }
 const { rows, toolReferences } = Astro.props;
 
-// Rows arrive newest-version-first (for the old table); the chart reads
-// left-to-right as a timeline, so oldest first.
-const chartRows = [...rows].reverse();
 const references = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string } => ref.value !== null);
+
+const delta = (value: number, reference: number) => {
+  const pct = ((value - reference) / reference) * 100;
+  const rounded = Math.round(pct * 10) / 10;
+  return rounded > 0 ? `+${rounded}%` : `${rounded}%`;
+};
 ---
 
-<div class="bench-version-history" data-rows={JSON.stringify(chartRows)} data-references={JSON.stringify(references)}>
-  <div data-chart="versions" class="bench-plotly-target bench-plotly-fade"></div>
-
-  <p class="bench-axis-note" style="text-align: left;">
-    Runs:{" "}
-    {chartRows.map((row, i) => (
-      <>
-        {i > 0 && " · "}
-        <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date}</a>
-      </>
-    ))}
-  </p>
-
-  {references.length > 0 && (
-    <details class="bench-details" data-compare-toggle>
-      <summary>Compare to {references.map((r) => r.tool).join(" & ")}</summary>
-      <p class="bench-axis-note" style="text-align: left;">
-        {references.map((ref, i) => (
-          <>
-            {i > 0 && " · "}
-            {ref.tool}{" "}<a href={`/benchmarks/${ref.sourceSlug}/`} class="bench-link">{ref.display}</a> ({ref.date})
-          </>
-        ))}
-      </p>
-    </details>
-  )}
+<div class="bench-version-cards">
+  {rows.map((row) => {
+    const value = row.counts[0];
+    return (
+      <a href={`/benchmarks/${row.sourceSlug}/`} class="bench-version-card">
+        <span class="bench-version-card-label">{row.release_version ?? row.date ?? "Undated"}</span>
+        <span class="bench-version-card-value">
+          {row.counts_display[0] ?? "—"}
+          <span class="bench-version-card-unit">precursor IDs</span>
+        </span>
+        {value !== null && references.length > 0 && (
+          <span class="bench-version-card-compare">
+            {references.map((ref, i) => (
+              <>
+                {i > 0 && " · "}
+                <span class={`bench-version-card-tool bench-version-card-tool-${ref.tool.toLowerCase().replace(/[^a-z]/g, "")}`}>
+                  {ref.tool} {ref.display} ({delta(value, ref.value)})
+                </span>
+              </>
+            ))}
+          </span>
+        )}
+      </a>
+    );
+  })}
 </div>
-
-<script>
-  import Plotly from "plotly.js-cartesian-dist-min";
-  import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
-
-  const toolColor = (tool: string) => TOOL_COLORS[tool.toLowerCase().replace(/[^a-z]/g, "")] ?? COLORS.textLight;
-
-  document.querySelectorAll<HTMLElement>("[data-rows]").forEach((container) => {
-    const rows: any[] = JSON.parse(container.dataset.rows!);
-    const references: any[] = JSON.parse(container.dataset.references!);
-    const el = container.querySelector<HTMLElement>('[data-chart="versions"]');
-    if (!el) return;
-
-    const labels = rows.map((r) => r.release_version ?? r.date ?? "—");
-    const values = rows.map((r) => r.counts[0]);
-    const displays = rows.map((r) => r.counts_display[0]);
-    const customdata = rows.map((r) => [
-      r.date ?? "—",
-      r.runtime ? `${Math.round(r.runtime * 100) / 100} h` : "—",
-      r.resource ?? "—",
-    ]);
-
-    const allValues = [...values, ...references.map((r) => r.value)].filter((v) => typeof v === "number");
-    const maxVal = Math.max(...allValues, 0);
-    // Headroom reserved up front (not just for the bars) so revealing the
-    // reference line later doesn't rescale the y-axis under it.
-    const yMax = maxVal * 1.2;
-
-    const referenceShapes = references.map((ref) => ({
-      type: "line",
-      xref: "paper",
-      x0: 0,
-      x1: 1,
-      yref: "y",
-      y0: ref.value,
-      y1: ref.value,
-      line: { color: toolColor(ref.tool), width: 1.5, dash: "dash" },
-    }));
-    const referenceAnnotations = references.map((ref) => ({
-      x: 0,
-      xref: "paper",
-      xanchor: "left",
-      y: ref.value,
-      text: `${ref.tool} ${ref.display}`,
-      showarrow: false,
-      yshift: 10,
-      font: { size: 11, color: toolColor(ref.tool) },
-    }));
-
-    drawWhenVisible(el, () => {
-      Plotly.newPlot(
-        el,
-        [
-          {
-            type: "bar",
-            x: labels,
-            y: values,
-            text: displays,
-            textposition: "outside",
-            customdata,
-            marker: { color: TOOL_COLORS.synapspec },
-            hovertemplate: "%{text} precursor IDs<br>%{customdata[0]} · %{customdata[1]} · %{customdata[2]}<extra></extra>",
-          },
-        ],
-        baseLayout({
-          xaxis: { ...axisStyle, title: { text: "SynapSpec release" }, showgrid: false },
-          yaxis: { ...axisStyle, title: { text: "Precursor IDs" }, range: [0, yMax] },
-        }),
-        baseConfig,
-      ).then(() => {
-        el.classList.add("is-visible");
-        const details = container.querySelector<HTMLDetailsElement>("[data-compare-toggle]");
-        details?.addEventListener("toggle", () => {
-          Plotly.relayout(el, details.open ? { shapes: referenceShapes, annotations: referenceAnnotations } : { shapes: [], annotations: [] });
-        });
-      });
-    });
-  });
-</script>

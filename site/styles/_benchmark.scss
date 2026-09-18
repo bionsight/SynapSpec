@@ -904,3 +904,80 @@
   &.bench-scatter-dot-diann { background: $viz-2; }
   &.bench-scatter-dot-spectronaut { background: $viz-3; }
 }
+
+// ── Run history stat cards (VersionHistoryWidget) ────────────
+// SynapSpec's own precursor count, card per release — the DIA-NN/Spectronaut
+// comparison is a sibling element hidden until the count itself is
+// hovered/focused, so it never draws the eye on first load.
+
+.bench-version-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: $spacing-md;
+  margin: $spacing-md 0;
+}
+
+.bench-version-card {
+  display: block;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: $spacing-md;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+
+  &:hover,
+  &:focus-within {
+    border-color: $primary-color;
+  }
+}
+
+.bench-version-card-label {
+  display: block;
+  font-size: $font-size-small;
+  font-weight: 600;
+  color: $text-light;
+}
+
+.bench-version-card-value {
+  display: block;
+  margin-top: $spacing-xs;
+  font-family: $heading-font;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $primary-color-darker;
+  font-variant-numeric: tabular-nums;
+}
+
+.bench-version-card-unit {
+  display: block;
+  margin-top: 2px;
+  font-family: $body-font;
+  font-size: $font-size-small;
+  font-weight: 500;
+  color: $text-light;
+}
+
+// Reserves its line height at all times so revealing it doesn't shift the
+// cards below — only opacity animates.
+.bench-version-card-compare {
+  display: block;
+  margin-top: $spacing-xs;
+  min-height: 1.2em;
+  font-size: $font-size-small;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.bench-version-card-value:hover + .bench-version-card-compare,
+.bench-version-card:focus-within .bench-version-card-compare {
+  opacity: 1;
+}
+
+.bench-version-card-tool {
+  font-weight: 600;
+
+  &.bench-version-card-tool-diann { color: $viz-2; }
+  &.bench-version-card-tool-spectronaut { color: $viz-3; }
+}
