@@ -908,18 +908,55 @@
 // ── Run history table (VersionHistoryWidget) ─────────────────
 // Plain .bench-table, one row per SynapSpec release. The DIA-NN/Spectronaut
 // comparison isn't a column (it'd be "—" in every row but one) — it's a
-// sibling span revealed on row hover/focus, pure CSS.
+// speech-bubble tooltip anchored to the precursor count, same light
+// bgcolor/border/text as the Plotly hoverlabel used on every chart on this
+// page (see plotlyTheme.ts) so hovering a number reads consistently
+// whether it's a chart point or this plain table.
 
-.bench-version-compare {
-  margin-left: $spacing-sm;
-  font-weight: 400;
-  opacity: 0;
-  transition: opacity 0.15s ease;
+.bench-version-value-wrap {
+  position: relative;
+  display: inline-block;
 }
 
-.bench-version-table tbody tr:hover .bench-version-compare,
+.bench-version-compare {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, -6px);
+  padding: 4px 10px;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  background: $background-color;
+  box-shadow: 0 2px 8px rgba($ink-900, 0.1);
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+
+  // 말풍선 꼬리 — 테두리색 삼각형 위에 한 픽셀 작은 배경색 삼각형을 겹쳐서
+  // border 1px 를 그대로 살린다.
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+  }
+
+  &::before { border-top-color: $border-color; }
+  &::after { border-top-color: $background-color; margin-top: -1px; }
+}
+
+.bench-version-value-wrap:hover .bench-version-compare,
 .bench-version-table tbody tr:focus-within .bench-version-compare {
   opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -10px);
 }
 
 .bench-tool {

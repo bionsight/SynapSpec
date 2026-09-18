@@ -4,7 +4,9 @@
 // leaderboard more naturally than cards do at three rows, and stays compact
 // if more releases get added later. Only difference from a plain table: the
 // DIA-NN/Spectronaut comparison isn't a column (it'd be "—" in every row but
-// one). It's a sibling element revealed on row hover/focus, pure CSS.
+// one). It's a speech-bubble tooltip anchored to the precursor count,
+// revealed on hover of that count (or focus of the row, for keyboard) —
+// pure CSS, no JS.
 interface Row {
   date: string | null;
   label: string;
@@ -31,19 +33,19 @@ const { rows, toolReferences } = Astro.props;
 const references = toolReferences.filter((ref): ref is ToolReference & { value: number; display: string } => ref.value !== null);
 ---
 
-<div class="bench-table-wrap">
-  <table class="bench-table bench-version-table">
-    <thead>
-      <tr><th>Release</th><th class="num">SynapSpec precursor IDs</th></tr>
-    </thead>
-    <tbody>
-      {rows.map((row) => (
-        <tr>
-          <th scope="row"><a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date ?? "Undated"}</a></th>
-          <td class="num">
+<table class="bench-table bench-version-table">
+  <thead>
+    <tr><th>Release</th><th class="num">SynapSpec precursor IDs</th></tr>
+  </thead>
+  <tbody>
+    {rows.map((row) => (
+      <tr>
+        <th scope="row"><a href={`/benchmarks/${row.sourceSlug}/`} class="bench-link">{row.release_version ?? row.date ?? "Undated"}</a></th>
+        <td class="num">
+          <span class="bench-version-value-wrap">
             {row.counts_display[0] ?? "—"}
             {references.length > 0 && (
-              <span class="bench-version-compare">
+              <span class="bench-version-compare" role="tooltip">
                 {references.map((ref, i) => (
                   <>
                     {i > 0 && " · "}
@@ -52,9 +54,9 @@ const references = toolReferences.filter((ref): ref is ToolReference & { value: 
                 ))}
               </span>
             )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+          </span>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
