@@ -1,0 +1,98 @@
+name: Benchmark from parquet
+
+# Supabase Storage에 precursors.parquet + meta.yaml이 올라오면(Edge Function이
+# repository_dispatch로 깨움) 숫자 계산까지만 자동으로 하고, gh-page에는 바로
+# push하지 않는다 — 새 브랜치에 커밋하고 PR을 열어서 사람이 merge 버튼을 누르게
+# 한다. workflow_dispatch로 수동 실행도 가능(storage_path를 직접 입력).
+#
+# 전제: scripts/supabase_download.py, scripts/manage_benchmarks.py from-parquet,
+# scripts/pr_summary.py, e2e/benchmark-screenshot.spec.ts가 gh-page 브랜치에 있어야 한다.
+# 필요한 repo secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
+#
+# 아직 라이브로 테스트하지 않았다 — Supabase 프로젝트와 repository_dispatch 호출자
+# (supabase/functions/benchmark-dispatch)가 준비된 뒤 실제 parquet 하나로 처음부터
+# 끝까지 한 번 돌려서 확인할 것.
+
+on:
+  repository_dispatch:
+    types: [benchmark-upload]
+  workflow_dispatch:
+    inputs:
+      storage_path:
+        description: "Supabase Storage 안의 run 폴더 경로 (예: 2026-09-20-abcd1234)"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-page
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 파이썬 의존성 설치
+        run: pip install pandas pyarrow pyyaml requests
+
+      - name: Supabase에서 parquet + meta.yaml 다운로드
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          STORAGE_PATH: ${{ github.event.client_payload.storage_path || inputs.storage_path }}
+        run: python3 scripts/supabase_download.py "$STORAGE_PATH" scripts/benchmark_runs/_incoming
+
+      - name: parquet → recorded YAML 계산
+        id: build_yaml
+        run: |
+          SLUG=$(python3 -c "import yaml; print(yaml.safe_load(open('scripts/benchmark_runs/_incoming/meta.yaml'))['run']['slug'])")
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          python3 scripts/manage_benchmarks.py from-parquet \
+            scripts/benchmark_runs/_incoming/precursors.parquet \
+            scripts/benchmark_runs/_incoming/meta.yaml \
+            --out "scripts/benchmark_runs/$SLUG.yaml"
+
+      - name: site/data/benchmark_*.json에 반영
+        run: python3 scripts/manage_benchmarks.py apply "scripts/benchmark_runs/${{ steps.build_yaml.outputs.slug }}.yaml"
+
+      - name: 정합성 검사 (실패하면 PR을 열지 않음)
+        run: python3 scripts/manage_benchmarks.py validate
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: npm 의존성 설치
+        run: npm ci
+
+      - name: Playwright 설치
+        run: npx playwright install --with-deps chromium
+
+      - name: 새 페이지 스크린샷 (npm run build && npm run preview는 playwright.config.ts가 자동 실행)
+        env:
+          BENCHMARK_SLUG: ${{ steps.build_yaml.outputs.slug }}
+        run: npx playwright test e2e/benchmark-screenshot.spec.ts
+
+      - name: PR 요약 만들기
+        run: python3 scripts/pr_summary.py "${{ steps.build_yaml.outputs.slug }}" > pr-body.md
+
+      - name: PR 열기
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: benchmark-update/${{ steps.build_yaml.outputs.slug }}
+          base: gh-page
+          title: "chore(benchmarks): add run ${{ steps.build_yaml.outputs.slug }}"
+          body-path: pr-body.md
+          commit-message: "chore(benchmarks): add run ${{ steps.build_yaml.outputs.slug }}"
+          add-paths: |
+            site/data/benchmark_catalog.json
+            site/data/benchmark_entries.json
+            site/data/benchmark_ledger.json
+            scripts/benchmark_runs/${{ steps.build_yaml.outputs.slug }}.yaml
+            benchmark-screenshots/${{ steps.build_yaml.outputs.slug }}.png
