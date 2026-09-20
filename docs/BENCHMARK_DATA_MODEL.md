@@ -202,6 +202,39 @@ recorded run은 DIA-NN·Spectronaut 비교 데이터가 없어서 이 두 파일
 
 ## 새 recorded run을 추가하는 절차
 
+**대부분은 `scripts/manage_benchmarks.py`를 쓰면 아래 6단계를 대신합니다.**
+
+```bash
+uv run --with pyyaml python3 scripts/manage_benchmarks.py new recorded <slug>
+# scripts/benchmark_runs/<slug>.yaml 생성됨 — 에디터로 값을 채운다
+
+uv run --with pyyaml python3 scripts/manage_benchmarks.py apply scripts/benchmark_runs/<slug>.yaml --dry-run
+uv run --with pyyaml python3 scripts/manage_benchmarks.py apply scripts/benchmark_runs/<slug>.yaml
+
+uv run --with pyyaml python3 scripts/manage_benchmarks.py validate   # 6개 JSON 정합성 검사
+uv run --with pyyaml python3 scripts/manage_benchmarks.py list       # 등록된 프리셋·항목 조회
+```
+
+값만 채우면 세 파일(`benchmark_catalog.json`의 `recorded_runs`/`dataset_catalog`,
+`benchmark_entries.json`, 필요하면 `benchmark_ledger.json`)을 정합성 맞춰 한 번에
+갱신하고, 비율 위젯 축 좌표(`axis.actual`/`axis.relative`)와
+`measured_ratio_display`/`deviation_percent`도 "고정 축" 절의 공식으로 자동 계산합니다.
+`imported` 등급은 `new imported <slug>` → `apply`로 등록합니다. 채운 YAML은
+`scripts/benchmark_runs/`에 남으니 JSON 변경과 함께 커밋해 두면 숫자의 출처가
+기록으로 남습니다. 아래 수동 절차는 CLI가 다루지 않는 필드(`diagnostics`,
+`quartile_measurements` 등 이미지·통계 파이프라인)를 직접 만질 때, 또는 각 필드가
+어떤 의미인지 확인할 때 참고하면 됩니다.
+
+**`total_precursors`/`total_proteins`/`ratio_measurements`/파일별 표까지 손으로 옮기지
+않으려면** `new meta <slug>`로 (parquet에 없는 값만 담는) 짧은 사이드카를 만들고,
+`from-parquet <precursors.parquet> <meta.yaml>`로 나머지를 계산해서 채운 recorded
+YAML을 생성할 수 있습니다 (`uv run --with pandas --with pyarrow --with numpy` 필요).
+DeepMSFlow `instrumentation/parsers/lfq.py`의 계산 로직을 pandas로 옮긴 것이라
+ClearML의 실제 summary/stats 리포트 표와 정확히 같은 숫자가 나온다는 보장은
+없습니다 — 처음 쓸 때는 이미 검증된 run의 parquet으로 한 번 돌려서 기존 숫자와
+맞는지 확인하세요. 만들어진 YAML은 그대로 `apply`하지 말고 한 번 검토할 것
+(특히 파일별 `replicate`는 parquet만으로 못 채워서 항상 비어 있습니다).
+
 1. ClearML task에서 `summary`, `stats`, `lfq_ratio_statistics` 리포트 표를 가져옵니다
    (`task.get_reported_plots()`로 plotly 표를 읽는 방식은 `scripts/fetch_benchmarks.py`의
    `reported_tables()`를 그대로 재사용할 수 있습니다).

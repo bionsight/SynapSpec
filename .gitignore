@@ -9,3 +9,11 @@ dist/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Supabase에서 내려받은 임시 parquet/meta — scripts/manage_benchmarks.py from-parquet의
+# 출력(scripts/benchmark_runs/<slug>.yaml)만 커밋 대상이다.
+/scripts/benchmark_runs/_incoming/
+
+# benchmark-screenshots/<slug>.png는 지우지 말 것 — .github/workflows/benchmark-from-parquet.yml이
+# PR 브랜치에 커밋해서 PR 본문(scripts/pr_summary.py)이 raw.githubusercontent.com으로
+# 참조한다. 여기서 ignore하면 그 커밋이 막힌다.
