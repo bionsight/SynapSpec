@@ -3,6 +3,7 @@
 // LFQBench ledger schema: the external workflows have source-table coverage
 // and exploratory specificity mapping. Keep this comparison in a dedicated
 // component rather than coercing the data into existing LFQ widgets.
+import CvDistributionWidget from "./CvDistributionWidget.astro";
 import comparison from "../../data/pxd055927/comparison.json";
 
 type ToolData = (typeof comparison.tools)[number];
@@ -35,18 +36,10 @@ const toolId = (tool: ToolData["tool"]) => {
   if (!id) throw new Error(`PXD055927 export has an unsupported tool: ${tool}`);
   return id;
 };
-const identificationChartData = tools.map((tool) => ({
-  tool: tool.tool,
-  id: toolId(tool.tool),
-  peptide_count: tool.peptide_count,
-  precursor_count: tool.precursor_count,
-}));
-
-const cvChartData = tools.map((tool) => ({
-  tool: tool.tool,
-  id: toolId(tool.tool),
-  cv: tool.cv,
-}));
+const detectionFrequency = tools[0].detection_frequency;
+if (!detectionFrequency || detectionFrequency.length !== 24) {
+  throw new Error("PXD055927 detail requires precursor detection counts for all 24 runs");
+}
 
 const specificityChartData = tools.map((tool) => ({
   tool: tool.tool,
@@ -63,8 +56,7 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
 <div
   class="pxd055927-benchmark"
   data-pxd055927
-  data-identification={JSON.stringify(identificationChartData)}
-  data-cv={JSON.stringify(cvChartData)}
+  data-detection={JSON.stringify(detectionFrequency)}
   data-specificity={JSON.stringify(specificityChartData)}
 >
   <p class="pxd055927-reference-note">Reference comparison — not a matched benchmark. SynapSpec is parquet-derived; external values are transcribed.</p>
@@ -75,22 +67,14 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
     <div class="bench-diagnostics-grid pxd055927-chart-grid">
       <figure class="bench-diagnostic">
         <div
-          data-chart="identification"
+          data-chart="completeness"
           class="bench-plotly-target bench-plotly-fade"
           role="img"
-          aria-label="Peptide and precursor identification counts for SynapSpec, FragPipe plus DIA-NN, and Spectronaut"
+          aria-label="SynapSpec precursor detection frequency across 24 runs"
         ></div>
-        <figcaption>Unique peptide and precursor identifications</figcaption>
+        <figcaption>Data completeness</figcaption>
       </figure>
-      <figure class="bench-diagnostic">
-        <div
-          data-chart="cv"
-          class="bench-plotly-target bench-plotly-fade"
-          role="img"
-          aria-label="Dose-matched peptide coefficient of variation box plots for SynapSpec, FragPipe plus DIA-NN, and Spectronaut"
-        ></div>
-        <figcaption>Peptide CV across dose-matched biological triplicates</figcaption>
-      </figure>
+      <CvDistributionWidget slug={comparison.dataset} />
     </div>
 
   </section>
@@ -132,7 +116,7 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
         {tools.filter((tool) => tool.tool !== "SynapSpec").map((tool) => (
           <li>
             <strong>{tool.tool}</strong>
-            <span class="bench-muted">{tool.entry_method === "parquet_computed" ? "Parquet-derived" : "Manual transcription"}</span>
+            <span class="bench-muted">{tool.software_version}</span>
             <span class="pxd055927-source-links">
               {tool.sources.map((source) => <a href={source.url} target="_blank" rel="noopener">{source.title} ↗</a>)}
             </span>
@@ -147,25 +131,6 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
   import Plotly from "plotly.js-cartesian-dist-min";
   import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
 
-  type IdentificationDatum = {
-    tool: string;
-    id: string;
-    peptide_count: number;
-    precursor_count: number;
-  };
-  type CvDatum = {
-    tool: string;
-    id: string;
-    cv: {
-      n: number;
-      peptide_count: number;
-      q1: number;
-      median: number;
-      q3: number;
-      lowerfence: number;
-      upperfence: number;
-    };
-  };
   type SpecificityDatum = {
     tool: string;
     id: string;
@@ -176,17 +141,7 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
   };
 
   const pieColors = [COLORS.primary, "#e69f00"];
-  const colorFor = (id: string) => TOOL_COLORS[id] ?? COLORS.textLight;
-  const percent = (value: number, digits = 1) => `${(value * 100).toFixed(digits)}%`;
   const count = (value: number) => value.toLocaleString("en-US");
-
-  const withAlpha = (hex: string, alpha: number) => {
-    const number = parseInt(hex.slice(1), 16);
-    const red = (number >> 16) & 255;
-    const green = (number >> 8) & 255;
-    const blue = number & 255;
-    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-  };
 
   const requiredDataset = (container: HTMLElement, field: string) => {
     const value = container.dataset[field];
@@ -195,83 +150,25 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
   };
 
   document.querySelectorAll<HTMLElement>("[data-pxd055927]").forEach((container) => {
-    const identification = JSON.parse(requiredDataset(container, "identification")) as IdentificationDatum[];
-    const cv = JSON.parse(requiredDataset(container, "cv")) as CvDatum[];
+    const detection = JSON.parse(requiredDataset(container, "detection")) as number[];
     const specificity = JSON.parse(requiredDataset(container, "specificity")) as SpecificityDatum[];
 
-    const identificationEl = container.querySelector<HTMLElement>('[data-chart="identification"]');
-    if (identificationEl) {
-      drawWhenVisible(identificationEl, () => {
-        const traces = [
-          { key: "peptide_count" as const, label: "Peptides" },
-          { key: "precursor_count" as const, label: "Precursors" },
-        ].map((metric) => ({
-          type: "bar",
-          name: metric.label,
-          x: identification.map((datum) => datum.tool),
-          y: identification.map((datum) => datum[metric.key]),
-          text: identification.map((datum) => count(datum[metric.key])),
-          textposition: "outside",
-          marker: {
-            color: identification.map((datum) => colorFor(datum.id)),
-            ...(metric.key === "precursor_count" ? { pattern: { shape: "/" } } : {}),
-          },
-          hovertemplate: `%{x} · ${metric.label}<br>%{text}<extra></extra>`,
-        }));
-
-        Plotly.newPlot(
-          identificationEl,
-          traces,
-          baseLayout({
-            margin: { t: 48, r: 18, b: 70, l: 58 },
-            barmode: "group",
-            bargap: 0.2,
-            bargroupgap: 0.06,
-            showlegend: true,
-            legend: { orientation: "h", x: 0.5, xanchor: "center", y: 1.16, yanchor: "top" },
-            xaxis: { ...axisStyle, showgrid: false, tickangle: -18 },
-            yaxis: { ...axisStyle, title: { text: "Unique identifications" }, rangemode: "tozero" },
-          }),
-          baseConfig,
-        ).then(() => identificationEl.classList.add("is-visible"));
-      });
-    }
-
-    const cvEl = container.querySelector<HTMLElement>('[data-chart="cv"]');
-    if (cvEl) {
-      drawWhenVisible(cvEl, () => {
-        const traces = cv.map((datum) => ({
-          type: "box",
-          name: datum.tool,
-          x: [datum.tool],
-          q1: [datum.cv.q1],
-          median: [datum.cv.median],
-          q3: [datum.cv.q3],
-          lowerfence: [datum.cv.lowerfence],
-          upperfence: [datum.cv.upperfence],
-          text: [
-            `median ${percent(datum.cv.median)} · Q1 ${percent(datum.cv.q1)} · Q3 ${percent(datum.cv.q3)} · ` +
-              `n = ${count(datum.cv.n)} peptide × dose`,
-          ],
-          marker: { color: colorFor(datum.id) },
-          fillcolor: withAlpha(colorFor(datum.id), 0.22),
-          line: { color: colorFor(datum.id) },
-          boxpoints: false,
-          hovertemplate: `${datum.tool}<br>%{text}<extra></extra>`,
-        }));
-
-        Plotly.newPlot(
-          cvEl,
-          traces,
-          baseLayout({
-            margin: { t: 18, r: 18, b: 82, l: 58 },
-            xaxis: { ...axisStyle, showgrid: false, tickangle: -18 },
-            yaxis: { ...axisStyle, title: { text: "Peptide quantity CV" }, tickformat: ".0%", rangemode: "tozero" },
-          }),
-          baseConfig,
-        ).then(() => cvEl.classList.add("is-visible"));
-      });
-    }
+    const completenessEl = container.querySelector<HTMLElement>('[data-chart="completeness"]');
+    if (!completenessEl) throw new Error("Missing PXD055927 completeness chart");
+    drawWhenVisible(completenessEl, () => {
+      Plotly.newPlot(completenessEl, [{
+        type: "bar",
+        name: "SynapSpec",
+        x: detection.map((_, index) => index + 1),
+        y: detection,
+        marker: { color: TOOL_COLORS.synapspec },
+        hovertemplate: "SynapSpec<br>Detected in %{x} files<br>%{y:,} precursors<extra></extra>",
+      }], baseLayout({
+        margin: { t: 18, r: 18, b: 65, l: 58 },
+        xaxis: { ...axisStyle, title: { text: "Detected in N files" }, showgrid: false, dtick: 3 },
+        yaxis: { ...axisStyle, title: { text: "Precursor count" }, rangemode: "tozero" },
+      }), baseConfig).then(() => completenessEl.classList.add("is-visible"));
+    });
 
     specificity.forEach((datum) => {
       const el = container.querySelector<HTMLElement>(`[data-chart="specificity-${datum.id}"]`);

@@ -86,10 +86,34 @@ class RunCount(Record):
     precursors: Count
 
 
+class ConditionCv(Record):
+    """Within-dose peptide CV over three positive biological replicates."""
+
+    dose_nm: Finite
+    n: Annotated[int, Field(strict=True, gt=0)]
+    median: Finite
+
+
+class ConditionDetection(Record):
+    """Identified precursor union and three-replicate intersection at one dose."""
+
+    dose_nm: Finite
+    precursor_count: Annotated[int, Field(strict=True, gt=0)]
+    complete_count: Count
+
+    @model_validator(mode="after")
+    def check_intersection(self) -> "ConditionDetection":
+        """Reject an intersection larger than the identified union."""
+        if self.complete_count > self.precursor_count:
+            raise ValueError("Complete precursor count cannot exceed the condition union")
+        return self
+
+
 class ToolData(Record):
     """Plot-ready data for one workflow, with comparison limitations attached."""
 
     tool: Literal["SynapSpec", "FragPipe + DIA-NN", "Spectronaut"]
+    software_version: Annotated[str, Field(min_length=1)] | None = None
     entry_method: Literal["parquet_computed", "manual_transcription"]
     sources: list[Source]
     peptide_count: Count
@@ -101,6 +125,9 @@ class ToolData(Record):
     specificity: Specificity
     per_run: list[RunCount] | None
     caveats: list[str]
+    detection_frequency: list[Count] | None
+    condition_cv: list[ConditionCv] | None
+    condition_detection: list[ConditionDetection] | None
 
     @model_validator(mode="after")
     def check_specificity_total(self) -> "ToolData":
@@ -111,6 +138,16 @@ class ToolData(Record):
             raise ValueError("Specificity slices plus exclusions must equal precursor_count")
         if not self.sources or not self.caveats:
             raise ValueError("Sources and comparison caveats are required")
+        if self.detection_frequency is not None:
+            if len(self.detection_frequency) != 24 or sum(self.detection_frequency) != self.precursor_count:
+                raise ValueError("Detection frequency must partition precursors across 24 runs")
+        if self.condition_cv is not None and [item.dose_nm for item in self.condition_cv] != list(DOSES_NM):
+            raise ValueError("Condition CV must contain all eight doses in order")
+        if self.condition_detection is not None:
+            if [item.dose_nm for item in self.condition_detection] != list(DOSES_NM):
+                raise ValueError("Condition detection must contain all eight doses in order")
+            if any(item.precursor_count > self.precursor_count for item in self.condition_detection):
+                raise ValueError("Condition precursor union cannot exceed the overall union")
         return self
 
 
@@ -250,6 +287,32 @@ def summarize_synapspec(parquet: Path) -> ToolData:
                    """).fetchall()
         ]
         cv = _cv_summary(connection)
+        detection_counts = dict(connection.execute("""
+            SELECT detected, count(*) FROM (
+                SELECT count(*) AS detected FROM hits
+                GROUP BY modified_sequence, precursor_charge
+            ) GROUP BY detected
+        """).fetchall())
+        detection_frequency = [detection_counts.get(index, 0) for index in range(1, 25)]
+        condition_detection = [
+            ConditionDetection(dose_nm=dose, precursor_count=total, complete_count=complete)
+            for dose, total, complete in connection.execute("""
+                SELECT dose_nm, count(*), count(*) FILTER(WHERE detected = 3) FROM (
+                    SELECT dose_nm, modified_sequence, precursor_charge, count(*) AS detected
+                    FROM hits JOIN samples USING(filename) GROUP BY ALL
+                ) GROUP BY dose_nm ORDER BY dose_nm
+            """).fetchall()
+        ]
+        condition_cv = [
+            ConditionCv(dose_nm=dose, n=count, median=median)
+            for dose, count, median in connection.execute("""
+                SELECT dose_nm, count(*), median(cv) FROM (
+                    SELECT modified_sequence, dose_nm, stddev_samp(quantity) / avg(quantity) AS cv
+                    FROM peptide_quantities JOIN samples USING(filename)
+                    GROUP BY ALL HAVING count(*) = 3
+                ) GROUP BY dose_nm ORDER BY dose_nm
+            """).fetchall()
+        ]
     return ToolData(
         tool="SynapSpec",
         entry_method="parquet_computed",
@@ -263,6 +326,9 @@ def summarize_synapspec(parquet: Path) -> ToolData:
         peptide_count=peptide_count,
         precursor_count=precursor_count,
         protein_accession_count=protein_count,
+        detection_frequency=detection_frequency,
+        condition_cv=condition_cv,
+        condition_detection=condition_detection,
         identification_scope="Unique modified sequences and sequence/charge pairs in target hits with precursor_qvalue < 0.01",
         cv=cv,
         cv_method="Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",

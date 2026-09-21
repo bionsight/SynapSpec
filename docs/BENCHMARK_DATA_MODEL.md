@@ -190,6 +190,28 @@ recorded보다 가볍습니다 — species별 정확도 없이 ClearML Summary �
 
 ## `benchmark_comparisons.json` / `benchmark_comparison_scatter.json`
 
+The `/benchmarks/` overview selects the first (newest) row of each LFQ ledger.
+SynapSpec counts, completeness, and species ratios come from that recorded run in
+`benchmark_catalog.json`. Both LFQ datasets use the ledger's `toolReferences` to read
+external `tool_diagnostics` and `tool_ratios`, exactly as the detail page does.
+Its input-file list comes from the recorded run, not the archived comparison.
+The archived comparison files remain intact for their archived routes. Never use
+their older input groups to populate the current LFQ overview.
+
+Optional `recorded_runs[slug].condition_cv` stores A/B precursor CV as fractions,
+sample counts, the calculation method, and source SHA256. For PXD028735 v0.12.4,
+use target hits with precursor q-value < 0.01, require positive `ms2_quantity` in
+all three replicates per condition, calculate sample SD / mean for each sequence +
+charge identity, and take the median. No additional normalization or imputation is
+applied. The supplied parquet matched all six recorded file counts and the full
+detection-frequency histogram; it contained no embedded version/commit metadata.
+Absent condition CV stays unavailable; never substitute pooled diagnostic CV or
+another run's CV. External A/B CV uses `tool_diagnostics[slug].condition_cv` with the
+same structure. `tool_sources[slug]` records uploaded report provenance separately
+from legacy ClearML imports. See [LFQ source updates](benchmarks/lfq/README.md).
+When adding a run,
+populate and validate its diagnostics, ratios, and condition CV before publishing.
+
 kind가 `comparison`인 두 항목(`lfqbench-202409-archived`, `lfqbench-202502-archived`)
 전용입니다. `benchmark_comparisons.json`은 도구별 상세(파일별 precursor 수, CV, 완주율),
 `benchmark_comparison_scatter.json`은 리더보드용으로 도구별 `median_epsilon`(log2 오차

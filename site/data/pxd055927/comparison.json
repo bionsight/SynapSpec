@@ -23,8 +23,8 @@
         "q1": 0.08241601657132375,
         "median": 0.14776245707082386,
         "q3": 0.2615885218224613,
-        "lowerfence": 0.0004264770537619402,
-        "upperfence": 0.5302931799239982
+        "lowerfence": 0.0004264770537619745,
+        "upperfence": 0.530293179923998
       },
       "cv_method": "Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",
       "specificity": {
@@ -37,7 +37,7 @@
       "per_run": [
         {
           "filename": "Elmo_20230331_TKO_HSdia_A1",
-          "dose_nm": 0.0,
+          "dose_nm": 0,
           "biological_replicate": 1,
           "precursors": 110390
         },
@@ -49,43 +49,43 @@
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A3",
-          "dose_nm": 1.0,
+          "dose_nm": 1,
           "biological_replicate": 1,
           "precursors": 115348
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A4",
-          "dose_nm": 10.0,
+          "dose_nm": 10,
           "biological_replicate": 1,
           "precursors": 114592
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A5",
-          "dose_nm": 100.0,
+          "dose_nm": 100,
           "biological_replicate": 1,
           "precursors": 115084
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A6",
-          "dose_nm": 1000.0,
+          "dose_nm": 1000,
           "biological_replicate": 1,
           "precursors": 108089
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A7",
-          "dose_nm": 10000.0,
+          "dose_nm": 10000,
           "biological_replicate": 1,
           "precursors": 113652
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A8",
-          "dose_nm": 50000.0,
+          "dose_nm": 50000,
           "biological_replicate": 1,
           "precursors": 114311
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B1",
-          "dose_nm": 0.0,
+          "dose_nm": 0,
           "biological_replicate": 2,
           "precursors": 114824
         },
@@ -97,43 +97,43 @@
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B3",
-          "dose_nm": 1.0,
+          "dose_nm": 1,
           "biological_replicate": 2,
           "precursors": 115677
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B4",
-          "dose_nm": 10.0,
+          "dose_nm": 10,
           "biological_replicate": 2,
           "precursors": 115446
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B5",
-          "dose_nm": 100.0,
+          "dose_nm": 100,
           "biological_replicate": 2,
           "precursors": 109177
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B6",
-          "dose_nm": 1000.0,
+          "dose_nm": 1000,
           "biological_replicate": 2,
           "precursors": 114076
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B7",
-          "dose_nm": 10000.0,
+          "dose_nm": 10000,
           "biological_replicate": 2,
           "precursors": 112665
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B8",
-          "dose_nm": 50000.0,
+          "dose_nm": 50000,
           "biological_replicate": 2,
           "precursors": 109020
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C1",
-          "dose_nm": 0.0,
+          "dose_nm": 0,
           "biological_replicate": 3,
           "precursors": 48265
         },
@@ -145,37 +145,37 @@
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C3",
-          "dose_nm": 1.0,
+          "dose_nm": 1,
           "biological_replicate": 3,
           "precursors": 115052
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C4",
-          "dose_nm": 10.0,
+          "dose_nm": 10,
           "biological_replicate": 3,
           "precursors": 114554
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C5",
-          "dose_nm": 100.0,
+          "dose_nm": 100,
           "biological_replicate": 3,
           "precursors": 109825
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C6",
-          "dose_nm": 1000.0,
+          "dose_nm": 1000,
           "biological_replicate": 3,
           "precursors": 110216
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C7",
-          "dose_nm": 10000.0,
+          "dose_nm": 10000,
           "biological_replicate": 3,
           "precursors": 109186
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C8",
-          "dose_nm": 50000.0,
+          "dose_nm": 50000,
           "biological_replicate": 3,
           "precursors": 110039
         }
@@ -185,10 +185,121 @@
         "CV uses each tool's own complete-case peptides, not a shared peptide intersection.",
         "Protein accessions are not harmonized protein groups; do not compare protein totals across tools.",
         "C1 has fewer retained precursors; it is included, not silently excluded."
+      ],
+      "detection_frequency": [
+        535,
+        644,
+        722,
+        855,
+        972,
+        1013,
+        986,
+        1044,
+        1058,
+        1102,
+        1148,
+        1133,
+        1306,
+        1353,
+        1544,
+        1708,
+        2077,
+        2422,
+        3088,
+        4442,
+        7490,
+        16107,
+        43646,
+        30446
+      ],
+      "condition_cv": [
+        {
+          "dose_nm": 0,
+          "n": 35156,
+          "median": 0.1868624565251365
+        },
+        {
+          "dose_nm": 0.1,
+          "n": 82238,
+          "median": 0.1695452810299508
+        },
+        {
+          "dose_nm": 1,
+          "n": 85362,
+          "median": 0.13384275228357023
+        },
+        {
+          "dose_nm": 10,
+          "n": 84625,
+          "median": 0.1260618670265031
+        },
+        {
+          "dose_nm": 100,
+          "n": 79210,
+          "median": 0.16258712355353755
+        },
+        {
+          "dose_nm": 1000,
+          "n": 78436,
+          "median": 0.17195167930345398
+        },
+        {
+          "dose_nm": 10000,
+          "n": 79954,
+          "median": 0.17394139870128345
+        },
+        {
+          "dose_nm": 50000,
+          "n": 79166,
+          "median": 0.19484196894673012
+        }
+      ],
+      "condition_detection": [
+        {
+          "dose_nm": 0,
+          "precursor_count": 121287,
+          "complete_count": 43045
+        },
+        {
+          "dose_nm": 0.1,
+          "precursor_count": 122878,
+          "complete_count": 101415
+        },
+        {
+          "dose_nm": 1,
+          "precursor_count": 122883,
+          "complete_count": 106057
+        },
+        {
+          "dose_nm": 10,
+          "precursor_count": 122929,
+          "complete_count": 104778
+        },
+        {
+          "dose_nm": 100,
+          "precursor_count": 122210,
+          "complete_count": 97542
+        },
+        {
+          "dose_nm": 1000,
+          "precursor_count": 122079,
+          "complete_count": 96355
+        },
+        {
+          "dose_nm": 10000,
+          "precursor_count": 122504,
+          "complete_count": 98288
+        },
+        {
+          "dose_nm": 50000,
+          "precursor_count": 122277,
+          "complete_count": 97042
+        }
       ]
     },
     {
       "tool": "FragPipe + DIA-NN",
+      "software_version": "21.1 + 1.8.2",
       "entry_method": "manual_transcription",
       "sources": [
         {
@@ -229,11 +340,57 @@
         "Values were manually transcribed from the prior local analysis; this export does not reparse S5.",
         "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
         "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
-        "Specificity is provisional and uses a different classification method from SynapSpec."
-      ]
+        "Specificity is provisional and uses a different classification method from SynapSpec.",
+        "Condition-specific peptide CV medians were calculated from the source table's dose_1/dose_2/dose_3 quantities using sample SD/mean; all rows were positive at every dose. The aggregated peptide table does not provide charge-specific run detection, so precursor completeness remains unavailable."
+      ],
+      "detection_frequency": null,
+      "condition_cv": [
+        {
+          "dose_nm": 0,
+          "n": 78773,
+          "median": 0.08459328098570558
+        },
+        {
+          "dose_nm": 0.1,
+          "n": 78773,
+          "median": 0.08494329598065485
+        },
+        {
+          "dose_nm": 1,
+          "n": 78773,
+          "median": 0.07115525044592674
+        },
+        {
+          "dose_nm": 10,
+          "n": 78773,
+          "median": 0.07084461741465124
+        },
+        {
+          "dose_nm": 100,
+          "n": 78773,
+          "median": 0.0612974699196791
+        },
+        {
+          "dose_nm": 1000,
+          "n": 78773,
+          "median": 0.08072222857635629
+        },
+        {
+          "dose_nm": 10000,
+          "n": 78773,
+          "median": 0.1011472935575209
+        },
+        {
+          "dose_nm": 50000,
+          "n": 78773,
+          "median": 0.08527968285160245
+        }
+      ],
+      "condition_detection": null
     },
     {
       "tool": "Spectronaut",
+      "software_version": "18.5.231110.55695",
       "entry_method": "manual_transcription",
       "sources": [
         {
@@ -273,8 +430,53 @@
         "Values were manually transcribed from the prior local analysis; this export does not reparse S6 or the Spectronaut SNE file.",
         "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
         "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
-        "Specificity is provisional and uses a different classification method from SynapSpec."
-      ]
+        "Specificity is provisional and uses a different classification method from SynapSpec.",
+        "Condition-specific peptide CV medians were calculated from the source table's dose_1/dose_2/dose_3 quantities using sample SD/mean; all rows were positive at every dose. The aggregated peptide table does not provide charge-specific run detection, so precursor completeness remains unavailable."
+      ],
+      "detection_frequency": null,
+      "condition_cv": [
+        {
+          "dose_nm": 0,
+          "n": 121902,
+          "median": 0.09705933238315292
+        },
+        {
+          "dose_nm": 0.1,
+          "n": 121902,
+          "median": 0.10058532887514518
+        },
+        {
+          "dose_nm": 1,
+          "n": 121902,
+          "median": 0.08782888659798771
+        },
+        {
+          "dose_nm": 10,
+          "n": 121902,
+          "median": 0.08582920160239169
+        },
+        {
+          "dose_nm": 100,
+          "n": 121902,
+          "median": 0.0772330604793754
+        },
+        {
+          "dose_nm": 1000,
+          "n": 121902,
+          "median": 0.0966386115211395
+        },
+        {
+          "dose_nm": 10000,
+          "n": 121902,
+          "median": 0.12431339523415741
+        },
+        {
+          "dose_nm": 50000,
+          "n": 121902,
+          "median": 0.10378648776269873
+        }
+      ],
+      "condition_detection": null
     }
   ]
 }

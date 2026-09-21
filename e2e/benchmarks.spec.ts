@@ -25,6 +25,30 @@ test.describe("benchmarks index", () => {
         await expect(chart).toHaveClass(/is-visible/);
         await expect(chart).toBeVisible();
       }
+      const comparison = JSON.parse((await panel.locator('[data-comparison]').getAttribute('data-comparison'))!);
+      await expect(panel.locator('[data-tool-versions]')).toHaveText(
+        comparison.tools.map((tool: { label: string }) => tool.label).join(' · '),
+      );
+      const renderedIds = await panel.locator('[data-chart="ids"]').evaluate((element) =>
+        (element as HTMLElement & { data: { y: number[] }[] }).data[0].y,
+      );
+      expect(renderedIds).toEqual(comparison.tools.map((tool: { precursors: number }) => tool.precursors));
+      await expect(panel.locator('[data-chart="complete"]')).toHaveCount(comparison.showCompleteness ? 1 : 0);
+      await expect(panel.locator('[data-condition]')).toHaveCount(0);
+      const distribution = JSON.parse((await panel.locator('[data-cv-distribution]').getAttribute('data-cv-distribution'))!);
+      const boxMode = await panel.locator('[data-chart="cv"]').evaluate((element) =>
+        (element as HTMLElement & { layout: { boxmode: string } }).layout.boxmode,
+      );
+      expect(boxMode).toBe(distribution.isPeptide ? 'overlay' : 'group');
+      const renderedCv = await panel.locator('[data-chart="cv"]').evaluate((element) =>
+        (element as HTMLElement & { data: { type: string; median: number[] }[] }).data.map((trace) => ({ type: trace.type, median: trace.median })),
+      );
+      expect(renderedCv).toEqual(distribution.series.map((series: { median: number[] }) => ({ type: 'box', median: series.median })));
+      const rows = JSON.parse((await panel.locator('[data-rows]').getAttribute('data-rows'))!);
+      const detail = await page.context().newPage();
+      await detail.goto(`/benchmarks/${rows[0].sourceSlug}/`);
+      expect(JSON.parse((await detail.locator('[data-cv-distribution]').getAttribute('data-cv-distribution'))!)).toEqual(distribution);
+      await detail.close();
     }
   });
 
@@ -46,7 +70,7 @@ test.describe("benchmark detail pages, one per kind", () => {
 
   test("comparison — renders the accuracy-vs-depth scatter with one dot per tool", async ({ page }) => {
     await page.goto("/benchmarks/lfqbench-202409-archived/");
-    await expect(page.locator("h1")).toHaveText("LFQBench / OE480");
+    await expect(page.locator("h1")).toHaveText("PXD028735");
     await expect(page.locator(".bench-scatter-dot")).toHaveCount(3);
     await expect(page.locator(".bench-scatter-legend li")).toHaveCount(3);
   });

@@ -12,6 +12,15 @@ site/data/pxd055927/
 
 ## External reference sources
 
+Software versions are reported in the paper's
+[MS Data Analysis methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC12022698/):
+FragPipe 21.1 with MSFragger 4.0 and DIA-NN 1.8.2, and Spectronaut
+18.5.231110.55695. Each external reference's `software_version` is preserved by
+the exporter and displayed on the website. The paired value `21.1 + 1.8.2`
+follows the `FragPipe + DIA-NN` label order; MSFragger is the search engine inside
+that workflow. These are paper-reported versions, not independently recovered
+execution-log versions.
+
 - FragPipe + DIA-NN: Koudelka et al. 2025, [Supplementary Table S5 · Direct MSF](https://ars.els-cdn.com/content/image/1-s2.0-S153594762500043X-mmc5.xlsx).
   This workflow combines FragPipe/MSFragger identification with DIA-NN quantification;
   it is not a standalone DIA-NN result.
@@ -24,6 +33,14 @@ analysis of these sources. The current exporter does not reparse the paper's tab
 or recalculate external results. Preserve source URLs, hashes, methods, and limitations
 in `external_reference.json`. Identification scope, CV cohorts, and specificity
 classification methods are not fully harmonized across workflows.
+
+The `condition_cv` medians were separately calculated from the original S5/S6 tables:
+group each row's `dose_1`, `dose_2`, and `dose_3` quantities, calculate sample SD / mean,
+then take the median across peptides at that dose. All source rows had positive
+quantities at every dose. S5 contains 78,773 modified sequences; S6 contains 121,902.
+These are peptide-level tables with aggregated charge lists, not charge-specific
+per-run identification records. External `detection_frequency` therefore remains
+`null`. The overview omits precursor completeness for this dataset.
 
 ## Scope
 
@@ -95,6 +112,14 @@ The current exporter assumes:
 - CV: sum positive MS2 quantities over charges, retain peptides quantified in all
   24 runs, calculate sample SD / mean across the three replicates at each dose,
   and pool the results across eight doses.
+- Overview `condition_cv`: use peptides positive in all three replicates of each
+  dose independently, calculate sample SD / mean, and record each dose's median
+  and peptide count. Unlike the pooled detail CV, this does not require all 24 runs.
+- `detection_frequency`: partition identified precursors into 24 bins by the number
+  of files in which each modified sequence + charge passes the identification filter.
+- `condition_detection`: for each dose, record the identified precursor union
+  (`precursor_count`) and the intersection of all three replicates (`complete_count`).
+  Their ratio is the overview completeness. Keep C1 and all other original runs.
 - Specificity: use SynapSpec's native `precursor_class`.
 
 Report failures caused by different filenames or sample layouts, missing required
@@ -165,6 +190,11 @@ source accuracy or scientific comparability. Also verify:
   Formatting and indentation differences are acceptable.
 - CV values are fractions: `0.15` is displayed as `15%`.
   `cv.n` counts peptide × dose observations and must equal `cv.peptide_count × 8`.
+- `condition_cv` contains eight ordered doses (0, 0.1, 1, 10, 100, 1000, 10000,
+  50000 nM), with sample counts and median CV fractions.
+- SynapSpec `detection_frequency` has 24 bins whose sum equals `precursor_count`.
+  Its final bin divided by `precursor_count` gives the all-24-run completeness.
+  External detection frequencies remain `null` unless charge-specific evidence is supplied.
 - `lowerfence` / `upperfence` are the actual minimum/maximum within the 1.5 IQR fences,
   not p5/p95.
 - `specific + semi_specific + non_specific_excluded + unmapped_excluded` equals
@@ -184,6 +214,14 @@ in existing tests are not target values that a new run must reproduce.
 
 Apply the validated candidate to `site/data/pxd055927/comparison.json`.
 A data update that preserves the JSON contract does not require chart code changes.
+The overview shows unique precursor totals across all doses and the same pooled
+peptide CV distribution as the detail page. It has no completeness plot or dose
+selector. External `condition_detection` remains `null`; existing condition-level
+statistics are retained in JSON but are not displayed in the overview.
+Both views use `CvDistributionWidget.astro`. PXD055927 CV pools peptide-by-dose
+values; LFQ datasets show precursor and protein CV across six files. The Run history
+detail retains Data completeness (SynapSpec only), CV distribution, and Precursor
+cleavage specificity.
 Do not add raw parquet files, temporary candidate directories, or large external source
 files to the website repository.
 

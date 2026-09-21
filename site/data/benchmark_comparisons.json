@@ -1,7 +1,7 @@
 [
   {
     "slug": "lfqbench-202409-archived",
-    "name": "LFQBench / OE480",
+    "name": "PXD028735",
     "instrument": "OE480",
     "preset": "bion_lfq_oe480",
     "files": [
@@ -295,7 +295,7 @@
   },
   {
     "slug": "lfqbench-202502-archived",
-    "name": "LFQBench / Orbitrap Astral",
+    "name": "ProteoBench 2 Th",
     "instrument": "Orbitrap Astral",
     "preset": "bion_lfq_astral",
     "files": [

@@ -2,16 +2,30 @@
 // benchmarks/index.md를 옮긴 것. No-JS 데이터셋 토글은 라디오+라벨로 그대로 둔다.
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ledgers from "../../data/benchmark_ledger.json";
+import catalog from "../../data/benchmark_catalog.json";
 import ComparisonWidget from "../../components/benchmark/ComparisonWidget.astro";
 import VersionHistoryWidget from "../../components/benchmark/VersionHistoryWidget.astro";
-import Pxd055927Benchmark from "../../components/benchmark/Pxd055927Benchmark.astro";
 import pxd055927 from "../../data/pxd055927/comparison.json";
+import type { BenchmarkSummary } from "../../lib/benchmarkSummary";
 
 const description =
   "SynapSpec benchmark history across LFQBench datasets and the PXD055927 reference comparison";
 
 const [oe480, astral] = ledgers;
 const pxd055927Name = "PXD055927 / semi-specific";
+if (pxd055927.tools.slice(1).some((tool) => !tool.software_version?.trim())) {
+  throw new Error("PXD055927 external references require their reported software versions");
+}
+const pxd055927Summary: BenchmarkSummary = {
+  runCount: 3,
+  showCompleteness: false,
+  tools: pxd055927.tools.map((tool, index) => ({
+    id: ["synapspec", "diann", "spectronaut"][index],
+    label: `${tool.tool} (${index === 0 ? pxd055927.synapspec_version : tool.software_version})`,
+    precursors: tool.precursor_count,
+    completePercent: null,
+  })),
+};
 const pxd055927Runs = [{
   date: null,
   label: `SynapSpec ${pxd055927.synapspec_version}`,
@@ -49,14 +63,16 @@ const pxd055927Runs = [{
       const isAstral = ledger.id === astral.id;
       const panelClass = isAstral ? "bench-ds-panel-astral" : "bench-ds-panel-oe480";
       const anchor = isAstral ? "run-history-astral" : "run-history-oe480";
+      const latestRun = ledger.rows[0];
+      if (!latestRun) throw new Error("Benchmark summary requires a recorded run: " + ledger.id);
+      const inputFiles = catalog.recorded_runs[latestRun.sourceSlug as keyof typeof catalog.recorded_runs].recorded_run.files.map((file) => file.name);
       return (
         <div class={`bench-ds-panel ${panelClass}`}>
           <section class="block" aria-label="Selected results">
             <div class="section-header">
               <h2>SynapSpec &middot; DIA-NN &middot; Spectronaut</h2>
             </div>
-            <p class="bench-axis-note bench-axis-note-left"><a href={`/benchmarks/${ledger.id}/`} class="bench-link">Run details &amp; source</a></p>
-            <ComparisonWidget slug={ledger.id} />
+            <ComparisonWidget slug={ledger.id} runSlug={latestRun.sourceSlug} runVersion={latestRun.release_version} toolReferences={ledger.toolReferences} />
           </section>
 
           <section id={anchor} class="block">
@@ -68,7 +84,7 @@ const pxd055927Runs = [{
 
           <details class="bench-details bench-border-t bench-details-flat">
             <summary>Fixed input-file list</summary>
-            <ul class="bench-file-list">{ledger.files.map((file) => <li>{file}</li>)}</ul>
+            <ul class="bench-file-list">{inputFiles.map((file) => <li>{file}</li>)}</ul>
           </details>
         </div>
       );
@@ -79,7 +95,8 @@ const pxd055927Runs = [{
         <div class="section-header">
           <h2>SynapSpec &middot; FragPipe + DIA-NN &middot; Spectronaut</h2>
         </div>
-        <Pxd055927Benchmark />
+        <ComparisonWidget summary={pxd055927Summary} cvSlug={pxd055927.dataset} />
+        <p class="bench-axis-note bench-axis-note-left">Identification totals cover all doses. Completeness and peptide CV use the selected dose’s three replicates; external completeness is unavailable.</p>
       </section>
       <section id="run-history-pxd055927" class="block">
         <div class="section-header bench-section-wide">

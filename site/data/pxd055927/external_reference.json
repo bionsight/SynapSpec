@@ -1,6 +1,7 @@
 [
   {
     "tool": "FragPipe + DIA-NN",
+    "software_version": "21.1 + 1.8.2",
     "entry_method": "manual_transcription",
     "sources": [
       {
@@ -22,7 +23,7 @@
       "n": 630184,
       "peptide_count": 78773,
       "q1": 0.044770854056,
-      "median": 0.079027146510,
+      "median": 0.07902714651,
       "q3": 0.138684640819,
       "lowerfence": 0.000091979235,
       "upperfence": 0.279550986525
@@ -41,11 +42,57 @@
       "Values were manually transcribed from the prior local analysis; this export does not reparse S5.",
       "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
       "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
-      "Specificity is provisional and uses a different classification method from SynapSpec."
+      "Specificity is provisional and uses a different classification method from SynapSpec.",
+      "Condition-specific peptide CV medians were calculated from the source table's dose_1/dose_2/dose_3 quantities using sample SD/mean; all rows were positive at every dose. The aggregated peptide table does not provide charge-specific run detection, so precursor completeness remains unavailable."
+    ],
+    "detection_frequency": null,
+    "condition_detection": null,
+    "condition_cv": [
+      {
+        "dose_nm": 0,
+        "n": 78773,
+        "median": 0.08459328098570558
+      },
+      {
+        "dose_nm": 0.1,
+        "n": 78773,
+        "median": 0.08494329598065485
+      },
+      {
+        "dose_nm": 1,
+        "n": 78773,
+        "median": 0.07115525044592674
+      },
+      {
+        "dose_nm": 10,
+        "n": 78773,
+        "median": 0.07084461741465124
+      },
+      {
+        "dose_nm": 100,
+        "n": 78773,
+        "median": 0.0612974699196791
+      },
+      {
+        "dose_nm": 1000,
+        "n": 78773,
+        "median": 0.08072222857635629
+      },
+      {
+        "dose_nm": 10000,
+        "n": 78773,
+        "median": 0.1011472935575209
+      },
+      {
+        "dose_nm": 50000,
+        "n": 78773,
+        "median": 0.08527968285160245
+      }
     ]
   },
   {
     "tool": "Spectronaut",
+    "software_version": "18.5.231110.55695",
     "entry_method": "manual_transcription",
     "sources": [
       {
@@ -85,7 +132,52 @@
       "Values were manually transcribed from the prior local analysis; this export does not reparse S6 or the Spectronaut SNE file.",
       "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
       "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
-      "Specificity is provisional and uses a different classification method from SynapSpec."
+      "Specificity is provisional and uses a different classification method from SynapSpec.",
+      "Condition-specific peptide CV medians were calculated from the source table's dose_1/dose_2/dose_3 quantities using sample SD/mean; all rows were positive at every dose. The aggregated peptide table does not provide charge-specific run detection, so precursor completeness remains unavailable."
+    ],
+    "detection_frequency": null,
+    "condition_detection": null,
+    "condition_cv": [
+      {
+        "dose_nm": 0,
+        "n": 121902,
+        "median": 0.09705933238315292
+      },
+      {
+        "dose_nm": 0.1,
+        "n": 121902,
+        "median": 0.10058532887514518
+      },
+      {
+        "dose_nm": 1,
+        "n": 121902,
+        "median": 0.08782888659798771
+      },
+      {
+        "dose_nm": 10,
+        "n": 121902,
+        "median": 0.08582920160239169
+      },
+      {
+        "dose_nm": 100,
+        "n": 121902,
+        "median": 0.0772330604793754
+      },
+      {
+        "dose_nm": 1000,
+        "n": 121902,
+        "median": 0.0966386115211395
+      },
+      {
+        "dose_nm": 10000,
+        "n": 121902,
+        "median": 0.12431339523415741
+      },
+      {
+        "dose_nm": 50000,
+        "n": 121902,
+        "median": 0.10378648776269873
+      }
     ]
   }
 ]

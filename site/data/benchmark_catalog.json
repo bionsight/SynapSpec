@@ -1444,6 +1444,18 @@
     },
     "pxd028735-v0.12.4": {
       "run_slug": "pxd028735-v0.12.4",
+      "condition_cv": {
+        "method": "Target precursor_qvalue < 0.01; unique modified_sequence + precursor_charge per file; positive ms2_quantity in all three replicates of each condition; sample SD / mean, then median across precursors. No additional normalization or imputation.",
+        "source_sha256": "9d4ef16c08442c9ef1f11d1daeec7494fda17c9a469f12f26edefca78dac94c7",
+        "A": {
+          "count": 67404,
+          "median": 0.1994099992684146
+        },
+        "B": {
+          "count": 60472,
+          "median": 0.19720929181497918
+        }
+      },
       "title": "PXD028735",
       "source_url": "https://www.ebi.ac.uk/pride/archive/projects/PXD028735",
       "instrument": "OE480",
@@ -3105,6 +3117,18 @@
             "p95": 1.101866
           }
         }
+      },
+      "condition_cv": {
+        "method": "Target precursor q-value < 0.01. IDs and detection frequency use unique modified sequence + charge per file, including identified rows with missing quantity. CV uses the source normalized precursor quantity, sample SD / mean, and positive finite quantities in all three runs of each condition. No additional normalization or imputation.",
+        "source_sha256": "75d9ab9d330891e8b4dbbf54cf065b356c86fe6592fd14e8bdf714a7afe48722",
+        "A": {
+          "count": 105728,
+          "median": 0.1894531289698309
+        },
+        "B": {
+          "count": 107126,
+          "median": 0.18792313478713812
+        }
       }
     }
   },
@@ -3337,6 +3361,225 @@
           "p75": 0.46184475189681407,
           "p95": 0.7426187623298433
         }
+      },
+      "condition_cv": {
+        "method": "Target precursor_qvalue < 0.01; unique modified_sequence + precursor_charge per file; positive finite ms2_quantity in all three replicates of each condition; sample SD / mean, then median across precursors. No additional normalization or imputation.",
+        "source_sha256": "b5a2de0d30147c853e00b28979347c67332f0c938358af1d18ba42043d907d7d",
+        "A": {
+          "count": 88632,
+          "median": 0.22963348895578933
+        },
+        "B": {
+          "count": 75259,
+          "median": 0.22664198257852478
+        }
+      }
+    },
+    "pxd028735-diann-v202": {
+      "data_completeness": {
+        "n_files": 6,
+        "bars": [
+          {
+            "n": 1,
+            "count": 1812,
+            "count_display": "1,812"
+          },
+          {
+            "n": 2,
+            "count": 3875,
+            "count_display": "3,875"
+          },
+          {
+            "n": 3,
+            "count": 18513,
+            "count_display": "18,513"
+          },
+          {
+            "n": 4,
+            "count": 6453,
+            "count_display": "6,453"
+          },
+          {
+            "n": 5,
+            "count": 7606,
+            "count_display": "7,606"
+          },
+          {
+            "n": 6,
+            "count": 57077,
+            "count_display": "57,077"
+          }
+        ]
+      },
+      "cv_distribution": {
+        "precursor": {
+          "count": 93524,
+          "median": 0.2589520583450775,
+          "median_display": "25.9%",
+          "p5": 0.06554533724926599,
+          "p25": 0.14555150511199139,
+          "p75": 0.4600584354555177,
+          "p95": 0.7232084825197704
+        },
+        "protein": {
+          "count": 9439,
+          "median": 0.18313217317146235,
+          "median_display": "18.3%",
+          "p5": 0.03687753090467423,
+          "p25": 0.08288742190386186,
+          "p75": 0.4257587491413666,
+          "p95": 0.6325588455252511
+        }
+      },
+      "condition_cv": {
+        "method": "Target precursor_qvalue < 0.01; unique modified_sequence + precursor_charge per file; positive finite ms2_quantity in all three replicates of each condition; sample SD / mean, then median across precursors. No additional normalization or imputation.",
+        "source_sha256": "54a2a9179c827dcf2b6a058a69b114348b5d28a7fe3bf1ed07a89049e362e4d4",
+        "A": {
+          "count": 75193,
+          "median": 0.16847371853010573
+        },
+        "B": {
+          "count": 67826,
+          "median": 0.1690577922553051
+        }
+      }
+    },
+    "proteobench-2th-diann-v250": {
+      "data_completeness": {
+        "n_files": 6,
+        "bars": [
+          {
+            "n": 1,
+            "count": 11537,
+            "count_display": "11,537"
+          },
+          {
+            "n": 2,
+            "count": 4696,
+            "count_display": "4,696"
+          },
+          {
+            "n": 3,
+            "count": 5849,
+            "count_display": "5,849"
+          },
+          {
+            "n": 4,
+            "count": 6882,
+            "count_display": "6,882"
+          },
+          {
+            "n": 5,
+            "count": 11197,
+            "count_display": "11,197"
+          },
+          {
+            "n": 6,
+            "count": 81598,
+            "count_display": "81,598"
+          }
+        ]
+      },
+      "cv_distribution": {
+        "precursor": {
+          "count": 110222,
+          "median": 0.2553156017395722,
+          "median_display": "25.5%",
+          "p5": 0.05962388050932235,
+          "p25": 0.13757842904990267,
+          "p75": 0.4032801126204364,
+          "p95": 0.6463118336077032
+        },
+        "protein": {
+          "count": 10704,
+          "median": 0.18396674812832153,
+          "median_display": "18.4%",
+          "p5": 0.0246721796624384,
+          "p25": 0.06371409814385248,
+          "p75": 0.3737081362712097,
+          "p95": 0.62079049976364
+        }
+      },
+      "condition_cv": {
+        "method": "Target precursor q-value < 0.01. IDs and detection frequency use unique modified sequence + charge per file, including identified rows with missing quantity. CV uses the source normalized precursor quantity, sample SD / mean, and positive finite quantities in all three runs of each condition. No additional normalization or imputation.",
+        "source_sha256": "dffccccf32f2d6a5a1ce80d210095ebb56a3d589a7a8ffaba486bf1cf3007187",
+        "A": {
+          "count": 89946,
+          "median": 0.1438703641855699
+        },
+        "B": {
+          "count": 90368,
+          "median": 0.14206055835317943
+        }
+      }
+    },
+    "proteobench-2th-spectronaut-v21": {
+      "data_completeness": {
+        "n_files": 6,
+        "bars": [
+          {
+            "n": 1,
+            "count": 644,
+            "count_display": "644"
+          },
+          {
+            "n": 2,
+            "count": 1474,
+            "count_display": "1,474"
+          },
+          {
+            "n": 3,
+            "count": 3371,
+            "count_display": "3,371"
+          },
+          {
+            "n": 4,
+            "count": 6225,
+            "count_display": "6,225"
+          },
+          {
+            "n": 5,
+            "count": 12512,
+            "count_display": "12,512"
+          },
+          {
+            "n": 6,
+            "count": 115940,
+            "count_display": "115,940"
+          }
+        ]
+      },
+      "cv_distribution": {
+        "precursor": {
+          "count": 139438,
+          "median": 0.3093845948985186,
+          "median_display": "30.9%",
+          "p5": 0.06289040056544845,
+          "p25": 0.16687720083798213,
+          "p75": 0.4682580977100017,
+          "p95": 0.7368857427322025
+        },
+        "protein": {
+          "count": 11432,
+          "median": 0.23023859729017032,
+          "median_display": "23.0%",
+          "p5": 0.030709598138055245,
+          "p25": 0.07360856578546532,
+          "p75": 0.3749170453278614,
+          "p95": 0.6532264586667664
+        }
+      },
+      "condition_cv": {
+        "method": "Target precursor q-value < 0.01. IDs and detection frequency use unique modified sequence + charge per file, including identified rows with missing quantity. CV uses the source normalized precursor quantity, sample SD / mean, and positive finite quantities in all three runs of each condition. No additional normalization or imputation.",
+        "source_sha256": "7e153e0841f710f0a3220973f6ab9639c3aa7116b300dba00c6c758a75936f75",
+        "A": {
+          "count": 123373,
+          "median": 0.18176860414671167
+        },
+        "B": {
+          "count": 124655,
+          "median": 0.17931027825997448
+        }
       }
     }
   },
@@ -3444,6 +3687,111 @@
         "upper": 1.694623320303041,
         "measured_ratio_display": "2.322×",
         "deviation_percent": 16.1
+      }
+    ],
+    "pxd028735-diann-v202": [
+      {
+        "species": "Human",
+        "count": 55209,
+        "count_display": "55,209",
+        "target": 0,
+        "median": 0.02877865553975102,
+        "lower": -0.19033596591231566,
+        "upper": 0.17741470045692498,
+        "measured_ratio_display": "1.020×",
+        "deviation_percent": 2.0
+      },
+      {
+        "species": "E. coli",
+        "count": 2348,
+        "count_display": "2,348",
+        "target": -2,
+        "median": -1.9957750721229868,
+        "lower": -2.3476143295188936,
+        "upper": -1.7686630329149753,
+        "measured_ratio_display": "0.251×",
+        "deviation_percent": 0.3
+      },
+      {
+        "species": "Yeast",
+        "count": 15192,
+        "count_display": "15,192",
+        "target": 1,
+        "median": 1.2145029459516998,
+        "lower": 1.026007649386076,
+        "upper": 1.4355575083724552,
+        "measured_ratio_display": "2.321×",
+        "deviation_percent": 16.0
+      }
+    ],
+    "proteobench-2th-diann-v250": [
+      {
+        "species": "Human",
+        "count": 75419,
+        "count_display": "75,419",
+        "target": 0,
+        "median": 0.0120897889514871,
+        "lower": -0.20080394602751517,
+        "upper": 0.18744269915196726,
+        "measured_ratio_display": "1.008×",
+        "deviation_percent": 0.8
+      },
+      {
+        "species": "E. coli",
+        "count": 5383,
+        "count_display": "5,383",
+        "target": -2,
+        "median": -1.740691281129814,
+        "lower": -1.9876257505164898,
+        "upper": -1.3136207139497909,
+        "measured_ratio_display": "0.299×",
+        "deviation_percent": 19.7
+      },
+      {
+        "species": "Yeast",
+        "count": 23098,
+        "count_display": "23,098",
+        "target": 1,
+        "median": 0.9818143369804229,
+        "lower": 0.7244890239730466,
+        "upper": 1.1826762996297524,
+        "measured_ratio_display": "1.975×",
+        "deviation_percent": -1.3
+      }
+    ],
+    "proteobench-2th-spectronaut-v21": [
+      {
+        "species": "Human",
+        "count": 97367,
+        "count_display": "97,367",
+        "target": 0,
+        "median": -0.06905264670727027,
+        "lower": -0.3098735825686308,
+        "upper": 0.1293188576912534,
+        "measured_ratio_display": "0.953×",
+        "deviation_percent": -4.7
+      },
+      {
+        "species": "E. coli",
+        "count": 7346,
+        "count_display": "7,346",
+        "target": -2,
+        "median": -1.8158157533604578,
+        "lower": -2.1059710848825004,
+        "upper": -1.3338898723680264,
+        "measured_ratio_display": "0.284×",
+        "deviation_percent": 13.6
+      },
+      {
+        "species": "Yeast",
+        "count": 31150,
+        "count_display": "31,150",
+        "target": 1,
+        "median": 0.8741316664273153,
+        "lower": 0.5812549414957463,
+        "upper": 1.1058724847517083,
+        "measured_ratio_display": "1.833×",
+        "deviation_percent": -8.4
       }
     ]
   },
@@ -3795,6 +4143,428 @@
           }
         ]
       }
+    ],
+    "pxd028735-diann-v202": [
+      {
+        "species": "Human",
+        "target": 0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 0.06435285936056692,
+            "lower": -0.20345342115775186,
+            "upper": 0.2976380972754181,
+            "count": 13802,
+            "count_display": "13,802"
+          },
+          {
+            "quartile": "Q2",
+            "median": 0.025325362040132453,
+            "lower": -0.2168513543051145,
+            "upper": 0.20895588817247301,
+            "count": 13802,
+            "count_display": "13,802"
+          },
+          {
+            "quartile": "Q3",
+            "median": 0.01526510935683811,
+            "lower": -0.19604904540405485,
+            "upper": 0.14922801999481303,
+            "count": 13802,
+            "count_display": "13,802"
+          },
+          {
+            "quartile": "Q4",
+            "median": 0.024393881235965646,
+            "lower": -0.13605557599828605,
+            "upper": 0.11949360578615949,
+            "count": 13803,
+            "count_display": "13,803"
+          }
+        ]
+      },
+      {
+        "species": "E. coli",
+        "target": -2,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -2.0369002956720372,
+            "lower": -2.473873207263469,
+            "upper": -1.5378126865330581,
+            "count": 587,
+            "count_display": "587"
+          },
+          {
+            "quartile": "Q2",
+            "median": -2.096584074386314,
+            "lower": -2.4653321696727564,
+            "upper": -1.762393169290569,
+            "count": 587,
+            "count_display": "587"
+          },
+          {
+            "quartile": "Q3",
+            "median": -2.0123146517401755,
+            "lower": -2.335938506673528,
+            "upper": -1.795259950190934,
+            "count": 587,
+            "count_display": "587"
+          },
+          {
+            "quartile": "Q4",
+            "median": -1.9223586527672394,
+            "lower": -2.0846223475006624,
+            "upper": -1.8122588995933224,
+            "count": 587,
+            "count_display": "587"
+          }
+        ]
+      },
+      {
+        "species": "Yeast",
+        "target": 1,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 1.4365022808399066,
+            "lower": 1.1249788580202424,
+            "upper": 1.756021590769076,
+            "count": 3798,
+            "count_display": "3,798"
+          },
+          {
+            "quartile": "Q2",
+            "median": 1.2698719818267659,
+            "lower": 1.0096243489052736,
+            "upper": 1.501818859139515,
+            "count": 3798,
+            "count_display": "3,798"
+          },
+          {
+            "quartile": "Q3",
+            "median": 1.192403411951915,
+            "lower": 1.004795231510387,
+            "upper": 1.3469992209206985,
+            "count": 3798,
+            "count_display": "3,798"
+          },
+          {
+            "quartile": "Q4",
+            "median": 1.135779864876954,
+            "lower": 1.0032522712426115,
+            "upper": 1.2290097992331734,
+            "count": 3798,
+            "count_display": "3,798"
+          }
+        ]
+      }
+    ],
+    "proteobench-2th-diann-v250": [
+      {
+        "species": "Human",
+        "target": 0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -0.0001095802857271634,
+            "lower": -0.3465014239264802,
+            "upper": 0.33667594361993824,
+            "count": 18855,
+            "count_display": "18,855"
+          },
+          {
+            "quartile": "Q2",
+            "median": -0.012476973605573994,
+            "lower": -0.2791957448681244,
+            "upper": 0.23577375837473985,
+            "count": 18854,
+            "count_display": "18,854"
+          },
+          {
+            "quartile": "Q3",
+            "median": 0.007518540912435419,
+            "lower": -0.17745033464366344,
+            "upper": 0.16869139693555296,
+            "count": 18855,
+            "count_display": "18,855"
+          },
+          {
+            "quartile": "Q4",
+            "median": 0.02722304390071885,
+            "lower": -0.08242344940153983,
+            "upper": 0.12139178090331568,
+            "count": 18855,
+            "count_display": "18,855"
+          }
+        ]
+      },
+      {
+        "species": "E. coli",
+        "target": -2,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -1.2360402348701047,
+            "lower": -1.6953707163189866,
+            "upper": -0.744938290512455,
+            "count": 1346,
+            "count_display": "1,346"
+          },
+          {
+            "quartile": "Q2",
+            "median": -1.6293582152131145,
+            "lower": -1.973184884472532,
+            "upper": -1.256370602733209,
+            "count": 1345,
+            "count_display": "1,345"
+          },
+          {
+            "quartile": "Q3",
+            "median": -1.8630177790166769,
+            "lower": -2.1296124318896155,
+            "upper": -1.6104676473661073,
+            "count": 1346,
+            "count_display": "1,346"
+          },
+          {
+            "quartile": "Q4",
+            "median": -1.8729401513083108,
+            "lower": -2.0102412658994306,
+            "upper": -1.72110856479597,
+            "count": 1346,
+            "count_display": "1,346"
+          }
+        ]
+      },
+      {
+        "species": "Yeast",
+        "target": 1,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 0.8416310409027639,
+            "lower": 0.43803965000171696,
+            "upper": 1.2169375153471773,
+            "count": 5775,
+            "count_display": "5,775"
+          },
+          {
+            "quartile": "Q2",
+            "median": 0.970881009972279,
+            "lower": 0.6587006882178046,
+            "upper": 1.2576552621444272,
+            "count": 5774,
+            "count_display": "5,774"
+          },
+          {
+            "quartile": "Q3",
+            "median": 1.0310144085073532,
+            "lower": 0.815812316381643,
+            "upper": 1.2256234190661863,
+            "count": 5774,
+            "count_display": "5,774"
+          },
+          {
+            "quartile": "Q4",
+            "median": 1.0009207912714018,
+            "lower": 0.8823125462289783,
+            "upper": 1.1045615919657177,
+            "count": 5775,
+            "count_display": "5,775"
+          }
+        ]
+      }
+    ],
+    "proteobench-2th-spectronaut-v21": [
+      {
+        "species": "Human",
+        "target": 0,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -0.024595950441753216,
+            "lower": -0.5118369355711176,
+            "upper": 0.4299746914313787,
+            "count": 24342,
+            "count_display": "24,342"
+          },
+          {
+            "quartile": "Q2",
+            "median": -0.11225972834816936,
+            "lower": -0.4255280064395983,
+            "upper": 0.16266454708433287,
+            "count": 24341,
+            "count_display": "24,341"
+          },
+          {
+            "quartile": "Q3",
+            "median": -0.08485636154591428,
+            "lower": -0.28229483296953634,
+            "upper": 0.08915545262114105,
+            "count": 24342,
+            "count_display": "24,342"
+          },
+          {
+            "quartile": "Q4",
+            "median": -0.056063528601590834,
+            "lower": -0.1623677025140849,
+            "upper": 0.03670378084189546,
+            "count": 24342,
+            "count_display": "24,342"
+          }
+        ]
+      },
+      {
+        "species": "E. coli",
+        "target": -2,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": -1.3053618973579244,
+            "lower": -1.9607928584910213,
+            "upper": -0.6621459483323435,
+            "count": 1837,
+            "count_display": "1,837"
+          },
+          {
+            "quartile": "Q2",
+            "median": -1.7319606287112868,
+            "lower": -2.1933498417169828,
+            "upper": -1.2578535219862677,
+            "count": 1836,
+            "count_display": "1,836"
+          },
+          {
+            "quartile": "Q3",
+            "median": -1.8846984605701749,
+            "lower": -2.2000844277492995,
+            "upper": -1.578824452599597,
+            "count": 1836,
+            "count_display": "1,836"
+          },
+          {
+            "quartile": "Q4",
+            "median": -1.9160590918682319,
+            "lower": -2.0591419045436585,
+            "upper": -1.770822004357968,
+            "count": 1837,
+            "count_display": "1,837"
+          }
+        ]
+      },
+      {
+        "species": "Yeast",
+        "target": 1,
+        "points": [
+          {
+            "quartile": "Q1",
+            "median": 0.986866963396231,
+            "lower": 0.46381341888376815,
+            "upper": 1.489471552844543,
+            "count": 7788,
+            "count_display": "7,788"
+          },
+          {
+            "quartile": "Q2",
+            "median": 0.8004816572756618,
+            "lower": 0.4239773535068053,
+            "upper": 1.1224946835989194,
+            "count": 7787,
+            "count_display": "7,787"
+          },
+          {
+            "quartile": "Q3",
+            "median": 0.8421233988309241,
+            "lower": 0.5913453339572896,
+            "upper": 1.0568797391076503,
+            "count": 7787,
+            "count_display": "7,787"
+          },
+          {
+            "quartile": "Q4",
+            "median": 0.8920830689210151,
+            "lower": 0.7589529296399149,
+            "upper": 0.9972214369036404,
+            "count": 7788,
+            "count_display": "7,788"
+          }
+        ]
+      }
     ]
+  },
+  "tool_sources": {
+    "pxd028735-diann-v202": {
+      "dataset": "PXD028735",
+      "tool": "DIA-NN",
+      "version": "2.0.2 Academia",
+      "analysis_date": "2025-03-31",
+      "archive": "PXD028735_diann_v202_spectronaut_v19_7.tar.gz",
+      "member": "diann_v202/report.parquet",
+      "sha256": "54a2a9179c827dcf2b6a058a69b114348b5d28a7fe3bf1ed07a89049e362e4d4",
+      "files": [
+        "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_01",
+        "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_02",
+        "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_03",
+        "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_01",
+        "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_02",
+        "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_03"
+      ],
+      "method": "Target precursor_qvalue < 0.01; unique modified_sequence + precursor_charge per file; positive finite ms2_quantity in all three replicates of each condition; sample SD / mean, then median across precursors. No additional normalization or imputation."
+    },
+    "proteobench-2th-diann-v250": {
+      "dataset": "ProteoBench 2 Th",
+      "tool": "DIA-NN",
+      "version": "2.5.0 Academia",
+      "analysis_date": "2026-08-04",
+      "archive": "200c98108a367991eb6d1b4cf867d5a617d62f10_data.zip",
+      "member": "input_file.parquet",
+      "sha256": "dffccccf32f2d6a5a1ce80d210095ebb56a3d589a7a8ffaba486bf1cf3007187",
+      "files": [
+        "LFQ_Astral_DIA_15min_50ng_Condition_A_REP1",
+        "LFQ_Astral_DIA_15min_50ng_Condition_A_REP2",
+        "LFQ_Astral_DIA_15min_50ng_Condition_A_REP3",
+        "LFQ_Astral_DIA_15min_50ng_Condition_B_REP1",
+        "LFQ_Astral_DIA_15min_50ng_Condition_B_REP2",
+        "LFQ_Astral_DIA_15min_50ng_Condition_B_REP3"
+      ],
+      "method": "Target precursor q-value < 0.01. IDs and detection frequency use unique modified sequence + charge per file, including identified rows with missing quantity. CV uses the source normalized precursor quantity, sample SD / mean, and positive finite quantities in all three runs of each condition. No additional normalization or imputation. LFQ uses the same filtered source quantities, restricted to precursor/species assignments in result_performance.csv. Compute log2(mean(A) / mean(B)) and log2(mean(B)) from linear quantities; do not copy the CSV mean-log ratios."
+    },
+    "proteobench-2th-spectronaut-v21": {
+      "dataset": "ProteoBench 2 Th",
+      "tool": "Spectronaut",
+      "version": "21.0.260602.94842",
+      "analysis_date": "2026-07-31",
+      "archive": "790d6197bc6972036a5cfa9907d3249bf978fe45_data.zip",
+      "member": "input_file.tsv",
+      "sha256": "7e153e0841f710f0a3220973f6ab9639c3aa7116b300dba00c6c758a75936f75",
+      "files": [
+        "LFQ_Astral_DIA_15min_50ng_Condition_A_REP1",
+        "LFQ_Astral_DIA_15min_50ng_Condition_A_REP2",
+        "LFQ_Astral_DIA_15min_50ng_Condition_A_REP3",
+        "LFQ_Astral_DIA_15min_50ng_Condition_B_REP1",
+        "LFQ_Astral_DIA_15min_50ng_Condition_B_REP2",
+        "LFQ_Astral_DIA_15min_50ng_Condition_B_REP3"
+      ],
+      "method": "Target precursor q-value < 0.01. IDs and detection frequency use unique modified sequence + charge per file, including identified rows with missing quantity. CV uses the source normalized precursor quantity, sample SD / mean, and positive finite quantities in all three runs of each condition. No additional normalization or imputation. LFQ uses the same filtered source quantities, restricted to precursor/species assignments in result_performance.csv. Compute log2(mean(A) / mean(B)) and log2(mean(B)) from linear quantities; do not copy the CSV mean-log ratios."
+    },
+    "pxd028735-spectronaut": {
+      "dataset": "PXD028735",
+      "tool": "Spectronaut",
+      "version": "19.7.250203.62635",
+      "analysis_date": "2025-02-19",
+      "archive": "PXD028735_diann_v202_spectronaut_v19_7.tar.gz",
+      "member": "spectronaut_v19_7/20250219_LFQ_Orbitrap_AIF_Alpha_directdia_Report_Piazza2020-202210.parquet",
+      "sha256": "b5a2de0d30147c853e00b28979347c67332f0c938358af1d18ba42043d907d7d",
+      "files": [
+        "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_01",
+        "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_02",
+        "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_03",
+        "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_01",
+        "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_02",
+        "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_03"
+      ],
+      "method": "Target precursor_qvalue < 0.01; unique modified_sequence + precursor_charge per file; positive finite ms2_quantity in all three replicates of each condition; sample SD / mean, then median across precursors. No additional normalization or imputation. Repeated fragment rows have identical precursor quantities and are collapsed before calculation."
+    }
   }
 }
