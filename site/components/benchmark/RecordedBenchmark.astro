@@ -2,6 +2,7 @@
 // _includes/benchmark/recorded.html을 옮긴 것. kind: recorded인 항목에서 쓴다.
 // catalog.recorded_runs 는 slug로 찾는 맵 — 여러 데이터셋(astral, oe480, ...)을 공유한다.
 import catalog from "../../data/benchmark_catalog.json";
+import RunConfiguration from "./RunConfiguration.astro";
 import QuartileWidget from "./QuartileWidget.astro";
 import DiagnosticsWidget from "./DiagnosticsWidget.astro";
 import DensityWidget from "./DensityWidget.astro";
@@ -62,17 +63,13 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
   </div>
 
 
-  <section id="configuration" class="mt-lg pt-lg bench-border-t">
-    <h2>Run configuration</h2>
-    <dl class="bench-config-grid">
-      {entry.recorded_config.map((pair) => <div><dt>{pair[0]}</dt><dd>{pair[1]}</dd></div>)}
-    </dl>
+  <RunConfiguration settings={entry.recorded_config}>
     <details class="bench-details">
       <summary>Additional recorded settings</summary>
       <p>FASTA: {entry.fasta}</p>
       <p>Differential analysis enabled · condition-aware precursor correction on · quantity level: pg · output: parquet.</p>
     </details>
-  </section>
+  </RunConfiguration>
 
   {sourceUrl && (
     <section id="raw-files" class="pb-lg">

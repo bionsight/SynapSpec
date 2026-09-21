@@ -47,6 +47,8 @@ test.describe("benchmarks index", () => {
       const rows = JSON.parse((await panel.locator('[data-rows]').getAttribute('data-rows'))!);
       const detail = await page.context().newPage();
       await detail.goto(`/benchmarks/${rows[0].sourceSlug}/`);
+      await expect(detail.locator('#configuration h2')).toHaveText('Run configuration');
+      await expect(detail.locator('#configuration dt')).not.toContainText(['Random seed']);
       expect(JSON.parse((await detail.locator('[data-cv-distribution]').getAttribute('data-cv-distribution'))!)).toEqual(distribution);
       await detail.close();
     }

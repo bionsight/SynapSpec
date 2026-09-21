@@ -4,7 +4,9 @@
 // and exploratory specificity mapping. Keep this comparison in a dedicated
 // component rather than coercing the data into existing LFQ widgets.
 import CvDistributionWidget from "./CvDistributionWidget.astro";
+import RunConfiguration from "./RunConfiguration.astro";
 import comparison from "../../data/pxd055927/comparison.json";
+import configuration from "../../data/pxd055927/configuration.json";
 
 type ToolData = (typeof comparison.tools)[number];
 
@@ -108,8 +110,13 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
     </ul>
   </section>
 
-  <section class="pxd055927-section pxd055927-sources" aria-label="Sources">
+  <RunConfiguration settings={configuration.settings}>
     <details class="bench-details">
+      <summary>Additional recorded settings</summary>
+      <p>Supplied {configuration.source}; not yet verified against the recorded run.</p>
+      <p>FASTA: {configuration.fasta}</p>
+    </details>
+    <details class="bench-details pxd055927-sources">
       <summary>Sources</summary>
       <ul class="pxd055927-source-list">
         <li><strong>SynapSpec</strong><span>{comparison.synapspec_version}</span></li>
@@ -124,7 +131,7 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
         ))}
       </ul>
     </details>
-  </section>
+  </RunConfiguration>
 </div>
 
 <script>

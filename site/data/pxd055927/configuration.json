@@ -1,0 +1,14 @@
+{
+  "source": "pxd_055927.yaml",
+  "fasta": "201015_Hs_CAN_uniprot-proteome_UP000005640_reviewed_yes_canonical_ProteinaseK_LysC.fasta",
+  "settings": [
+    ["Library", "Generated from FASTA"],
+    ["Enzyme", "Trypsin/P"],
+    ["Cleavage mode", "Semi-specific"],
+    ["Missed cleavages", "2"],
+    ["Match between runs", "On"],
+    ["Peptide length", "7–52 residues"],
+    ["Precursor charge", "1–6"],
+    ["Maximum variable modifications", "5"]
+  ]
+}
