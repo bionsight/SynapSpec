@@ -1,0 +1,214 @@
+---
+// PXD055927 is a deliberately dedicated comparison. Its export is not the
+// LFQBench ledger schema: the external workflows have source-table coverage
+// and exploratory specificity mapping. Keep this comparison in a dedicated
+// component rather than coercing the data into existing LFQ widgets.
+import CvDistributionWidget from "./CvDistributionWidget.astro";
+import comparison from "../../data/pxd055927/comparison.json";
+
+type ToolData = (typeof comparison.tools)[number];
+
+const tools = comparison.tools;
+
+if (typeof comparison.synapspec_version !== "string" || !comparison.synapspec_version.trim()) {
+  throw new Error("PXD055927 comparison requires the actual SynapSpec analysis version");
+}
+
+const expectedTools = ["SynapSpec", "FragPipe + DIA-NN", "Spectronaut"] as const;
+if (
+  comparison.dataset !== "bion-semi-specific-pxd055927" ||
+  comparison.status !== "reference_comparison_not_matched_benchmark" ||
+  tools.length !== expectedTools.length ||
+  tools.some((tool, index) => tool.tool !== expectedTools[index])
+) {
+  throw new Error("PXD055927 export has an unexpected dataset, status, or tool order");
+}
+
+const numberFormat = new Intl.NumberFormat("en-US");
+const formatCount = (value: number) => numberFormat.format(value);
+const toolIds: Record<string, string> = {
+  SynapSpec: "synapspec",
+  "FragPipe + DIA-NN": "diann",
+  Spectronaut: "spectronaut",
+};
+const toolId = (tool: ToolData["tool"]) => {
+  const id = toolIds[tool];
+  if (!id) throw new Error(`PXD055927 export has an unsupported tool: ${tool}`);
+  return id;
+};
+const detectionFrequency = tools[0].detection_frequency;
+if (!detectionFrequency || detectionFrequency.length !== 24) {
+  throw new Error("PXD055927 detail requires precursor detection counts for all 24 runs");
+}
+
+const specificityChartData = tools.map((tool) => ({
+  tool: tool.tool,
+  id: toolId(tool.tool),
+  specific: tool.specificity.specific,
+  semi_specific: tool.specificity.semi_specific,
+  non_specific_excluded: tool.specificity.non_specific_excluded,
+  unmapped_excluded: tool.specificity.unmapped_excluded,
+}));
+
+const specificityDenominator = (tool: ToolData) => tool.specificity.specific + tool.specificity.semi_specific;
+---
+
+<div
+  class="pxd055927-benchmark"
+  data-pxd055927
+  data-detection={JSON.stringify(detectionFrequency)}
+  data-specificity={JSON.stringify(specificityChartData)}
+>
+  <p class="pxd055927-reference-note">Reference comparison — not a matched benchmark. SynapSpec is parquet-derived; external values are transcribed.</p>
+
+  <section class="pxd055927-section" aria-labelledby="pxd055927-identification-heading">
+    <p class="bench-scatter-compare-label" id="pxd055927-identification-heading">Diagnostic plots</p>
+
+    <div class="bench-diagnostics-grid pxd055927-chart-grid">
+      <figure class="bench-diagnostic">
+        <div
+          data-chart="completeness"
+          class="bench-plotly-target bench-plotly-fade"
+          role="img"
+          aria-label="SynapSpec precursor detection frequency across 24 runs"
+        ></div>
+        <figcaption>Data completeness</figcaption>
+      </figure>
+      <CvDistributionWidget slug={comparison.dataset} />
+    </div>
+
+  </section>
+
+  <section class="pxd055927-section" aria-labelledby="pxd055927-specificity-heading">
+    <h2 class="pxd055927-subheading" id="pxd055927-specificity-heading">Precursor cleavage specificity</h2>
+
+    <div class="bench-comparison-row pxd055927-specificity-grid">
+      {tools.map((tool) => (
+        <figure class="bench-diagnostic pxd055927-specificity-card">
+          <h3>{tool.tool}</h3>
+          <div
+            data-chart={`specificity-${toolId(tool.tool)}`}
+            class="bench-plotly-target bench-plotly-fade"
+            role="img"
+            aria-label={`${tool.tool} precursor specificity: specific versus semi-specific`}
+          ></div>
+          <figcaption>
+            <strong>{formatCount(specificityDenominator(tool))} plotted precursors</strong>
+            <span>
+              Non-specific excluded: {formatCount(tool.specificity.non_specific_excluded)} · Unmapped excluded:
+              {" "}{formatCount(tool.specificity.unmapped_excluded)}
+            </span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+    <ul class="bench-chart-legend pxd055927-legend" aria-label="Precursor specificity legend">
+      <li><span class="bench-chart-legend-swatch pxd055927-legend-specific"></span>Specific</li>
+      <li><span class="bench-chart-legend-swatch pxd055927-legend-semi"></span>Semi-specific</li>
+    </ul>
+  </section>
+
+  <section class="pxd055927-section pxd055927-sources" aria-label="Sources">
+    <details class="bench-details">
+      <summary>Sources</summary>
+      <ul class="pxd055927-source-list">
+        <li><strong>SynapSpec</strong><span>{comparison.synapspec_version}</span></li>
+        {tools.filter((tool) => tool.tool !== "SynapSpec").map((tool) => (
+          <li>
+            <strong>{tool.tool}</strong>
+            <span class="bench-muted">{tool.software_version}</span>
+            <span class="pxd055927-source-links">
+              {tool.sources.map((source) => <a href={source.url} target="_blank" rel="noopener">{source.title} ↗</a>)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </section>
+</div>
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
+
+  type SpecificityDatum = {
+    tool: string;
+    id: string;
+    specific: number;
+    semi_specific: number;
+    non_specific_excluded: number;
+    unmapped_excluded: number;
+  };
+
+  const pieColors = [COLORS.primary, "#e69f00"];
+  const count = (value: number) => value.toLocaleString("en-US");
+
+  const requiredDataset = (container: HTMLElement, field: string) => {
+    const value = container.dataset[field];
+    if (!value) throw new Error(`PXD055927 chart data attribute is missing: ${field}`);
+    return value;
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-pxd055927]").forEach((container) => {
+    const detection = JSON.parse(requiredDataset(container, "detection")) as number[];
+    const specificity = JSON.parse(requiredDataset(container, "specificity")) as SpecificityDatum[];
+
+    const completenessEl = container.querySelector<HTMLElement>('[data-chart="completeness"]');
+    if (!completenessEl) throw new Error("Missing PXD055927 completeness chart");
+    drawWhenVisible(completenessEl, () => {
+      Plotly.newPlot(completenessEl, [{
+        type: "bar",
+        name: "SynapSpec",
+        x: detection.map((_, index) => index + 1),
+        y: detection,
+        marker: { color: TOOL_COLORS.synapspec },
+        hovertemplate: "SynapSpec<br>Detected in %{x} files<br>%{y:,} precursors<extra></extra>",
+      }], baseLayout({
+        margin: { t: 18, r: 18, b: 65, l: 58 },
+        xaxis: { ...axisStyle, title: { text: "Detected in N files" }, showgrid: false, dtick: 3 },
+        yaxis: { ...axisStyle, title: { text: "Precursor count" }, rangemode: "tozero" },
+      }), baseConfig).then(() => completenessEl.classList.add("is-visible"));
+    });
+
+    specificity.forEach((datum) => {
+      const el = container.querySelector<HTMLElement>(`[data-chart="specificity-${datum.id}"]`);
+      if (!el) return;
+
+      const denominator = datum.specific + datum.semi_specific;
+      drawWhenVisible(el, () => {
+        Plotly.newPlot(
+          el,
+          [
+            {
+              type: "pie",
+              labels: ["Specific", "Semi-specific"],
+              values: [datum.specific, datum.semi_specific],
+              textinfo: "percent",
+              textposition: "inside",
+              insidetextorientation: "horizontal",
+              hole: 0.52,
+              sort: false,
+              direction: "clockwise",
+              marker: { colors: pieColors, line: { color: COLORS.background, width: 2 } },
+              textfont: { color: COLORS.background, size: 12 },
+              hovertemplate: `${datum.tool}<br>%{label}: %{value:,} (%{percent})<extra></extra>`,
+            },
+          ],
+          baseLayout({
+            margin: { t: 8, r: 8, b: 8, l: 8 },
+            annotations: [
+              {
+                x: 0.5,
+                y: 0.5,
+                text: `<b>${count(denominator)}</b><br><span style="font-size:10px;color:${COLORS.textLight}">plotted</span>`,
+                showarrow: false,
+                align: "center",
+              },
+            ],
+          }),
+          baseConfig,
+        ).then(() => el.classList.add("is-visible"));
+      });
+    });
+  });
+</script>

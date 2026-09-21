@@ -1,7 +1,7 @@
 [
   {
     "id": "lfqbench-202409-archived",
-    "name": "LFQBench / OE480",
+    "name": "PXD028735",
     "files": [
       "20240910_LFQBench_120min_A_R1",
       "20240910_LFQBench_120min_A_R2",
@@ -12,7 +12,7 @@
     ],
     "comparison": {
       "slug": "lfqbench-202409-archived",
-      "name": "LFQBench / OE480",
+      "name": "PXD028735",
       "instrument": "OE480",
       "preset": "bion_lfq_oe480",
       "files": [
@@ -283,57 +283,15 @@
         "resource": "c7i.8xlarge",
         "commit": "5fdaefd0",
         "release_version": "v0.12.4"
-      },
-      {
-        "id": "pxd028735-v0.11.0",
-        "date": "2026-09-16",
-        "label": "SynapSpec v0.11.0 run · PXD028735 raw files",
-        "sourceSlug": "pxd028735-v0.11.0",
-        "comparisonSlug": null,
-        "counts": [
-          82674,
-          null,
-          null
-        ],
-        "counts_display": [
-          "82,674",
-          null,
-          null
-        ],
-        "runtime": 10.6731277778,
-        "resource": "c7i.8xlarge",
-        "commit": "6f090cba",
-        "release_version": "v0.11.0"
-      },
-      {
-        "id": "pxd028735-v0.9.2",
-        "date": "2026-09-16",
-        "label": "SynapSpec v0.9.2 run · PXD028735 raw files",
-        "sourceSlug": "pxd028735-v0.9.2",
-        "comparisonSlug": null,
-        "counts": [
-          86079,
-          null,
-          null
-        ],
-        "counts_display": [
-          "86,079",
-          null,
-          null
-        ],
-        "runtime": 4.6066888889,
-        "resource": "c7i.8xlarge",
-        "commit": "af9dd5a5",
-        "release_version": "v0.9.2"
       }
     ],
     "toolReferences": [
       {
         "tool": "DIA-NN",
-        "value": 103433,
-        "display": "103,433",
-        "date": "2026-02-04",
-        "sourceSlug": "pxd028735-diann"
+        "value": 95336,
+        "display": "95,336",
+        "date": "2025-03-31",
+        "sourceSlug": "pxd028735-diann-v202"
       },
       {
         "tool": "Spectronaut",
@@ -346,7 +304,7 @@
   },
   {
     "id": "lfqbench-202502-archived",
-    "name": "LFQBench / Orbitrap Astral",
+    "name": "ProteoBench 2 Th",
     "files": [
       "20250206_OA_OP_LFQBench_A_R1",
       "20250206_OA_OP_LFQBench_A_R2",
@@ -357,7 +315,7 @@
     ],
     "comparison": {
       "slug": "lfqbench-202502-archived",
-      "name": "LFQBench / Orbitrap Astral",
+      "name": "ProteoBench 2 Th",
       "instrument": "Orbitrap Astral",
       "preset": "bion_lfq_astral",
       "files": [
@@ -628,64 +586,22 @@
         "resource": "c7i.4xlarge",
         "commit": "5fdaefd0",
         "release_version": "v0.12.4"
-      },
-      {
-        "id": "proteobench-v0.11.0",
-        "date": "2026-09-16",
-        "label": "SynapSpec v0.11.0 run · ProteoBench 2 Th mix (HYE)",
-        "sourceSlug": "proteobench-v0.11.0",
-        "comparisonSlug": null,
-        "counts": [
-          125072,
-          null,
-          null
-        ],
-        "counts_display": [
-          "125,072",
-          null,
-          null
-        ],
-        "runtime": 8.7559055556,
-        "resource": "c7i.4xlarge",
-        "commit": "6f090cba",
-        "release_version": "v0.11.0"
-      },
-      {
-        "id": "proteobench-v0.9.2",
-        "date": "2026-09-16",
-        "label": "SynapSpec v0.9.2 run · ProteoBench 2 Th mix (HYE)",
-        "sourceSlug": "proteobench-v0.9.2",
-        "comparisonSlug": null,
-        "counts": [
-          127056,
-          null,
-          null
-        ],
-        "counts_display": [
-          "127,056",
-          null,
-          null
-        ],
-        "runtime": 4.4537777778,
-        "resource": "c7i.4xlarge",
-        "commit": "af9dd5a5",
-        "release_version": "v0.9.2"
       }
     ],
     "toolReferences": [
       {
         "tool": "DIA-NN",
-        "value": 286311,
-        "display": "286,311",
-        "date": "2026-06-26",
-        "sourceSlug": "proteobench-2th-astral-diann"
+        "value": 121759,
+        "display": "121,759",
+        "date": "2026-08-04",
+        "sourceSlug": "proteobench-2th-diann-v250"
       },
       {
         "tool": "Spectronaut",
-        "value": null,
-        "display": null,
-        "date": null,
-        "sourceSlug": null
+        "value": 140166,
+        "display": "140,166",
+        "date": "2026-07-31",
+        "sourceSlug": "proteobench-2th-spectronaut-v21"
       }
     ]
   }

@@ -1,172 +1,198 @@
 ---
-// Native reinterpretation of the archived comparisons' static six-panel PNG
-// (record.figure) — three bar charts (precursor IDs, six-run completeness,
-// within-condition CV) plus one median+IQR dot chart per species, matching
-// the RatioWidget style used on recorded-run pages. Same six small-plots
-// pattern as DiagnosticsWidget/QuartileWidget rather than one multi-panel
-// Plotly figure, so there's no subplot-domain math to hand-tune.
+import CvDistributionWidget from "./CvDistributionWidget.astro";
 import comparisons from "../../data/benchmark_comparisons.json";
+import catalog from "../../data/benchmark_catalog.json";
+import type { BenchmarkSummary } from "../../lib/benchmarkSummary";
 
 interface Props {
-  slug: string;
+  slug?: string;
+  cvSlug?: string;
+  summary?: BenchmarkSummary;
+  runSlug?: string;
+  runVersion?: string;
+  toolReferences?: { tool: string; sourceSlug: string | null }[];
 }
-const { slug } = Astro.props;
-const record = comparisons.find((r) => r.slug === slug);
+const { slug, cvSlug, summary: suppliedSummary, runSlug, runVersion, toolReferences } = Astro.props;
+if ((slug === undefined) === (suppliedSummary === undefined)) {
+  throw new Error("ComparisonWidget requires either a comparison slug or summary data");
+}
+const record = slug ? comparisons.find((item) => item.slug === slug) : undefined;
+if (slug && !record) throw new Error("Unknown benchmark comparison: " + slug);
+const latestRun = runSlug ? catalog.recorded_runs[runSlug as keyof typeof catalog.recorded_runs] : undefined;
+if (runSlug && (!record || !latestRun)) throw new Error("Unknown summary run: " + runSlug);
+if (runSlug && !runVersion?.trim()) throw new Error("Summary run requires its recorded version");
+const synapspecLabel = `SynapSpec (${runVersion})`;
+const diagnostics = (latestRun as {
+  diagnostics?: { data_completeness: { n_files: number; bars: { n: number; count: number }[] } };
+} | undefined)?.diagnostics;
+if (latestRun && !diagnostics) throw new Error("Summary run requires completeness diagnostics: " + runSlug);
+const completeCount = diagnostics?.data_completeness.bars.find((bar) => bar.n === diagnostics.data_completeness.n_files)?.count;
+if (latestRun && (completeCount === undefined || diagnostics!.data_completeness.bars.reduce((sum, bar) => sum + bar.count, 0) !== latestRun.recorded_run.total_precursors)) {
+  throw new Error("Summary completeness must reconcile with the recorded precursor count");
+}
+const speciesNames = { HUMAN: "Human", YEAS8: "Yeast", ECOLI: "E. coli" };
+const references = new Map(toolReferences?.map((reference) => {
+  const source = reference.sourceSlug;
+  const diagnostic = source ? catalog.tool_diagnostics[source as keyof typeof catalog.tool_diagnostics] : undefined;
+  const ratios = source ? catalog.tool_ratios[source as keyof typeof catalog.tool_ratios] : undefined;
+  const provenance = source ? (catalog.tool_sources as Record<string, { version: string }>)[source] : undefined;
+  if (!diagnostic || !ratios) throw new Error("Missing recorded tool reference: " + reference.tool);
+  const completeness = diagnostic.data_completeness;
+  const total = completeness.bars.reduce((sum, bar) => sum + bar.count, 0);
+  const complete = completeness.bars.find((bar) => bar.n === completeness.n_files)?.count;
+  if (!total || complete === undefined || completeness.n_files !== latestRun?.recorded_run.files_in_experiment) {
+    throw new Error("Tool reference completeness does not match the run layout: " + source);
+  }
+  const label = provenance ? `${reference.tool} (${provenance.version})` : reference.tool;
+  return [reference.tool === "DIA-NN" ? "diann" : reference.tool.toLowerCase(), { total, complete, ratios, label }] as const;
+}));
+if (toolReferences && record?.tools.some((tool) => tool.id !== "synapspec" && !references.has(tool.id))) {
+  throw new Error("All external summary tools must have recorded references");
+}
+const ratioTools = record?.tools.map((tool) => {
+  const isCurrentSynapspec = latestRun && tool.id === "synapspec";
+  const reference = references.get(tool.id);
+  const measurements = isCurrentSynapspec ? latestRun.ratio_measurements : reference?.ratios;
+  return {
+    id: tool.id,
+    label: isCurrentSynapspec ? synapspecLabel : reference?.label ?? tool.label,
+    ratios: measurements ? tool.ratios.map((ratio) => {
+      const measured = measurements.find((item) => item.species === speciesNames[ratio.species as keyof typeof speciesNames]);
+      if (!measured) throw new Error("Summary source is missing LFQ ratios: " + tool.id + " / " + ratio.species);
+      return { ...ratio, count: measured.count, count_display: measured.count_display,
+        target: measured.target, median: measured.median, lower: measured.lower, upper: measured.upper };
+    }) : tool.ratios,
+  };
+});
+const summary: BenchmarkSummary = suppliedSummary ?? {
+  runCount: latestRun?.recorded_run.files_in_experiment ?? 6,
+  showCompleteness: true,
+  tools: record!.tools.map((tool) => ({
+    id: tool.id, label: latestRun && tool.id === "synapspec" ? synapspecLabel : references.get(tool.id)?.label ?? tool.label,
+    precursors: latestRun && tool.id === "synapspec" ? latestRun.recorded_run.total_precursors : references.get(tool.id)?.total ?? tool.precursors,
+    completePercent: latestRun && tool.id === "synapspec" ? completeCount! / latestRun.recorded_run.total_precursors * 100 : references.has(tool.id)
+      ? references.get(tool.id)!.complete / references.get(tool.id)!.total * 100 : tool.complete_six_percent,
+  })),
+};
+const distributionSlug = runSlug ?? cvSlug;
+if (!distributionSlug && !record) throw new Error("CV distribution requires a source run");
 ---
 
-{record && (
-  <div class="bench-comparison-grid" data-comparison={JSON.stringify(record.tools)}>
-    <div class="bench-comparison-row">
-      <figure class="bench-diagnostic">
-        <div data-chart="ids" class="bench-plotly-target bench-plotly-fade"></div>
-        <figcaption>Unique precursor IDs</figcaption>
-      </figure>
-      <figure class="bench-diagnostic">
-        <div data-chart="complete" class="bench-plotly-target bench-plotly-fade"></div>
-        <figcaption>Detected in all six runs</figcaption>
-      </figure>
-      <figure class="bench-diagnostic">
-        <div data-chart="cv" class="bench-plotly-target bench-plotly-fade"></div>
-        <figcaption>Within-condition median CV</figcaption>
-      </figure>
-    </div>
-    <div class="bench-comparison-row">
-      <figure class="bench-diagnostic">
-        <div data-chart="ratio-HUMAN" class="bench-plotly-target bench-plotly-fade"></div>
-        <figcaption>Human: LFQ ratio median and IQR</figcaption>
-      </figure>
-      <figure class="bench-diagnostic">
-        <div data-chart="ratio-YEAS8" class="bench-plotly-target bench-plotly-fade"></div>
-        <figcaption>Yeast: LFQ ratio median and IQR</figcaption>
-      </figure>
-      <figure class="bench-diagnostic">
-        <div data-chart="ratio-ECOLI" class="bench-plotly-target bench-plotly-fade"></div>
-        <figcaption>E. coli: LFQ ratio median and IQR</figcaption>
-      </figure>
-    </div>
+<div class="bench-comparison-grid" data-comparison={JSON.stringify(summary)} data-ratios={ratioTools ? JSON.stringify(ratioTools) : undefined}>
+  <p class="bench-axis-note bench-axis-note-left" data-tool-versions>{summary.tools.map((tool) => tool.label).join(" · ")}</p>
+
+  <div class="bench-comparison-row">
+    <figure class="bench-diagnostic">
+      <div data-chart="ids" class="bench-plotly-target bench-plotly-fade"></div>
+      <figcaption>Unique precursor IDs</figcaption>
+    </figure>
+    {summary.showCompleteness && <figure class="bench-diagnostic">
+      <div data-chart="complete" class="bench-plotly-target bench-plotly-fade"></div>
+      <figcaption>Detected in all {summary.runCount} runs</figcaption>
+    </figure>}
+    {distributionSlug ? <CvDistributionWidget slug={distributionSlug} /> : <figure class="bench-diagnostic">
+      <div data-chart="archived-cv" data-archived-cv={JSON.stringify(record!.tools.map((tool) => [tool.cv.A.median_percent, tool.cv.B.median_percent]))} class="bench-plotly-target bench-plotly-fade"></div>
+      <figcaption>Within-condition median CV</figcaption>
+    </figure>}
   </div>
-)}
+  {record && <div class="bench-comparison-row">
+    {[
+      ["HUMAN", "Human"], ["YEAS8", "Yeast"], ["ECOLI", "E. coli"],
+    ].map(([key, label]) => (
+      <figure class="bench-diagnostic">
+        <div data-chart={"ratio-" + key} class="bench-plotly-target bench-plotly-fade"></div>
+        <figcaption>{label}: LFQ ratio median and IQR</figcaption>
+      </figure>
+    ))}
+  </div>}
+</div>
 
 <script>
   import Plotly from "plotly.js-cartesian-dist-min";
+  import type comparisons from "../../data/benchmark_comparisons.json";
+  import type { BenchmarkSummary } from "../../lib/benchmarkSummary";
   import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
 
   const SPECIES_LABEL: Record<string, string> = { HUMAN: "Human", YEAS8: "Yeast", ECOLI: "E. coli" };
 
-  // Three ticks — 0, half, and the rounded max — instead of Plotly's default
-  // ~7, so the axis reads at a glance instead of as a ladder of "k" labels.
-  // Rounds to the nearest 50k so the half-tick lands on a clean number too.
   function niceTicks(max: number) {
     const rounded = Math.max(50000, Math.ceil(max / 50000) * 50000);
-    const half = rounded / 2;
-    const label = (v: number) => (v === 0 ? "0" : `${v / 1000}k`);
-    return { tickvals: [0, half, rounded], ticktext: [label(0), label(half), label(rounded)], range: [0, rounded * 1.15] };
+    return {
+      tickvals: [0, rounded / 2, rounded],
+      ticktext: ["0", rounded / 2000 + "k", rounded / 1000 + "k"],
+      range: [0, rounded * 1.15],
+    };
   }
 
   document.querySelectorAll<HTMLElement>("[data-comparison]").forEach((container) => {
-    const tools: any[] = JSON.parse(container.dataset.comparison!);
-    const fullLabels = tools.map((t) => t.label);
-    // Axis ticks use the short tool name only — "SynapSpec (v092 folder)" etc.
-    // forced Plotly to rotate and truncate the label. The full source-folder
-    // label (load-bearing for this "not reconciled" archived comparison)
-    // still shows on hover via customdata.
-    const labels = fullLabels.map((l) => l.replace(/\s*\(.*\)$/, ""));
-    const colors = tools.map((t) => TOOL_COLORS[t.id] ?? COLORS.primary);
-
-    const idsEl = container.querySelector<HTMLElement>('[data-chart="ids"]');
-    if (idsEl) {
-      const idsTicks = niceTicks(Math.max(...tools.map((t) => t.precursors)));
-      drawWhenVisible(idsEl, () => {
-        Plotly.newPlot(
-          idsEl,
-          [
-            {
-              type: "bar",
-              x: labels,
-              customdata: fullLabels,
-              y: tools.map((t) => t.precursors),
-              text: tools.map((t) => t.precursors_display),
-              textposition: "outside",
-              marker: { color: colors },
-              hovertemplate: "%{customdata}<br>%{text} precursor IDs<extra></extra>",
-            },
-          ],
-          baseLayout({
-            xaxis: { ...axisStyle, showgrid: false },
-            yaxis: { ...axisStyle, title: { text: "Modified sequence + charge" }, ...idsTicks },
-          }),
-          baseConfig,
-        ).then(() => idsEl.classList.add("is-visible"));
-      });
-    }
-
+    const summary = JSON.parse(container.dataset.comparison!) as BenchmarkSummary;
+    const tools = summary.tools;
+    const ratioTools: Pick<(typeof comparisons)[number]["tools"][number], "id" | "label" | "ratios">[] = container.dataset.ratios
+      ? JSON.parse(container.dataset.ratios) : [];
+    const fullLabels = tools.map((tool) => tool.label);
+    const labels = fullLabels.map((label) => label.replace(/\s*\(.*\)$/, ""));
+    const toolAxis = {
+      ...axisStyle, showgrid: false, tickangle: 0, automargin: true,
+      tickvals: labels, ticktext: labels.map((label) => label.replace(" + ", "<br>+ ")),
+    };
+    const colors = tools.map((tool) => TOOL_COLORS[tool.id] ?? COLORS.primary);
+    const idsEl = container.querySelector<HTMLElement>('[data-chart="ids"]')!;
     const completeEl = container.querySelector<HTMLElement>('[data-chart="complete"]');
-    if (completeEl) {
-      drawWhenVisible(completeEl, () => {
-        Plotly.newPlot(
-          completeEl,
-          [
-            {
-              type: "bar",
-              x: labels,
-              customdata: fullLabels,
-              y: tools.map((t) => t.complete_six_percent),
-              text: tools.map((t) => `${Math.round(t.complete_six_percent * 10) / 10}%`),
-              textposition: "outside",
-              marker: { color: colors },
-              hovertemplate: "%{customdata}<br>%{text} of identified precursors<extra></extra>",
-            },
-          ],
-          baseLayout({
-            xaxis: { ...axisStyle, showgrid: false },
-            yaxis: { ...axisStyle, title: { text: "% of each tool's identified precursors" }, range: [0, 100] },
-          }),
-          baseConfig,
-        ).then(() => completeEl.classList.add("is-visible"));
-      });
-    }
 
-    const cvEl = container.querySelector<HTMLElement>('[data-chart="cv"]');
-    if (cvEl) {
-      drawWhenVisible(cvEl, () => {
-        Plotly.newPlot(
-          cvEl,
-          [
-            {
-              type: "bar",
-              name: "Condition A",
-              x: labels,
-              customdata: fullLabels,
-              y: tools.map((t) => t.cv.A.median_percent),
-              marker: { color: colors },
-              hovertemplate: "%{customdata} · Condition A<br>median CV %{y:.1f}%<extra></extra>",
-            },
-            {
-              type: "bar",
-              name: "Condition B",
-              x: labels,
-              customdata: fullLabels,
-              y: tools.map((t) => t.cv.B.median_percent),
-              marker: { color: colors, pattern: { shape: "/" } },
-              hovertemplate: "%{customdata} · Condition B<br>median CV %{y:.1f}%<extra></extra>",
-            },
-          ],
-          baseLayout({
-            showlegend: true,
-            legend: { orientation: "h", y: -0.2 },
-            xaxis: { ...axisStyle, showgrid: false },
-            yaxis: { ...axisStyle, title: { text: "Median CV (%, positive quantity in all 3 replicates)" } },
-          }),
-          baseConfig,
-        ).then(() => cvEl.classList.add("is-visible"));
-      });
-    }
+    drawWhenVisible(idsEl, () => {
+      Plotly.newPlot(idsEl, [{
+        type: "bar", x: labels, customdata: fullLabels,
+        y: tools.map((tool) => tool.precursors),
+        text: tools.map((tool) => tool.precursors.toLocaleString("en-US")),
+        textposition: "outside", marker: { color: colors },
+        hovertemplate: "%{customdata}<br>%{text} precursor IDs<extra></extra>",
+      }], baseLayout({
+        xaxis: toolAxis,
+        yaxis: { ...axisStyle, title: { text: "Modified sequence + charge" }, ...niceTicks(Math.max(...tools.map((tool) => tool.precursors))) },
+      }), baseConfig).then(() => idsEl.classList.add("is-visible"));
+    });
+
+    if (completeEl) drawWhenVisible(completeEl, () => {
+      const percentages = tools.map((tool) => tool.completePercent);
+      Plotly.newPlot(completeEl, [{
+        type: "bar", x: labels, customdata: fullLabels,
+        y: percentages,
+        text: percentages.map((value) => value === null ? "" : value.toFixed(1) + "%"),
+        textposition: "outside", marker: { color: colors },
+        hovertemplate: "%{customdata}<br>%{text} of identified precursors<extra></extra>",
+      }], baseLayout({
+        xaxis: toolAxis,
+        yaxis: { ...axisStyle, title: { text: "Complete precursors (%)" }, range: [0, 110] },
+        annotations: percentages.flatMap((value, index) => value === null ? [{
+          x: labels[index], y: 3, text: "N/A", showarrow: false, font: { color: COLORS.textLight },
+        }] : []),
+      }), baseConfig).then(() => completeEl.classList.add("is-visible"));
+    });
+
+    const archivedCv = container.querySelector<HTMLElement>('[data-chart="archived-cv"]');
+    if (archivedCv) drawWhenVisible(archivedCv, () => {
+      const medians = JSON.parse(archivedCv.dataset.archivedCv!) as number[][];
+      Plotly.newPlot(archivedCv, ["Condition A", "Condition B"].map((condition, index) => ({
+        type: "bar", name: condition, x: labels, customdata: fullLabels,
+        y: medians.map((values) => values[index]),
+        marker: { color: colors, pattern: { shape: index === 0 ? "" : "/" } },
+        hovertemplate: `%{customdata} · ${condition}<br>median CV %{y:.1f}%<extra></extra>`,
+      })), baseLayout({
+        showlegend: true, legend: { orientation: "h", y: -0.2 },
+        margin: { t: 10, r: 20, b: 80, l: 50 }, xaxis: toolAxis,
+        yaxis: { ...axisStyle, title: { text: "Median CV (%)" } },
+      }), baseConfig).then(() => archivedCv.classList.add("is-visible"));
+    });
 
     for (const key of Object.keys(SPECIES_LABEL)) {
       const el = container.querySelector<HTMLElement>(`[data-chart="ratio-${key}"]`);
       if (!el) continue;
 
-      const rows = tools.map((t) => t.ratios.find((r: any) => r.species === key));
+      const rows = ratioTools.map((tool) => {
+        const ratio = tool.ratios.find((item) => item.species === key);
+        if (!ratio) throw new Error("Missing LFQ ratio: " + key);
+        return ratio;
+      });
       const target = rows[0]?.target ?? 0;
 
       drawWhenVisible(el, () => {
@@ -178,24 +204,24 @@ const record = comparisons.find((r) => r.slug === slug);
               mode: "markers",
               x: labels,
               customdata: fullLabels,
-              y: rows.map((r: any) => r.median),
+              y: rows.map((r) => r.median),
               error_y: {
                 type: "data",
                 symmetric: false,
-                array: rows.map((r: any) => r.upper - r.median),
-                arrayminus: rows.map((r: any) => r.median - r.lower),
+                array: rows.map((r) => r.upper - r.median),
+                arrayminus: rows.map((r) => r.median - r.lower),
                 color: COLORS.primaryDark,
                 thickness: 2,
                 width: 6,
               },
               marker: { color: colors, size: 12, line: { color: COLORS.background, width: 2 } },
-              text: rows.map((r: any) => `median ${Math.round(r.median * 1000) / 1000}, n = ${r.count_display}`),
+              text: rows.map((r) => `median ${Math.round(r.median * 1000) / 1000}, n = ${r.count_display}`),
               hovertemplate: "%{customdata}<br>%{text}<extra></extra>",
             },
           ],
           baseLayout({
             xaxis: { ...axisStyle, showgrid: false },
-            yaxis: { ...axisStyle, title: { text: "log₂(mean A / mean B) · precursor MS2" } },
+            yaxis: { ...axisStyle, title: { text: "log₂(mean A / mean B)" } },
             shapes: [
               {
                 type: "line",

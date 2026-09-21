@@ -1,0 +1,79 @@
+---
+import catalog from "../../data/benchmark_catalog.json";
+import ledgers from "../../data/benchmark_ledger.json";
+import pxd055927 from "../../data/pxd055927/comparison.json";
+
+interface Props { slug: string }
+const { slug } = Astro.props;
+const isPeptide = slug === pxd055927.dataset;
+const run = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
+const ledger = ledgers.find((entry) => entry.rows.some((row) => row.sourceSlug === slug));
+type Distribution = { median: number; p5: number; p25: number; p75: number; p95: number };
+type Diagnostics = { cv_distribution: { precursor: Distribution; protein: Distribution } };
+const sources = isPeptide ? [] : [
+  { tool: "SynapSpec", diagnostics: (run as { diagnostics?: Diagnostics } | undefined)?.diagnostics },
+  ...(ledger?.toolReferences.filter((ref) => ref.sourceSlug).map((ref) => ({
+    tool: ref.tool,
+    diagnostics: catalog.tool_diagnostics[ref.sourceSlug as keyof typeof catalog.tool_diagnostics],
+  })) ?? []),
+];
+if (!isPeptide && sources.some((source) => !source.diagnostics)) {
+  throw new Error("Missing CV distribution for " + slug);
+}
+const series = isPeptide ? pxd055927.tools.map((tool) => ({
+  tool: tool.tool,
+  categories: [tool.tool],
+  q1: [tool.cv.q1], median: [tool.cv.median], q3: [tool.cv.q3],
+  lower: [tool.cv.lowerfence], upper: [tool.cv.upperfence],
+  text: [`n = ${tool.cv.n.toLocaleString("en-US")} peptide × dose`],
+})) : sources.map(({ tool, diagnostics }) => {
+  const values = [diagnostics!.cv_distribution.precursor, diagnostics!.cv_distribution.protein];
+  return {
+    tool, categories: ["Precursor", "Protein"],
+    q1: values.map((value) => value.p25), median: values.map((value) => value.median),
+    q3: values.map((value) => value.p75), lower: values.map((value) => value.p5),
+    upper: values.map((value) => value.p95), text: ["", ""],
+  };
+});
+---
+
+<figure class="bench-diagnostic" data-cv-distribution={JSON.stringify({ isPeptide, series })}>
+  <div data-chart="cv" class="bench-plotly-target bench-plotly-fade"></div>
+  <figcaption>CV distribution</figcaption>
+</figure>
+
+<script>
+  import Plotly from "plotly.js-cartesian-dist-min";
+  import { baseLayout, axisStyle, baseConfig, COLORS, TOOL_COLORS, drawWhenVisible } from "../../lib/plotlyTheme";
+
+  type Series = {
+    tool: string; categories: string[]; q1: number[]; median: number[];
+    q3: number[]; lower: number[]; upper: number[]; text: string[];
+  };
+  document.querySelectorAll<HTMLElement>("[data-cv-distribution]").forEach((container) => {
+    const { isPeptide, series } = JSON.parse(container.dataset.cvDistribution!) as { isPeptide: boolean; series: Series[] };
+    const element = container.querySelector<HTMLElement>('[data-chart="cv"]')!;
+    drawWhenVisible(element, () => {
+      const traces = series.map((item) => {
+        const id = item.tool === "FragPipe + DIA-NN" ? "diann" : item.tool.toLowerCase().replace(/[^a-z]/g, "");
+        const color = TOOL_COLORS[id] ?? COLORS.textLight;
+        const rgb = [1, 3, 5].map((offset) => parseInt(color.slice(offset, offset + 2), 16));
+        return {
+          type: "box", name: item.tool, x: item.categories,
+          q1: item.q1, median: item.median, q3: item.q3,
+          lowerfence: item.lower, upperfence: item.upper,
+          text: item.median.map((value, index) => `median CV ${(value * 100).toFixed(1)}%${item.text[index] ? " · " + item.text[index] : ""}`),
+          marker: { color }, fillcolor: `rgba(${rgb.join(",")},0.22)`, line: { color }, boxpoints: false,
+          hovertemplate: `${item.tool} %{x}<br>%{text}<extra></extra>`,
+        };
+      });
+      Plotly.newPlot(element, traces, baseLayout({
+        boxmode: isPeptide ? "overlay" : "group", showlegend: !isPeptide && series.length > 1,
+        legend: { orientation: "h", x: 0, y: 1.15, font: { size: 10 } },
+        margin: { t: isPeptide ? 18 : 48, r: 18, b: isPeptide ? 58 : 40, l: 58 },
+        xaxis: { ...axisStyle, showgrid: false, tickangle: isPeptide ? -18 : 0 },
+        yaxis: { ...axisStyle, title: { text: isPeptide ? "Peptide quantity CV" : "Quantity CV" }, tickformat: ".0%", rangemode: "tozero" },
+      }), baseConfig).then(() => element.classList.add("is-visible"));
+    });
+  });
+</script>

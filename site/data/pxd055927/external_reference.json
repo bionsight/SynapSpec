@@ -1,0 +1,183 @@
+[
+  {
+    "tool": "FragPipe + DIA-NN",
+    "software_version": "21.1 + 1.8.2",
+    "entry_method": "manual_transcription",
+    "sources": [
+      {
+        "title": "Koudelka et al. 2025 · Supplementary Table S5 · Direct MSF",
+        "url": "https://ars.els-cdn.com/content/image/1-s2.0-S153594762500043X-mmc5.xlsx",
+        "sha256": "cf720092239cbe9c3ffc5f281f47ca56113b4d5dc04ba8feac2d3f7c547aef7f"
+      },
+      {
+        "title": "PXD055927 submitted human canonical FASTA (exploratory specificity mapping)",
+        "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/03/PXD055927/201015_Hs_CAN_uniprot-proteome_UP000005640_reviewed_yes_canonical_ProteinaseK_LysC.fasta",
+        "sha256": "0f5ed33a9571a98ff989a91807382c5954d65484eb7967ddf98436884dc61476"
+      }
+    ],
+    "peptide_count": 78773,
+    "precursor_count": 88451,
+    "protein_accession_count": null,
+    "identification_scope": "Peptide rows in S5 and unique modified-sequence/charge identities expanded from its charge column; not verified as the full identification universe.",
+    "cv": {
+      "n": 630184,
+      "peptide_count": 78773,
+      "q1": 0.044770854056,
+      "median": 0.07902714651,
+      "q3": 0.138684640819,
+      "lowerfence": 0.000091979235,
+      "upperfence": 0.279550986525
+    },
+    "cv_method": "Previously calculated from S5 peptide quantities: sample SD/mean over three biological replicates per dose, pooled across eight doses. All source rows had positive quantities across 24 runs.",
+    "specificity": {
+      "specific": 54074,
+      "semi_specific": 33836,
+      "non_specific_excluded": 231,
+      "unmapped_excluded": 310,
+      "method": "Prior exploratory FASTA mapping: specific if both termini match Trypsin/P boundaries; semi-specific if exactly one matches. Protein termini included, initiator methionine excision and processed termini not modeled. Multi-mapping uses specific before semi-specific before non-specific. Two-sided nonspecific and unmapped identities excluded from the pie. Not a harmonized final classification."
+    },
+    "per_run": null,
+    "caveats": [
+      "This workflow is FragPipe/MSFragger identification plus DIA-NN quantification, not standalone DIA-NN.",
+      "Values were manually transcribed from the prior local analysis; this export does not reparse S5.",
+      "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
+      "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
+      "Specificity is provisional and uses a different classification method from SynapSpec.",
+      "Condition-specific peptide CV medians were calculated from the source table's dose_1/dose_2/dose_3 quantities using sample SD/mean; all rows were positive at every dose. The aggregated peptide table does not provide charge-specific run detection, so precursor completeness remains unavailable."
+    ],
+    "detection_frequency": null,
+    "condition_detection": null,
+    "condition_cv": [
+      {
+        "dose_nm": 0,
+        "n": 78773,
+        "median": 0.08459328098570558
+      },
+      {
+        "dose_nm": 0.1,
+        "n": 78773,
+        "median": 0.08494329598065485
+      },
+      {
+        "dose_nm": 1,
+        "n": 78773,
+        "median": 0.07115525044592674
+      },
+      {
+        "dose_nm": 10,
+        "n": 78773,
+        "median": 0.07084461741465124
+      },
+      {
+        "dose_nm": 100,
+        "n": 78773,
+        "median": 0.0612974699196791
+      },
+      {
+        "dose_nm": 1000,
+        "n": 78773,
+        "median": 0.08072222857635629
+      },
+      {
+        "dose_nm": 10000,
+        "n": 78773,
+        "median": 0.1011472935575209
+      },
+      {
+        "dose_nm": 50000,
+        "n": 78773,
+        "median": 0.08527968285160245
+      }
+    ]
+  },
+  {
+    "tool": "Spectronaut",
+    "software_version": "18.5.231110.55695",
+    "entry_method": "manual_transcription",
+    "sources": [
+      {
+        "title": "Koudelka et al. 2025 · Supplementary Table S6 · Direct SN",
+        "url": "https://ars.els-cdn.com/content/image/1-s2.0-S153594762500043X-mmc6.xlsx",
+        "sha256": "de4712af4ba7ebeeeeb787a16143b0395eac59d61f91218b2b20d5bc18b5487b"
+      },
+      {
+        "title": "PXD055927 submitted human canonical FASTA (exploratory specificity mapping)",
+        "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/03/PXD055927/201015_Hs_CAN_uniprot-proteome_UP000005640_reviewed_yes_canonical_ProteinaseK_LysC.fasta",
+        "sha256": "0f5ed33a9571a98ff989a91807382c5954d65484eb7967ddf98436884dc61476"
+      }
+    ],
+    "peptide_count": 121902,
+    "precursor_count": 160485,
+    "protein_accession_count": null,
+    "identification_scope": "Peptide rows in S6 and unique modified-sequence/charge identities expanded from its charge column; not verified as the full identification universe.",
+    "cv": {
+      "n": 975216,
+      "peptide_count": 121902,
+      "q1": 0.051780011942,
+      "median": 0.095761550268,
+      "q3": 0.184647936037,
+      "lowerfence": 0.000051526701,
+      "upperfence": 0.383944966338
+    },
+    "cv_method": "Previously calculated from S6 peptide quantities: sample SD/mean over three biological replicates per dose, pooled across eight doses. All source rows had positive quantities across 24 runs.",
+    "specificity": {
+      "specific": 93491,
+      "semi_specific": 66427,
+      "non_specific_excluded": 567,
+      "unmapped_excluded": 0,
+      "method": "Prior exploratory FASTA mapping: specific if both termini match Trypsin/P boundaries; semi-specific if exactly one matches. Protein termini included, initiator methionine excision and processed termini not modeled. Multi-mapping uses specific before semi-specific before non-specific. Two-sided nonspecific identities excluded from the pie. Not a harmonized final classification."
+    },
+    "per_run": null,
+    "caveats": [
+      "Values were manually transcribed from the prior local analysis; this export does not reparse S6 or the Spectronaut SNE file.",
+      "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
+      "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
+      "Specificity is provisional and uses a different classification method from SynapSpec.",
+      "Condition-specific peptide CV medians were calculated from the source table's dose_1/dose_2/dose_3 quantities using sample SD/mean; all rows were positive at every dose. The aggregated peptide table does not provide charge-specific run detection, so precursor completeness remains unavailable."
+    ],
+    "detection_frequency": null,
+    "condition_detection": null,
+    "condition_cv": [
+      {
+        "dose_nm": 0,
+        "n": 121902,
+        "median": 0.09705933238315292
+      },
+      {
+        "dose_nm": 0.1,
+        "n": 121902,
+        "median": 0.10058532887514518
+      },
+      {
+        "dose_nm": 1,
+        "n": 121902,
+        "median": 0.08782888659798771
+      },
+      {
+        "dose_nm": 10,
+        "n": 121902,
+        "median": 0.08582920160239169
+      },
+      {
+        "dose_nm": 100,
+        "n": 121902,
+        "median": 0.0772330604793754
+      },
+      {
+        "dose_nm": 1000,
+        "n": 121902,
+        "median": 0.0966386115211395
+      },
+      {
+        "dose_nm": 10000,
+        "n": 121902,
+        "median": 0.12431339523415741
+      },
+      {
+        "dose_nm": 50000,
+        "n": 121902,
+        "median": 0.10378648776269873
+      }
+    ]
+  }
+]

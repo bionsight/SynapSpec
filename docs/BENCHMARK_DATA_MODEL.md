@@ -1,9 +1,13 @@
 # Benchmark 데이터 구조
 
-`/benchmarks/` 아래 모든 페이지는 `site/data/benchmark_*.json` 여섯 개 파일을 읽습니다.
+The existing LFQ benchmark pages read the `site/data/benchmark_*.json` files listed below.
 `docs/BENCHMARKS.md`는 예전 Jekyll 파이프라인(`_config.yml`, `_benchmarks/`)을 다루는
 운영 문서이고, 이 문서는 지금 Astro 사이트가 실제로 읽는 JSON 스키마 자체를 다룹니다.
 새 벤치마크 결과를 페이지에 반영할 때는 이 문서를 먼저 보면 됩니다.
+
+PXD055927 semi-specific data uses a separate JSON contract. Follow the
+[PXD055927 update instructions](benchmarks/pxd055927/README.md) to combine new SynapSpec
+parquet results with external reference JSON. Do not apply the LFQ conversion procedure below.
 
 ## 파일 여섯 개와 역할
 
@@ -185,6 +189,28 @@ recorded보다 가볍습니다 — species별 정확도 없이 ClearML Summary �
 지금은 이 불일치를 표시하는 장치가 없습니다.
 
 ## `benchmark_comparisons.json` / `benchmark_comparison_scatter.json`
+
+The `/benchmarks/` overview selects the first (newest) row of each LFQ ledger.
+SynapSpec counts, completeness, and species ratios come from that recorded run in
+`benchmark_catalog.json`. Both LFQ datasets use the ledger's `toolReferences` to read
+external `tool_diagnostics` and `tool_ratios`, exactly as the detail page does.
+Its input-file list comes from the recorded run, not the archived comparison.
+The archived comparison files remain intact for their archived routes. Never use
+their older input groups to populate the current LFQ overview.
+
+Optional `recorded_runs[slug].condition_cv` stores A/B precursor CV as fractions,
+sample counts, the calculation method, and source SHA256. For PXD028735 v0.12.4,
+use target hits with precursor q-value < 0.01, require positive `ms2_quantity` in
+all three replicates per condition, calculate sample SD / mean for each sequence +
+charge identity, and take the median. No additional normalization or imputation is
+applied. The supplied parquet matched all six recorded file counts and the full
+detection-frequency histogram; it contained no embedded version/commit metadata.
+Absent condition CV stays unavailable; never substitute pooled diagnostic CV or
+another run's CV. External A/B CV uses `tool_diagnostics[slug].condition_cv` with the
+same structure. `tool_sources[slug]` records uploaded report provenance separately
+from legacy ClearML imports. See [LFQ source updates](benchmarks/lfq/README.md).
+When adding a run,
+populate and validate its diagnostics, ratios, and condition CV before publishing.
 
 kind가 `comparison`인 두 항목(`lfqbench-202409-archived`, `lfqbench-202502-archived`)
 전용입니다. `benchmark_comparisons.json`은 도구별 상세(파일별 precursor 수, CV, 완주율),

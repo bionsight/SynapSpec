@@ -1,16 +1,38 @@
 ---
 // _includes/benchmark/imported.html을 옮긴 것. kind: imported인 3개 항목에서 쓴다.
 import imports from "../../data/benchmark_imports.json";
+import catalog from "../../data/benchmark_catalog.json";
 
 interface Props {
   slug: string;
 }
 const { slug } = Astro.props;
+const source = (catalog as { tool_sources?: Record<string, { dataset: string; tool: string; version: string; analysis_date: string; archive: string; member: string; sha256: string; files: string[]; method: string }> }).tool_sources?.[slug];
 const run = imports.find((r) => r.slug === slug)!;
-const hours = Math.trunc(run.runtimeMinutes / 60);
-const minutes = run.runtimeMinutes % 60;
+if (!source && !run) throw new Error("Unknown imported benchmark: " + slug);
+const hours = run ? Math.trunc(run.runtimeMinutes / 60) : undefined;
+const minutes = run ? run.runtimeMinutes % 60 : undefined;
+const diagnostic = source ? catalog.tool_diagnostics[slug as keyof typeof catalog.tool_diagnostics] : undefined;
 ---
 
+{source ? <div class="container">
+  <div class="breadcrumbs"><a href="/benchmarks/">&larr; Benchmarks</a></div>
+  <div class="page-header"><h1>{source.dataset} <span class="bench-muted">/ {source.tool} {source.version}</span></h1></div>
+  <section class="py-lg bench-border-y">
+    <h2>Results</h2>
+    <p class="bench-lede">{diagnostic!.data_completeness.bars.reduce((sum, bar) => sum + bar.count, 0).toLocaleString("en-US")}<span class="bench-lede-unit"> precursor IDs</span></p>
+  </section>
+  <section class="py-lg">
+    <h2>Source</h2>
+    <dl class="bench-facts">
+      <div><dt>Analysis date</dt><dd>{source.analysis_date}</dd></div>
+      <div><dt>Archive</dt><dd>{source.archive}</dd></div>
+      <div><dt>Report</dt><dd>{source.member}</dd></div>
+      <div><dt>Method</dt><dd>{source.method}</dd></div>
+    </dl>
+    <h2>Inputs</h2><ul class="bench-file-list">{source.files.map((file) => <li>{file}</li>)}</ul>
+  </section>
+</div> :
 <div class="container">
   <div class="breadcrumbs">
     <a href="/benchmarks/">&larr; Benchmarks</a>
@@ -59,3 +81,4 @@ const minutes = run.runtimeMinutes % 60;
     </ul>
   </section>
 </div>
+}
