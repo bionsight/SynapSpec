@@ -283,6 +283,27 @@
         "resource": "c7i.8xlarge",
         "commit": "5fdaefd0",
         "release_version": "v0.12.4"
+      },
+      {
+        "id": "pxd028735-1.0.0",
+        "date": "2026-09-21",
+        "label": "SynapSpec v1.0.0 run · PXD028735 raw files",
+        "sourceSlug": "pxd028735-1.0.0",
+        "comparisonSlug": null,
+        "counts": [
+          93466,
+          null,
+          null
+        ],
+        "counts_display": [
+          "93,466",
+          null,
+          null
+        ],
+        "runtime": 0.0,
+        "resource": "c7i.8xlarge",
+        "commit": "18c16399",
+        "release_version": "v1.0.0"
       }
     ],
     "toolReferences": [
@@ -586,6 +607,27 @@
         "resource": "c7i.4xlarge",
         "commit": "5fdaefd0",
         "release_version": "v0.12.4"
+      },
+      {
+        "id": "proteobench-1.0.0",
+        "date": "2026-09-21",
+        "label": "SynapSpec v1.0.0 run · ProteoBench 2 Th mix (HYE)",
+        "sourceSlug": "proteobench-1.0.0",
+        "comparisonSlug": null,
+        "counts": [
+          142269,
+          null,
+          null
+        ],
+        "counts_display": [
+          "142,269",
+          null,
+          null
+        ],
+        "runtime": 0.0,
+        "resource": "c7i.8xlarge",
+        "commit": "18c16399",
+        "release_version": "v1.0.0"
       }
     ],
     "toolReferences": [
