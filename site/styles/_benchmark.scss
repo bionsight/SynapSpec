@@ -1028,3 +1028,10 @@
   flex-direction: column;
   gap: $spacing-md;
 }
+
+.run-history-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #888);
+  font-weight: 400;
+  margin-left: 0.75rem;
+}

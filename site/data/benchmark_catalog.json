@@ -3130,6 +3130,360 @@
           "median": 0.18792313478713812
         }
       }
+    },
+    "pxd028735-1.0.0": {
+      "run_slug": "pxd028735-1.0.0",
+      "title": "PXD028735",
+      "instrument": "OE480",
+      "commit": "18c16399",
+      "config_file": "bion_lfq_oe480_ec2.yaml",
+      "fasta": null,
+      "time_range_display": null,
+      "checked_display": "21 September 2026",
+      "recorded_run": {
+        "slug": "pxd028735-1.0.0",
+        "date": "2026-09-21",
+        "instance": "c7i.8xlarge",
+        "runtime_hours": 0.0,
+        "runtime_display": "0 h 0 min",
+        "total_precursors": 93466,
+        "total_precursors_display": "93,466",
+        "total_proteins": 11657,
+        "total_proteins_display": "11,657",
+        "files_in_experiment": 6,
+        "files": [
+          {
+            "name": "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_01",
+            "condition": "A",
+            "replicate": 1,
+            "precursors": 85128,
+            "proteins": 10852,
+            "precursors_display": "85,128",
+            "proteins_display": "10,852"
+          },
+          {
+            "name": "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_02",
+            "condition": "A",
+            "replicate": 2,
+            "precursors": 86228,
+            "proteins": 10969,
+            "precursors_display": "86,228",
+            "proteins_display": "10,969"
+          },
+          {
+            "name": "LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_03",
+            "condition": "A",
+            "replicate": 3,
+            "precursors": 82629,
+            "proteins": 10682,
+            "precursors_display": "82,629",
+            "proteins_display": "10,682"
+          },
+          {
+            "name": "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_01",
+            "condition": "B",
+            "replicate": 1,
+            "precursors": 76003,
+            "proteins": 10464,
+            "precursors_display": "76,003",
+            "proteins_display": "10,464"
+          },
+          {
+            "name": "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_02",
+            "condition": "B",
+            "replicate": 2,
+            "precursors": 76958,
+            "proteins": 10435,
+            "precursors_display": "76,958",
+            "proteins_display": "10,435"
+          },
+          {
+            "name": "LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_03",
+            "condition": "B",
+            "replicate": 3,
+            "precursors": 73289,
+            "proteins": 10165,
+            "precursors_display": "73,289",
+            "proteins_display": "10,165"
+          }
+        ]
+      },
+      "ratio_measurements": [
+        {
+          "species": "Human",
+          "count": 56239,
+          "count_display": "56,239",
+          "target": 0.0,
+          "median": -0.0353329066,
+          "lower": -0.2416595777,
+          "upper": 0.1608512224,
+          "measured_ratio_display": "0.976×",
+          "deviation_percent": -2.4,
+          "axis": {
+            "actual": {
+              "target": 306.5,
+              "median": 302.507,
+              "lower": 279.192,
+              "upper": 324.676
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 234.03,
+              "lower": 140.77,
+              "upper": 322.705
+            }
+          }
+        },
+        {
+          "species": "E. coli",
+          "count": 2827,
+          "count_display": "2,827",
+          "target": -2.0,
+          "median": -1.9914386879,
+          "lower": -2.2948153847,
+          "upper": -1.3400435291,
+          "measured_ratio_display": "0.251×",
+          "deviation_percent": 0.6,
+          "axis": {
+            "actual": {
+              "target": 80.5,
+              "median": 81.467,
+              "lower": 47.186,
+              "upper": 155.075
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 253.87,
+              "lower": 116.743,
+              "upper": 548.3
+            }
+          }
+        },
+        {
+          "species": "Yeast",
+          "count": 15391,
+          "count_display": "15,391",
+          "target": 1.0,
+          "median": 1.131715522,
+          "lower": 0.9164966203,
+          "upper": 1.4149219089,
+          "measured_ratio_display": "2.191×",
+          "deviation_percent": 9.6,
+          "axis": {
+            "actual": {
+              "target": 419.5,
+              "median": 434.384,
+              "lower": 410.064,
+              "upper": 466.386
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 309.535,
+              "lower": 212.256,
+              "upper": 437.545
+            }
+          }
+        }
+      ],
+      "recorded_config": [
+        [
+          "Library",
+          "Generated from FASTA"
+        ],
+        [
+          "Enzyme",
+          "Trypsin/P"
+        ],
+        [
+          "Missed cleavages",
+          "2"
+        ],
+        [
+          "Match between runs",
+          "On"
+        ],
+        [
+          "Peptide length",
+          "7-52 residues"
+        ],
+        [
+          "Precursor charge",
+          "1-6"
+        ],
+        [
+          "Maximum variable modifications",
+          "5"
+        ],
+        [
+          "Random seed",
+          "42"
+        ]
+      ],
+      "source_url": "https://www.ebi.ac.uk/pride/archive/projects/PXD028735"
+    },
+    "proteobench-1.0.0": {
+      "run_slug": "proteobench-1.0.0",
+      "title": "ProteoBench 2 Th",
+      "instrument": "Astral",
+      "commit": "18c16399",
+      "config_file": "bion_lfq_astral_ec2.yaml",
+      "fasta": null,
+      "time_range_display": null,
+      "checked_display": "21 September 2026",
+      "recorded_run": {
+        "slug": "proteobench-1.0.0",
+        "date": "2026-09-21",
+        "instance": "c7i.8xlarge",
+        "runtime_hours": 0.0,
+        "runtime_display": "0 h 0 min",
+        "total_precursors": 142269,
+        "total_precursors_display": "142,269",
+        "total_proteins": 17494,
+        "total_proteins_display": "17,494",
+        "files_in_experiment": 6,
+        "files": [
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_A_REP1",
+            "condition": "A",
+            "replicate": 1,
+            "precursors": 126603,
+            "proteins": 15797,
+            "precursors_display": "126,603",
+            "proteins_display": "15,797"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_A_REP2",
+            "condition": "A",
+            "replicate": 2,
+            "precursors": 129251,
+            "proteins": 15986,
+            "precursors_display": "129,251",
+            "proteins_display": "15,986"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_A_REP3",
+            "condition": "A",
+            "replicate": 3,
+            "precursors": 129712,
+            "proteins": 16033,
+            "precursors_display": "129,712",
+            "proteins_display": "16,033"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_B_REP1",
+            "condition": "B",
+            "replicate": 1,
+            "precursors": 130893,
+            "proteins": 15994,
+            "precursors_display": "130,893",
+            "proteins_display": "15,994"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_B_REP2",
+            "condition": "B",
+            "replicate": 2,
+            "precursors": 130697,
+            "proteins": 16016,
+            "precursors_display": "130,697",
+            "proteins_display": "16,016"
+          },
+          {
+            "name": "LFQ_Astral_DIA_15min_50ng_Condition_B_REP3",
+            "condition": "B",
+            "replicate": 3,
+            "precursors": 131500,
+            "proteins": 16120,
+            "precursors_display": "131,500",
+            "proteins_display": "16,120"
+          }
+        ]
+      },
+      "ratio_measurements": [
+        {
+          "species": "Human",
+          "count": 96877,
+          "count_display": "96,877",
+          "target": 0.0,
+          "median": -0.1556931696,
+          "lower": -0.3461981804,
+          "upper": -0.0012337823,
+          "measured_ratio_display": "0.898×",
+          "deviation_percent": -10.2,
+          "axis": {
+            "actual": {
+              "target": 306.5,
+              "median": 288.907,
+              "lower": 267.38,
+              "upper": 306.361
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 179.627,
+              "lower": 93.518,
+              "upper": 249.442
+            }
+          }
+        },
+        {
+          "species": "E. coli",
+          "count": 7459,
+          "count_display": "7,459",
+          "target": -2.0,
+          "median": -1.6212351366,
+          "lower": -1.9681365444,
+          "upper": -1.0717207494,
+          "measured_ratio_display": "0.325×",
+          "deviation_percent": 30.0,
+          "axis": {
+            "actual": {
+              "target": 80.5,
+              "median": 123.3,
+              "lower": 84.101,
+              "upper": 185.396
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 421.202,
+              "lower": 264.402,
+              "upper": 669.582
+            }
+          }
+        }
+      ],
+      "recorded_config": [
+        [
+          "Library",
+          "Generated from FASTA"
+        ],
+        [
+          "Enzyme",
+          "Trypsin/P"
+        ],
+        [
+          "Missed cleavages",
+          "2"
+        ],
+        [
+          "Match between runs",
+          "On"
+        ],
+        [
+          "Peptide length",
+          "7-52 residues"
+        ],
+        [
+          "Precursor charge",
+          "1-6"
+        ],
+        [
+          "Maximum variable modifications",
+          "5"
+        ],
+        [
+          "Random seed",
+          "42"
+        ]
+      ]
     }
   },
   "dataset_catalog": [
@@ -3162,6 +3516,26 @@
       "run_slug": "proteobench-2th-astral",
       "commit": "00adf78c",
       "key_config": "MBR on · Trypsin/P · 1 missed cleavage"
+    },
+    {
+      "slug": "pxd028735-1.0.0",
+      "name": "PXD028735",
+      "instrument": "OE480",
+      "preset": "bion_lfq_oe480",
+      "has_run": true,
+      "run_slug": "pxd028735-1.0.0",
+      "commit": "18c16399",
+      "key_config": "MBR on · Trypsin/P · 2 missed cleavages"
+    },
+    {
+      "slug": "proteobench-1.0.0",
+      "name": "ProteoBench 2 Th",
+      "instrument": "Astral",
+      "preset": "bion_lfq_astral",
+      "has_run": true,
+      "run_slug": "proteobench-1.0.0",
+      "commit": "18c16399",
+      "key_config": "MBR on · Trypsin/P · 2 missed cleavages"
     }
   ],
   "quartile_axis_ticks": [

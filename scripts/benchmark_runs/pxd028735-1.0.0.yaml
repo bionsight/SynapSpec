@@ -1,0 +1,87 @@
+kind: recorded
+dataset:
+  slug: pxd028735-1.0.0
+  name: PXD028735
+  instrument: OE480
+  preset: bion_lfq_oe480
+  key_config: MBR on · Trypsin/P · 2 missed cleavages
+run:
+  slug: pxd028735-1.0.0
+  commit: 18c16399
+  date: '2026-09-21'
+  instance: c7i.8xlarge
+  runtime_hours: 0.0
+  config_file: bion_lfq_oe480_ec2.yaml
+  fasta: null
+  time_range_display: null
+  checked_display: 21 September 2026
+  source_url: https://www.ebi.ac.uk/pride/archive/projects/PXD028735
+  total_precursors: 93466
+  total_proteins: 11657
+recorded_config:
+- - Library
+  - Generated from FASTA
+- - Enzyme
+  - Trypsin/P
+- - Missed cleavages
+  - '2'
+- - Match between runs
+  - 'On'
+- - Peptide length
+  - 7-52 residues
+- - Precursor charge
+  - 1-6
+- - Maximum variable modifications
+  - '5'
+- - Random seed
+  - '42'
+files:
+- name: LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_01
+  condition: A
+  replicate: 1
+  precursors: 85128
+  proteins: 10852
+- name: LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_02
+  condition: A
+  replicate: 2
+  precursors: 86228
+  proteins: 10969
+- name: LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_03
+  condition: A
+  replicate: 3
+  precursors: 82629
+  proteins: 10682
+- name: LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_01
+  condition: B
+  replicate: 1
+  precursors: 76003
+  proteins: 10464
+- name: LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_02
+  condition: B
+  replicate: 2
+  precursors: 76958
+  proteins: 10435
+- name: LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_03
+  condition: B
+  replicate: 3
+  precursors: 73289
+  proteins: 10165
+ratio_measurements:
+- species: Human
+  target: 0.0
+  count: 56239
+  median: -0.0353329066
+  lower: -0.2416595777
+  upper: 0.1608512224
+- species: E. coli
+  target: -2.0
+  count: 2827
+  median: -1.9914386879
+  lower: -2.2948153847
+  upper: -1.3400435291
+- species: Yeast
+  target: 1.0
+  count: 15391
+  median: 1.131715522
+  lower: 0.9164966203
+  upper: 1.4149219089

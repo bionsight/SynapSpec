@@ -1,0 +1,81 @@
+kind: recorded
+dataset:
+  slug: proteobench-1.0.0
+  name: ProteoBench 2 Th
+  instrument: Astral
+  preset: bion_lfq_astral
+  key_config: MBR on · Trypsin/P · 2 missed cleavages
+run:
+  slug: proteobench-1.0.0
+  commit: 18c16399
+  date: '2026-09-21'
+  instance: c7i.8xlarge
+  runtime_hours: 0.0
+  config_file: bion_lfq_astral_ec2.yaml
+  fasta: null
+  time_range_display: null
+  checked_display: 21 September 2026
+  source_url: null
+  total_precursors: 142269
+  total_proteins: 17494
+recorded_config:
+- - Library
+  - Generated from FASTA
+- - Enzyme
+  - Trypsin/P
+- - Missed cleavages
+  - '2'
+- - Match between runs
+  - 'On'
+- - Peptide length
+  - 7-52 residues
+- - Precursor charge
+  - 1-6
+- - Maximum variable modifications
+  - '5'
+- - Random seed
+  - '42'
+files:
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP1
+  condition: A
+  replicate: 1
+  precursors: 126603
+  proteins: 15797
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP2
+  condition: A
+  replicate: 2
+  precursors: 129251
+  proteins: 15986
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP3
+  condition: A
+  replicate: 3
+  precursors: 129712
+  proteins: 16033
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP1
+  condition: B
+  replicate: 1
+  precursors: 130893
+  proteins: 15994
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP2
+  condition: B
+  replicate: 2
+  precursors: 130697
+  proteins: 16016
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP3
+  condition: B
+  replicate: 3
+  precursors: 131500
+  proteins: 16120
+ratio_measurements:
+- species: Human
+  target: 0.0
+  count: 96877
+  median: -0.1556931696
+  lower: -0.3461981804
+  upper: -0.0012337823
+- species: E. coli
+  target: -2.0
+  count: 7459
+  median: -1.6212351366
+  lower: -1.9681365444
+  upper: -1.0717207494
