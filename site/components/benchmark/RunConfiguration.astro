@@ -1,0 +1,15 @@
+---
+interface Props {
+  settings: string[][];
+}
+const { settings } = Astro.props;
+const visibleSettings = settings.filter(([label]) => label !== "Random seed");
+---
+
+<section id="configuration" class="mt-lg pt-lg bench-border-t">
+  <h2>Run configuration</h2>
+  <dl class="bench-config-grid">
+    {visibleSettings.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
+  </dl>
+  <slot />
+</section>

@@ -70,6 +70,14 @@ information already confirmed in the conversation or supplied artifacts.
 | PXD055927 external reference JSON | Workflow values, sources, methods, and comparison limitations |
 | Update target | `site/data/pxd055927/comparison.json` in the website repository |
 
+The detail page reads `site/data/pxd055927/configuration.json` for its run
+configuration. These settings were transcribed from the supplied `pxd_055927.yaml`;
+the file has not yet been verified against the current ClearML run. Do not infer
+run settings from parquet or copy LFQ defaults. When replacing a measurement,
+verify and update this configuration from that run's saved YAML as well as the
+comparison JSON. Random seed is omitted from public configuration displays;
+existing source records retain it.
+
 Record the actual analysis version in `comparison.json` as `synapspec_version`.
 The user confirmed `v0.12.1` for the current result. The source label and current
 Run history entry derive their version and precursor count from this same JSON;
