@@ -1851,22 +1851,22 @@
         },
         "cv_distribution": {
           "precursor": {
-            "count": 80907,
-            "median": 0.37709,
-            "median_display": "37.7%",
-            "p5": 0.084167,
-            "p25": 0.184883,
-            "p75": 0.617301,
-            "p95": 0.970009
+            "count": 144779,
+            "median": 0.21186,
+            "median_display": "21.2%",
+            "p5": 0.05117,
+            "p25": 0.1241,
+            "p75": 0.37979,
+            "p95": 0.90045
           },
           "protein": {
-            "count": 5720,
-            "median": 0.162779,
-            "median_display": "16.3%",
-            "p5": 0.044597,
-            "p25": 0.084754,
-            "p75": 0.446954,
-            "p95": 1.11827
+            "count": 18498,
+            "median": 0.68949,
+            "median_display": "68.9%",
+            "p5": 0.12825,
+            "p25": 0.43443,
+            "p75": 0.93429,
+            "p95": 1.42667
           }
         }
       }
@@ -3099,22 +3099,22 @@
         },
         "cv_distribution": {
           "precursor": {
-            "count": 123011,
-            "median": 0.292256,
-            "median_display": "29.2%",
-            "p5": 0.075509,
-            "p25": 0.180626,
-            "p75": 0.41596,
-            "p95": 0.715214
+            "count": 236794,
+            "median": 0.19666,
+            "median_display": "19.7%",
+            "p5": 0.0313,
+            "p25": 0.09778,
+            "p75": 0.35192,
+            "p95": 0.70906
           },
           "protein": {
-            "count": 8621,
-            "median": 0.169194,
-            "median_display": "16.9%",
-            "p5": 0.035047,
-            "p25": 0.074865,
-            "p75": 0.348837,
-            "p95": 1.101866
+            "count": 28183,
+            "median": 0.75676,
+            "median_display": "75.7%",
+            "p5": 0.14056,
+            "p25": 0.48715,
+            "p75": 0.99342,
+            "p95": 1.48341
           }
         }
       },
@@ -3319,7 +3319,64 @@
           "42"
         ]
       ],
-      "source_url": "https://www.ebi.ac.uk/pride/archive/projects/PXD028735"
+      "source_url": "https://www.ebi.ac.uk/pride/archive/projects/PXD028735",
+      "diagnostics": {
+        "data_completeness": {
+          "n_files": 6,
+          "bars": [
+            {
+              "n": 1,
+              "count": 730,
+              "count_display": "730"
+            },
+            {
+              "n": 2,
+              "count": 2502,
+              "count_display": "2,502"
+            },
+            {
+              "n": 3,
+              "count": 12290,
+              "count_display": "12,290"
+            },
+            {
+              "n": 4,
+              "count": 9349,
+              "count_display": "9,349"
+            },
+            {
+              "n": 5,
+              "count": 11335,
+              "count_display": "11,335"
+            },
+            {
+              "n": 6,
+              "count": 57260,
+              "count_display": "57,260"
+            }
+          ]
+        },
+        "cv_distribution": {
+          "precursor": {
+            "count": 159746,
+            "median": 0.22671,
+            "median_display": "22.7%",
+            "p5": 0.05146,
+            "p25": 0.13169,
+            "p75": 0.40686,
+            "p95": 0.92663
+          },
+          "protein": {
+            "count": 20023,
+            "median": 0.7146,
+            "median_display": "71.5%",
+            "p5": 0.13433,
+            "p25": 0.46485,
+            "p75": 0.95488,
+            "p95": 1.43772
+          }
+        }
+      }
     },
     "proteobench-1.0.0": {
       "run_slug": "proteobench-1.0.0",
@@ -3483,7 +3540,64 @@
           "Random seed",
           "42"
         ]
-      ]
+      ],
+      "diagnostics": {
+        "data_completeness": {
+          "n_files": 6,
+          "bars": [
+            {
+              "n": 1,
+              "count": 1569,
+              "count_display": "1,569"
+            },
+            {
+              "n": 2,
+              "count": 2909,
+              "count_display": "2,909"
+            },
+            {
+              "n": 3,
+              "count": 5569,
+              "count_display": "5,569"
+            },
+            {
+              "n": 4,
+              "count": 9434,
+              "count_display": "9,434"
+            },
+            {
+              "n": 5,
+              "count": 19902,
+              "count_display": "19,902"
+            },
+            {
+              "n": 6,
+              "count": 102886,
+              "count_display": "102,886"
+            }
+          ]
+        },
+        "cv_distribution": {
+          "precursor": {
+            "count": 265570,
+            "median": 0.20392,
+            "median_display": "20.4%",
+            "p5": 0.03148,
+            "p25": 0.10166,
+            "p75": 0.35802,
+            "p95": 0.67704
+          },
+          "protein": {
+            "count": 29576,
+            "median": 0.77341,
+            "median_display": "77.3%",
+            "p5": 0.13362,
+            "p25": 0.49634,
+            "p75": 1.0151,
+            "p95": 1.45144
+          }
+        }
+      }
     }
   },
   "dataset_catalog": [
@@ -3513,8 +3627,8 @@
       "instrument": "Astral",
       "preset": "proteobench_2th_astral",
       "has_run": true,
-      "run_slug": "proteobench-2th-astral",
-      "commit": "00adf78c",
+      "run_slug": "proteobench-1.0.0",
+      "commit": "18c16399",
       "key_config": "MBR on · Trypsin/P · 1 missed cleavage"
     },
     {
