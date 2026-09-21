@@ -1,9 +1,13 @@
 # Benchmark 데이터 구조
 
-`/benchmarks/` 아래 모든 페이지는 `site/data/benchmark_*.json` 여섯 개 파일을 읽습니다.
+The existing LFQ benchmark pages read the `site/data/benchmark_*.json` files listed below.
 `docs/BENCHMARKS.md`는 예전 Jekyll 파이프라인(`_config.yml`, `_benchmarks/`)을 다루는
 운영 문서이고, 이 문서는 지금 Astro 사이트가 실제로 읽는 JSON 스키마 자체를 다룹니다.
 새 벤치마크 결과를 페이지에 반영할 때는 이 문서를 먼저 보면 됩니다.
+
+PXD055927 semi-specific data uses a separate JSON contract. Follow the
+[PXD055927 update instructions](benchmarks/pxd055927/README.md) to combine new SynapSpec
+parquet results with external reference JSON. Do not apply the LFQ conversion procedure below.
 
 ## 파일 여섯 개와 역할
 

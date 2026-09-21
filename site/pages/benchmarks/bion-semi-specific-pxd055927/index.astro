@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Pxd055927Benchmark from "../../../components/benchmark/Pxd055927Benchmark.astro";
+
+const title = "PXD055927 / semi-specific reference comparison";
+const description =
+  "Reference comparison of SynapSpec, FragPipe + DIA-NN, and Spectronaut on PXD055927, with identification, CV, specificity, and provenance caveats.";
+---
+
+<BaseLayout title={title} description={description} noindex>
+  <div class="container">
+    <div class="breadcrumbs">
+      <a href="/benchmarks/">&larr; Benchmarks</a> / PXD055927 reference comparison
+    </div>
+
+    <div class="page-header">
+      <h1>PXD055927 <span class="bench-muted">/ semi-specific reference comparison</span></h1>
+    </div>
+
+    <Pxd055927Benchmark />
+  </div>
+</BaseLayout>

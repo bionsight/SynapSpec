@@ -1,16 +1,31 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("benchmarks index", () => {
-  test("defaults to OE480 and toggles to Astral via the no-JS radio inputs", async ({ page }) => {
+  test("switches between every dataset and renders the selected charts", async ({ page }) => {
     await page.goto("/benchmarks/");
     await expect(page.locator("h1")).toHaveText("Benchmarks");
-    await expect(page.locator("#dataset-oe480")).toBeChecked();
-    await expect(page.locator("div.bench-ds-panel-oe480")).toBeVisible();
 
-    await page.locator('label[for="dataset-astral"]').click();
-    await expect(page.locator("#dataset-astral")).toBeChecked();
-    // 라디오 상태는 바뀌지만 두 패널 다 DOM에는 있다 — 보이는 건 CSS다.
-    await expect(page.locator(".bench-ds-panel-astral .bench-version-chart-block")).toBeVisible();
+    const radios = page.locator('input[name="dataset"]');
+    await expect(radios.first()).toBeChecked();
+    const datasetIds = await radios.evaluateAll((inputs) => inputs.map((input) => input.id));
+    const panels = page.locator(".bench-ds-panel");
+    await expect(panels).toHaveCount(datasetIds.length);
+
+    for (const id of [...datasetIds, datasetIds[0]]) {
+      await page.locator(`label[for="${id}"]`).click();
+      await expect(page.locator(`#${id}`)).toBeChecked();
+      const panel = panels.filter({ has: page.locator(`#run-history-${id.replace("dataset-", "")}`) });
+      await expect(panel).toBeVisible();
+      await expect(page.locator(".bench-ds-panel:visible")).toHaveCount(1);
+
+      const charts = panel.locator(".bench-plotly-target");
+      expect(await charts.count()).toBeGreaterThan(0);
+      for (const chart of await charts.all()) {
+        await expect(chart).toHaveClass(/js-plotly-plot/);
+        await expect(chart).toHaveClass(/is-visible/);
+        await expect(chart).toBeVisible();
+      }
+    }
   });
 
   test("clicking a run history bar opens that run's detail page", async ({ page }) => {

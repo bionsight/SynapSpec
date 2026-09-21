@@ -4,11 +4,24 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ledgers from "../../data/benchmark_ledger.json";
 import ComparisonWidget from "../../components/benchmark/ComparisonWidget.astro";
 import VersionHistoryWidget from "../../components/benchmark/VersionHistoryWidget.astro";
+import Pxd055927Benchmark from "../../components/benchmark/Pxd055927Benchmark.astro";
+import pxd055927 from "../../data/pxd055927/comparison.json";
 
 const description =
-  "SynapSpec benchmark history on the LFQBench standard dataset — three-tool comparisons on fixed inputs, and every recorded run over time";
+  "SynapSpec benchmark history across LFQBench datasets and the PXD055927 reference comparison";
 
 const [oe480, astral] = ledgers;
+const pxd055927Name = "PXD055927 / semi-specific";
+const pxd055927Runs = [{
+  date: null,
+  label: `SynapSpec ${pxd055927.synapspec_version}`,
+  sourceSlug: pxd055927.dataset,
+  counts: [pxd055927.tools[0].precursor_count],
+  counts_display: [pxd055927.tools[0].precursor_count.toLocaleString("en-US")],
+  runtime: null,
+  resource: null,
+  release_version: pxd055927.synapspec_version,
+}];
 ---
 
 <BaseLayout title="Benchmarks" description={description} noindex>
@@ -19,14 +32,17 @@ const [oe480, astral] = ledgers;
 
     <input type="radio" name="dataset" id="dataset-oe480" class="bench-ds-input" checked />
     <input type="radio" name="dataset" id="dataset-astral" class="bench-ds-input" />
+    <input type="radio" name="dataset" id="dataset-pxd055927" class="bench-ds-input" />
 
     <div class="bench-ds-head">
       <div class="bench-toggle-group" role="group" aria-label="Dataset">
         <label for="dataset-oe480" class="bench-toggle-btn">{oe480.name}</label>
         <label for="dataset-astral" class="bench-toggle-btn">{astral.name}</label>
+        <label for="dataset-pxd055927" class="bench-toggle-btn">{pxd055927Name}</label>
       </div>
       <a href="#run-history-oe480" class="bench-ds-panel-oe480 bench-link">Run history ({oe480.rows.length})</a>
       <a href="#run-history-astral" class="bench-ds-panel-astral bench-link">Run history ({astral.rows.length})</a>
+      <a href="#run-history-pxd055927" class="bench-ds-panel-pxd055927 bench-link">Run history ({pxd055927Runs.length})</a>
     </div>
 
     {ledgers.map((ledger) => {
@@ -57,5 +73,20 @@ const [oe480, astral] = ledgers;
         </div>
       );
     })}
+
+    <div class="bench-ds-panel bench-ds-panel-pxd055927">
+      <section class="block" aria-label="PXD055927 reference comparison">
+        <div class="section-header">
+          <h2>SynapSpec &middot; FragPipe + DIA-NN &middot; Spectronaut</h2>
+        </div>
+        <Pxd055927Benchmark />
+      </section>
+      <section id="run-history-pxd055927" class="block">
+        <div class="section-header bench-section-wide">
+          <h2>Run history</h2>
+        </div>
+        <VersionHistoryWidget rows={pxd055927Runs} toolReferences={[]} />
+      </section>
+    </div>
   </div>
 </BaseLayout>

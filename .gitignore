@@ -10,6 +10,10 @@ dist/
 /playwright-report/
 /playwright/.cache/
 
+# Python exporter tests
+__pycache__/
+.pytest_cache/
+
 # Supabase에서 내려받은 임시 parquet/meta — scripts/manage_benchmarks.py from-parquet의
 # 출력(scripts/benchmark_runs/<slug>.yaml)만 커밋 대상이다.
 /scripts/benchmark_runs/_incoming/

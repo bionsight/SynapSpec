@@ -1,0 +1,280 @@
+{
+  "dataset": "bion-semi-specific-pxd055927",
+  "synapspec_version": "v0.12.1",
+  "status": "reference_comparison_not_matched_benchmark",
+  "tools": [
+    {
+      "tool": "SynapSpec",
+      "entry_method": "parquet_computed",
+      "sources": [
+        {
+          "title": "precursors.parquet · commit 1a430b80",
+          "url": "http://clearml.bionsight.internal:8080/projects/*/tasks/c61cec4b479644f188a360c3575638a3",
+          "sha256": "856915cc325dc0763766c7a322e34ecae7ea039fb0476633fa62cac0d55d26fb"
+        }
+      ],
+      "peptide_count": 102561,
+      "precursor_count": 126841,
+      "protein_accession_count": 10047,
+      "identification_scope": "Unique modified sequences and sequence/charge pairs in target hits with precursor_qvalue < 0.01",
+      "cv": {
+        "n": 208864,
+        "peptide_count": 26108,
+        "q1": 0.08241601657132375,
+        "median": 0.14776245707082386,
+        "q3": 0.2615885218224613,
+        "lowerfence": 0.0004264770537619402,
+        "upperfence": 0.5302931799239982
+      },
+      "cv_method": "Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",
+      "specificity": {
+        "specific": 95491,
+        "semi_specific": 31350,
+        "non_specific_excluded": 0,
+        "unmapped_excluded": 0,
+        "method": "Native precursor_class, not reclassified against the public FASTA"
+      },
+      "per_run": [
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A1",
+          "dose_nm": 0.0,
+          "biological_replicate": 1,
+          "precursors": 110390
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A2",
+          "dose_nm": 0.1,
+          "biological_replicate": 1,
+          "precursors": 109852
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A3",
+          "dose_nm": 1.0,
+          "biological_replicate": 1,
+          "precursors": 115348
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A4",
+          "dose_nm": 10.0,
+          "biological_replicate": 1,
+          "precursors": 114592
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A5",
+          "dose_nm": 100.0,
+          "biological_replicate": 1,
+          "precursors": 115084
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A6",
+          "dose_nm": 1000.0,
+          "biological_replicate": 1,
+          "precursors": 108089
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A7",
+          "dose_nm": 10000.0,
+          "biological_replicate": 1,
+          "precursors": 113652
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_A8",
+          "dose_nm": 50000.0,
+          "biological_replicate": 1,
+          "precursors": 114311
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B1",
+          "dose_nm": 0.0,
+          "biological_replicate": 2,
+          "precursors": 114824
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B2",
+          "dose_nm": 0.1,
+          "biological_replicate": 2,
+          "precursors": 114604
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B3",
+          "dose_nm": 1.0,
+          "biological_replicate": 2,
+          "precursors": 115677
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B4",
+          "dose_nm": 10.0,
+          "biological_replicate": 2,
+          "precursors": 115446
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B5",
+          "dose_nm": 100.0,
+          "biological_replicate": 2,
+          "precursors": 109177
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B6",
+          "dose_nm": 1000.0,
+          "biological_replicate": 2,
+          "precursors": 114076
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B7",
+          "dose_nm": 10000.0,
+          "biological_replicate": 2,
+          "precursors": 112665
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_B8",
+          "dose_nm": 50000.0,
+          "biological_replicate": 2,
+          "precursors": 109020
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C1",
+          "dose_nm": 0.0,
+          "biological_replicate": 3,
+          "precursors": 48265
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C2",
+          "dose_nm": 0.1,
+          "biological_replicate": 3,
+          "precursors": 115454
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C3",
+          "dose_nm": 1.0,
+          "biological_replicate": 3,
+          "precursors": 115052
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C4",
+          "dose_nm": 10.0,
+          "biological_replicate": 3,
+          "precursors": 114554
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C5",
+          "dose_nm": 100.0,
+          "biological_replicate": 3,
+          "precursors": 109825
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C6",
+          "dose_nm": 1000.0,
+          "biological_replicate": 3,
+          "precursors": 110216
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C7",
+          "dose_nm": 10000.0,
+          "biological_replicate": 3,
+          "precursors": 109186
+        },
+        {
+          "filename": "Elmo_20230331_TKO_HSdia_C8",
+          "dose_nm": 50000.0,
+          "biological_replicate": 3,
+          "precursors": 110039
+        }
+      ],
+      "caveats": [
+        "Native precursor classes are not harmonized with the external FASTA-derived classes.",
+        "CV uses each tool's own complete-case peptides, not a shared peptide intersection.",
+        "Protein accessions are not harmonized protein groups; do not compare protein totals across tools.",
+        "C1 has fewer retained precursors; it is included, not silently excluded."
+      ]
+    },
+    {
+      "tool": "FragPipe + DIA-NN",
+      "entry_method": "manual_transcription",
+      "sources": [
+        {
+          "title": "Koudelka et al. 2025 · Supplementary Table S5 · Direct MSF",
+          "url": "https://ars.els-cdn.com/content/image/1-s2.0-S153594762500043X-mmc5.xlsx",
+          "sha256": "cf720092239cbe9c3ffc5f281f47ca56113b4d5dc04ba8feac2d3f7c547aef7f"
+        },
+        {
+          "title": "PXD055927 submitted human canonical FASTA (exploratory specificity mapping)",
+          "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/03/PXD055927/201015_Hs_CAN_uniprot-proteome_UP000005640_reviewed_yes_canonical_ProteinaseK_LysC.fasta",
+          "sha256": "0f5ed33a9571a98ff989a91807382c5954d65484eb7967ddf98436884dc61476"
+        }
+      ],
+      "peptide_count": 78773,
+      "precursor_count": 88451,
+      "protein_accession_count": null,
+      "identification_scope": "Peptide rows in S5 and unique modified-sequence/charge identities expanded from its charge column; not verified as the full identification universe.",
+      "cv": {
+        "n": 630184,
+        "peptide_count": 78773,
+        "q1": 0.044770854056,
+        "median": 0.07902714651,
+        "q3": 0.138684640819,
+        "lowerfence": 0.000091979235,
+        "upperfence": 0.279550986525
+      },
+      "cv_method": "Previously calculated from S5 peptide quantities: sample SD/mean over three biological replicates per dose, pooled across eight doses. All source rows had positive quantities across 24 runs.",
+      "specificity": {
+        "specific": 54074,
+        "semi_specific": 33836,
+        "non_specific_excluded": 231,
+        "unmapped_excluded": 310,
+        "method": "Prior exploratory FASTA mapping: specific if both termini match Trypsin/P boundaries; semi-specific if exactly one matches. Protein termini included, initiator methionine excision and processed termini not modeled. Multi-mapping uses specific before semi-specific before non-specific. Two-sided nonspecific and unmapped identities excluded from the pie. Not a harmonized final classification."
+      },
+      "per_run": null,
+      "caveats": [
+        "This workflow is FragPipe/MSFragger identification plus DIA-NN quantification, not standalone DIA-NN.",
+        "Values were manually transcribed from the prior local analysis; this export does not reparse S5.",
+        "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
+        "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
+        "Specificity is provisional and uses a different classification method from SynapSpec."
+      ]
+    },
+    {
+      "tool": "Spectronaut",
+      "entry_method": "manual_transcription",
+      "sources": [
+        {
+          "title": "Koudelka et al. 2025 · Supplementary Table S6 · Direct SN",
+          "url": "https://ars.els-cdn.com/content/image/1-s2.0-S153594762500043X-mmc6.xlsx",
+          "sha256": "de4712af4ba7ebeeeeb787a16143b0395eac59d61f91218b2b20d5bc18b5487b"
+        },
+        {
+          "title": "PXD055927 submitted human canonical FASTA (exploratory specificity mapping)",
+          "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/03/PXD055927/201015_Hs_CAN_uniprot-proteome_UP000005640_reviewed_yes_canonical_ProteinaseK_LysC.fasta",
+          "sha256": "0f5ed33a9571a98ff989a91807382c5954d65484eb7967ddf98436884dc61476"
+        }
+      ],
+      "peptide_count": 121902,
+      "precursor_count": 160485,
+      "protein_accession_count": null,
+      "identification_scope": "Peptide rows in S6 and unique modified-sequence/charge identities expanded from its charge column; not verified as the full identification universe.",
+      "cv": {
+        "n": 975216,
+        "peptide_count": 121902,
+        "q1": 0.051780011942,
+        "median": 0.095761550268,
+        "q3": 0.184647936037,
+        "lowerfence": 0.000051526701,
+        "upperfence": 0.383944966338
+      },
+      "cv_method": "Previously calculated from S6 peptide quantities: sample SD/mean over three biological replicates per dose, pooled across eight doses. All source rows had positive quantities across 24 runs.",
+      "specificity": {
+        "specific": 93491,
+        "semi_specific": 66427,
+        "non_specific_excluded": 567,
+        "unmapped_excluded": 0,
+        "method": "Prior exploratory FASTA mapping: specific if both termini match Trypsin/P boundaries; semi-specific if exactly one matches. Protein termini included, initiator methionine excision and processed termini not modeled. Multi-mapping uses specific before semi-specific before non-specific. Two-sided nonspecific identities excluded from the pie. Not a harmonized final classification."
+      },
+      "per_run": null,
+      "caveats": [
+        "Values were manually transcribed from the prior local analysis; this export does not reparse S6 or the Spectronaut SNE file.",
+        "Source-table coverage is not equivalent to all FDR-filtered SynapSpec identifications.",
+        "CV cohorts differ between tools; upstream normalization, selection and imputation have not been harmonized.",
+        "Specificity is provisional and uses a different classification method from SynapSpec."
+      ]
+    }
+  ]
+}

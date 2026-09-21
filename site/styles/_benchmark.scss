@@ -587,6 +587,7 @@
 
 .bench-toggle-group {
   display: flex;
+  flex-wrap: wrap;
   gap: $spacing-xs * 0.5;
 }
 
@@ -612,7 +613,10 @@
 #dataset-oe480:checked ~ .bench-ds-head .bench-toggle-btn[for="dataset-oe480"],
 #dataset-astral:checked
   ~ .bench-ds-head
-  .bench-toggle-btn[for="dataset-astral"] {
+  .bench-toggle-btn[for="dataset-astral"],
+#dataset-pxd055927:checked
+  ~ .bench-ds-head
+  .bench-toggle-btn[for="dataset-pxd055927"] {
   background: $primary-color;
   border-color: $primary-color;
   color: $background-color;
@@ -750,8 +754,142 @@
 }
 
 #dataset-oe480:checked ~ .bench-ds-head .bench-ds-panel-oe480,
-#dataset-astral:checked ~ .bench-ds-head .bench-ds-panel-astral {
+#dataset-astral:checked ~ .bench-ds-head .bench-ds-panel-astral,
+#dataset-pxd055927:checked ~ .bench-ds-head .bench-ds-panel-pxd055927 {
   display: inline;
+}
+
+.bench-ds-panel-pxd055927 {
+  display: none;
+}
+
+#dataset-pxd055927:checked ~ .bench-ds-panel-oe480,
+#dataset-pxd055927:checked ~ .bench-ds-panel-astral {
+  display: none;
+}
+
+#dataset-pxd055927:checked ~ .bench-ds-panel-pxd055927 {
+  display: block;
+}
+
+#dataset-pxd055927:checked ~ .bench-ds-head .bench-ds-panel-oe480,
+#dataset-pxd055927:checked ~ .bench-ds-head .bench-ds-panel-astral {
+  display: none;
+}
+
+.pxd055927-benchmark {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.pxd055927-reference-note {
+  margin: 0;
+  color: $text-light;
+  font-size: $font-size-small;
+}
+
+.pxd055927-section {
+  padding-top: $spacing-lg;
+  border-top: 1px solid $border-color;
+}
+
+.pxd055927-section:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.pxd055927-subheading {
+  margin: -$spacing-sm 0 $spacing-md;
+  font-size: 1.25rem;
+}
+
+.pxd055927-chart-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pxd055927-specificity-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pxd055927-specificity-card {
+  min-width: 0;
+
+  h3 {
+    margin: 0;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 48px;
+    margin-top: 0;
+
+    strong {
+      color: $text-color;
+    }
+
+    span {
+      color: $text-light;
+      font-size: 0.78rem;
+    }
+  }
+}
+
+.pxd055927-legend {
+  justify-content: center;
+}
+
+.pxd055927-legend-specific {
+  background: $primary-color;
+}
+
+.pxd055927-legend-semi {
+  background: $viz-2;
+}
+
+.pxd055927-source-list {
+  padding: 0;
+  list-style: none;
+  font-size: $font-size-small;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $spacing-xs;
+    padding: $spacing-xs 0;
+    border-bottom: 1px solid $border-color;
+  }
+
+  li:last-child {
+    border-bottom: 0;
+  }
+
+  strong {
+    color: $text-color;
+  }
+}
+
+.pxd055927-source-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+
+  a {
+    word-break: break-word;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: $mobile) {
+  .pxd055927-chart-grid,
+  .pxd055927-specificity-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 // ── Accuracy-vs-depth scatter (ProteoBench 참고) ───────────────
@@ -802,7 +940,8 @@
   }
 }
 
-.bench-scatter-legend {
+.bench-scatter-legend,
+.bench-chart-legend {
   display: flex;
   flex-wrap: wrap;
   gap: $spacing-md;
@@ -819,7 +958,8 @@
   }
 }
 
-.bench-scatter-legend-swatch {
+.bench-scatter-legend-swatch,
+.bench-chart-legend-swatch {
   display: inline-block;
   width: 10px;
   height: 10px;
