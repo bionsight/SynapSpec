@@ -3505,6 +3505,31 @@
               "upper": 669.582
             }
           }
+        },
+        {
+          "species": "Yeast",
+          "count": 30387,
+          "count_display": "30,387",
+          "target": 1.0,
+          "median": 0.6625911662,
+          "lower": 0.398474673,
+          "upper": 0.8605722017,
+          "measured_ratio_display": "1.583×",
+          "deviation_percent": -20.9,
+          "axis": {
+            "actual": {
+              "target": 419.5,
+              "median": 381.373,
+              "lower": 351.528,
+              "upper": 403.745
+            },
+            "relative": {
+              "target": 250.0,
+              "median": 97.491,
+              "lower": -21.889,
+              "upper": 186.979
+            }
+          }
         }
       ],
       "recorded_config": [
@@ -3540,64 +3565,7 @@
           "Random seed",
           "42"
         ]
-      ],
-      "diagnostics": {
-        "data_completeness": {
-          "n_files": 6,
-          "bars": [
-            {
-              "n": 1,
-              "count": 1569,
-              "count_display": "1,569"
-            },
-            {
-              "n": 2,
-              "count": 2909,
-              "count_display": "2,909"
-            },
-            {
-              "n": 3,
-              "count": 5569,
-              "count_display": "5,569"
-            },
-            {
-              "n": 4,
-              "count": 9434,
-              "count_display": "9,434"
-            },
-            {
-              "n": 5,
-              "count": 19902,
-              "count_display": "19,902"
-            },
-            {
-              "n": 6,
-              "count": 102886,
-              "count_display": "102,886"
-            }
-          ]
-        },
-        "cv_distribution": {
-          "precursor": {
-            "count": 265570,
-            "median": 0.20392,
-            "median_display": "20.4%",
-            "p5": 0.03148,
-            "p25": 0.10166,
-            "p75": 0.35802,
-            "p95": 0.67704
-          },
-          "protein": {
-            "count": 29576,
-            "median": 0.77341,
-            "median_display": "77.3%",
-            "p5": 0.13362,
-            "p25": 0.49634,
-            "p75": 1.0151,
-            "p95": 1.45144
-          }
-        }
-      }
+      ]
     }
   },
   "dataset_catalog": [

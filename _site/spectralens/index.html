@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SpectraLens</title>
+  <meta name="description" content="SpectraLens is a targeted DIA peak inspection desktop tool for quickly checking precursor and fragment peaks in raw mass spectrometry files.">
+  <meta property="og:title" content="SpectraLens">
+  <meta property="og:description" content="SpectraLens is a targeted DIA peak inspection desktop tool for quickly checking precursor and fragment peaks in raw mass spectrometry files.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://chemproteomics.github.io/assets/images/spectralens/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  
+  <link rel="stylesheet" href="/assets/css/style.css?v=1785418815">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="/assets/images/spectralens/favicon.png">
+
+  
+<script>
+  (function() {
+    const MIXPANEL_TOKEN = "0af3e19a73b0a8fa536568138d6f08a7";
+    const ANALYTICS_PRODUCT = "SpectraLens";
+    const ANALYTICS_PAGE_TYPE = "landing_page";
+
+    function installMixpanelSnippet() {
+      if (window.mixpanel && window.mixpanel.__SV) return;
+
+      (function(documentRef, mixpanelRef) {
+        if (mixpanelRef.__SV) return;
+
+        let script;
+        let firstScript;
+
+        window.mixpanel = mixpanelRef;
+        mixpanelRef._i = [];
+        mixpanelRef.init = function(token, config, name) {
+          function addStubMethod(target, methodPath) {
+            const parts = methodPath.split('.');
+            if (parts.length === 2) {
+              target = target[parts[0]];
+              methodPath = parts[1];
+            }
+            target[methodPath] = function() {
+              target.push([methodPath].concat(Array.prototype.slice.call(arguments, 0)));
+            };
+          }
+
+          let instance = mixpanelRef;
+          if (typeof name !== 'undefined') {
+            instance = mixpanelRef[name] = [];
+          } else {
+            name = 'mixpanel';
+          }
+
+          instance.people = instance.people || [];
+          instance.toString = function(stub) {
+            let output = 'mixpanel';
+            if (name !== 'mixpanel') output += '.' + name;
+            if (!stub) output += ' (stub)';
+            return output;
+          };
+          instance.people.toString = function() {
+            return instance.toString(1) + '.people (stub)';
+          };
+
+          const methods = 'disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user'.split(' ');
+          for (let index = 0; index < methods.length; index += 1) {
+            addStubMethod(instance, methods[index]);
+          }
+
+          mixpanelRef._i.push([token, config, name]);
+        };
+        mixpanelRef.__SV = 1.2;
+
+        script = documentRef.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+        firstScript = documentRef.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+      })(document, window.mixpanel || []);
+    }
+
+    function getCommonProperties() {
+      return {
+        product: ANALYTICS_PRODUCT,
+        page_type: ANALYTICS_PAGE_TYPE,
+        page_title: document.title,
+        page_path: window.location.pathname,
+        page_url: window.location.href,
+        referrer: document.referrer || null
+      };
+    }
+
+    function getClickSection(target) {
+      if (target.closest('header, .site-header, .spectralens-site-header, nav')) return 'navigation';
+      if (target.closest('footer, .site-footer, .spectralens-footer')) return 'footer';
+      if (target.closest('.hero, .spectralens-hero')) return 'hero';
+      if (target.closest('.services-grid, .card, .spectralens-feature-grid')) return 'features';
+      if (target.closest('.highlight-section, .spectralens-cta')) return 'cta_section';
+      if (target.closest('#docs, .spectralens-docs')) return 'docs';
+      if (target.closest('main, .main-content')) return 'main_content';
+      return 'unknown';
+    }
+
+    window.trackMixpanelEvent = function(eventName, properties) {
+      if (!window.mixpanel || typeof window.mixpanel.track !== 'function') return;
+
+      try {
+        window.mixpanel.track(eventName, {
+          ...getCommonProperties(),
+          ...(properties || {})
+        });
+      } catch (error) {
+        // Analytics should never affect the site experience.
+      }
+    };
+
+    window.initMixpanelClickTracking = function() {
+      if (window.mixpanelClickTrackingInitialized) return;
+      window.mixpanelClickTrackingInitialized = true;
+
+      document.addEventListener('click', function(event) {
+        const target = event.target.closest('a, button');
+        if (!target) return;
+
+        const href = target.getAttribute('href') || '';
+        const absoluteHref = target.href || href;
+        let linkDomain = null;
+
+        if (absoluteHref) {
+          try {
+            linkDomain = new URL(absoluteHref, window.location.href).hostname;
+          } catch (error) {
+            linkDomain = null;
+          }
+        }
+
+        window.trackMixpanelEvent('website_link_clicked', {
+          link_text: (target.textContent || target.getAttribute('aria-label') || 'Unknown').trim().substring(0, 100),
+          link_url: href,
+          link_domain: linkDomain,
+          is_external: Boolean(linkDomain && linkDomain !== window.location.hostname),
+          element_id: target.id || null,
+          element_class: typeof target.className === 'string' ? target.className : '',
+          click_section: getClickSection(target)
+        });
+      });
+    };
+
+    window.loadMixpanelAnalytics = function() {
+      if (!MIXPANEL_TOKEN || window.mixpanelInitialized) return;
+      window.mixpanelInitialized = true;
+
+      installMixpanelSnippet();
+      if (!window.mixpanel || typeof window.mixpanel.init !== 'function') return;
+
+      window.mixpanel.init(MIXPANEL_TOKEN, {
+        persistence: 'localStorage',
+        api_transport: 'sendBeacon',
+        ignore_dnt: true
+      });
+      window.mixpanel.register({
+        product: ANALYTICS_PRODUCT,
+        site: window.location.hostname || 'local'
+      });
+      window.trackMixpanelEvent('website_page_viewed');
+      window.initMixpanelClickTracking();
+    };
+  })();
+</script>
+
+
+
+  <script>
+    window.addEventListener('load', function() {
+      const consent = localStorage.getItem('cookieConsent');
+
+      if (consent === 'accepted') {
+        if (typeof loadMixpanelAnalytics === 'function') {
+          loadMixpanelAnalytics();
+        }
+      } else if (consent === null) {
+        setTimeout(showSpectraLensCookieBanner, 800);
+      }
+    });
+
+    function showSpectraLensCookieBanner() {
+      const banner = document.getElementById('spectralens-cookie-consent-banner');
+      if (banner) {
+        banner.classList.add('show');
+      }
+    }
+
+    function hideSpectraLensCookieBanner() {
+      const banner = document.getElementById('spectralens-cookie-consent-banner');
+      if (banner) {
+        banner.classList.remove('show');
+      }
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('cookieConsent', 'accepted');
+      hideSpectraLensCookieBanner();
+      if (typeof loadMixpanelAnalytics === 'function') {
+        loadMixpanelAnalytics();
+      }
+    }
+
+    function declineCookies() {
+      localStorage.setItem('cookieConsent', 'declined');
+      hideSpectraLensCookieBanner();
+    }
+  </script>
+</head>
+<body class="page-spectralens">
+  
+
+  <header class="spectralens-site-header">
+    <div class="container spectralens-header-inner">
+      <a href="/spectralens/" class="spectralens-brand" aria-label="SpectraLens home">
+        <img src="/assets/images/spectralens/logo.png" alt="">
+        <span>SpectraLens</span>
+      </a>
+
+      <nav class="spectralens-nav" aria-label="SpectraLens navigation">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#docs">Docs</a>
+        <a href="#download">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    
+<section class="spectralens-hero">
+  <div class="container spectralens-hero-grid">
+    <div class="spectralens-hero-copy">
+      <div class="spectralens-kicker">
+        <span>DIA peak inspection</span>
+      </div>
+      <h1>SpectraLens</h1>
+      <p class="spectralens-lede">
+        Targeted DIA peak inspection for the precursor you care about.
+      </p>
+      <p class="spectralens-hero-text">
+        SpectraLens is built for the moment when you do not want to run a full DIA pipeline.
+        Load raw files, enter the precursor you care about, and quickly inspect the MS1/MS2 peak evidence.
+      </p>
+      <div class="spectralens-actions">
+        <a href="https://github.com/bionsight/SpectraLens/releases/tag/v0.4.5" class="btn btn-large" target="_blank" rel="noopener">
+          <i class="fas fa-download"></i> Download Latest
+        </a>
+        <a href="#docs" class="btn btn-large btn-outline">
+          <i class="fas fa-book-open"></i> Read Docs
+        </a>
+      </div>
+    </div>
+
+    <div class="spectralens-visual spectralens-screenshot-frame" aria-label="SpectraLens application preview">
+      <img src="/assets/images/spectralens/spectralens_window.png" alt="SpectraLens desktop application showing precursor selection and XIC peak plots" />
+    </div>
+  </div>
+</section>
+
+<section class="spectralens-band spectralens-summary-band">
+  <div class="container spectralens-highlight-grid">
+    
+    <div class="spectralens-highlight">
+      <span>Targeted</span>
+      <strong>Precursor-first</strong>
+    </div>
+    
+    <div class="spectralens-highlight">
+      <span>Views</span>
+      <strong>MS1 and MS2 XIC</strong>
+    </div>
+    
+    <div class="spectralens-highlight">
+      <span>Context</span>
+      <strong>iRT, RT, spectra</strong>
+    </div>
+    
+    <div class="spectralens-highlight">
+      <span>Output</span>
+      <strong>CSV export</strong>
+    </div>
+    
+  </div>
+</section>
+
+<section id="features" class="spectralens-section">
+  <div class="container">
+    <div class="spectralens-section-header">
+      <span>Why it exists</span>
+      <h2>Fast answers before a full analysis run</h2>
+      <p>
+        SpectraLens is for targeted visual confirmation: a few precursors, selected raw files,
+        and immediate chromatographic evidence without waiting for a full DIA analysis workflow.
+      </p>
+    </div>
+
+    <div class="spectralens-feature-grid">
+      
+      <article class="spectralens-feature">
+        <div class="spectralens-feature-icon">
+          <i class="fas fa-crosshairs"></i>
+        </div>
+        <h3>Precursor-centered inspection</h3>
+        <p>Add the peptide sequence and charge state you want to verify, then inspect only the targeted signal instead of processing the full experiment.</p>
+      </article>
+      
+      <article class="spectralens-feature">
+        <div class="spectralens-feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Interactive XIC views</h3>
+        <p>Review precursor-level MS1 XICs and fragment-level MS2 XICs with linear or log scale, legends, and optional TIC or base peak overlays.</p>
+      </article>
+      
+      <article class="spectralens-feature">
+        <div class="spectralens-feature-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3>iRT and charge prediction</h3>
+        <p>Use model-based iRT and charge predictions to seed a focused search window when library information is incomplete.</p>
+      </article>
+      
+      <article class="spectralens-feature">
+        <div class="spectralens-feature-icon">
+          <i class="fas fa-wave-square"></i>
+        </div>
+        <h3>Spectrum context</h3>
+        <p>Compare experimental and predicted spectra so a peak can be checked with chromatographic and fragment evidence together.</p>
+      </article>
+      
+      <article class="spectralens-feature">
+        <div class="spectralens-feature-icon">
+          <i class="fas fa-folder-open"></i>
+        </div>
+        <h3>Raw file workspace</h3>
+        <p>Create a local workspace, add raw files, and reuse converted files during repeated precursor checks.</p>
+      </article>
+      
+      <article class="spectralens-feature">
+        <div class="spectralens-feature-icon">
+          <i class="fas fa-file-csv"></i>
+        </div>
+        <h3>Exportable review</h3>
+        <p>Export analysis results as CSV for review notes, sharing, or downstream manual curation.</p>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="workflow" class="spectralens-band">
+  <div class="container">
+    <div class="spectralens-section-header">
+      <span>Workflow</span>
+      <h2>From raw file to peak evidence</h2>
+    </div>
+
+    <div class="spectralens-workflow">
+      
+      <article>
+        <div class="spectralens-step-number">1</div>
+        <h3>Create a workspace</h3>
+        <p>Choose a local workspace for raw files, converted files, peptide lists, and analysis settings.</p>
+      </article>
+      
+      <article>
+        <div class="spectralens-step-number">2</div>
+        <h3>Add raw files</h3>
+        <p>Select DIA raw files. SpectraLens prepares local analysis-ready files and keeps their status visible.</p>
+      </article>
+      
+      <article>
+        <div class="spectralens-step-number">3</div>
+        <h3>Enter precursors</h3>
+        <p>Paste peptide sequences, optional charge suffixes, UniMod modifications, or supported glycan notation.</p>
+      </article>
+      
+      <article>
+        <div class="spectralens-step-number">4</div>
+        <h3>Inspect peaks</h3>
+        <p>Run targeted extraction, then switch between iRT-RT, spectra, MS1 XIC, and MS2 XIC tabs.</p>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="docs" class="spectralens-section spectralens-docs">
+  <div class="container">
+    <div class="spectralens-section-header">
+      <span>Docs</span>
+      <h2>Install and use SpectraLens</h2>
+      <p>
+        This page keeps the working notes and user docs together because SpectraLens has a focused surface area.
+      </p>
+    </div>
+
+    <div class="spectralens-doc-layout">
+      <aside class="spectralens-doc-nav" aria-label="SpectraLens documentation sections">
+        <a href="#download">Download</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+        <a href="#quick-start">Quick start</a>
+        <a href="#precursor-input">Precursor input</a>
+        <a href="#settings">Settings</a>
+        <a href="#outputs">Outputs</a>
+        <a href="#support">Support</a>
+      </aside>
+
+      <div class="spectralens-doc-content">
+        <section id="download">
+          <h3>Download</h3>
+          <p>
+            SpectraLens is distributed as a desktop application for macOS and Windows.
+            Download the binary for your platform, launch it locally, and create a workspace to inspect DIA precursor peaks.
+          </p>
+          <div class="spectralens-download-grid">
+            <a href="https://d35ag17soow82e.cloudfront.net/0.4.5/SpectraLens-macos-0.4.5.dmg" class="spectralens-download" target="_blank" rel="noopener">
+              <i class="fab fa-apple"></i>
+              <span>macOS</span>
+              <strong>Desktop app</strong>
+            </a>
+            <a href="https://d35ag17soow82e.cloudfront.net/0.4.5/SpectraLens-windows-0.4.5.msi" class="spectralens-download" target="_blank" rel="noopener">
+              <i class="fab fa-windows"></i>
+              <span>Windows</span>
+              <strong>Desktop app</strong>
+            </a>
+          </div>
+        </section>
+
+        <section id="troubleshooting">
+          <h3>Troubleshooting</h3>
+          <h4>macOS: app cannot be opened because the developer cannot be verified</h4>
+          <p>
+            Due to macOS Gatekeeper security settings, you may need to manually approve SpectraLens
+            because the current macOS build may not have an Apple Developer code signature.
+          </p>
+          <ol>
+            <li>Open <strong>System Settings</strong> or <strong>System Preferences</strong>.</li>
+            <li>Go to <strong>Privacy &amp; Security</strong>.</li>
+            <li>Scroll down to the <strong>Security</strong> section.</li>
+            <li>
+              Find the message about SpectraLens being blocked because it is not from an identified
+              developer, then click <strong>Open Anyway</strong>.
+            </li>
+          </ol>
+          <p>
+            After approving the app, open SpectraLens again from Finder or Launchpad.
+          </p>
+        </section>
+
+        <section id="quick-start">
+          <h3>Quick start</h3>
+          <p>
+            Start by creating or opening a local workspace. SpectraLens keeps selected raw files,
+            target precursors, settings, and exported results inside that workspace.
+          </p>
+
+          <div class="spectralens-guide">
+            <article class="spectralens-guide-step">
+              <div class="spectralens-guide-copy">
+                <span>Step 1</span>
+                <h4>Add raw files</h4>
+                <p>
+                  Open the Raw Files panel, click <strong>Add Files</strong>, and choose the raw files you want
+                  to inspect. After the files are listed, select the blue checkbox for the file or files that
+                  should be included in the targeted analysis.
+                </p>
+              </div>
+              <figure>
+                <img src="/assets/images/spectralens/select_raw_files.png" alt="SpectraLens Raw Files panel with Add Files and file selection checkbox highlighted" loading="lazy" />
+                <figcaption>Add raw files, then select the files to use for analysis.</figcaption>
+              </figure>
+            </article>
+
+            <article class="spectralens-guide-step">
+              <div class="spectralens-guide-copy">
+                <span>Step 2</span>
+                <h4>Open the precursor input dialog</h4>
+                <p>
+                  Click the <strong>+</strong> button in the precursor toolbar to open the sequence input dialog.
+                  If the button is not visible, collapse the Raw Files panel first so the precursor list has more space.
+                </p>
+              </div>
+              <figure>
+                <img src="/assets/images/spectralens/add_sequences.png" alt="SpectraLens precursor list with plus button highlighted and Raw Files panel highlighted" loading="lazy" />
+                <figcaption>Use the plus button to add target precursor sequences.</figcaption>
+              </figure>
+            </article>
+
+            <article class="spectralens-guide-step">
+              <div class="spectralens-guide-copy">
+                <span>Step 3</span>
+                <h4>Enter target sequences</h4>
+                <p>
+                  Add the sequence or precursor you want to check, then click <strong>Add</strong>. Use UniMod
+                  notation for modifications, such as <code>C(UniMod:4)</code>. Separate multiple sequences with
+                  line breaks or commas. Add a charge state after a period, such as <code>PEPTIDESEQ.2</code>.
+                </p>
+              </div>
+              <figure>
+                <img src="/assets/images/spectralens/fill_sequences.png" alt="SpectraLens Add Peptide dialog with sequence input examples" loading="lazy" />
+                <figcaption>Enter one or more target sequences, then add them to the precursor list.</figcaption>
+              </figure>
+            </article>
+
+            <article class="spectralens-guide-step">
+              <div class="spectralens-guide-copy">
+                <span>Step 4</span>
+                <h4>Select precursors and run</h4>
+                <p>
+                  Select the sequence rows you want to analyze. Anchor precursors are used for RT-iRT mapping.
+                  SpectraLens automatically fills many settings from the raw file metadata, but you can adjust
+                  tolerances, instrument, NCE, RT window, and fragment limits from Settings when needed.
+                  Click <strong>Analyze All</strong> to extract and inspect the target peaks.
+                </p>
+              </div>
+              <figure>
+                <img src="/assets/images/spectralens/select_seqs_settings.png" alt="SpectraLens precursor table and settings area with selectable sequence rows highlighted" loading="lazy" />
+                <figcaption>Select target sequences, review settings, and run Analyze All.</figcaption>
+              </figure>
+            </article>
+          </div>
+        </section>
+
+        <section id="precursor-input">
+          <h3>Precursor input</h3>
+          <p>
+            Paste one sequence per line or separate multiple entries with commas. Add a charge suffix with
+            <code>.2</code> or <code>.3</code> when you want a specific charge state. If the charge is omitted,
+            SpectraLens predicts likely charge states and iRT values.
+          </p>
+          <pre><code>PEPTIDESEQ.2
+PEPC(UniMod:4)TIDESEQ.3
+AA[Hex(1)HexNAc(2)]DD
+PEPTIDES(UniMod:21)EQ,PEPTIDEM(UniMod:35)SEQ</code></pre>
+        </section>
+
+        <section id="settings">
+          <h3>Settings reference</h3>
+          <div class="spectralens-settings-list">
+            
+            <div>
+              <strong>MS1 tolerance</strong>
+              <span>Precursor m/z extraction window in ppm.</span>
+            </div>
+            
+            <div>
+              <strong>MS2 tolerance</strong>
+              <span>Fragment ion extraction window in ppm.</span>
+            </div>
+            
+            <div>
+              <strong>RT window</strong>
+              <span>Seconds around the predicted or entered retention time used for targeted XIC extraction.</span>
+            </div>
+            
+            <div>
+              <strong>Instrument</strong>
+              <span>Mass spectrometer model used for prediction and display context.</span>
+            </div>
+            
+            <div>
+              <strong>NCE</strong>
+              <span>Normalized collision energy used for predicted fragment spectra.</span>
+            </div>
+            
+            <div>
+              <strong>Max fragments</strong>
+              <span>Optional cap on the number of fragment ions extracted.</span>
+            </div>
+            
+            <div>
+              <strong>Intensity aggregation</strong>
+              <span>How intensities inside each tolerance window are combined: sum, mean, or maximum.</span>
+            </div>
+            
+          </div>
+        </section>
+
+        <section id="outputs">
+          <h3>Outputs</h3>
+          <p>
+            SpectraLens keeps precursor rows, local file status, analysis settings, and extracted result tables
+            inside the selected workspace. Use Export CSV from the visualization panel to save a reviewable result
+            table for downstream notes or manual curation.
+          </p>
+        </section>
+
+        <section id="support">
+          <h3>Support &amp; community</h3>
+          <p>
+            SpectraLens uses GitHub Discussions and Issues for community support, bug reports, and feature ideas.
+          </p>
+          <ul>
+            <li>
+              <strong>Questions and usage help:</strong>
+              ask in <a href="https://github.com/bionsight/SpectraLens/discussions" target="_blank" rel="noopener">GitHub Discussions</a>.
+            </li>
+            <li>
+              <strong>Bug reports:</strong>
+              open a <a href="https://github.com/bionsight/SpectraLens/issues" target="_blank" rel="noopener">GitHub Issue</a>
+              with your operating system, SpectraLens version, input file type, and a short description of what happened.
+            </li>
+            <li>
+              <strong>Feature ideas:</strong>
+              share suggestions in Discussions so they can be discussed before becoming issues.
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <footer class="spectralens-footer">
+    <div class="container spectralens-footer-inner">
+      <div>
+        <strong>SpectraLens</strong>
+        <span>Targeted DIA peak inspection for focused precursor review.</span>
+      </div>
+      <div class="spectralens-footer-links">
+        <a href="https://github.com/bionsight/SpectraLens/releases/tag/v0.4.5" target="_blank" rel="noopener">Download</a>
+        <a href="mailto:contact@bionsight.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="spectralens-cookie-consent-banner">
+    <div class="spectralens-cookie-content">
+      <div class="spectralens-cookie-text">
+        <h3>Cookie & Privacy Consent</h3>
+        <p>
+          We collect anonymized usage statistics to improve this website.
+          You can accept or decline analytics cookies.
+        </p>
+      </div>
+      <div class="spectralens-cookie-buttons">
+        <button class="spectralens-cookie-btn spectralens-cookie-btn-accept" onclick="acceptCookies()">
+          Accept All
+        </button>
+        <button class="spectralens-cookie-btn spectralens-cookie-btn-decline" onclick="declineCookies()">
+          Decline
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -3,7 +3,7 @@ dataset:
   slug: proteobench-1.0.0
   name: ProteoBench 2 Th
   instrument: Astral
-  preset: bion_lfq_astral
+  preset: proteobench_2th_astral
   key_config: MBR on · Trypsin/P · 2 missed cleavages
 run:
   slug: proteobench-1.0.0
@@ -79,3 +79,9 @@ ratio_measurements:
   median: -1.6212351366
   lower: -1.9681365444
   upper: -1.0717207494
+- species: Yeast
+  target: 1.0
+  count: 30387
+  median: 0.6625911662
+  lower: 0.398474673
+  upper: 0.8605722017
