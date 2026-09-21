@@ -27,9 +27,9 @@ const series = isPeptide ? pxd055927.tools.map((tool) => ({
   lower: [tool.cv.lowerfence], upper: [tool.cv.upperfence],
   text: [`n = ${tool.cv.n.toLocaleString("en-US")} peptide × dose`],
 })) : sources.map(({ tool, diagnostics }) => {
-  const values = [diagnostics!.cv_distribution.precursor, diagnostics!.cv_distribution.protein];
+  const values = [diagnostics!.cv_distribution.precursor];
   return {
-    tool, categories: ["Precursor", "Protein"],
+    tool, categories: ["Precursor"],
     q1: values.map((value) => value.p25), median: values.map((value) => value.median),
     q3: values.map((value) => value.p75), lower: values.map((value) => value.p5),
     upper: values.map((value) => value.p95), text: ["", ""],
