@@ -1,6 +1,6 @@
 {
   "dataset": "bion-semi-specific-pxd055927",
-  "synapspec_version": "v0.12.1",
+  "synapspec_version": "v1.0.0",
   "status": "reference_comparison_not_matched_benchmark",
   "tools": [
     {
@@ -14,25 +14,24 @@
         }
       ],
       "peptide_count": 102561,
-      "precursor_count": 126841,
+      "precursor_count": 139627,
       "protein_accession_count": 10047,
       "identification_scope": "Unique modified sequences and sequence/charge pairs in target hits with precursor_qvalue < 0.01",
       "cv": {
-        "n": 208864,
-        "peptide_count": 26108,
-        "q1": 0.08241601657132375,
-        "median": 0.14776245707082386,
-        "q3": 0.2615885218224613,
-        "lowerfence": 0.0004264770537619745,
-        "upperfence": 0.530293179923998
+        "count": 410395,
+        "median": 0.19533,
+        "median_display": "19.5%",
+        "p5": 0.06228,
+        "p25": 0.11827,
+        "p75": 0.31143,
+        "p95": 0.5891
       },
       "cv_method": "Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",
       "specificity": {
-        "specific": 95491,
-        "semi_specific": 31350,
-        "non_specific_excluded": 0,
-        "unmapped_excluded": 0,
-        "method": "Native precursor_class, not reclassified against the public FASTA"
+        "specific": 73842,
+        "semi_specific": 25662,
+        "non_specific_excluded": 86,
+        "unmapped_excluded": 40037
       },
       "per_run": [
         {
@@ -295,7 +294,73 @@
           "precursor_count": 122277,
           "complete_count": 97042
         }
-      ]
+      ],
+      "protein_count": 10430,
+      "completeness": {
+        "n_files": 24,
+        "bars": [
+          {
+            "n": 1,
+            "count": 139627,
+            "count_display": "139,627"
+          },
+          {
+            "n": 2,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 3,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 4,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 5,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 6,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 7,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 8,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 9,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 10,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 11,
+            "count": 0,
+            "count_display": "0"
+          },
+          {
+            "n": 12,
+            "count": 0,
+            "count_display": "0"
+          }
+        ]
+      }
     },
     {
       "tool": "FragPipe + DIA-NN",
@@ -323,7 +388,7 @@
         "q1": 0.044770854056,
         "median": 0.07902714651,
         "q3": 0.138684640819,
-        "lowerfence": 0.000091979235,
+        "lowerfence": 9.1979235e-05,
         "upperfence": 0.279550986525
       },
       "cv_method": "Previously calculated from S5 peptide quantities: sample SD/mean over three biological replicates per dose, pooled across eight doses. All source rows had positive quantities across 24 runs.",
@@ -414,7 +479,7 @@
         "q1": 0.051780011942,
         "median": 0.095761550268,
         "q3": 0.184647936037,
-        "lowerfence": 0.000051526701,
+        "lowerfence": 5.1526701e-05,
         "upperfence": 0.383944966338
       },
       "cv_method": "Previously calculated from S6 peptide quantities: sample SD/mean over three biological replicates per dose, pooled across eight doses. All source rows had positive quantities across 24 runs.",
