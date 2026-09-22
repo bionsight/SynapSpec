@@ -28,10 +28,10 @@
       },
       "cv_method": "Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",
       "specificity": {
-        "specific": 73842,
-        "semi_specific": 25662,
-        "non_specific_excluded": 86,
-        "unmapped_excluded": 40037
+        "specific": 104598,
+        "semi_specific": 35029,
+        "non_specific_excluded": 0,
+        "unmapped_excluded": 0
       },
       "per_run": [
         {
