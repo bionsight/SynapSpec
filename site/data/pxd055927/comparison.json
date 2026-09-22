@@ -18,13 +18,13 @@
       "protein_accession_count": 10047,
       "identification_scope": "Unique modified sequences and sequence/charge pairs in target hits with precursor_qvalue < 0.01",
       "cv": {
-        "count": 410395,
+        "n": 410395,
+        "peptide_count": 410395,
+        "q1": 0.11827,
         "median": 0.19533,
-        "median_display": "19.5%",
-        "p5": 0.06228,
-        "p25": 0.11827,
-        "p75": 0.31143,
-        "p95": 0.5891
+        "q3": 0.31143,
+        "lowerfence": 0.06228,
+        "upperfence": 0.5891
       },
       "cv_method": "Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",
       "specificity": {
