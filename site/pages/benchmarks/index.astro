@@ -26,16 +26,28 @@ const pxd055927Summary: BenchmarkSummary = {
     completePercent: null,
   })),
 };
-const pxd055927Runs = [{
-  date: null,
-  label: `SynapSpec ${pxd055927.synapspec_version}`,
-  sourceSlug: pxd055927.dataset,
-  counts: [pxd055927.tools[0].precursor_count],
-  counts_display: [pxd055927.tools[0].precursor_count.toLocaleString("en-US")],
-  runtime: null,
-  resource: null,
-  release_version: pxd055927.synapspec_version,
-}];
+const pxd055927Runs = [
+  {
+    date: null,
+    label: `SynapSpec ${pxd055927.synapspec_version}`,
+    sourceSlug: pxd055927.dataset,
+    counts: [pxd055927.tools[0].precursor_count],
+    counts_display: [pxd055927.tools[0].precursor_count.toLocaleString("en-US")],
+    runtime: null,
+    resource: null,
+    release_version: pxd055927.synapspec_version,
+  },
+  {
+    date: "2026-09-09",
+    label: "SynapSpec v0.12.1 run · PXD055927 semi-specific",
+    sourceSlug: "pxd055927-v0.12.1",
+    counts: [126841],
+    counts_display: ["126,841"],
+    runtime: null,
+    resource: null,
+    release_version: "v0.12.1",
+  },
+];
 ---
 
 <BaseLayout title="Benchmarks" description={description} noindex>
