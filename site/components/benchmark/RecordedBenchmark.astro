@@ -20,11 +20,12 @@ const diagnostics = (entry as { diagnostics?: unknown }).diagnostics;
 // runs without it (no per-run diagnostics computed) skip this section
 // entirely rather than rendering an empty one.
 const quartiles = (entry as { quartile_measurements?: unknown }).quartile_measurements;
-// Only the PXD028735 runs have a public source record (PRIDE) on file.
-// ProteoBench/Astral doesn't have one we know of yet, so for now it just
-// skips the raw-files/source-record area entirely rather than showing a
-// stale table or a dead link.
+// Runs with a public source record (PRIDE, ProteoBench, etc.) show a link;
+// others skip the raw-files/source-record area entirely.
 const sourceUrl = (entry as { source_url?: string }).source_url;
+const sourceLabel = sourceUrl?.includes("pride")
+  ? `${entry.title} on PRIDE Archive`
+  : `${entry.title} on ProteoBench`;
 ---
 
 <div class="container">
@@ -73,7 +74,7 @@ const sourceUrl = (entry as { source_url?: string }).source_url;
 
   {sourceUrl && (
     <section id="raw-files" class="pb-lg">
-      <a href={sourceUrl} class="bench-link" target="_blank" rel="noopener">Raw files: {entry.title} on PRIDE Archive ↗</a>
+      <a href={sourceUrl} class="bench-link" target="_blank" rel="noopener">Raw files: {sourceLabel} ↗</a>
     </section>
   )}
 </div>

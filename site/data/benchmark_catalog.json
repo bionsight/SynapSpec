@@ -2285,7 +2285,8 @@
             "p95": 1.551562
           }
         }
-      }
+      },
+      "source_url": "https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral"
     },
     "proteobench-v0.11.0": {
       "run_slug": "proteobench-v0.11.0",
@@ -2701,7 +2702,8 @@
             "p95": 1.374665
           }
         }
-      }
+      },
+      "source_url": "https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral"
     },
     "proteobench-v0.12.4": {
       "run_slug": "proteobench-v0.12.4",
@@ -3129,7 +3131,8 @@
           "count": 107126,
           "median": 0.18792313478713812
         }
-      }
+      },
+      "source_url": "https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral"
     },
     "pxd028735-1.0.0": {
       "run_slug": "pxd028735-1.0.0",
@@ -3622,7 +3625,8 @@
             "p95": 1.45144
           }
         }
-      }
+      },
+      "source_url": "https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral"
     }
   },
   "dataset_catalog": [
@@ -5028,9 +5032,9 @@
     "proteobench-2th-diann-v250": {
       "dataset": "ProteoBench 2 Th",
       "tool": "DIA-NN",
-      "version": "2.5.0 Academia",
+      "version": "DIA-NN 20260805_082913",
       "analysis_date": "2026-08-04",
-      "archive": "200c98108a367991eb6d1b4cf867d5a617d62f10_data.zip",
+      "archive": "https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral",
       "member": "input_file.parquet",
       "sha256": "dffccccf32f2d6a5a1ce80d210095ebb56a3d589a7a8ffaba486bf1cf3007187",
       "files": [
@@ -5046,9 +5050,9 @@
     "proteobench-2th-spectronaut-v21": {
       "dataset": "ProteoBench 2 Th",
       "tool": "Spectronaut",
-      "version": "21.0.260602.94842",
+      "version": "Spectronaut 20260803_090414",
       "analysis_date": "2026-07-31",
-      "archive": "790d6197bc6972036a5cfa9907d3249bf978fe45_data.zip",
+      "archive": "https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral",
       "member": "input_file.tsv",
       "sha256": "7e153e0841f710f0a3220973f6ab9639c3aa7116b300dba00c6c758a75936f75",
       "files": [
