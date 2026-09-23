@@ -96,13 +96,13 @@ const pxd055927Runs = [
           </section>
 
           <details class="bench-details bench-border-t bench-details-flat">
-            <summary>Raw files used</summary>
-            <ul class="bench-file-list">{inputFiles.map((file) => <li>{file}</li>)}</ul>
+            <summary>Source</summary>
             <p class="bench-source-note">
               {isAstral
                 ? <a href="https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral" class="bench-link" target="_blank" rel="noopener">Source: ProteoBench ↗</a>
                 : <a href="https://www.ebi.ac.uk/pride/archive/projects/PXD028735" class="bench-link" target="_blank" rel="noopener">Source: PXD028735 on PRIDE ↗</a>}
             </p>
+            <ul class="bench-file-list">{inputFiles.map((file) => <li>{file}</li>)}</ul>
           </details>
         </div>
       );
