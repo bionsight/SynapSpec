@@ -1,13 +1,13 @@
 {
   "synapspec": {
-    "version": "1.0.0",
-    "name": "SynapSpec 1.0.0",
+    "version": "1.0.1",
+    "name": "SynapSpec 1.0.1",
     "downloads": {
-      "windows_gpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.0/SynapSpec-windows-1.0.0.zip",
-      "windows_cpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.0/SynapSpec-windows-cpu-1.0.0.zip",
-      "linux_gpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.0/SynapSpec-linux-1.0.0.tar.gz",
-      "linux_cpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.0/SynapSpec-linux-cpu-1.0.0.tar.gz",
-      "macos": "https://d3s63qbeileh4l.cloudfront.net/1.0.0/SynapSpec-macos-1.0.0.dmg"
+      "windows_gpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.1/SynapSpec-windows-1.0.1.zip",
+      "windows_cpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.1/SynapSpec-windows-cpu-1.0.1.zip",
+      "linux_gpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.1/SynapSpec-linux-1.0.1.tar.gz",
+      "linux_cpu": "https://d3s63qbeileh4l.cloudfront.net/1.0.1/SynapSpec-linux-cpu-1.0.1.tar.gz",
+      "macos": "https://d3s63qbeileh4l.cloudfront.net/1.0.1/SynapSpec-macos-1.0.1.dmg"
     }
   }
 }
