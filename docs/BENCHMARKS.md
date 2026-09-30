@@ -32,6 +32,14 @@ OE480에서 SynapSpec이 2위(DIA-NN보다 낮은 정확도), Astral에서도 2�
 `benchmark_comparison_scatter.json`과 `benchmarks.json`은 이제 사이트에서 읽는 곳이
 없지만, 스크립트가 쓰고 읽으므로 남겨 두었다.
 
+**2026-09-30: 클릭으로 닿지 않는 상세 페이지 10개를 운영에서 뺐다.** 목록에서 들어갈 수
+있는 상세 페이지는 Run history 막대가 가리키는 것뿐이다(`VersionHistoryWidget.astro`).
+DIA-NN·Spectronaut 도구 페이지 4개는 차트의 기준선으로만 그려져서 들어갈 길이 없었다.
+나머지 6개는 ledger에서 빠진 v0.9.2·v0.11.0 run 4개와 옛 DIA-NN import 2개다.
+`benchmark_entries.json`의 항목만 지웠고 데이터와 `ImportedBenchmark.astro`는 남겼다.
+도구 페이지 데이터는 목록 차트가 계속 읽는다. 다시 열려면 항목만 되돌리면 된다.
+`manage_benchmarks.py validate`가 남긴 데이터를 고아로 경고하는 것은 이 때문이다.
+
 ## TODO
 
 ### 1. 공개 전환 (완료)

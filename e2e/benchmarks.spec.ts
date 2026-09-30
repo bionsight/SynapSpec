@@ -62,14 +62,6 @@ test.describe("benchmarks index", () => {
   });
 });
 
-test.describe("benchmark detail pages, one per kind", () => {
-  test("imported — shows the tool's precursor count", async ({ page }) => {
-    await page.goto("/benchmarks/pxd028735-diann/");
-    await expect(page.locator("h1")).toContainText("LFQBench");
-    await expect(page.locator(".bench-lede")).toContainText("precursor IDs");
-  });
-});
-
 test("benchmarks section is in the sitemap", async ({ request, baseURL }) => {
   const res = await request.get(`${baseURL}/sitemap-0.xml`);
   expect(res.ok()).toBeTruthy();
