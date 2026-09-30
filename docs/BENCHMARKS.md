@@ -1,19 +1,14 @@
 # Benchmarks 페이지 — 현황과 TODO
 
-> 최종 갱신 2026-08-27. 관련 파일은 이 문서 맨 아래 목록 참조.
+> 최종 갱신 2026-09-30. 관련 파일은 이 문서 맨 아래 목록 참조.
 
 ## 현재 상태
 
-`/benchmarks/` 와 run별 상세 페이지가 **라이브에 배포돼 있지만 비공개 상태**다.
-팀장 검토 전이라 다음 세 가지로 가려 놓았다.
+`/benchmarks/` 와 run별 상세 페이지는 **팀장 승인을 받아 공개 상태**다.
 
-| 방법 | 위치 |
-|---|---|
-| 내비게이션 링크 제거 | `_config.yml` 의 `navigation` (헤더·푸터가 함께 참조) |
-| 검색엔진 색인 차단 | `noindex: true` → `_layouts/default.html` 의 robots 메타 |
-| 사이트맵 제외 | `sitemap: false` |
-
-링크를 아는 사람만 접근할 수 있고, 사이트를 돌아다니다 발견할 수는 없다.
+처음(2026-08-26)에는 팀장 검토 전이라 내비게이션 링크, `noindex`, sitemap 세 가지로
+가려 두었다. 내비게이션 링크는 Astro 이관(PR #5, 2026-09-18) 때 `site/data/nav.ts` 에
+들어가면서 먼저 열렸다. 나머지 둘은 2026-09-30 에 풀었다.
 
 **주의:** 2026-08-26 08:55~09:13 UTC(약 18분) 동안은 내비게이션에 링크가 있었고
 sitemap.xml 에도 포함돼 있었다. 또한 이 저장소는 public 이므로 커밋 이력에
@@ -30,23 +25,17 @@ OE480에서 SynapSpec이 2위(DIA-NN보다 낮은 정확도), Astral에서도 2�
 
 ## TODO
 
-### 1. 공개 전환 (팀장 승인 후)
+### 1. 공개 전환 (완료)
 
-네 군데를 되돌리면 된다. 하나라도 빠지면 어중간하게 노출된다.
-
-- [ ] `_config.yml` → `navigation` 에 `- name: "Benchmarks" / url: "/benchmarks/"` 추가
-- [ ] `_config.yml` → benchmarks 컬렉션 `defaults` 에서 `noindex` / `sitemap` 두 줄 삭제
-- [ ] `benchmarks/index.md` front matter 에서 `noindex` / `sitemap` 두 줄 삭제
-- [ ] `scripts/fetch_benchmarks.py` 의 `write_collection()` 에서 stub front matter 두 줄 삭제 후 스크립트 재실행
+- [x] `site/data/nav.ts` 의 `navigation` 에 `{ name: "Benchmarks", url: "/benchmarks/" }` 추가 (2026-09-18)
+- [x] `site/pages/benchmarks/` 아래 세 페이지의 `BaseLayout` 에서 `noindex` 삭제 (2026-09-30)
+- [x] `astro.config.mjs` 의 `sitemap()` 에서 `/benchmarks/` 제외 `filter` 삭제 (2026-09-30)
 
 ### 2. 개발 환경
 
-- [ ] **Ruby 3.x 설치.** 시스템 Ruby 2.6 이 `Gemfile.lock` 의 bundler 2.7.1 을 못 써서
-      `bundle exec jekyll serve` 가 안 된다. 지금은 배포 후 브라우저로만 확인 가능한 상태다.
-      `brew install ruby` 또는 rbenv.
-- [ ] **Liquid 검증 스크립트를 저장소로 옮기기.** python-liquid 로 템플릿을 렌더해
-      문법 오류·미치환 태그·style 퍼센트 범위를 검사하는 스크립트를 임시로 썼는데
-      저장소에 없다. Jekyll 로컬 빌드가 되면 불필요해질 수도 있다.
+- [x] **로컬 빌드.** Astro 이관으로 해결됐다. `npm run check`, `npm run build`,
+      `npm run dev` 로 배포 전에 확인한다. Ruby 설치와 Liquid 검증 스크립트는 더
+      필요 없다.
 
 ### 3. 데이터
 
@@ -105,8 +94,8 @@ OE480에서 SynapSpec이 2위(DIA-NN보다 낮은 정확도), Astral에서도 2�
 - [ ] **자동 갱신.** 지금은 수동이다. ClearML 이 사내망(`clearml.bionsight.internal`)이라
       GitHub 호스팅 러너에서 접근할 수 없기 때문. DeepMSFlow 가 쓰는 ARC 온프레미스 러너
       (`on-premise-cpu`)를 이 저장소에서도 쓸 수 있으면 cron 워크플로우로 자동화 가능하다.
-- [ ] **TanStack Start 이관 대비.** 신버전 사이트로 넘어가면 `_data/benchmarks.json` 은
-      그대로 재사용하고 템플릿만 `.tsx` 로 다시 쓰면 된다. 수집 스크립트는 손댈 필요 없다.
+- [x] **사이트 이관.** TanStack Start 대신 Astro 로 옮겼다(PR #5, 2026-09-18).
+      수집 결과는 `site/data/benchmarks.json` 으로 옮겨 그대로 재사용한다.
 
 ### 6. 무관하지만 위험한 것
 
@@ -130,12 +119,12 @@ git add -A && git commit -m "chore: update benchmarks" && git push origin gh-pag
 
 | 파일 | 역할 |
 |---|---|
-| `scripts/fetch_benchmarks.py` | ClearML SDK 로 수집 → JSON + 컬렉션 stub 생성 |
-| `_data/benchmarks.json` | 수집 결과. 커밋되므로 빌드에 네트워크가 필요 없다 |
-| `_benchmarks/<날짜>.md` | 상세 페이지 stub. 스크립트가 생성·삭제하므로 직접 수정 금지 |
-| `benchmarks/index.md` | 리스트 페이지 |
-| `_layouts/benchmark_run.html` | 상세 페이지 레이아웃 |
-| `_sass/_benchmark.scss` | 스타일 |
+| `scripts/fetch_benchmarks.py` | ClearML SDK 로 수집 → JSON 생성 |
+| `site/data/benchmarks.json` | 수집 결과. 커밋되므로 빌드에 네트워크가 필요 없다 |
+| `site/pages/benchmarks/index.astro` | 리스트 페이지 |
+| `site/pages/benchmarks/[slug]/index.astro` | 상세 페이지. `getStaticPaths` 가 `benchmarks.json` 의 run 과 `benchmark_entries.json` 에서 만든다 |
+| `site/components/benchmark/` | 상세 페이지 컴포넌트와 차트 위젯 |
+| `site/styles/_benchmark.scss` | 스타일 |
 
 ## 데이터 출처
 

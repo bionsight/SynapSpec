@@ -32,7 +32,7 @@ const { kind, title } = Astro.props;
 const { slug } = Astro.params;
 ---
 
-<BaseLayout title={title} noindex>
+<BaseLayout title={title}>
   {kind === "run" && <RunBenchmark slug={slug!} />}
   {kind === "recorded" && <RecordedBenchmark slug={slug!} />}
   {kind === "comparison" && <ComparisonBenchmark slug={slug!} />}
