@@ -63,38 +63,18 @@ test.describe("benchmarks index", () => {
 });
 
 test.describe("benchmark detail pages, one per kind", () => {
-  test("run — has prev/next pager and per-file table", async ({ page }) => {
-    await page.goto("/benchmarks/2026-07-22/");
-    await expect(page.locator("h1")).toHaveText("Benchmark run");
-    await expect(page.locator(".bench-stat-value").first()).toHaveText("261,903");
-    await expect(page.locator(".bench-pager a")).toHaveCount(1); // 마지막 런이라 prev만 있다
-  });
-
-  test("comparison — renders the accuracy-vs-depth scatter with one dot per tool", async ({ page }) => {
-    await page.goto("/benchmarks/lfqbench-202409-archived/");
-    await expect(page.locator("h1")).toHaveText("PXD028735");
-    await expect(page.locator(".bench-scatter-dot")).toHaveCount(3);
-    await expect(page.locator(".bench-scatter-legend li")).toHaveCount(3);
-  });
-
-  test("imported — shows the original figure when one was recorded", async ({ page }) => {
-    await page.goto("/benchmarks/2026-09-06-9897b894/");
-    await expect(page.locator(".bench-figure-link img")).toBeVisible();
-  });
-
-  test("pending — explains that results have not been imported", async ({ page }) => {
-    await page.goto("/benchmarks/lfqbench-oe480/");
-    await expect(page.locator("h1")).toHaveText("LFQBench / OE480");
-    await expect(page.locator(".bench-pending h2")).toHaveText("Results have not been imported");
+  test("imported — shows the tool's precursor count", async ({ page }) => {
+    await page.goto("/benchmarks/pxd028735-diann/");
+    await expect(page.locator("h1")).toContainText("LFQBench");
+    await expect(page.locator(".bench-lede")).toContainText("precursor IDs");
   });
 });
 
-test("benchmarks section is excluded from the sitemap", async ({ request, baseURL }) => {
+test("benchmarks section is in the sitemap", async ({ request, baseURL }) => {
   const res = await request.get(`${baseURL}/sitemap-0.xml`);
   expect(res.ok()).toBeTruthy();
   const body = await res.text();
-  expect(body).not.toContain("/benchmarks/");
-  for (const path of ["/", "/about/", "/contact/", "/download/", "/spectralens/"]) {
+  for (const path of ["/", "/about/", "/contact/", "/download/", "/spectralens/", "/benchmarks/"]) {
     expect(body).toContain(`https://synapspec.ai${path}`);
   }
 });

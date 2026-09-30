@@ -23,6 +23,14 @@ OE480에서 SynapSpec이 2위(DIA-NN보다 낮은 정확도), Astral에서도 2�
 "Accuracy vs. depth" 차트에서 계속 쓴다 — 지워진 건 그 데이터를 등수로 요약해
 보여주던 페이지 하나뿐이다.
 
+**2026-09-30: 목록에서 닿지 않는 상세 페이지 26개를 지웠다.** 날짜별 run 페이지 18개
+(`benchmarks.json`), archived comparison 2개, 9월 초 import·recorded run 5개,
+`lfqbench-oe480` 1개다. 공개 전환으로 sitemap에 올라가자 옛 기준의 숫자가 색인될 수
+있었다. `ComparisonBenchmark.astro`와 `RunBenchmark.astro`도 함께 지웠다.
+`benchmark_comparisons.json`은 목록의 `ComparisonWidget.astro`가 계속 읽는다.
+`benchmark_comparison_scatter.json`과 `benchmarks.json`은 이제 사이트에서 읽는 곳이
+없지만, 스크립트가 쓰고 읽으므로 남겨 두었다.
+
 ## TODO
 
 ### 1. 공개 전환 (완료)
@@ -122,7 +130,7 @@ git add -A && git commit -m "chore: update benchmarks" && git push origin gh-pag
 | `scripts/fetch_benchmarks.py` | ClearML SDK 로 수집 → JSON 생성 |
 | `site/data/benchmarks.json` | 수집 결과. 커밋되므로 빌드에 네트워크가 필요 없다 |
 | `site/pages/benchmarks/index.astro` | 리스트 페이지 |
-| `site/pages/benchmarks/[slug]/index.astro` | 상세 페이지. `getStaticPaths` 가 `benchmarks.json` 의 run 과 `benchmark_entries.json` 에서 만든다 |
+| `site/pages/benchmarks/[slug]/index.astro` | 상세 페이지. `getStaticPaths` 가 `benchmark_entries.json` 에서 만든다 |
 | `site/components/benchmark/` | 상세 페이지 컴포넌트와 차트 위젯 |
 | `site/styles/_benchmark.scss` | 스타일 |
 

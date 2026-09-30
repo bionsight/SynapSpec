@@ -17,10 +17,10 @@ parquet results with external reference JSON. Do not apply the LFQ conversion pr
 | `benchmark_catalog.json` | recorded 등급 run의 전체 데이터 + 프리셋 카탈로그 | `RecordedBenchmark.astro`, `RatioWidget.astro`, `PendingBenchmark.astro`, `history/index.astro` |
 | `benchmark_imports.json` | ClearML summary만 가볍게 옮긴 run (imported 등급) | `ImportedBenchmark.astro` |
 | `benchmark_ledger.json` | 데이터셋(OE480/Astral)별 run history 표 | `benchmarks/index.astro` |
-| `benchmark_comparisons.json` + `benchmark_comparison_scatter.json` | SynapSpec·DIA-NN·Spectronaut 3-tool 비교 | `ComparisonBenchmark.astro` |
-| `benchmarks.json` | Astral 전용 run 이력. `scripts/fetch_benchmarks.py` 산출물 | `history/index.astro`, `[slug]/index.astro`(kind: run) |
+| `benchmark_comparisons.json` + `benchmark_comparison_scatter.json` | SynapSpec·DIA-NN·Spectronaut 3-tool 비교 | `ComparisonWidget.astro`(comparisons만. scatter는 읽는 곳 없음) |
+| `benchmarks.json` | Astral 전용 run 이력. `scripts/fetch_benchmarks.py` 산출물 | 없음 (run 페이지는 2026-09-30에 지웠다) |
 
-## 라우팅: kind 네 가지
+## 라우팅: kind 세 가지
 
 `[slug]/index.astro`가 모든 `/benchmarks/:slug/` 요청을 받아 `benchmark_entries.json`에서
 `slug`를 찾고, 그 항목의 `kind`로 컴포넌트를 고릅니다.
@@ -28,7 +28,6 @@ parquet results with external reference JSON. Do not apply the LFQ conversion pr
 - **pending** — 프리셋은 있는데 아직 결과가 없음. `PendingBenchmark.astro`
 - **imported** — ClearML Summary 표에서 가볍게 옮겨온 run. `ImportedBenchmark.astro`
 - **recorded** — species별 log2 비율·CV·per-file 표까지 다 있는 완전판. `RecordedBenchmark.astro`
-- **comparison** — 3-tool 비교 아카이브. `ComparisonBenchmark.astro`
 
 **주의**: `benchmark_catalog.json`의 `dataset_catalog[].has_run`은 정보 표시용 필드일 뿐
 라우팅에 관여하지 않습니다. 실제로 어떤 컴포넌트가 뜨는지는 오직 `benchmark_entries.json`의
@@ -144,9 +143,8 @@ ClearML 리포트 표 `lfq_ratio_statistics`(species, median, target, `25%`, `75
 { "kind": "recorded", "slug": "lfqbench-oe480", "title": "LFQBench / OE480" }
 ```
 
-`[slug]/index.astro`의 `getStaticPaths`가 이 배열과 `benchmarks.json.runs`를 합쳐서 정적
-경로를 만듭니다. 두 소스의 slug는 서로 겹치지 않아야 합니다(런은 날짜만, 엔트리는
-데이터셋 이름이거나 날짜+해시).
+`[slug]/index.astro`의 `getStaticPaths`가 이 배열에서 정적 경로를 만듭니다.
+`manage_benchmarks.py validate`는 여전히 `benchmarks.json.runs`와 slug가 겹치지 않는지 검사합니다.
 
 ## `benchmark_imports.json`
 
@@ -195,7 +193,7 @@ SynapSpec counts, completeness, and species ratios come from that recorded run i
 `benchmark_catalog.json`. Both LFQ datasets use the ledger's `toolReferences` to read
 external `tool_diagnostics` and `tool_ratios`, exactly as the detail page does.
 Its input-file list comes from the recorded run, not the archived comparison.
-The archived comparison files remain intact for their archived routes. Never use
+The archived comparison files remain intact; their own routes were removed on 2026-09-30. Never use
 their older input groups to populate the current LFQ overview.
 
 Optional `recorded_runs[slug].condition_cv` stores A/B precursor CV as fractions,
@@ -212,8 +210,9 @@ from legacy ClearML imports. See [LFQ source updates](benchmarks/lfq/README.md).
 When adding a run,
 populate and validate its diagnostics, ratios, and condition CV before publishing.
 
-kind가 `comparison`인 두 항목(`lfqbench-202409-archived`, `lfqbench-202502-archived`)
-전용입니다. `benchmark_comparisons.json`은 도구별 상세(파일별 precursor 수, CV, 완주율),
+원래 kind가 `comparison`인 두 항목(`lfqbench-202409-archived`, `lfqbench-202502-archived`)
+전용이었습니다. 두 페이지는 2026-09-30에 지웠고, 지금은 목록의 `ComparisonWidget.astro`가
+ledger id로 `benchmark_comparisons.json`만 읽습니다. `benchmark_comparisons.json`은 도구별 상세(파일별 precursor 수, CV, 완주율),
 `benchmark_comparison_scatter.json`은 리더보드용으로 도구별 `median_epsilon`(log2 오차
 중앙값)만 뽑아둔 것입니다. `ledger_slug`/`slug`로 서로 연결됩니다. 이번에 추가한 oe480
 recorded run은 DIA-NN·Spectronaut 비교 데이터가 없어서 이 두 파일에는 손대지 않았습니다.
@@ -221,8 +220,8 @@ recorded run은 DIA-NN·Spectronaut 비교 데이터가 없어서 이 두 파일
 ## `benchmarks.json`
 
 `scripts/fetch_benchmarks.py`가 ClearML 프로젝트 `DeepMSFlow/lfq/astral`(태그
-`bion-lfq-astral`)만 긁어서 만드는 Astral 전용 run 이력입니다. `history/index.astro`의
-"Identification history" 차트와 표가 여기서 나옵니다. oe480·다른 프리셋은 아직 이
+`bion-lfq-astral`)만 긁어서 만드는 Astral 전용 run 이력입니다. 이 데이터로 만들던
+날짜별 run 페이지는 2026-09-30에 지웠고, 지금 사이트에서 읽는 곳은 없습니다. oe480·다른 프리셋은 아직 이
 스크립트가 다루지 않습니다 — `docs/BENCHMARKS.md`의 TODO에도 "oe480 장비 추가"가
 미완으로 남아 있습니다.
 
