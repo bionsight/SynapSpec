@@ -79,7 +79,8 @@ comparison JSON. Random seed is omitted from public configuration displays;
 existing source records retain it.
 
 Record the actual analysis version in `comparison.json` as `synapspec_version`.
-The user confirmed `v0.12.1` for the current result. The source label and current
+The current result is `v1.0.0`, from ClearML task `4b4c8ae57a564616bbf230e7b166508d`
+(tagged `pre1.0.0`); the task tagged `v1.0.0` was stopped without results. The source label and current
 Run history entry derive their version and precursor count from this same JSON;
 there is no separate history file to keep in sync. Do not synchronize the recorded
 version with the website header's latest release. Unconfirmed dates, runtimes, and
@@ -89,6 +90,12 @@ The current page shows one entry derived from the current comparison snapshot.
 Replacing that snapshot updates the entry; it does not automatically append or archive
 older runs. Preserve previous snapshots and corresponding detail routes before extending
 the page to show multiple historical runs.
+
+The v0.12.1 snapshot is preserved as `site/data/pxd055927/comparison-v0.12.1.json`,
+restored from commit `4d30591`, and rendered at `/benchmarks/pxd055927-v0.12.1/`.
+Only its SynapSpec source title was changed, to name the release instead of the commit.
+The Run history's v0.12.1 bar links there. `configuration.json` is shared by both pages;
+it was written while the current result was still v0.12.1.
 
 The exporter and its regression tests are included in this repository. They were
 preserved from the DeepMSFlow analysis workspace's
@@ -144,7 +151,9 @@ PXD_CANDIDATE_DIR=$(mktemp -d)
 uv run --no-project scripts/benchmarks/pxd055927/export_json.py \
   /absolute/path/to/precursors.parquet \
   --external site/data/pxd055927/external_reference.json \
-  --output "$PXD_CANDIDATE_DIR/comparison.json"
+  --output "$PXD_CANDIDATE_DIR/comparison.json" \
+  --version v1.0.0 \
+  --task-url "http://clearml.bionsight.internal:8080/projects/*/tasks/<task id>"
 ```
 
 This command calculates SynapSpec results and combines them with the two external
@@ -156,13 +165,10 @@ paper data. No separate merge program is needed.
 Add or update the top-level `synapspec_version` with the confirmed analysis version
 (for example, `v0.12.1`). The exporter does not generate this website metadata field.
 
-The current exporter hardcodes provenance for the previous SynapSpec commit
-`1a430b80` and ClearML task `c61cec4b479644f188a360c3575638a3`.
-**Providing a new parquet file does not automatically update that provenance.**
-
-Update the candidate's SynapSpec `sources[].title` and `sources[].url` using confirmed
-information for the new run. Preserve `sources[].sha256`, which the exporter computes
-from the new parquet, and verify it against the actual input. Reassess the previous
+The exporter takes the SynapSpec source from `--version` and `--task-url`. The title is
+`precursors.parquet · SynapSpec <version>`: runs are identified by release, not by commit.
+The URL is the ClearML task that holds the parquet artifact. `sources[].sha256` is
+computed from the parquet; verify it against the actual input. Reassess the previous
 run's C1 identification-count caveat against the new `per_run` results.
 Do not change calculated results to match previous values.
 

@@ -251,13 +251,18 @@ def _cv_summary(connection: duckdb.DuckDBPyConnection) -> CvSummary:
     )
 
 
-def summarize_synapspec(parquet: Path) -> ToolData:
+def summarize_synapspec(parquet: Path, version: str, task_url: str) -> ToolData:
     """Compute filtered counts and dose-matched CV from the supplied parquet.
 
     Parameters
     ----------
     parquet
         PXD055927 precursors.parquet with the 24 named input runs.
+    version
+        SynapSpec release that produced the parquet, e.g. ``v1.0.0``. The source is
+        identified by release, not by commit.
+    task_url
+        ClearML task that holds the parquet artifact.
 
     Returns
     -------
@@ -318,8 +323,8 @@ def summarize_synapspec(parquet: Path) -> ToolData:
         entry_method="parquet_computed",
         sources=[
             Source(
-                title="precursors.parquet · commit 1a430b80",
-                url="http://clearml.bionsight.internal:8080/projects/*/tasks/c61cec4b479644f188a360c3575638a3",
+                title=f"precursors.parquet · SynapSpec {version}",
+                url=task_url,
                 sha256=digest,
             )
         ],
@@ -355,12 +360,14 @@ def main() -> None:
     parser.add_argument("parquet", type=Path)
     parser.add_argument("--external", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--version", required=True, help="SynapSpec release, e.g. v1.0.0")
+    parser.add_argument("--task-url", required=True, help="ClearML task holding the parquet")
     arguments = parser.parse_args()
     output = arguments.output.resolve()
     if output in {arguments.parquet.resolve(), arguments.external.resolve(), Path(__file__).resolve()}:
         raise ValueError("Output must not overwrite an input or the exporter")
     external = [ToolData.model_validate(item) for item in json.loads(arguments.external.read_text())]
-    comparison = Comparison(tools=[summarize_synapspec(arguments.parquet), *external])
+    comparison = Comparison(tools=[summarize_synapspec(arguments.parquet, arguments.version, arguments.task_url), *external])
     output.write_text(comparison.model_dump_json(indent=2) + "\n")
     print(output)
 

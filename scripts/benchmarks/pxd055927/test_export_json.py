@@ -15,6 +15,7 @@ from pydantic import ValidationError
 
 REFERENCE = Path(__file__).resolve().parents[3] / "site/data/pxd055927/external_reference.json"
 EXPORTER = Path(__file__).with_name("export_json.py")
+SOURCE_ARGS = ["--version", "v9.9.9", "--task-url", "https://clearml.example/tasks/fixture"]
 
 
 def test_external_software_version_cannot_be_empty() -> None:
@@ -115,7 +116,7 @@ def test_invalid_cv_summary_is_rejected() -> None:
 def test_cli_exports_calculated_values_and_preserves_external_references(parquet: Path, tmp_path: Path) -> None:
     output = tmp_path / "comparison.json"
     subprocess.run(
-        [sys.executable, str(EXPORTER), str(parquet), "--external", str(REFERENCE), "--output", str(output)],
+        [sys.executable, str(EXPORTER), str(parquet), "--external", str(REFERENCE), "--output", str(output), *SOURCE_ARGS],
         check=True, capture_output=True, text=True,
     )
     comparison = Comparison.model_validate_json(output.read_text())
@@ -127,6 +128,8 @@ def test_cli_exports_calculated_values_and_preserves_external_references(parquet
     assert [item.n for item in comparison.tools[0].condition_cv] == [1] * 8
     assert [item.median for item in comparison.tools[0].condition_cv] == pytest.approx([0.5] * 8)
     assert json.loads(output.read_text())["tools"][1:] == json.loads(REFERENCE.read_text())
+    assert comparison.tools[0].sources[0].title == "precursors.parquet · SynapSpec v9.9.9"
+    assert comparison.tools[0].sources[0].url == "https://clearml.example/tasks/fixture"
 
 
 def test_detection_frequency_must_partition_precursors() -> None:
@@ -145,7 +148,7 @@ def test_condition_cv_requires_ordered_doses() -> None:
 
 def test_condition_detection_uses_each_dose_union(parquet: Path) -> None:
     changed = _changed_parquet(parquet, "DELETE FROM fixture WHERE filename LIKE '%C1' AND precursor_charge = 3")
-    result = summarize_synapspec(changed)
+    result = summarize_synapspec(changed, *SOURCE_ARGS[1::2])
     assert result.condition_detection is not None
     assert [(item.precursor_count, item.complete_count) for item in result.condition_detection] == [(2, 1)] + [(2, 2)] * 7
     assert result.detection_frequency == [0] * 22 + [1, 1]
@@ -168,7 +171,7 @@ def test_cli_failure_leaves_existing_output_unchanged(parquet: Path, tmp_path: P
     output = tmp_path / "comparison.json"
     output.write_text("previous publication")
     result = subprocess.run(
-        [sys.executable, str(EXPORTER), str(changed), "--external", str(REFERENCE), "--output", str(output)],
+        [sys.executable, str(EXPORTER), str(changed), "--external", str(REFERENCE), "--output", str(output), *SOURCE_ARGS],
         check=False, capture_output=True, text=True,
     )
     assert result.returncode != 0
@@ -179,7 +182,7 @@ def test_cli_failure_leaves_existing_output_unchanged(parquet: Path, tmp_path: P
 def test_cli_rejects_overwriting_input(parquet: Path) -> None:
     before = parquet.read_bytes()
     result = subprocess.run(
-        [sys.executable, str(EXPORTER), str(parquet), "--external", str(REFERENCE), "--output", str(parquet)],
+        [sys.executable, str(EXPORTER), str(parquet), "--external", str(REFERENCE), "--output", str(parquet), *SOURCE_ARGS],
         check=False, capture_output=True, text=True,
     )
     assert result.returncode != 0

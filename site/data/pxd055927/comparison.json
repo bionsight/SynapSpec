@@ -5,178 +5,180 @@
   "tools": [
     {
       "tool": "SynapSpec",
+      "software_version": null,
       "entry_method": "parquet_computed",
       "sources": [
         {
-          "title": "precursors.parquet · commit 1a430b80",
-          "url": "http://clearml.bionsight.internal:8080/projects/*/tasks/c61cec4b479644f188a360c3575638a3",
-          "sha256": "856915cc325dc0763766c7a322e34ecae7ea039fb0476633fa62cac0d55d26fb"
+          "title": "precursors.parquet · SynapSpec v1.0.0",
+          "url": "http://clearml.bionsight.internal:8080/projects/*/tasks/4b4c8ae57a564616bbf230e7b166508d",
+          "sha256": "fd43da5bbf2650a71e049819f39f46608c5fe077801eefd9bfd25923352d95ca"
         }
       ],
-      "peptide_count": 102561,
+      "peptide_count": 112576,
       "precursor_count": 139627,
-      "protein_accession_count": 10047,
+      "protein_accession_count": 10430,
       "identification_scope": "Unique modified sequences and sequence/charge pairs in target hits with precursor_qvalue < 0.01",
       "cv": {
-        "n": 410395,
-        "peptide_count": 410395,
-        "q1": 0.11827,
-        "median": 0.19533,
-        "q3": 0.31143,
-        "lowerfence": 0.06228,
-        "upperfence": 0.5891
+        "n": 232560,
+        "peptide_count": 29070,
+        "q1": 0.08392874514437229,
+        "median": 0.14909395206649806,
+        "q3": 0.2650025874070247,
+        "lowerfence": 0.00029336425455195157,
+        "upperfence": 0.5366051922946544
       },
       "cv_method": "Sum positive ms2_quantity over charges per modified sequence/run; retain peptides positive in all 24 runs; sample SD/mean across A/B/C at each dose; pool eight doses. No additional normalization or imputation.",
       "specificity": {
         "specific": 104598,
         "semi_specific": 35029,
         "non_specific_excluded": 0,
-        "unmapped_excluded": 0
+        "unmapped_excluded": 0,
+        "method": "Native precursor_class, not reclassified against the public FASTA"
       },
       "per_run": [
         {
           "filename": "Elmo_20230331_TKO_HSdia_A1",
-          "dose_nm": 0,
+          "dose_nm": 0.0,
           "biological_replicate": 1,
-          "precursors": 110390
+          "precursors": 127889
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A2",
           "dose_nm": 0.1,
           "biological_replicate": 1,
-          "precursors": 109852
+          "precursors": 125234
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A3",
-          "dose_nm": 1,
+          "dose_nm": 1.0,
           "biological_replicate": 1,
-          "precursors": 115348
+          "precursors": 126669
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A4",
-          "dose_nm": 10,
+          "dose_nm": 10.0,
           "biological_replicate": 1,
-          "precursors": 114592
+          "precursors": 124314
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A5",
-          "dose_nm": 100,
+          "dose_nm": 100.0,
           "biological_replicate": 1,
-          "precursors": 115084
+          "precursors": 129701
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A6",
-          "dose_nm": 1000,
+          "dose_nm": 1000.0,
           "biological_replicate": 1,
-          "precursors": 108089
+          "precursors": 121184
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A7",
-          "dose_nm": 10000,
+          "dose_nm": 10000.0,
           "biological_replicate": 1,
-          "precursors": 113652
+          "precursors": 125762
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_A8",
-          "dose_nm": 50000,
+          "dose_nm": 50000.0,
           "biological_replicate": 1,
-          "precursors": 114311
+          "precursors": 126744
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B1",
-          "dose_nm": 0,
+          "dose_nm": 0.0,
           "biological_replicate": 2,
-          "precursors": 114824
+          "precursors": 127810
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B2",
           "dose_nm": 0.1,
           "biological_replicate": 2,
-          "precursors": 114604
+          "precursors": 125041
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B3",
-          "dose_nm": 1,
+          "dose_nm": 1.0,
           "biological_replicate": 2,
-          "precursors": 115677
+          "precursors": 131576
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B4",
-          "dose_nm": 10,
+          "dose_nm": 10.0,
           "biological_replicate": 2,
-          "precursors": 115446
+          "precursors": 129729
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B5",
-          "dose_nm": 100,
+          "dose_nm": 100.0,
           "biological_replicate": 2,
-          "precursors": 109177
+          "precursors": 130097
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B6",
-          "dose_nm": 1000,
+          "dose_nm": 1000.0,
           "biological_replicate": 2,
-          "precursors": 114076
+          "precursors": 124546
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B7",
-          "dose_nm": 10000,
+          "dose_nm": 10000.0,
           "biological_replicate": 2,
-          "precursors": 112665
+          "precursors": 124297
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_B8",
-          "dose_nm": 50000,
+          "dose_nm": 50000.0,
           "biological_replicate": 2,
-          "precursors": 109020
+          "precursors": 127203
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C1",
-          "dose_nm": 0,
+          "dose_nm": 0.0,
           "biological_replicate": 3,
-          "precursors": 48265
+          "precursors": 56369
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C2",
           "dose_nm": 0.1,
           "biological_replicate": 3,
-          "precursors": 115454
+          "precursors": 128631
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C3",
-          "dose_nm": 1,
+          "dose_nm": 1.0,
           "biological_replicate": 3,
-          "precursors": 115052
+          "precursors": 126484
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C4",
-          "dose_nm": 10,
+          "dose_nm": 10.0,
           "biological_replicate": 3,
-          "precursors": 114554
+          "precursors": 131380
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C5",
-          "dose_nm": 100,
+          "dose_nm": 100.0,
           "biological_replicate": 3,
-          "precursors": 109825
+          "precursors": 123965
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C6",
-          "dose_nm": 1000,
+          "dose_nm": 1000.0,
           "biological_replicate": 3,
-          "precursors": 110216
+          "precursors": 124252
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C7",
-          "dose_nm": 10000,
+          "dose_nm": 10000.0,
           "biological_replicate": 3,
-          "precursors": 109186
+          "precursors": 125027
         },
         {
           "filename": "Elmo_20230331_TKO_HSdia_C8",
-          "dose_nm": 50000,
+          "dose_nm": 50000.0,
           "biological_replicate": 3,
-          "precursors": 110039
+          "precursors": 131457
         }
       ],
       "caveats": [
@@ -186,181 +188,115 @@
         "C1 has fewer retained precursors; it is included, not silently excluded."
       ],
       "detection_frequency": [
-        535,
-        644,
-        722,
-        855,
-        972,
-        1013,
-        986,
-        1044,
-        1058,
-        1102,
-        1148,
-        1133,
-        1306,
-        1353,
-        1544,
-        1708,
-        2077,
-        2422,
-        3088,
-        4442,
-        7490,
-        16107,
-        43646,
-        30446
+        265,
+        312,
+        381,
+        461,
+        589,
+        638,
+        768,
+        956,
+        815,
+        965,
+        1073,
+        1159,
+        1407,
+        1579,
+        1839,
+        2120,
+        2228,
+        2578,
+        3305,
+        4797,
+        7719,
+        16400,
+        53376,
+        33897
       ],
       "condition_cv": [
         {
-          "dose_nm": 0,
-          "n": 35156,
-          "median": 0.1868624565251365
+          "dose_nm": 0.0,
+          "n": 41096,
+          "median": 0.17322219100182992
         },
         {
           "dose_nm": 0.1,
-          "n": 82238,
-          "median": 0.1695452810299508
+          "n": 91697,
+          "median": 0.16596366893641223
         },
         {
-          "dose_nm": 1,
-          "n": 85362,
-          "median": 0.13384275228357023
+          "dose_nm": 1.0,
+          "n": 93819,
+          "median": 0.14205837949349875
         },
         {
-          "dose_nm": 10,
-          "n": 84625,
-          "median": 0.1260618670265031
+          "dose_nm": 10.0,
+          "n": 94109,
+          "median": 0.1476202325864243
         },
         {
-          "dose_nm": 100,
-          "n": 79210,
-          "median": 0.16258712355353755
+          "dose_nm": 100.0,
+          "n": 93464,
+          "median": 0.1263017907363766
         },
         {
-          "dose_nm": 1000,
-          "n": 78436,
-          "median": 0.17195167930345398
+          "dose_nm": 1000.0,
+          "n": 87763,
+          "median": 0.14905632791408832
         },
         {
-          "dose_nm": 10000,
-          "n": 79954,
-          "median": 0.17394139870128345
+          "dose_nm": 10000.0,
+          "n": 89794,
+          "median": 0.16362039473468418
         },
         {
-          "dose_nm": 50000,
-          "n": 79166,
-          "median": 0.19484196894673012
+          "dose_nm": 50000.0,
+          "n": 94854,
+          "median": 0.15311614964464337
         }
       ],
       "condition_detection": [
         {
-          "dose_nm": 0,
-          "precursor_count": 121287,
-          "complete_count": 43045
+          "dose_nm": 0.0,
+          "precursor_count": 136089,
+          "complete_count": 50289
         },
         {
           "dose_nm": 0.1,
-          "precursor_count": 122878,
-          "complete_count": 101415
+          "precursor_count": 136818,
+          "complete_count": 112766
         },
         {
-          "dose_nm": 1,
-          "precursor_count": 122883,
-          "complete_count": 106057
+          "dose_nm": 1.0,
+          "precursor_count": 137189,
+          "complete_count": 116237
         },
         {
-          "dose_nm": 10,
-          "precursor_count": 122929,
-          "complete_count": 104778
+          "dose_nm": 10.0,
+          "precursor_count": 137400,
+          "complete_count": 116231
         },
         {
-          "dose_nm": 100,
-          "precursor_count": 122210,
-          "complete_count": 97542
+          "dose_nm": 100.0,
+          "precursor_count": 137133,
+          "complete_count": 115651
         },
         {
-          "dose_nm": 1000,
-          "precursor_count": 122079,
-          "complete_count": 96355
+          "dose_nm": 1000.0,
+          "precursor_count": 135284,
+          "complete_count": 107780
         },
         {
-          "dose_nm": 10000,
-          "precursor_count": 122504,
-          "complete_count": 98288
+          "dose_nm": 10000.0,
+          "precursor_count": 136281,
+          "complete_count": 110309
         },
         {
-          "dose_nm": 50000,
-          "precursor_count": 122277,
-          "complete_count": 97042
+          "dose_nm": 50000.0,
+          "precursor_count": 137470,
+          "complete_count": 116791
         }
-      ],
-      "protein_count": 10430,
-      "completeness": {
-        "n_files": 24,
-        "bars": [
-          {
-            "n": 1,
-            "count": 139627,
-            "count_display": "139,627"
-          },
-          {
-            "n": 2,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 3,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 4,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 5,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 6,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 7,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 8,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 9,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 10,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 11,
-            "count": 0,
-            "count_display": "0"
-          },
-          {
-            "n": 12,
-            "count": 0,
-            "count_display": "0"
-          }
-        ]
-      }
+      ]
     },
     {
       "tool": "FragPipe + DIA-NN",

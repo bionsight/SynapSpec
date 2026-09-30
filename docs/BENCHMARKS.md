@@ -13,7 +13,8 @@
 **주의:** 2026-08-26 08:55~09:13 UTC(약 18분) 동안은 내비게이션에 링크가 있었고
 sitemap.xml 에도 포함돼 있었다. 또한 이 저장소는 public 이므로 커밋 이력에
 벤치마크 수치와 내부 ClearML 프로젝트 경로(`DeepMSFlow/lfq/astral`)가 남아 있다.
-자격증명과 내부 호스트명은 커밋되지 않았다.
+자격증명은 커밋되지 않았다. 내부 ClearML 호스트명과 task 링크는 PXD055927 comparison JSON의
+출처(`sources[].url`)로 커밋돼 있고, 의도적으로 유지한다.
 
 **2026-09-18: `/benchmarks/leaderboard/` 페이지를 지웠다.** 도구별 순위표라
 OE480에서 SynapSpec이 2위(DIA-NN보다 낮은 정확도), Astral에서도 2위
