@@ -5,9 +5,26 @@
 // component rather than coercing the data into existing LFQ widgets.
 import CvDistributionWidget from "./CvDistributionWidget.astro";
 import RunConfiguration from "./RunConfiguration.astro";
-import comparison from "../../data/pxd055927/comparison.json";
+import current from "../../data/pxd055927/comparison.json";
 import configuration from "../../data/pxd055927/configuration.json";
 
+// 지난 버전의 스냅샷(예: comparison-v0.12.1.json)을 넘기면 그 버전의 상세 페이지가 된다.
+// 스냅샷마다 필드가 조금씩 달라서 JSON에서 추론한 타입 대신 이 컴포넌트가 읽는 필드만 적는다.
+type Comparison = {
+  dataset: string;
+  synapspec_version: string;
+  status: string;
+  tools: {
+    tool: string;
+    software_version?: string;
+    sources: { title: string; url: string }[];
+    detection_frequency?: number[] | null;
+    specificity: { specific: number; semi_specific: number; non_specific_excluded: number; unmapped_excluded: number };
+    cv: { n: number; q1: number; median: number; q3: number; lowerfence: number; upperfence: number };
+  }[];
+};
+interface Props { comparison?: Comparison }
+const comparison = Astro.props.comparison ?? current;
 type ToolData = (typeof comparison.tools)[number];
 
 const tools = comparison.tools;
@@ -76,7 +93,7 @@ const specificityDenominator = (tool: ToolData) => tool.specificity.specific + t
         ></div>
         <figcaption>Data completeness</figcaption>
       </figure>
-      <CvDistributionWidget slug={comparison.dataset} />
+      <CvDistributionWidget slug={comparison.dataset} comparison={comparison} />
     </div>
 
   </section>

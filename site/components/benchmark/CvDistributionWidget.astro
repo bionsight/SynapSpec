@@ -1,10 +1,12 @@
 ---
 import catalog from "../../data/benchmark_catalog.json";
 import ledgers from "../../data/benchmark_ledger.json";
-import pxd055927 from "../../data/pxd055927/comparison.json";
+import currentPxd055927 from "../../data/pxd055927/comparison.json";
 
-interface Props { slug: string }
+type PeptideCv = { n: number; q1: number; median: number; q3: number; lowerfence: number; upperfence: number };
+interface Props { slug: string; comparison?: { dataset: string; tools: { tool: string; cv: PeptideCv }[] } }
 const { slug } = Astro.props;
+const pxd055927 = Astro.props.comparison ?? currentPxd055927;
 const isPeptide = slug === pxd055927.dataset;
 const run = catalog.recorded_runs[slug as keyof typeof catalog.recorded_runs];
 const ledger = ledgers.find((entry) => entry.rows.some((row) => row.sourceSlug === slug));
