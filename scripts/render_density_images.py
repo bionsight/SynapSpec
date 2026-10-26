@@ -48,6 +48,11 @@ SPECIES_COLORS = {"Human": "#c96a5e", "Yeast": "#5a8aa7", "E. coli": "#6da89a"}
 SPECIES_ORDER = ("Human", "Yeast", "E. coli")
 TARGETS = {"Human": 0, "Yeast": 1, "E. coli": -2}
 AXIS_REFERENCE_VERSION = "v1.0.0"
+# Preserve the display ranges of the published v1.0.0 benchmark images.
+PUBLISHED_RATIO_RANGES = {
+    "lfqbench-202409-archived": [-7.94, 9.94],
+    "lfqbench-202502-archived": [-3.92, 3.48],
+}
 
 PANEL_WIDTH = 420
 PANEL_HEIGHT = 480
@@ -127,6 +132,20 @@ def reference_slug_for(slug: str, ledgers: list) -> str:
     )
 
 
+def ratio_range_for(slug: str, ledgers: list, fallback_cloud: dict) -> list[float]:
+    ledger = next(
+        (
+            item
+            for item in ledgers
+            if any(row.get("sourceSlug") == slug for row in item["rows"])
+        ),
+        None,
+    )
+    if ledger and ledger.get("id") in PUBLISHED_RATIO_RANGES:
+        return PUBLISHED_RATIO_RANGES[ledger["id"]]
+    return x_range_for(fallback_cloud)
+
+
 def x_range_for(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
     ys = np.concatenate([points["y"] for points in cloud.values()])
     lo, hi = float(ys.min()), float(ys.max())
@@ -144,10 +163,12 @@ def density_max(clouds: list[dict], grid: np.ndarray) -> float:
     return max(maxima) * 1.08
 
 
-def render(slug: str, panels: list[dict], reference_panels: list[dict]) -> None:
+def render(
+    slug: str, panels: list[dict], reference_panels: list[dict], ledgers: list
+) -> None:
     clouds = [load_json(p["path"]) for p in panels]
     reference_clouds = [load_json(panel["path"]) for panel in reference_panels]
-    x_range = x_range_for(reference_clouds[0])
+    x_range = ratio_range_for(slug, ledgers, reference_clouds[0])
     grid = np.linspace(x_range[0], x_range[1], GRID_POINTS)
 
     curves = []  # (panel index, species, density array)
@@ -262,7 +283,7 @@ def main() -> None:
             print(f"skip {slug}: no scatter data")
             continue
         reference_panels = panels_for(reference_slug_for(slug, ledgers), ledgers)
-        render(slug, panels, reference_panels or panels)
+        render(slug, panels, reference_panels or panels, ledgers)
 
 
 if __name__ == "__main__":

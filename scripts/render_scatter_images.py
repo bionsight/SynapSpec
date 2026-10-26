@@ -46,6 +46,15 @@ TARGETS = {"Human": 0, "Yeast": 1, "E. coli": -2}
 MARKER_SIZE = 2
 MARKER_OPACITY = 0.25
 AXIS_REFERENCE_VERSION = "v1.0.0"
+# Preserve the display ranges of the published v1.0.0 benchmark images.
+PUBLISHED_RATIO_RANGES = {
+    "lfqbench-202409-archived": [-7.94, 9.94],
+    "lfqbench-202502-archived": [-3.92, 3.48],
+}
+PUBLISHED_QUANTITY_RANGES = {
+    "lfqbench-202409-archived": [[15, 35], [10, 35], [5, 25]],
+    "lfqbench-202502-archived": [[5, 30], [10, 30], [-5, 20]],
+}
 
 PANEL_WIDTH = 420
 PANEL_HEIGHT = 480
@@ -124,6 +133,36 @@ def reference_slug_for(slug: str, ledgers: list) -> str:
     )
 
 
+def ratio_range_for(slug: str, ledgers: list, fallback_cloud: dict) -> list[float]:
+    ledger = next(
+        (
+            item
+            for item in ledgers
+            if any(row.get("sourceSlug") == slug for row in item["rows"])
+        ),
+        None,
+    )
+    if ledger and ledger.get("id") in PUBLISHED_RATIO_RANGES:
+        return PUBLISHED_RATIO_RANGES[ledger["id"]]
+    return primary_y_range(fallback_cloud)
+
+
+def quantity_ranges_for(
+    slug: str, ledgers: list, fallback_clouds: list[dict]
+) -> list[list[float]]:
+    ledger = next(
+        (
+            item
+            for item in ledgers
+            if any(row.get("sourceSlug") == slug for row in item["rows"])
+        ),
+        None,
+    )
+    if ledger and ledger.get("id") in PUBLISHED_QUANTITY_RANGES:
+        return PUBLISHED_QUANTITY_RANGES[ledger["id"]]
+    return [panel_x_range(cloud) for cloud in fallback_clouds]
+
+
 def padded_range(cloud: dict, coordinate: str, pad_fraction: float) -> list[float]:
     values = [value for points in cloud.values() for value in points[coordinate]]
     lo, hi = min(values), max(values)
@@ -139,11 +178,13 @@ def panel_x_range(cloud: dict, pad_fraction: float = 0.067520483957424) -> list[
     return padded_range(cloud, "x", pad_fraction)
 
 
-def render(slug: str, panels: list[dict], reference_panels: list[dict]) -> None:
+def render(
+    slug: str, panels: list[dict], reference_panels: list[dict], ledgers: list
+) -> None:
     clouds = [load_json(p["path"]) for p in panels]
     reference_clouds = [load_json(panel["path"]) for panel in reference_panels]
-    y_range = primary_y_range(reference_clouds[0])
-    x_ranges = [panel_x_range(cloud) for cloud in reference_clouds]
+    y_range = ratio_range_for(slug, ledgers, reference_clouds[0])
+    x_ranges = quantity_ranges_for(slug, ledgers, reference_clouds)
 
     fig = make_subplots(
         rows=1,
@@ -256,7 +297,7 @@ def main() -> None:
             print(f"skip {slug}: no scatter data")
             continue
         reference_panels = panels_for(reference_slug_for(slug, ledgers), ledgers)
-        render(slug, panels, reference_panels or panels)
+        render(slug, panels, reference_panels or panels, ledgers)
 
 
 if __name__ == "__main__":
