@@ -1,25 +1,26 @@
 #!/usr/bin/env python3
-"""Run detail 페이지의 species별 log2(A/B) ratio 분포를 정적 PNG로 렌더링한다.
+"""Render species-level log2(A/B) distributions as static PNG files.
 
-RatioWidget이 보여주던 "종별 한 점 추정치 + 오차범위"와는 다른 정보다 — 이건
-전체 분포의 모양(퍼짐, 꼬리, 종 간 overlap)을 보여준다. render_scatter_images.py와
-같은 site/public/data/benchmarks/scatter-*.json 포인트 클라우드를 그대로 재사용해서
-(각 species의 y값이 이미 precursor별 log2(A/B)다) scipy로 KDE를 계산하고,
-Plotly(Python) + kaleido로 site/public/data/benchmarks/density-{slug}.png에 저장한다.
+These plots show the full distribution shape, including spread, tails, and species
+overlap, rather than the point estimate and error interval previously shown by
+RatioWidget. The script reuses the same
+site/public/data/benchmarks/scatter-*.json point clouds as
+render_scatter_images.py. Each species y value is already a precursor-level
+log2(A/B) ratio, so SciPy computes the KDE and Plotly (Python) with Kaleido writes
+site/public/data/benchmarks/density-{slug}.png.
 
-여러 툴(SynapSpec/DIA-NN/Spectronaut)은 subplot으로 나란히 두고, x축(log2 ratio)과
-y축(density) 모두 한 번에 공유 range를 계산해 전부에 동일 적용한다 — 정적 이미지라
-render_scatter_images.py의 예전 "새 패널이 열릴 때마다 이미 그려진 패널이 다시
-그려져서 축이 흔들리는" 문제 자체가 없다.
+SynapSpec, DIA-NN, and Spectronaut are shown as adjacent subplots. Every panel
+uses the SynapSpec run's log2 ratio range and a shared density range. Static
+rendering also prevents axes from shifting as additional panels load.
 
-사전 준비 (최초 1회, 로컬 전용 — 사이트/CI엔 영향 없음):
+One-time local setup (does not affect the site or CI):
     brew install --cask font-pretendard
 
-실행:
+Run:
     uv run --with plotly --with kaleido --with scipy python scripts/render_density_images.py
 
-옵션:
-    --slug NAME   해당 run만 다시 렌더링 (기본: diagnostics 있는 모든 run)
+Options:
+    --slug NAME   Render only this run (default: every run with diagnostics).
 """
 
 from __future__ import annotations
@@ -37,12 +38,13 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "site" / "data"
 BENCH_DIR = ROOT / "site" / "public" / "data" / "benchmarks"
 
-# site/lib/plotlyTheme.ts와 맞춰뒀다 — 값이 바뀌면 여기도 손으로 맞춰야 한다.
+# Keep these values aligned with the benchmark PNGs already published on the site.
 FONT_FAMILY = "Pretendard, -apple-system, BlinkMacSystemFont, sans-serif"
 COLOR_TEXT = "#1a1f26"
 COLOR_TEXT_LIGHT = "#5c6773"
 COLOR_BORDER = "#e7eaee"
-SPECIES_COLORS = {"Human": "#106a9e", "Yeast": "#d97706", "E. coli": "#0f9b8e"}
+SPECIES_COLORS = {"Human": "#c96a5e", "Yeast": "#5a8aa7", "E. coli": "#6da89a"}
+SPECIES_ORDER = ("Human", "Yeast", "E. coli")
 TARGETS = {"Human": 0, "Yeast": 1, "E. coli": -2}
 
 PANEL_WIDTH = 420
@@ -52,7 +54,7 @@ GRID_POINTS = 400
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--slug", help="해당 run만 다시 렌더링 (기본: diagnostics 있는 모든 run)")
+    parser.add_argument("--slug", help="Render only this run (default: every run with diagnostics)")
     return parser.parse_args()
 
 
@@ -60,15 +62,12 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
-def with_alpha(hex_color: str, alpha: float) -> str:
-    n = int(hex_color.lstrip("#"), 16)
-    r, g, b = (n >> 16) & 255, (n >> 8) & 255, n & 255
-    return f"rgba({r}, {g}, {b}, {alpha})"
-
-
 def panels_for(slug: str, ledgers: list) -> list[dict]:
-    panels = [{"tool": "SynapSpec", "path": BENCH_DIR / f"scatter-{slug}.json"}]
     ledger = next((l for l in ledgers if any(r.get("sourceSlug") == slug for r in l["rows"])), None)
+    row = next((r for r in ledger["rows"] if r.get("sourceSlug") == slug), None) if ledger else None
+    version = str(row.get("release_version") or "").removeprefix("v") if row else ""
+    title = f"SynapSpec {version}" if version else "SynapSpec"
+    panels = [{"tool": title, "path": BENCH_DIR / f"scatter-{slug}.json"}]
     if ledger:
         for tool in ("DIA-NN", "Spectronaut"):
             ref = next((r for r in ledger["toolReferences"] if r["tool"] == tool and r.get("sourceSlug")), None)
@@ -77,24 +76,24 @@ def panels_for(slug: str, ledgers: list) -> list[dict]:
     return [p for p in panels if p["path"].exists()]
 
 
-def x_range_for(clouds: list[dict], pad_fraction: float = 0.15) -> list[float]:
-    # 1~99 percentile로 잘라낸다 — 산점도와 달리 KDE는 극단 outlier precursor
-    # 몇 개 때문에 대부분의 곡선이 x축 가운데로 뭉개지면 안 되니, 실제 밀도가
-    # 몰려있는 구간을 기준으로 범위를 잡고 KDE 꼬리가 자연스럽게 빠질 여백만 둔다.
-    ys = np.concatenate([pts["y"] for cloud in clouds for pts in cloud.values()])
-    lo, hi = np.percentile(ys, [1, 99])
+def x_range_for(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
+    ys = np.concatenate([points["y"] for points in cloud.values()])
+    lo, hi = float(ys.min()), float(ys.max())
     pad = (hi - lo) * pad_fraction
     return [float(lo - pad), float(hi + pad)]
 
 
 def render(slug: str, panels: list[dict]) -> None:
     clouds = [load_json(p["path"]) for p in panels]
-    x_range = x_range_for(clouds)
+    x_range = x_range_for(clouds[0])
     grid = np.linspace(x_range[0], x_range[1], GRID_POINTS)
 
     curves = []  # (panel index, species, density array)
     for i, cloud in enumerate(clouds):
-        for species, pts in cloud.items():
+        for species in SPECIES_ORDER:
+            pts = cloud.get(species)
+            if not pts:
+                continue
             kde = gaussian_kde(pts["y"])
             curves.append((i, species, kde(grid)))
     y_max = max(curve.max() for _, _, curve in curves) * 1.08
@@ -114,8 +113,6 @@ def render(slug: str, panels: list[dict]) -> None:
                 legendgroup=species,
                 showlegend=species not in seen_species,
                 line=dict(color=color, width=2),
-                fill="tozeroy",
-                fillcolor=with_alpha(color, 0.35),
             ),
             row=1,
             col=col,
