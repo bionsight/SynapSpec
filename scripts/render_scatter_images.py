@@ -135,7 +135,7 @@ def primary_y_range(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
     return padded_range(cloud, "y", pad_fraction)
 
 
-def panel_x_range(cloud: dict, pad_fraction: float = 0.071) -> list[float]:
+def panel_x_range(cloud: dict, pad_fraction: float = 0.067520483957424) -> list[float]:
     return padded_range(cloud, "x", pad_fraction)
 
 
