@@ -8,9 +8,9 @@ with Plotly (Python) and Kaleido, then writes each result to
 site/public/data/benchmarks/scatter-{slug}.png. At runtime, the page only needs to
 download a single image.
 
-SynapSpec, DIA-NN, and Spectronaut are shown as subplots in one figure. Each tool
-keeps its own x-axis sensitivity range, while every panel uses the SynapSpec run's
-y-axis range for comparison.
+SynapSpec, DIA-NN, and Spectronaut are shown as subplots in one figure. Releases
+in the same benchmark ledger reuse the v1.0.0 axes when that baseline is
+available, so version pages remain directly comparable.
 
 One-time local setup (does not affect the site or CI):
     brew install --cask font-pretendard   # Match the site's font in generated images.
@@ -45,14 +45,19 @@ SPECIES_ORDER = ("Human", "Yeast", "E. coli")
 TARGETS = {"Human": 0, "Yeast": 1, "E. coli": -2}
 MARKER_SIZE = 2
 MARKER_OPACITY = 0.25
+AXIS_REFERENCE_VERSION = "v1.0.0"
 
 PANEL_WIDTH = 420
 PANEL_HEIGHT = 480
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--slug", help="Render only this run (default: every run with diagnostics)")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--slug", help="Render only this run (default: every run with diagnostics)"
+    )
     return parser.parse_args()
 
 
@@ -61,31 +66,91 @@ def load_json(path: Path) -> dict:
 
 
 def panels_for(slug: str, ledgers: list) -> list[dict]:
-    ledger = next((l for l in ledgers if any(r.get("sourceSlug") == slug for r in l["rows"])), None)
-    row = next((r for r in ledger["rows"] if r.get("sourceSlug") == slug), None) if ledger else None
+    ledger = next(
+        (l for l in ledgers if any(r.get("sourceSlug") == slug for r in l["rows"])),
+        None,
+    )
+    row = (
+        next((r for r in ledger["rows"] if r.get("sourceSlug") == slug), None)
+        if ledger
+        else None
+    )
     version = str(row.get("release_version") or "").removeprefix("v") if row else ""
     title = f"SynapSpec {version}" if version else "SynapSpec"
     panels = [{"tool": title, "path": BENCH_DIR / f"scatter-{slug}.json"}]
     if ledger:
         for tool in ("DIA-NN", "Spectronaut"):
-            ref = next((r for r in ledger["toolReferences"] if r["tool"] == tool and r.get("sourceSlug")), None)
+            ref = next(
+                (
+                    r
+                    for r in ledger["toolReferences"]
+                    if r["tool"] == tool and r.get("sourceSlug")
+                ),
+                None,
+            )
             if ref:
-                panels.append({"tool": tool, "path": BENCH_DIR / f"scatter-{ref['sourceSlug']}.json"})
+                panels.append(
+                    {
+                        "tool": tool,
+                        "path": BENCH_DIR / f"scatter-{ref['sourceSlug']}.json",
+                    }
+                )
     return [p for p in panels if p["path"].exists()]
 
 
-def primary_y_range(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
-    values = [value for points in cloud.values() for value in points["y"]]
+def reference_slug_for(slug: str, ledgers: list) -> str:
+    ledger = next(
+        (
+            item
+            for item in ledgers
+            if any(row.get("sourceSlug") == slug for row in item["rows"])
+        ),
+        None,
+    )
+    if not ledger:
+        return slug
+    reference = next(
+        (
+            row
+            for row in ledger["rows"]
+            if row.get("release_version") == AXIS_REFERENCE_VERSION
+        ),
+        None,
+    )
+    return (
+        reference.get("sourceSlug")
+        if reference and reference.get("sourceSlug")
+        else slug
+    )
+
+
+def padded_range(cloud: dict, coordinate: str, pad_fraction: float) -> list[float]:
+    values = [value for points in cloud.values() for value in points[coordinate]]
     lo, hi = min(values), max(values)
     pad = (hi - lo) * pad_fraction
     return [lo - pad, hi + pad]
 
 
-def render(slug: str, panels: list[dict]) -> None:
-    clouds = [load_json(p["path"]) for p in panels]
-    y_range = primary_y_range(clouds[0])
+def primary_y_range(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
+    return padded_range(cloud, "y", pad_fraction)
 
-    fig = make_subplots(rows=1, cols=len(panels), subplot_titles=[p["tool"] for p in panels], horizontal_spacing=0.06)
+
+def panel_x_range(cloud: dict, pad_fraction: float = 0.071) -> list[float]:
+    return padded_range(cloud, "x", pad_fraction)
+
+
+def render(slug: str, panels: list[dict], reference_panels: list[dict]) -> None:
+    clouds = [load_json(p["path"]) for p in panels]
+    reference_clouds = [load_json(panel["path"]) for panel in reference_panels]
+    y_range = primary_y_range(reference_clouds[0])
+    x_ranges = [panel_x_range(cloud) for cloud in reference_clouds]
+
+    fig = make_subplots(
+        rows=1,
+        cols=len(panels),
+        subplot_titles=[p["tool"] for p in panels],
+        horizontal_spacing=0.06,
+    )
 
     for i, (panel, cloud) in enumerate(zip(panels, clouds), start=1):
         axis_suffix = "" if i == 1 else str(i)
@@ -123,10 +188,13 @@ def render(slug: str, panels: list[dict]) -> None:
                 yref=f"y{axis_suffix}",
                 y0=target,
                 y1=target,
-                line=dict(color=SPECIES_COLORS.get(species, COLOR_TEXT), width=1, dash="dot"),
+                line=dict(
+                    color=SPECIES_COLORS.get(species, COLOR_TEXT), width=1, dash="dot"
+                ),
             )
 
         fig.update_xaxes(
+            range=x_ranges[i - 1] if i <= len(x_ranges) else panel_x_range(cloud),
             title_text="log₂(mean quantity in B)",
             row=1,
             col=i,
@@ -152,7 +220,9 @@ def render(slug: str, panels: list[dict]) -> None:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         showlegend=True,
-        legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.18, itemsizing="constant"),
+        legend=dict(
+            orientation="h", x=0.5, xanchor="center", y=-0.18, itemsizing="constant"
+        ),
         margin=dict(t=40, r=20, b=90, l=60),
         width=PANEL_WIDTH * len(panels),
         height=PANEL_HEIGHT,
@@ -161,7 +231,9 @@ def render(slug: str, panels: list[dict]) -> None:
 
     out_path = BENCH_DIR / f"scatter-{slug}.png"
     fig.write_image(str(out_path), scale=2)
-    print(f"wrote {out_path.relative_to(ROOT)} ({len(panels)} panel(s): {', '.join(p['tool'] for p in panels)})")
+    print(
+        f"wrote {out_path.relative_to(ROOT)} ({len(panels)} panel(s): {', '.join(p['tool'] for p in panels)})"
+    )
 
 
 def main() -> None:
@@ -183,7 +255,8 @@ def main() -> None:
         if not panels:
             print(f"skip {slug}: no scatter data")
             continue
-        render(slug, panels)
+        reference_panels = panels_for(reference_slug_for(slug, ledgers), ledgers)
+        render(slug, panels, reference_panels or panels)
 
 
 if __name__ == "__main__":

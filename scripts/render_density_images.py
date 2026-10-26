@@ -9,9 +9,10 @@ render_scatter_images.py. Each species y value is already a precursor-level
 log2(A/B) ratio, so SciPy computes the KDE and Plotly (Python) with Kaleido writes
 site/public/data/benchmarks/density-{slug}.png.
 
-SynapSpec, DIA-NN, and Spectronaut are shown as adjacent subplots. Every panel
-uses the SynapSpec run's log2 ratio range and a shared density range. Static
-rendering also prevents axes from shifting as additional panels load.
+SynapSpec, DIA-NN, and Spectronaut are shown as adjacent subplots. Releases in
+the same benchmark ledger reuse the v1.0.0 axes when that baseline is available,
+so version pages remain directly comparable. Static rendering also prevents axes
+from shifting as additional panels load.
 
 One-time local setup (does not affect the site or CI):
     brew install --cask font-pretendard
@@ -46,6 +47,7 @@ COLOR_BORDER = "#e7eaee"
 SPECIES_COLORS = {"Human": "#c96a5e", "Yeast": "#5a8aa7", "E. coli": "#6da89a"}
 SPECIES_ORDER = ("Human", "Yeast", "E. coli")
 TARGETS = {"Human": 0, "Yeast": 1, "E. coli": -2}
+AXIS_REFERENCE_VERSION = "v1.0.0"
 
 PANEL_WIDTH = 420
 PANEL_HEIGHT = 480
@@ -53,8 +55,12 @@ GRID_POINTS = 400
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--slug", help="Render only this run (default: every run with diagnostics)")
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--slug", help="Render only this run (default: every run with diagnostics)"
+    )
     return parser.parse_args()
 
 
@@ -63,17 +69,62 @@ def load_json(path: Path) -> dict:
 
 
 def panels_for(slug: str, ledgers: list) -> list[dict]:
-    ledger = next((l for l in ledgers if any(r.get("sourceSlug") == slug for r in l["rows"])), None)
-    row = next((r for r in ledger["rows"] if r.get("sourceSlug") == slug), None) if ledger else None
+    ledger = next(
+        (l for l in ledgers if any(r.get("sourceSlug") == slug for r in l["rows"])),
+        None,
+    )
+    row = (
+        next((r for r in ledger["rows"] if r.get("sourceSlug") == slug), None)
+        if ledger
+        else None
+    )
     version = str(row.get("release_version") or "").removeprefix("v") if row else ""
     title = f"SynapSpec {version}" if version else "SynapSpec"
     panels = [{"tool": title, "path": BENCH_DIR / f"scatter-{slug}.json"}]
     if ledger:
         for tool in ("DIA-NN", "Spectronaut"):
-            ref = next((r for r in ledger["toolReferences"] if r["tool"] == tool and r.get("sourceSlug")), None)
+            ref = next(
+                (
+                    r
+                    for r in ledger["toolReferences"]
+                    if r["tool"] == tool and r.get("sourceSlug")
+                ),
+                None,
+            )
             if ref:
-                panels.append({"tool": tool, "path": BENCH_DIR / f"scatter-{ref['sourceSlug']}.json"})
+                panels.append(
+                    {
+                        "tool": tool,
+                        "path": BENCH_DIR / f"scatter-{ref['sourceSlug']}.json",
+                    }
+                )
     return [p for p in panels if p["path"].exists()]
+
+
+def reference_slug_for(slug: str, ledgers: list) -> str:
+    ledger = next(
+        (
+            item
+            for item in ledgers
+            if any(row.get("sourceSlug") == slug for row in item["rows"])
+        ),
+        None,
+    )
+    if not ledger:
+        return slug
+    reference = next(
+        (
+            row
+            for row in ledger["rows"]
+            if row.get("release_version") == AXIS_REFERENCE_VERSION
+        ),
+        None,
+    )
+    return (
+        reference.get("sourceSlug")
+        if reference and reference.get("sourceSlug")
+        else slug
+    )
 
 
 def x_range_for(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
@@ -83,9 +134,20 @@ def x_range_for(cloud: dict, pad_fraction: float = 0.04) -> list[float]:
     return [float(lo - pad), float(hi + pad)]
 
 
-def render(slug: str, panels: list[dict]) -> None:
+def density_max(clouds: list[dict], grid: np.ndarray) -> float:
+    maxima = []
+    for cloud in clouds:
+        for species in SPECIES_ORDER:
+            points = cloud.get(species)
+            if points:
+                maxima.append(float(gaussian_kde(points["y"])(grid).max()))
+    return max(maxima) * 1.08
+
+
+def render(slug: str, panels: list[dict], reference_panels: list[dict]) -> None:
     clouds = [load_json(p["path"]) for p in panels]
-    x_range = x_range_for(clouds[0])
+    reference_clouds = [load_json(panel["path"]) for panel in reference_panels]
+    x_range = x_range_for(reference_clouds[0])
     grid = np.linspace(x_range[0], x_range[1], GRID_POINTS)
 
     curves = []  # (panel index, species, density array)
@@ -96,9 +158,14 @@ def render(slug: str, panels: list[dict]) -> None:
                 continue
             kde = gaussian_kde(pts["y"])
             curves.append((i, species, kde(grid)))
-    y_max = max(curve.max() for _, _, curve in curves) * 1.08
+    y_max = density_max(reference_clouds, grid)
 
-    fig = make_subplots(rows=1, cols=len(panels), subplot_titles=[p["tool"] for p in panels], horizontal_spacing=0.06)
+    fig = make_subplots(
+        rows=1,
+        cols=len(panels),
+        subplot_titles=[p["tool"] for p in panels],
+        horizontal_spacing=0.06,
+    )
 
     seen_species: set[str] = set()
     for i, species, density in curves:
@@ -142,7 +209,9 @@ def render(slug: str, panels: list[dict]) -> None:
                 yref=f"y{axis_suffix}",
                 y0=0,
                 y1=y_max,
-                line=dict(color=SPECIES_COLORS.get(species, COLOR_TEXT), width=1, dash="dot"),
+                line=dict(
+                    color=SPECIES_COLORS.get(species, COLOR_TEXT), width=1, dash="dot"
+                ),
             )
         fig.update_xaxes(
             range=x_range,
@@ -168,7 +237,9 @@ def render(slug: str, panels: list[dict]) -> None:
 
     out_path = BENCH_DIR / f"density-{slug}.png"
     fig.write_image(str(out_path), scale=2)
-    print(f"wrote {out_path.relative_to(ROOT)} ({len(panels)} panel(s): {', '.join(p['tool'] for p in panels)})")
+    print(
+        f"wrote {out_path.relative_to(ROOT)} ({len(panels)} panel(s): {', '.join(p['tool'] for p in panels)})"
+    )
 
 
 def main() -> None:
@@ -190,7 +261,8 @@ def main() -> None:
         if not panels:
             print(f"skip {slug}: no scatter data")
             continue
-        render(slug, panels)
+        reference_panels = panels_for(reference_slug_for(slug, ledgers), ledgers)
+        render(slug, panels, reference_panels or panels)
 
 
 if __name__ == "__main__":
