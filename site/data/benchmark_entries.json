@@ -18,5 +18,15 @@
     "kind": "recorded",
     "slug": "proteobench-1.0.0",
     "title": "ProteoBench 2 Th / Astral"
+  },
+  {
+    "kind": "recorded",
+    "slug": "pxd028735-1.1.0",
+    "title": "PXD028735 / OE480"
+  },
+  {
+    "kind": "recorded",
+    "slug": "proteobench-1.1.0",
+    "title": "ProteoBench 2 Th / Astral"
   }
 ]

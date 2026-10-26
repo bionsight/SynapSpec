@@ -1,0 +1,93 @@
+kind: recorded
+dataset:
+  slug: pxd028735-1.1.0
+  name: PXD028735
+  instrument: OE480
+  preset: bion_lfq_oe480
+  key_config: MBR on · Trypsin/P · 2 missed cleavages
+run:
+  slug: pxd028735-1.1.0
+  commit: 71e7e5ff
+  date: '2026-10-26'
+  instance: c7i.8xlarge
+  runtime_hours: 0.0
+  config_file: bion_lfq_oe480_ec2.yaml
+  fasta: null
+  time_range_display: null
+  checked_display: 26 October 2026
+  source_url: https://www.ebi.ac.uk/pride/archive/projects/PXD028735
+  total_precursors: 96557
+  total_proteins: 8862
+recorded_config:
+- - Library
+  - Generated from FASTA
+- - Enzyme
+  - Trypsin/P
+- - Missed cleavages
+  - '2'
+- - Match between runs
+  - 'On'
+- - Peptide length
+  - 7-52 residues
+- - Precursor charge
+  - 1-6
+- - Maximum variable modifications
+  - '5'
+- - Random seed
+  - '42'
+ledger:
+  group_id: lfqbench-202409-archived
+  label: SynapSpec v1.1.0 run · PXD028735 raw files
+  diann_precursors: null
+  spectronaut_precursors: null
+  release_version: v1.1.0
+files:
+- name: LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_01
+  condition: A
+  replicate: 1
+  precursors: 88623
+  proteins: 8705
+- name: LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_02
+  condition: A
+  replicate: 2
+  precursors: 87414
+  proteins: 8683
+- name: LFQ_Orbitrap_AIF_Condition_A_Sample_Alpha_03
+  condition: A
+  replicate: 3
+  precursors: 86600
+  proteins: 8687
+- name: LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_01
+  condition: B
+  replicate: 1
+  precursors: 79285
+  proteins: 8670
+- name: LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_02
+  condition: B
+  replicate: 2
+  precursors: 80597
+  proteins: 8681
+- name: LFQ_Orbitrap_AIF_Condition_B_Sample_Alpha_03
+  condition: B
+  replicate: 3
+  precursors: 78516
+  proteins: 8644
+ratio_measurements:
+- species: Human
+  target: 0.0
+  count: 57943
+  median: -0.0356872536
+  lower: -0.2376563504
+  upper: 0.1553602877
+- species: E. coli
+  target: -2.0
+  count: 2706
+  median: -2.005642489
+  lower: -2.3136683021
+  upper: -1.6092499872
+- species: Yeast
+  target: 1.0
+  count: 15809
+  median: 1.1333683033
+  lower: 0.9425201937
+  upper: 1.430259692

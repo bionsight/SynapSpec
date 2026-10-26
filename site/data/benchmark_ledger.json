@@ -264,6 +264,27 @@
     },
     "rows": [
       {
+        "id": "pxd028735-1.1.0",
+        "date": "2026-10-26",
+        "label": "SynapSpec v1.1.0 run · PXD028735 raw files",
+        "sourceSlug": "pxd028735-1.1.0",
+        "comparisonSlug": null,
+        "counts": [
+          96557,
+          null,
+          null
+        ],
+        "counts_display": [
+          "96,557",
+          null,
+          null
+        ],
+        "runtime": 0.0,
+        "resource": "c7i.8xlarge",
+        "commit": "71e7e5ff",
+        "release_version": "v1.1.0"
+      },
+      {
         "id": "pxd028735-1.0.0",
         "date": "2026-09-21",
         "label": "SynapSpec v1.0.0 run · PXD028735 raw files",
@@ -587,6 +608,27 @@
       "figure": "lfqbench-202502-archived.png"
     },
     "rows": [
+      {
+        "id": "proteobench-1.1.0",
+        "date": "2026-10-26",
+        "label": "SynapSpec v1.1.0 run · ProteoBench 2 Th mix (HYE)",
+        "sourceSlug": "proteobench-1.1.0",
+        "comparisonSlug": null,
+        "counts": [
+          139173,
+          null,
+          null
+        ],
+        "counts_display": [
+          "139,173",
+          null,
+          null
+        ],
+        "runtime": 0.0,
+        "resource": "c7i.8xlarge",
+        "commit": "71e7e5ff",
+        "release_version": "v1.1.0"
+      },
       {
         "id": "proteobench-1.0.0",
         "date": "2026-09-21",

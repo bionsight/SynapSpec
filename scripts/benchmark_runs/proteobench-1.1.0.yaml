@@ -1,0 +1,93 @@
+kind: recorded
+dataset:
+  slug: proteobench-1.1.0
+  name: ProteoBench 2 Th
+  instrument: Astral
+  preset: proteobench_2th_astral
+  key_config: MBR on · Trypsin/P · 2 missed cleavages
+run:
+  slug: proteobench-1.1.0
+  commit: 71e7e5ff
+  date: '2026-10-26'
+  instance: c7i.8xlarge
+  runtime_hours: 0.0
+  config_file: bion_lfq_astral_ec2.yaml
+  fasta: null
+  time_range_display: null
+  checked_display: 26 October 2026
+  source_url: https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral
+  total_precursors: 139173
+  total_proteins: 11754
+recorded_config:
+- - Library
+  - Generated from FASTA
+- - Enzyme
+  - Trypsin/P
+- - Missed cleavages
+  - '2'
+- - Match between runs
+  - 'On'
+- - Peptide length
+  - 7-52 residues
+- - Precursor charge
+  - 1-6
+- - Maximum variable modifications
+  - '5'
+- - Random seed
+  - '42'
+ledger:
+  group_id: lfqbench-202502-archived
+  label: SynapSpec v1.1.0 run · ProteoBench 2 Th mix (HYE)
+  diann_precursors: null
+  spectronaut_precursors: null
+  release_version: v1.1.0
+files:
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP1
+  condition: A
+  replicate: 1
+  precursors: 125009
+  proteins: 11561
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP2
+  condition: A
+  replicate: 2
+  precursors: 128380
+  proteins: 11599
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP3
+  condition: A
+  replicate: 3
+  precursors: 128130
+  proteins: 11588
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP1
+  condition: B
+  replicate: 1
+  precursors: 129551
+  proteins: 11616
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP2
+  condition: B
+  replicate: 2
+  precursors: 129089
+  proteins: 11628
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP3
+  condition: B
+  replicate: 3
+  precursors: 128943
+  proteins: 11600
+ratio_measurements:
+- species: Human
+  target: 0.0
+  count: 95618
+  median: -0.0142447959
+  lower: -0.2030917982
+  upper: 0.1404324678
+- species: E. coli
+  target: -2.0
+  count: 7065
+  median: -1.5311377067
+  lower: -1.8546039058
+  upper: -1.0816240837
+- species: Yeast
+  target: 1.0
+  count: 30281
+  median: 0.8179771112
+  lower: 0.5631067719
+  upper: 1.0145849631
