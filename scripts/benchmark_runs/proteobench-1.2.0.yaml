@@ -1,0 +1,83 @@
+kind: recorded
+dataset:
+  slug: proteobench-1.2.0
+  name: ProteoBench 2 Th
+  instrument: Astral
+  preset: proteobench_2th_astral
+  key_config: null
+run:
+  slug: proteobench-1.2.0
+  commit: 274e9424
+  date: '2026-11-26'
+  instance: —
+  runtime_hours: 0.0
+  config_file: null
+  fasta: null
+  time_range_display: null
+  checked_display: 26 November 2026
+  source_url: https://proteobench.cubimed.rub.de/Quant_LFQ_DIA_ion_Astral
+  total_precursors: 139403
+  total_proteins: 11324
+recorded_config:
+- - Source commit
+  - 274e9424
+- - Sample layout
+  - 2 conditions × 3 replicates
+- - Report format
+  - Parquet
+ledger:
+  group_id: lfqbench-202502-archived
+  label: SynapSpec v1.2.0 benchmark · ProteoBench 2 Th mix (HYE)
+  diann_precursors: null
+  spectronaut_precursors: null
+  release_version: v1.2.0
+files:
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP1
+  condition: A
+  replicate: 1
+  precursors: 124715
+  proteins: 11163
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP2
+  condition: A
+  replicate: 2
+  precursors: 128060
+  proteins: 11211
+- name: LFQ_Astral_DIA_15min_50ng_Condition_A_REP3
+  condition: A
+  replicate: 3
+  precursors: 127657
+  proteins: 11207
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP1
+  condition: B
+  replicate: 1
+  precursors: 128862
+  proteins: 11206
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP2
+  condition: B
+  replicate: 2
+  precursors: 128914
+  proteins: 11212
+- name: LFQ_Astral_DIA_15min_50ng_Condition_B_REP3
+  condition: B
+  replicate: 3
+  precursors: 128472
+  proteins: 11201
+ratio_measurements:
+- species: Human
+  target: 0.0
+  count: 95822
+  median: -0.0178076236
+  lower: -0.2032020579
+  upper: 0.132764275
+- species: E. coli
+  target: -2.0
+  count: 7144
+  median: -1.5361812422
+  lower: -1.8463036228
+  upper: -1.1212276163
+- species: Yeast
+  target: 1.0
+  count: 30528
+  median: 0.801934967
+  lower: 0.5522735506
+  upper: 0.9961140249
